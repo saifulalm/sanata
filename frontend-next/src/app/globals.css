@@ -1,0 +1,265 @@
+@import "tailwindcss";
+
+@theme {
+  /* Primary - futuristic deep navy */
+  --color-primary-50: #ecf8ff;
+  --color-primary-100: #d8efff;
+  --color-primary-200: #b7e3ff;
+  --color-primary-300: #80d0ff;
+  --color-primary-400: #44b7f1;
+  --color-primary-500: #1f97d4;
+  --color-primary-600: #1779b5;
+  --color-primary-700: #125f90;
+  --color-primary-800: #0b2437;
+  --color-primary-900: #081b2a;
+  --color-primary-950: #040f1a;
+
+  /* Secondary - futuristic copper */
+  --color-gold-50: #fff5eb;
+  --color-gold-100: #fde6cf;
+  --color-gold-200: #fac69b;
+  --color-gold-300: #f6a66b;
+  --color-gold-400: #ef8745;
+  --color-gold-500: #db6f2f;
+  --color-gold-600: #b95623;
+  --color-gold-700: #8f411c;
+  --color-gold-800: #663016;
+  --color-gold-900: #431f10;
+
+  /* Neutrals */
+  --color-ink: #e2e8f0;
+  --color-surface: #07111d;
+
+  --font-display: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-accent: var(--font-accent), ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-primary-950 text-ink antialiased;
+  font-family: var(--font-body);
+}
+
+::selection {
+  @apply bg-gold-300 text-primary-900;
+}
+
+.container-px {
+  @apply px-6 md:px-10 lg:px-16;
+}
+
+/* Latar situs publik. Halaman publik memakai kelas tema gelap secara eksplisit
+   (lihat `components/ui/Surface.tsx`), jadi tidak ada aturan paksaan di sini. */
+.public-theme {
+  background:
+    radial-gradient(circle at top, rgba(56, 189, 248, 0.12), transparent 24%),
+    radial-gradient(circle at 80% 18%, rgba(239, 135, 69, 0.1), transparent 20%),
+    linear-gradient(180deg, #06111f 0%, #071423 52%, #06101b 100%);
+  color: #e2e8f0;
+}
+
+/**
+ * Jembatan tema panel admin.
+ *
+ * Layar admin masih ditulis dengan kelas tema terang (`bg-white`,
+ * `text-neutral-500`, dst.). Sampai layar-layar itu ditulis ulang, aturan di
+ * bawah memetakannya ke padanan gelap. Sengaja dibatasi pada `.admin-theme`
+ * supaya tidak menyentuh situs publik maupun halaman cetak — halaman cetak
+ * harus tetap putih.
+ */
+.admin-theme {
+  background:
+    radial-gradient(circle at top left, rgba(56, 189, 248, 0.14), transparent 24%),
+    radial-gradient(circle at 80% 22%, rgba(239, 135, 69, 0.12), transparent 22%),
+    linear-gradient(180deg, #06111f 0%, #081421 100%);
+  color: #e2e8f0;
+}
+
+.admin-theme [class*="bg-white"] {
+  background: rgba(255, 255, 255, 0.04) !important;
+  backdrop-filter: blur(18px);
+}
+
+.admin-theme [class*="bg-surface"] {
+  background: rgba(8, 18, 33, 0.82) !important;
+}
+
+.admin-theme [class*="border-neutral-"] {
+  border-color: rgba(148, 163, 184, 0.18) !important;
+}
+
+.admin-theme [class*="text-primary-"] {
+  color: #f8fafc !important;
+}
+
+.admin-theme [class*="text-neutral-"] {
+  color: #94a3b8 !important;
+}
+
+.admin-theme [class*="text-gold-"] {
+  color: #f59e0b !important;
+}
+
+.admin-theme [class*="bg-primary-"] {
+  background: linear-gradient(135deg, rgba(11, 36, 55, 0.95), rgba(8, 27, 42, 0.95)) !important;
+}
+
+.admin-theme [class*="bg-gold-"] {
+  background: rgba(239, 135, 69, 0.16) !important;
+}
+
+.admin-theme [class*="hover:bg-neutral-50"]:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.admin-theme [class*="hover:text-primary-"] {
+  transition: color 0.2s ease;
+}
+
+.admin-theme input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]),
+.admin-theme select,
+.admin-theme textarea {
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: #f8fafc !important;
+  border-color: rgba(125, 211, 252, 0.18) !important;
+}
+
+.admin-theme input::placeholder,
+.admin-theme textarea::placeholder {
+  color: #64748b;
+}
+
+.admin-theme option,
+.public-theme option {
+  background: #081b2a;
+  color: #f8fafc;
+}
+
+.admin-theme table {
+  color: #e2e8f0;
+}
+
+.admin-theme thead {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/**
+ * Chip status & kotak peringatan pada panel admin memakai warna tint terang
+ * (`bg-red-50` + `text-red-700`). Di atas latar gelap kombinasi itu menyilaukan,
+ * jadi dipetakan ke versi transparan dengan teks terang.
+ *
+ * Selektor memakai `~=` (token utuh) — bukan `*=` — supaya `bg-red-50` tidak
+ * ikut mencocokkan `bg-red-500`.
+ */
+.admin-theme [class~="bg-red-50"],
+.admin-theme [class~="bg-red-100"] {
+  background: rgba(248, 113, 113, 0.14) !important;
+}
+.admin-theme [class~="bg-amber-50"],
+.admin-theme [class~="bg-amber-100"] {
+  background: rgba(251, 191, 36, 0.14) !important;
+}
+.admin-theme [class~="bg-emerald-50"],
+.admin-theme [class~="bg-emerald-100"] {
+  background: rgba(52, 211, 153, 0.14) !important;
+}
+.admin-theme [class~="bg-blue-50"],
+.admin-theme [class~="bg-blue-100"] {
+  background: rgba(96, 165, 250, 0.14) !important;
+}
+
+.admin-theme [class~="text-red-600"],
+.admin-theme [class~="text-red-700"] {
+  color: #fca5a5 !important;
+}
+.admin-theme [class~="text-amber-600"],
+.admin-theme [class~="text-amber-700"],
+.admin-theme [class~="text-amber-800"],
+.admin-theme [class~="text-amber-900"] {
+  color: #fcd34d !important;
+}
+.admin-theme [class~="text-emerald-600"],
+.admin-theme [class~="text-emerald-700"] {
+  color: #6ee7b7 !important;
+}
+.admin-theme [class~="text-blue-700"] {
+  color: #93c5fd !important;
+}
+
+.admin-theme [class~="border-amber-100"],
+.admin-theme [class~="border-amber-200"] {
+  border-color: rgba(251, 191, 36, 0.28) !important;
+}
+.admin-theme [class~="border-red-400"] {
+  border-color: rgba(248, 113, 113, 0.45) !important;
+}
+
+/* Isi artikel publik yang datang sebagai HTML dari editor. */
+.prose-content {
+  @apply space-y-4 leading-8 text-slate-300;
+}
+.prose-content h2 {
+  @apply mt-8 font-display text-xl font-semibold text-white;
+}
+.prose-content h3 {
+  @apply mt-6 font-display text-lg font-semibold text-cyan-100;
+}
+.prose-content ul {
+  @apply list-disc space-y-1 pl-5;
+}
+.prose-content ol {
+  @apply list-decimal space-y-1 pl-5;
+}
+.prose-content blockquote {
+  @apply border-l-2 border-gold-400 pl-4 italic text-slate-400;
+}
+.prose-content a {
+  @apply text-cyan-300 underline underline-offset-2;
+}
+.prose-content strong {
+  @apply font-semibold text-white;
+}
+.prose-content img {
+  @apply rounded-[1.4rem] border border-white/10;
+}
+
+/* Isi editor teks kaya — proyek ini tidak memakai plugin typography,
+   jadi gayanya ditulis eksplisit agar cocok dengan tampilan artikel publik. */
+.rte-content {
+  @apply min-h-[220px] px-3 py-2.5 text-sm leading-relaxed text-slate-200;
+}
+.rte-content:focus {
+  @apply outline-none;
+}
+.rte-content > * + * {
+  @apply mt-3;
+}
+.rte-content h2 {
+  @apply mt-6 font-display text-xl font-semibold text-white;
+}
+.rte-content h3 {
+  @apply mt-5 font-display text-base font-semibold text-cyan-100;
+}
+.rte-content ul {
+  @apply list-disc space-y-1 pl-5;
+}
+.rte-content ol {
+  @apply list-decimal space-y-1 pl-5;
+}
+.rte-content blockquote {
+  @apply border-l-2 border-gold-400 pl-4 italic text-slate-400;
+}
+.rte-content a {
+  @apply text-cyan-300 underline;
+}
+.rte-content strong {
+  @apply font-semibold text-white;
+}
+.rte-content p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  @apply pointer-events-none float-left h-0 text-slate-500;
+}

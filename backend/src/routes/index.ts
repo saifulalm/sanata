@@ -1,0 +1,46 @@
+import { Router } from "express";
+import authRoutes from "@/routes/auth.routes";
+import categoryRoutes from "@/routes/category.routes";
+import contentRoutes from "@/routes/content.routes";
+import productRoutes from "@/routes/product.routes";
+import userRoutes from "@/routes/user.routes";
+import mediaRoutes from "@/routes/media.routes";
+import dashboardRoutes from "@/routes/dashboard.routes";
+import inquiryRoutes from "@/routes/inquiry.routes";
+import auditLogRoutes from "@/routes/auditLog.routes";
+import priceItemRoutes from "@/routes/priceItem.routes";
+import ahspRoutes from "@/routes/ahsp.routes";
+import rabRoutes from "@/routes/rab.routes";
+import siteContentRoutes from "@/routes/siteContent.routes";
+import quotationRoutes from "@/routes/quotation.routes";
+import broadcastRoutes from "@/routes/broadcast.routes";
+import submissionRoutes from "@/routes/submission.routes";
+import siteMemoRoutes from "@/routes/siteMemo.routes";
+import letterRoutes from "@/routes/letter.routes";
+import signatoryRoutes from "@/routes/signatory.routes";
+import workforceRoleRoutes from "@/routes/workforceRole.routes";
+
+const router = Router();
+
+router.use("/auth", authRoutes);
+router.use("/categories", categoryRoutes);
+router.use("/contents", contentRoutes);
+router.use("/products", productRoutes);
+router.use("/users", userRoutes);
+router.use("/media", mediaRoutes);
+router.use("/dashboard", dashboardRoutes);
+router.use("/inquiries", inquiryRoutes);
+router.use("/audit-logs", auditLogRoutes);
+router.use("/price-items", priceItemRoutes);
+router.use("/ahsp", ahspRoutes);
+router.use("/rab", rabRoutes);
+router.use("/site-content", siteContentRoutes);
+router.use("/quotations", quotationRoutes);
+router.use("/broadcasts", broadcastRoutes);
+router.use("/submissions", submissionRoutes);
+router.use("/site-memos", siteMemoRoutes);
+router.use("/letters", letterRoutes);
+router.use("/signatories", signatoryRoutes);
+router.use("/workforce-roles", workforceRoleRoutes);
+
+export default router;

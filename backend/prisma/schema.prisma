@@ -1,0 +1,1230 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  USER
+}
+
+enum InquiryStatus {
+  NEW
+  CONTACTED
+  CLOSED
+}
+
+enum BroadcastChannel {
+  EMAIL
+  TELEGRAM
+  WHATSAPP
+  INSTAGRAM
+  FACEBOOK
+}
+
+enum BroadcastConnectionStatus {
+  DISCONNECTED
+  CONNECTED
+  ERROR
+}
+
+enum BroadcastProvider {
+  EMAIL_SMTP
+  TELEGRAM_BOT
+  WHATSAPP_BAILEYS
+  WHATSAPP_OFFICIAL
+  WHATSAPP_WAHA
+  WHATSAPP_EVOLUTION
+  INSTAGRAM_META
+  FACEBOOK_META
+}
+
+enum BroadcastConnectionMode {
+  PRODUCTION
+  EXPERIMENTAL
+}
+
+enum BroadcastCampaignStatus {
+  DRAFT
+  SENDING
+  SENT
+  PARTIAL
+  FAILED
+  CANCELLED
+}
+
+enum BroadcastDeliveryStatus {
+  PENDING
+  SENT
+  FAILED
+  SKIPPED
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ContentType {
+  PAGE
+  POST
+}
+
+/// Peran terpusat — dipakai oleh Penanda Tangan dan Laporan Harian.
+/// Gabungan dari hierarki direksi hingga tukang di lapangan.
+enum ProjectRole {
+  DIREKTUR_UTAMA
+  DIREKTUR
+  MANAGER_PROYEK
+  SITE_MANAGER
+  PIMPINAN_PROYEK
+  KEPALA_TUKANG
+  TUKANG_BATU
+  TUKANG_KAYU
+  TUKANG_BESI
+  OPERATOR
+  MANDOR
+  PEKERJA
+  STAF
+  LAINNYA
+}
+
+/// Jabatan yang aktif untuk dipilih di laporan harian.
+/// Admin bisa mengaktifkan/menonaktifkan agar daftar tidak terlalu panjang.
+model WorkforceRole {
+  id        String      @id @default(cuid())
+  role      ProjectRole @unique
+  label     String      /// label tampilan, mis. "Tukang Batu"
+  isActive  Boolean     @default(true)
+  order     Int         @default(0)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+/// Master daftar penanda tangan resmi untuk surat penawaran dan surat proyek.
+/// Nama serta jabatan dibaca dari sini agar tidak perlu ketik ulang setiap kali.
+/// Jabatan menggunakan enum ProjectRole yang sama dengan laporan harian.
+model Signatory {
+  id         String        @id @default(cuid())
+  name       String
+  title      String
+  role       ProjectRole?
+  department String?
+  isActive   Boolean       @default(true)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  quotations Quotation[]
+  letters    ProjectLetter[]
+
+  @@index([isActive])
+}
+
+model User {
+  id               String    @id @default(cuid())
+  name             String
+  email            String    @unique
+  passwordHash     String
+  role             Role      @default(USER)
+  avatarUrl        String?
+  isActive         Boolean   @default(true)
+  lastLoginAt      DateTime?
+  twoFactorSecret  String?
+  twoFactorEnabled Boolean   @default(false)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  contents      Content[]
+  products      Product[]
+  auditLogs     AuditLog[]
+  refreshTokens RefreshToken[]
+  rabs             Rab[]
+  quotations       Quotation[]
+  rabProgress      RabProgress[]
+  approvedProgress RabProgress[]         @relation("ProgressApprover")
+  baselines        RabScheduleBaseline[]
+  dailyReports     DailyReport[]
+  billings         ProgressBilling[]
+  broadcastCampaigns BroadcastCampaign[]
+
+  submissionsRequested ProjectSubmission[] @relation("SubmissionRequester")
+  submissionsReviewed  ProjectSubmission[] @relation("SubmissionReviewer")
+  logbookEntries       LogbookEntry[]
+  siteMemos            SiteMemo[]
+  projectLetters       ProjectLetter[]
+
+  @@index([role])
+}
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  tokenHash String    @unique
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contents Content[]
+  products Product[]
+}
+
+model Content {
+  id          String        @id @default(cuid())
+  title       String
+  slug        String        @unique
+  excerpt     String?       @db.Text
+  body        String        @db.Text
+  type        ContentType   @default(POST)
+  status      ContentStatus @default(DRAFT)
+  coverImage  String?
+  views       Int           @default(0)
+  publishedAt DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // --- SEO ---
+  /// Judul untuk mesin pencari; jatuh balik ke `title` bila kosong.
+  metaTitle       String?
+  /// Deskripsi hasil pencarian; jatuh balik ke `excerpt` bila kosong.
+  metaDescription String? @db.Text
+  /// Gambar Open Graph; jatuh balik ke `coverImage`.
+  ogImage         String?
+  /// URL kanonik bila artikel ini duplikat/sindikasi dari sumber lain.
+  canonicalUrl    String?
+  /// Kata kunci utama — dasar analisis skor SEO.
+  focusKeyword    String?
+  /// Kecualikan dari sitemap dan beri tag noindex.
+  noIndex         Boolean @default(false)
+
+  authorId   String
+  author     User      @relation(fields: [authorId], references: [id])
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+
+  @@index([status])
+  @@index([type])
+  @@index([categoryId])
+}
+
+model Product {
+  id             String   @id @default(cuid())
+  name           String
+  slug           String   @unique
+  description    String   @db.Text
+  price          Decimal  @db.Decimal(12, 2)
+  compareAtPrice Decimal? @db.Decimal(12, 2)
+  sku            String?  @unique
+  stock          Int      @default(0)
+  isActive       Boolean  @default(true)
+  images         Media[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id])
+  createdById String
+  createdBy   User      @relation(fields: [createdById], references: [id])
+
+  @@index([isActive])
+  @@index([categoryId])
+}
+
+model Media {
+  id         String   @id @default(cuid())
+  url        String
+  /// Kunci di penyimpanan (nama berkas lokal atau object key S3) — dipakai saat menghapus.
+  storageKey String?
+  filename   String
+  mimeType   String
+  size       Int
+  createdAt  DateTime @default(now())
+
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String
+  entity    String
+  entityId  String?
+  meta      String?  @db.Text
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@index([entity])
+  @@index([userId])
+}
+
+model Inquiry {
+  id                String           @id @default(cuid())
+  name              String
+  email             String
+  phone             String?
+  service           String?
+  message           String           @db.Text
+  status            InquiryStatus    @default(NEW)
+  marketingConsent  Boolean          @default(false)
+  preferredChannel  BroadcastChannel?
+  createdAt         DateTime         @default(now())
+
+  broadcastContact BroadcastContact?
+
+  @@index([status])
+}
+
+model BroadcastContact {
+  id                    String            @id @default(cuid())
+  name                  String
+  email                 String?
+  phone                 String?
+  telegramChatId        String?
+  instagramHandle       String?
+  facebookPageScopedId  String?
+  preferredChannel      BroadcastChannel?
+  consent               Boolean           @default(false)
+  consentSource         String?
+  tags                  Json?
+  notes                 String?           @db.Text
+  isActive              Boolean           @default(true)
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+
+  inquiryId   String?   @unique
+  inquiry     Inquiry?  @relation(fields: [inquiryId], references: [id], onDelete: SetNull)
+  deliveries  BroadcastDelivery[]
+
+  @@index([isActive])
+  @@index([preferredChannel])
+}
+
+model BroadcastChannelConnection {
+  id            String                    @id @default(cuid())
+  channel       BroadcastChannel
+  provider      BroadcastProvider
+  mode          BroadcastConnectionMode   @default(PRODUCTION)
+  accountKey    String
+  label         String
+  senderIdentity String?
+  isEnabled     Boolean                   @default(false)
+  isPrimary     Boolean                   @default(false)
+  priority      Int                       @default(100)
+  weight        Int                       @default(1)
+  dailyLimit    Int?
+  hourlyLimit   Int?
+  status        BroadcastConnectionStatus @default(DISCONNECTED)
+  statusMessage String?                   @db.Text
+  config        Json?
+  cooldownUntil DateTime?
+  lastCheckedAt DateTime?
+  lastUsedAt    DateTime?
+  createdAt     DateTime                  @default(now())
+  updatedAt     DateTime                  @updatedAt
+
+  campaigns  BroadcastCampaign[]
+  deliveries BroadcastDelivery[]
+
+  @@unique([channel, accountKey])
+  @@index([channel, isEnabled])
+  @@index([channel, provider])
+  @@index([channel, isPrimary, priority])
+}
+
+model BroadcastCampaign {
+  id             String                  @id @default(cuid())
+  title          String
+  channel        BroadcastChannel
+  status         BroadcastCampaignStatus @default(DRAFT)
+  audienceType   String                  @default("ALL_CONTACTS")
+  audienceFilter Json?
+  subject        String?
+  message        String                  @db.Text
+  sentAt         DateTime?
+  createdAt      DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+
+  createdById  String
+  createdBy    User                      @relation(fields: [createdById], references: [id])
+  connectionId String?
+  connection   BroadcastChannelConnection? @relation(fields: [connectionId], references: [id], onDelete: SetNull)
+  deliveries   BroadcastDelivery[]
+
+  @@index([channel])
+  @@index([status])
+  @@index([createdById])
+}
+
+model BroadcastDelivery {
+  id            String                  @id @default(cuid())
+  channel       BroadcastChannel
+  recipient     String
+  status        BroadcastDeliveryStatus @default(PENDING)
+  externalId    String?
+  errorMessage  String?                 @db.Text
+  sentAt        DateTime?
+  createdAt     DateTime                @default(now())
+  updatedAt     DateTime                @updatedAt
+
+  campaignId   String
+  campaign     BroadcastCampaign        @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  contactId    String?
+  contact      BroadcastContact?        @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  connectionId String?
+  connection   BroadcastChannelConnection? @relation(fields: [connectionId], references: [id], onDelete: SetNull)
+
+  @@index([campaignId, status])
+  @@index([contactId])
+  @@index([connectionId])
+}
+
+// ---------------------------------------------------------------------------
+// CMS konten situs — membuat blok di homepage & halaman lain bisa diedit admin
+// ---------------------------------------------------------------------------
+
+/// Nilai tunggal (headline, nomor telepon, alamat) yang diacu lewat key.
+model SiteSetting {
+  key       String   @id
+  value     String   @db.Text
+  group     String
+  label     String
+  type      String   @default("text")
+  order     Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  @@index([group, order])
+}
+
+/// Satu baris dari daftar berulang (layanan, testimoni, FAQ, nilai perusahaan, ...).
+/// Satu tabel dipakai semua daftar; `collection` menentukan daftar mana, dan
+/// `meta` menampung field tambahan yang khas per daftar.
+model SiteCollectionItem {
+  id         String   @id @default(cuid())
+  collection String
+  title      String   // wajib: dipakai sebagai unique key per koleksi
+  subtitle   String?
+  body       String?  @db.Text
+  icon       String?
+  imageUrl   String?
+  href       String?
+  meta       Json?
+  order      Int      @default(0)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([collection, title])
+  @@index([collection, order])
+  @@index([isActive])
+}
+
+// ---------------------------------------------------------------------------
+// Estimasi biaya konstruksi: Harga Satuan Dasar -> AHSP -> RAB
+// ---------------------------------------------------------------------------
+
+/// Kelompok sumber daya pada AHSP (Permen PUPR 28/2016).
+enum ResourceType {
+  LABOR // upah / tenaga kerja
+  MATERIAL // bahan
+  EQUIPMENT // peralatan
+}
+
+enum RabStatus {
+  DRAFT
+  REVIEW
+  APPROVED
+  REJECTED
+  ARCHIVED
+}
+
+/// Harga Satuan Dasar — master harga upah, bahan, dan alat.
+model PriceItem {
+  id        String       @id @default(cuid())
+  code      String       @unique
+  name      String
+  type      ResourceType
+  unit      String
+  unitPrice Decimal      @db.Decimal(15, 2)
+  region    String?
+  isActive  Boolean      @default(true)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  components AhspComponent[]
+
+  @@index([type])
+  @@index([isActive])
+}
+
+/// Analisa Harga Satuan Pekerjaan — resep koefisien untuk satu satuan pekerjaan.
+model Ahsp {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  name        String
+  unit        String
+  category    String?
+  /// Overhead & profit dalam persen, ditambahkan di atas biaya langsung.
+  overheadPct Decimal  @default(10) @db.Decimal(5, 2)
+  notes       String?  @db.Text
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  components AhspComponent[]
+  rabItems   RabItem[]
+
+  @@index([category])
+  @@index([isActive])
+}
+
+model AhspComponent {
+  id          String    @id @default(cuid())
+  ahspId      String
+  ahsp        Ahsp      @relation(fields: [ahspId], references: [id], onDelete: Cascade)
+  priceItemId String
+  priceItem   PriceItem @relation(fields: [priceItemId], references: [id])
+  /// Koefisien pemakaian per satuan pekerjaan (mis. 0.2500 OH per m2).
+  coefficient Decimal   @db.Decimal(12, 4)
+  order       Int       @default(0)
+
+  @@index([ahspId])
+  @@index([priceItemId])
+}
+
+/// Rencana Anggaran Biaya untuk satu proyek/penawaran.
+model Rab {
+  id          String    @id @default(cuid())
+  number      String    @unique
+  title       String
+  clientName  String?
+  location    String?
+  projectDate DateTime?
+  status      RabStatus @default(DRAFT)
+  /// Tanggal mulai pelaksanaan — titik nol jadwal 4D.
+  ///
+  /// Jadwal tiap item disimpan sebagai offset hari dari tanggal ini, bukan
+  /// tanggal absolut, supaya proyek yang mundur cukup diubah di satu tempat.
+  scheduleStart DateTime?
+  /// Hari libur mingguan: 0 = Minggu … 6 = Sabtu. Kosongkan untuk memakai
+  /// hari kalender penuh (perilaku lama tetap terjaga).
+  restDays      Int[]     @default([0])
+  /// PPN dalam persen (default 11).
+  taxPct      Decimal   @default(11) @db.Decimal(5, 2)
+  discountPct Decimal   @default(0) @db.Decimal(5, 2)
+  notes       String?   @db.Text
+
+  // Total tersimpan, selalu dihitung ulang server-side saat menulis.
+  subtotal       Decimal @default(0) @db.Decimal(18, 2)
+  discountAmount Decimal @default(0) @db.Decimal(18, 2)
+  taxAmount      Decimal @default(0) @db.Decimal(18, 2)
+  total          Decimal @default(0) @db.Decimal(18, 2)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id])
+
+  sections     RabSection[]
+  quotations   Quotation[]
+  holidays     RabHoliday[]
+  baselines    RabScheduleBaseline[]
+  dailyReports DailyReport[]
+  billings     ProgressBilling[]
+
+  submissions  ProjectSubmission[]
+  logbook      LogbookEntry[]
+  memos        SiteMemo[]
+  letters      ProjectLetter[]
+
+  @@index([status])
+  @@index([createdById])
+}
+
+/// Hari libur khusus proyek (Lebaran, cuti bersama, force majeure).
+///
+/// Disimpan per RAB, bukan global: dua proyek di kota berbeda bisa punya
+/// hari libur daerah yang tidak sama.
+model RabHoliday {
+  id    String   @id @default(cuid())
+  rabId String
+  rab   Rab      @relation(fields: [rabId], references: [id], onDelete: Cascade)
+  date  DateTime
+  name  String
+
+  @@unique([rabId, date])
+  @@index([rabId])
+}
+
+/// Foto rencana yang dibekukan supaya replan bisa dibandingkan dengan rencana awal.
+///
+/// Tanpa ini, mengubah jadwal akan menimpa kurva rencana dan proyek kehilangan
+/// pembanding — padahal justru selisih terhadap rencana awal itulah yang
+/// ditanyakan pemilik proyek.
+model RabScheduleBaseline {
+  id           String   @id @default(cuid())
+  rabId        String
+  rab          Rab      @relation(fields: [rabId], references: [id], onDelete: Cascade)
+  name         String
+  capturedAt   DateTime @default(now())
+  capturedById String?
+  capturedBy   User?    @relation(fields: [capturedById], references: [id], onDelete: SetNull)
+  /// Kurva rencana + jadwal tiap item pada saat baseline diambil.
+  snapshot     Json
+
+  @@index([rabId])
+}
+
+model RabSection {
+  id    String @id @default(cuid())
+  rabId String
+  rab   Rab    @relation(fields: [rabId], references: [id], onDelete: Cascade)
+  name  String
+  order Int    @default(0)
+
+  items RabItem[]
+
+  @@index([rabId])
+}
+
+enum QuotationStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  REJECTED
+  CANCELLED
+}
+
+/// Surat Penawaran Harga yang dibuat dari sebuah RAB.
+///
+/// Nilai penawaran DIBEKUKAN saat dibuat: rincian dan total disalin ke `snapshot`.
+/// Tanpa ini, mengubah RAB setelah surat terkirim akan diam-diam mengubah angka
+/// pada penawaran yang sudah diterima klien.
+model Quotation {
+  id     String          @id @default(cuid())
+  number String          @unique
+  status QuotationStatus @default(DRAFT)
+
+  rabId String?
+  rab   Rab?    @relation(fields: [rabId], references: [id], onDelete: SetNull)
+
+  // Tujuan surat
+  clientName    String
+  clientCompany String?
+  clientAddress String? @db.Text
+  attentionTo   String?
+
+  subject      String
+  /// Paragraf pembuka dan penutup surat, bisa disunting per penawaran.
+  openingNote  String? @db.Text
+  closingNote  String? @db.Text
+  /// Syarat & ketentuan, satu baris per poin.
+  terms        String? @db.Text
+  /// Termin pembayaran: [{ label, percent }] — disimpan JSON agar jumlah termin bebas.
+  paymentTerms Json?
+
+  issuedAt   DateTime  @default(now())
+  validUntil DateTime
+  sentAt     DateTime?
+  decidedAt  DateTime?
+
+  // Penanda tangan
+  signerName  String
+  signerTitle String
+
+  signatoryId String?
+  signatory   Signatory? @relation(fields: [signatoryId], references: [id])
+
+  // Nilai beku pada saat surat dibuat
+  snapshot       Json
+  subtotal       Decimal @db.Decimal(18, 2)
+  discountAmount Decimal @db.Decimal(18, 2)
+  taxAmount      Decimal @db.Decimal(18, 2)
+  total          Decimal @db.Decimal(18, 2)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id])
+
+  /// SPK yang lahir dari penawaran ini setelah diterima klien.
+  letters ProjectLetter[]
+
+  @@index([status])
+  @@index([rabId])
+  @@index([createdById])
+}
+
+model RabItem {
+  id          String     @id @default(cuid())
+  sectionId   String
+  section     RabSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  /// Opsional: item yang bersumber dari AHSP tersimpan referensinya.
+  ahspId      String?
+  ahsp        Ahsp?      @relation(fields: [ahspId], references: [id], onDelete: SetNull)
+  description String
+  unit        String
+  volume      Decimal    @db.Decimal(15, 3)
+  unitPrice   Decimal    @db.Decimal(15, 2)
+  /// volume * unitPrice, dihitung server-side.
+  amount      Decimal    @db.Decimal(18, 2)
+  order       Int        @default(0)
+
+  /// Hari ke berapa pekerjaan ini mulai, dihitung dari `Rab.scheduleStart`.
+  startOffsetDays Int @default(0)
+  /// Lama pekerjaan dalam hari. 0 berarti belum dijadwalkan dan item
+  /// dikeluarkan dari kurva rencana (bobotnya tetap dihitung di penyebut).
+  durationDays    Int @default(0)
+
+  progress RabProgress[]
+
+  @@index([sectionId])
+  @@index([ahspId])
+}
+
+/// Realisasi pekerjaan di lapangan, dicatat per tanggal opname.
+///
+/// Nilainya kumulatif (bukan tambahan) karena itulah yang dilaporkan pengawas:
+/// "pekerjaan ini sudah 40% per tanggal sekian". Kurva realisasi memakai
+/// catatan terakhir pada atau sebelum akhir tiap periode.
+model RabProgress {
+  id      String   @id @default(cuid())
+  itemId  String
+  item    RabItem  @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  date    DateTime
+  /// Persentase kumulatif 0–100.
+  percent Decimal  @db.Decimal(5, 2)
+  note    String?
+
+  /// Hanya opname berstatus APPROVED yang masuk kurva realisasi dan jadi dasar
+  /// tagihan termin. Angka yang belum diperiksa pengawas tidak boleh diam-diam
+  /// menaikkan nilai tagihan.
+  status       ProgressStatus @default(PENDING)
+  approvedById String?
+  approvedBy   User?          @relation("ProgressApprover", fields: [approvedById], references: [id], onDelete: SetNull)
+  approvedAt   DateTime?
+  rejectReason String?
+
+  photos RabProgressPhoto[]
+
+  createdAt   DateTime @default(now())
+  createdById String?
+  createdBy   User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([itemId, date])
+  @@index([status])
+}
+
+enum ProgressStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+/// Bukti visual opname. Tanpa foto, persentase hanyalah klaim.
+model RabProgressPhoto {
+  id         String      @id @default(cuid())
+  progressId String
+  progress   RabProgress @relation(fields: [progressId], references: [id], onDelete: Cascade)
+  url        String
+  caption    String?
+  order      Int         @default(0)
+
+  @@index([progressId])
+}
+
+/// Laporan harian lapangan — catatan pelaksanaan per tanggal.
+model DailyReport {
+  id    String   @id @default(cuid())
+  rabId String
+  rab   Rab      @relation(fields: [rabId], references: [id], onDelete: Cascade)
+  date  DateTime
+
+  weatherMorning   Weather?
+  weatherAfternoon Weather?
+
+  /// Jumlah tenaga kerja per jabatan, mis. { "Tukang batu": 4, "Pekerja": 10 }.
+  /// Bentuk bebas karena susunan tim berbeda tiap proyek dan tiap tahap.
+  workforce Json?
+
+  /// Entri tenaga kerja terstruktur — referensi ke WorkforceRole.
+  /// Isi dikopi dari WorkforceRole.isActive saat laporan dibuat.
+  workforceEntries DailyReportWorkforce[]
+
+  equipment  String? @db.Text
+  materials  String? @db.Text
+  activities String  @db.Text
+  obstacles  String? @db.Text
+  notes      String? @db.Text
+
+  photos DailyReportPhoto[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String?
+  createdBy   User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  /// Satu laporan per proyek per hari.
+  @@unique([rabId, date])
+  @@index([rabId, date])
+}
+
+enum Weather {
+  CERAH
+  BERAWAN
+  GERIMIS
+  HUJAN
+  HUJAN_LEBAT
+}
+
+model DailyReportPhoto {
+  id       String      @id @default(cuid())
+  reportId String
+  report   DailyReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  url      String
+  caption  String?
+  /// Lokasi/bagian pekerjaan yang difoto, mis. "Kolom K1 lantai 2".
+  location String?
+  takenAt  DateTime?
+  order    Int         @default(0)
+
+  @@index([reportId])
+}
+
+/// Entri tenaga kerja per laporan harian — referensi terstruktur ke WorkforceRole.
+model DailyReportWorkforce {
+  id        String      @id @default(cuid())
+  reportId  String
+  report    DailyReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  role      ProjectRole
+  count     Int
+  order     Int         @default(0)
+
+  @@index([reportId])
+}
+
+enum BillingStatus {
+  DRAFT
+  ISSUED
+  PAID
+  CANCELLED
+}
+
+/// Tagihan termin berbasis progres (progress billing).
+///
+/// Nilainya dibekukan saat terbit, sama seperti Surat Penawaran: opname yang
+/// berubah setelah berita acara ditandatangani tidak boleh mengubah angka
+/// tagihan yang sudah dikirim.
+model ProgressBilling {
+  id     String        @id @default(cuid())
+  rabId  String
+  rab    Rab           @relation(fields: [rabId], references: [id], onDelete: Cascade)
+  number String        @unique
+  status BillingStatus @default(DRAFT)
+  /// Batas akhir periode opname yang ditagih.
+  periodEnd DateTime
+
+  /// Nilai kumulatif terpasang s/d periode ini.
+  cumulativeValue Decimal @db.Decimal(18, 2)
+  /// Nilai yang sudah ditagih pada termin-termin sebelumnya.
+  previousValue   Decimal @db.Decimal(18, 2)
+  /// cumulativeValue - previousValue.
+  currentValue    Decimal @db.Decimal(18, 2)
+
+  /// Retensi/jaminan pemeliharaan yang ditahan, umumnya 5%.
+  retentionPct    Decimal @default(5) @db.Decimal(5, 2)
+  retentionAmount Decimal @db.Decimal(18, 2)
+  taxPct          Decimal @default(11) @db.Decimal(5, 2)
+  taxAmount       Decimal @db.Decimal(18, 2)
+  /// Yang benar-benar dibayarkan: currentValue - retensi + PPN.
+  netAmount       Decimal @db.Decimal(18, 2)
+
+  notes String? @db.Text
+  /// Rincian per item saat terbit — pembekuan nilai.
+  snapshot Json
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String?
+  createdBy   User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  /// Invoice dan kwitansi yang terbit dari termin ini.
+  letters ProjectLetter[]
+
+  @@index([rabId])
+  @@index([status])
+}
+
+// ============================================================================
+// Dokumen & pelaporan proyek
+//
+// Empat keluarga dokumen yang dipakai kontraktor sehari-hari, semuanya melekat
+// pada satu RAB â€” di sistem ini RAB adalah proyeknya, bukan sekadar berkas
+// anggaran:
+//
+//   Pengajuan      alat, material, dan waktu yang diminta lapangan ke atasan
+//   Pelaporan      harian (sudah ada), mingguan & bulanan (turunan), logbook
+//   Site memo      surat masuk dari klien dan balasan kontraktor
+//   Surat-menyurat SPK, invoice, kwitansi, BAPP, BAST
+//
+// Laporan mingguan dan bulanan sengaja tidak punya tabel: keduanya rekap murni
+// dari laporan harian dan opname yang sudah disetujui, jadi menyimpannya hanya
+// menciptakan salinan yang bisa basi terhadap sumbernya.
+// ============================================================================
+
+/// Pencatat nomor urut dokumen, satu baris per (rangkaian, tahun).
+///
+/// Nomor surat tidak boleh kembar, dan cara lama â€” membaca nomor terbesar lalu
+/// menambah satu â€” bisa memberi angka yang sama kepada dua orang yang menyimpan
+/// bersamaan. Baris counter memindahkan penjaminan itu ke basis data: satu
+/// UPDATE yang mengunci barisnya, sehingga urutan tetap rapat tanpa bergantung
+/// pada waktu.
+model DocumentCounter {
+  id      String @id @default(cuid())
+  /// Kode rangkaian, mis. "SPK", "INV", "KW", "BAPP", "BAST", "AJU", "MEMO".
+  series  String
+  /// Tahun kalender Jakarta saat nomor dialokasikan.
+  year    Int
+  lastSeq Int    @default(0)
+
+  updatedAt DateTime @updatedAt
+
+  @@unique([series, year])
+}
+
+enum SubmissionType {
+  ALAT // ajuan peralatan
+  MATERIAL // ajuan bahan
+  WAKTU // ajuan perpanjangan waktu
+  RENCANA_WAKTU // rencana waktu pelaksanaan yang diajukan
+}
+
+/// Alur pengajuan mengikuti rantai wewenang di proyek.
+///
+/// Ajuan alat dan material berhenti di atasan (site manager/direksi). Ajuan
+/// waktu menyangkut kontrak, jadi setelah disetujui atasan masih harus
+/// diteruskan ke pemilik proyek â€” itu sebabnya ada dua tahap persetujuan yang
+/// terpisah, bukan satu status "disetujui" yang kabur.
+enum SubmissionStatus {
+  DRAFT
+  SUBMITTED // menunggu pemeriksaan atasan
+  APPROVED_INTERNAL // disetujui atasan
+  FORWARDED_CLIENT // diteruskan ke pemilik proyek
+  APPROVED_CLIENT // disetujui pemilik proyek
+  REJECTED
+  CANCELLED
+}
+
+model ProjectSubmission {
+  id     String           @id @default(cuid())
+  number String           @unique
+  rabId  String
+  rab    Rab              @relation(fields: [rabId], references: [id], onDelete: Cascade)
+  type   SubmissionType
+  status SubmissionStatus @default(DRAFT)
+
+  title String
+  /// Alasan pengajuan â€” bagian yang dibaca atasan sebelum memutuskan.
+  reason String? @db.Text
+  /// Kapan barang atau keputusan dibutuhkan di lapangan.
+  neededDate DateTime?
+
+  /// Khusus ajuan waktu: berapa hari tambahan yang diminta dan target barunya.
+  requestedDays Int?
+  newTargetDate DateTime?
+
+  /// Perkiraan biaya seluruh item â€” dasar pertimbangan atasan.
+  estimatedCost Decimal @default(0) @db.Decimal(18, 2)
+
+  /// Lampiran sebagai daftar { url, name }. Dokumen pengajuan hanya menampilkan
+  /// berkasnya apa adanya, tidak pernah menyaring atau mengurutkannya, jadi
+  /// tabel tersendiri tidak memberi apa pun selain sambungan tambahan.
+  attachments Json?
+
+  requestedById String
+  requestedBy   User      @relation("SubmissionRequester", fields: [requestedById], references: [id])
+  submittedAt   DateTime?
+
+  reviewedById String?
+  reviewedBy   User?     @relation("SubmissionReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+  reviewedAt   DateTime?
+  reviewNote   String?   @db.Text
+
+  forwardedAt DateTime?
+  /// Keputusan pemilik proyek. Klien berada di luar sistem, jadi namanya teks bebas.
+  clientDecidedAt DateTime?
+  clientDecidedBy String?
+  clientNote      String?   @db.Text
+
+  items ProjectSubmissionItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([rabId, type])
+  @@index([status])
+}
+
+/// Rincian alat/bahan yang diminta. Ajuan waktu umumnya tidak punya rincian.
+model ProjectSubmissionItem {
+  id           String            @id @default(cuid())
+  submissionId String
+  submission   ProjectSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  name String
+  /// Spesifikasi teknis â€” "besi ulir D13 SNI" berbeda dari sekadar "besi D13".
+  spec      String?
+  unit      String
+  quantity  Decimal @db.Decimal(15, 3)
+  unitPrice Decimal @default(0) @db.Decimal(15, 2)
+  amount    Decimal @default(0) @db.Decimal(18, 2)
+  note      String?
+  order     Int     @default(0)
+
+  @@index([submissionId])
+}
+
+enum LogbookCategory {
+  KUNJUNGAN_CLIENT
+  KUNJUNGAN_KONSULTAN
+  INSTRUKSI_LAPANGAN
+  KEAMANAN
+  KESALAHAN_KERJA
+  KECELAKAAN_KERJA
+  KERUSAKAN_ALAT
+  GANGGUAN_CUACA
+  GANGGUAN_WARGA
+  LAINNYA
+}
+
+enum LogbookSeverity {
+  INFO
+  RINGAN
+  SEDANG
+  BERAT
+  KRITIS
+}
+
+/// Buku kejadian lapangan.
+///
+/// Berbeda dari laporan harian, yang mencatat apa yang direncanakan dan
+/// dikerjakan. Logbook mencatat apa yang tidak direncanakan: klien datang
+/// mendadak, baut terpasang salah, ada gangguan dari luar. Saat terjadi klaim
+/// keterlambatan, catatan inilah yang menjelaskan sebabnya.
+model LogbookEntry {
+  id    String @id @default(cuid())
+  rabId String
+  rab   Rab    @relation(fields: [rabId], references: [id], onDelete: Cascade)
+
+  date DateTime
+  /// Jam kejadian sebagai teks "HH:MM" â€” kejadian lapangan dicatat menurut jam
+  /// dinding di lokasi, dan menyimpannya sebagai penanda waktu justru memaksa
+  /// menebak zona waktu yang tidak pernah ditanyakan ke siapa pun.
+  timeOfDay String?
+
+  category LogbookCategory
+  severity LogbookSeverity @default(INFO)
+
+  title       String
+  description String  @db.Text
+  /// Pihak yang terlibat: nama tamu, subkontraktor, instansi.
+  involvedParty String?
+  actionTaken   String? @db.Text
+  followUp      String? @db.Text
+
+  isResolved Boolean   @default(false)
+  resolvedAt DateTime?
+
+  attachments Json?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String?
+  createdBy   User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([rabId, date])
+  @@index([category])
+}
+
+enum MemoDirection {
+  INCOMING // surat masuk â€” umumnya komplain atau instruksi klien
+  OUTGOING // surat keluar â€” balasan kontraktor
+}
+
+enum MemoCategory {
+  KOMPLAIN
+  INSTRUKSI
+  TEGURAN
+  PERMINTAAN_INFO
+  KLARIFIKASI
+  APPROVAL
+  ADDENDUM
+  LAINNYA
+}
+
+enum MemoStatus {
+  OPEN // masuk, belum ditangani
+  IN_PROGRESS
+  ANSWERED // sudah dibalas surat keluar
+  CLOSED
+}
+
+/// Site memo â€” surat masuk dan surat keluar dalam satu tabel dan satu utas.
+///
+/// Sengaja tidak dipisah menjadi dua tabel: setiap balasan menunjuk surat yang
+/// dijawabnya, dan pertanyaan yang paling sering diajukan pemilik proyek â€”
+/// "komplain tanggal sekian sudah dijawab belum?" â€” hanya bisa dijawab murah
+/// bila keduanya berada di tabel yang sama.
+model SiteMemo {
+  id     String @id @default(cuid())
+  number String @unique
+  rabId  String
+  rab    Rab    @relation(fields: [rabId], references: [id], onDelete: Cascade)
+
+  direction MemoDirection
+  category  MemoCategory  @default(LAINNYA)
+  status    MemoStatus    @default(OPEN)
+
+  subject String
+  body    String @db.Text
+
+  fromParty String
+  toParty   String
+
+  /// Tanggal yang tertera di surat, bukan tanggal input.
+  letterDate DateTime
+  /// Kapan surat benar-benar diterima (masuk) atau dikirim (keluar).
+  handledAt DateTime?
+  /// Batas waktu menjawab surat masuk. Tunggakan dihitung dari sini.
+  dueDate  DateTime?
+  closedAt DateTime?
+
+  parentId String?
+  parent   SiteMemo?  @relation("MemoThread", fields: [parentId], references: [id], onDelete: SetNull)
+  replies  SiteMemo[] @relation("MemoThread")
+
+  attachments Json?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String?
+  createdBy   User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([rabId, direction])
+  @@index([status])
+  @@index([parentId])
+}
+
+enum LetterType {
+  SPK // Surat Perjanjian Kerja
+  INVOICE
+  KWITANSI
+  BAPP // Berita Acara Penyelesaian Pekerjaan
+  BAST // Berita Acara Serah Terima
+}
+
+enum LetterStatus {
+  DRAFT
+  ISSUED // sudah terbit dan bernomor pasti
+  SIGNED // sudah ditandatangani kedua pihak
+  PAID // khusus invoice dan kwitansi
+  CANCELLED
+}
+
+/// Surat resmi proyek: SPK, invoice, kwitansi, BAPP, dan BAST.
+///
+/// Kelimanya ditampung satu tabel karena secara struktur identik â€” nomor unik,
+/// dua pihak, tanggal, penanda tangan, dan sebuah isi â€” sedangkan yang berbeda
+/// hanya bagian isinya, yang disimpan di `body`. Memecahnya menjadi lima tabel
+/// akan menyalin kolom yang sama lima kali dan membuat "semua surat proyek ini,
+/// terbaru dulu" menjadi lima kueri yang digabung.
+///
+/// Nilai uang dibekukan saat surat terbit, mengikuti aturan yang sama dengan
+/// Surat Penawaran dan termin: opname yang direvisi setelah invoice terkirim
+/// tidak boleh diam-diam mengubah angka yang sudah dipegang pemilik proyek.
+model ProjectLetter {
+  id     String       @id @default(cuid())
+  number String       @unique
+  rabId  String
+  rab    Rab          @relation(fields: [rabId], references: [id], onDelete: Cascade)
+  type   LetterType
+  status LetterStatus @default(DRAFT)
+
+  subject String
+  /// Tanggal yang tercetak di surat.
+  letterDate DateTime
+  issuedAt   DateTime?
+  signedAt   DateTime?
+  paidAt     DateTime?
+  /// Jatuh tempo pembayaran invoice.
+  dueDate DateTime?
+
+  recipientName    String
+  recipientCompany String?
+  recipientAddress String? @db.Text
+  attentionTo      String?
+
+  signerName  String
+  signerTitle String
+
+  signatoryId String?
+  signatory   Signatory? @relation(fields: [signatoryId], references: [id])
+  /// Pihak kedua pada SPK dan berita acara — dokumen dua tanda tangan.
+  counterSignerName  String?
+  counterSignerTitle String?
+
+  /// Nilai pokok. Nol untuk BAPP dan BAST yang memang tidak membawa angka.
+  amount          Decimal @default(0) @db.Decimal(18, 2)
+  retentionAmount Decimal @default(0) @db.Decimal(18, 2)
+  taxPct          Decimal @default(0) @db.Decimal(5, 2)
+  taxAmount       Decimal @default(0) @db.Decimal(18, 2)
+  totalAmount     Decimal @default(0) @db.Decimal(18, 2)
+  /// Terbilang, dibekukan bersama nilainya supaya huruf dan angka tak pernah
+  /// berselisih setelah surat terbit.
+  amountInWords String?
+
+  /// Isi khas tiap jenis: pasal SPK, rincian tagihan, daftar pekerjaan BAPP.
+  body Json
+  /// Salinan angka sumber pada saat terbit.
+  snapshot Json?
+
+  billingId String?
+  billing   ProgressBilling? @relation(fields: [billingId], references: [id], onDelete: SetNull)
+  /// SPK lahir dari penawaran yang diterima klien.
+  quotationId String?
+  quotation   Quotation? @relation(fields: [quotationId], references: [id], onDelete: SetNull)
+  /// Kwitansi menunjuk invoicenya, BAST menunjuk BAPP-nya.
+  parentLetterId String?
+  parentLetter   ProjectLetter?  @relation("LetterChain", fields: [parentLetterId], references: [id], onDelete: SetNull)
+  childLetters   ProjectLetter[] @relation("LetterChain")
+
+  notes       String? @db.Text
+  attachments Json?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String?
+  createdBy   User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([rabId, type])
+  @@index([status])
+  @@index([billingId])
+}
+
