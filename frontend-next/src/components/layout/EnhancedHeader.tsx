@@ -24,6 +24,7 @@ interface NavItem {
 const mainNav: NavItem[] = [
   { label: "Layanan", href: "/services" },
   { label: "Proyek", href: "/projects" },
+  { label: "Proses", href: "/process" },
   { label: "Tentang", href: "/about" },
   { label: "Karier", href: "/career" },
   { label: "Kontak", href: "/contact" },

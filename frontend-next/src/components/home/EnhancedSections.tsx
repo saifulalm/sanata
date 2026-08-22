@@ -15,6 +15,88 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
+// Type definitions for CMS data
+interface StatItem {
+  value: number;
+  suffix: string;
+  label: string;
+  icon: "Briefcase" | "Users" | "Award" | "TrendingUp";
+}
+
+interface TestimonialItem {
+  id: string;
+  name: string;
+  role: string;
+  content: string;
+  rating: number;
+}
+
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+// Default stats fallback
+const defaultStats: StatItem[] = [
+  { value: 120, suffix: "+", label: "Proyek Selesai", icon: "Briefcase" },
+  { value: 14, suffix: "+", label: "Tahun Pengalaman", icon: "Award" },
+  { value: 80, suffix: "+", label: "Klien Puas", icon: "Users" },
+  { value: 98, suffix: "%", label: "Tingkat Kepuasan", icon: "TrendingUp" },
+];
+
+// Default testimonials fallback
+const defaultTestimonials: TestimonialItem[] = [
+  {
+    id: "1",
+    name: "Ir. Ahmad Wijaya",
+    role: "Direksi PT Nusantara Realty",
+    content: "Sanata Construction menghadirkan solusi konstruksi yang inovatif dan efisien. Tim mereka sangat profesional dalam mengelola proyek kompleks kami.",
+    rating: 5,
+  },
+  {
+    id: "2",
+    name: "Dr. Sarah Putri",
+    role: "Rektor Universitas Teknologi Mandiri",
+    content: "Implementasi sistem BIM dan pendekatan modular dari Sanata membuat proyek kampus kami selesai lebih cepat dari jadwal dengan kualitas premium.",
+    rating: 5,
+  },
+  {
+    id: "3",
+    name: "Hendra Kusuma",
+    role: "CEO PT Green Habitat Indonesia",
+    content: "Komitmen Sanata terhadap keberlanjutan dan penggunaan material ramah lingkungan sejalan dengan visi perusahaan kami untuk hunian masa depan.",
+    rating: 5,
+  },
+];
+
+// Default FAQ fallback
+const defaultFAQs: FAQItem[] = [
+  {
+    question: "Bagaimana proses perencanaan proyek di Sanata?",
+    answer: "Kami memulai dengan analisis kebutuhan klien secara mendalam, kemudian membuat desain menggunakan teknologi BIM 4D yang memungkinkan visualisasi proyek secara real-time sebelum konstruksi dimulai.",
+  },
+  {
+    question: "Berapa lama biasanya waktu pengerjaan proyek?",
+    answer: "Waktu pengerjaan bervariasi tergantung skala dan kompleksitas proyek. Proyek residensial biasanya 6-12 bulan, sementara proyek komersial bisa 12-24 bulan atau lebih.",
+  },
+  {
+    question: "Apakah Sanata memberikan garansi untuk proyek?",
+    answer: "Ya, semua proyek kami dilengkapi dengan garansi struktural 10 tahun dan garansi finishing 2 tahun. Kami juga menyediakan layanan maintenance berkala.",
+  },
+  {
+    question: "Bagaimana sistem pembayaran di Sanata?",
+    answer: "Kami menerapkan sistem pembayaran berbasis milestone, di mana pembayaran dilakukan sesuai dengan tahapan penyelesaian proyek yang telah disepakati bersama.",
+  },
+];
+
+// Map icon names to Lucide components
+const iconMap: Record<string, LucideIcon> = {
+  Briefcase,
+  Users,
+  Award,
+  TrendingUp,
+};
+
 // Animated counter component
 function AnimatedCounter({
   value,
@@ -61,92 +143,7 @@ function AnimatedCounter({
   );
 }
 
-// Statistics section data
-const stats = [
-  { value: 150, suffix: "+", label: "Proyek Selesai", icon: Briefcase },
-  { value: 12, suffix: "+", label: "Tahun Pengalaman", icon: Award },
-  { value: 500, suffix: "+", label: "Klien Puas", icon: Users },
-  { value: 98, suffix: "%", label: "Tingkat Kepuasan", icon: TrendingUp },
-];
-
-// Testimonials data
-const testimonials = [
-  {
-    id: 1,
-    name: "Ir. Ahmad Wijaya",
-    role: "Direksi PT Nusantara Realty",
-    avatar: null,
-    content:
-      "Sanata Construction menghadirkan solusi konstruksi yang inovatif dan efisien. Tim mereka sangat profesional dalam mengelola proyek kompleks kami.",
-    rating: 5,
-    project: "Nusantara Tower Phase 2",
-  },
-  {
-    id: 2,
-    name: "Dr. Sarah Putri",
-    role: "Rektor Universitas Teknologi Mandiri",
-    avatar: null,
-    content:
-      "Implementasi sistem BIM dan pendekatan modular dari Sanata membuat proyek kampus kami selesai lebih cepat dari jadwal dengan kualitas premium.",
-    rating: 5,
-    project: "Gedung Perpustakaan Universitas",
-  },
-  {
-    id: 3,
-    name: "Hendra Kusuma",
-    role: "CEO PT Green Habitat Indonesia",
-    avatar: null,
-    content:
-      "Komitmen Sanata terhadap keberlanjutan dan penggunaan material ramah lingkungan sejalan dengan visi perusahaan kami untuk hunian masa depan.",
-    rating: 5,
-    project: "Green Residence Complex",
-  },
-];
-
-// FAQ data
-const faqs = [
-  {
-    question: "Bagaimana proses perencanaan proyek di Sanata?",
-    answer:
-      "Kami memulai dengan analisis kebutuhan klien secara mendalam, kemudian membuat desain menggunakan teknologi BIM 4D yang memungkinkan visualisasi proyek secara real-time sebelum konstruksi dimulai.",
-  },
-  {
-    question: "Berapa lama biasanya waktu pengerjaan proyek?",
-    answer:
-      "Waktu pengerjaan bervariasi tergantung skala dan kompleksitas proyek. Proyek residensial biasanya 6-12 bulan, sementara proyek komersial bisa 12-24 bulan atau lebih.",
-  },
-  {
-    question: "Apakah Sanata memberikan garansi untuk proyek?",
-    answer:
-      "Ya, semua proyek kami dilengkapi dengan garansi struktural 10 tahun dan garansi finishing 2 tahun. Kami juga menyediakan layanan maintenance berkala.",
-  },
-  {
-    question: "Bagaimana sistem pembayaran di Sanata?",
-    answer:
-      "Kami menerapkan sistem pembayaran berbasis milestone, di mana pembayaran dilakukan sesuai dengan tahapan penyelesaian proyek yang telah disepakati bersama.",
-  },
-];
-
-// Team members (for future expansion)
-const team = [
-  {
-    name: "Dr. Ir. Budi Santoso",
-    role: "Chief Executive Officer",
-    image: null,
-  },
-  {
-    name: "Maya Wijaya",
-    role: "Chief Operations Officer",
-    image: null,
-  },
-  {
-    name: "Ir. Denny Kurniawan",
-    role: "Chief Technical Officer",
-    image: null,
-  },
-];
-
-export function StatsSection() {
+export function StatsSection({ stats = defaultStats }: { stats?: StatItem[] }) {
   return (
     <section className="relative border-y border-white/10 bg-slate-950/60 py-20">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(56,189,248,0.08),_transparent_60%)]" />
@@ -161,7 +158,7 @@ export function StatsSection() {
 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat) => {
-            const Icon = stat.icon;
+            const Icon = iconMap[stat.icon] || Briefcase;
             return (
               <div
                 key={stat.label}
@@ -188,7 +185,7 @@ export function StatsSection() {
   );
 }
 
-export function TestimonialsSection() {
+export function TestimonialsSection({ testimonials = defaultTestimonials }: { testimonials?: TestimonialItem[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const next = () => setActiveIndex((prev) => (prev + 1) % testimonials.length);
@@ -242,7 +239,6 @@ export function TestimonialsSection() {
                       <div>
                         <p className="font-semibold text-white">{testimonial.name}</p>
                         <p className="text-sm text-slate-400">{testimonial.role}</p>
-                        <p className="mt-1 text-xs text-cyan-400">{testimonial.project}</p>
                       </div>
                     </div>
 
@@ -296,7 +292,7 @@ export function TestimonialsSection() {
   );
 }
 
-export function FAQSection() {
+export function FAQSection({ faqs = defaultFAQs }: { faqs?: FAQItem[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (

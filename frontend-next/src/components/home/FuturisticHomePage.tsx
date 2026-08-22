@@ -187,6 +187,11 @@ export function FuturisticHomePage({
     defaultRumamesraServices
   );
 
+  // Stats dari CMS atau fallback
+  const cmsStats = normalizeStats(collection(content, "home_stats"));
+  const cmsTestimonials = normalizeTestimonials(collection(content, "testimonials"));
+  const cmsFAQs = normalizeFAQs(collection(content, "faq"));
+
   return (
     <div className="overflow-hidden bg-[#06111f] text-white">
       <section id="homepage" className="relative isolate min-h-screen overflow-hidden">
@@ -474,14 +479,14 @@ export function FuturisticHomePage({
         </div>
       </section>
 
-      {/* Stats Section - Track Record */}
-      <StatsSection />
+      {/* Stats Section - Track Record dari CMS */}
+      <StatsSection stats={cmsStats} />
 
-      {/* Testimonials Section */}
-      <TestimonialsSection />
+      {/* Testimonials Section dari CMS */}
+      <TestimonialsSection testimonials={cmsTestimonials} />
 
-      {/* FAQ Section */}
-      <FAQSection />
+      {/* FAQ Section dari CMS */}
+      <FAQSection faqs={cmsFAQs} />
 
       {/* Newsletter Section */}
       <NewsletterSection />
@@ -572,6 +577,106 @@ function normalizeServices(
   }
 
   return fallback.map((item) => ({ ...item, href: null }));
+}
+
+// Default stats fallback
+const defaultStats = [
+  { value: 120, suffix: "+", label: "Proyek Selesai", icon: "Briefcase" as const },
+  { value: 14, suffix: "+", label: "Tahun Pengalaman", icon: "Award" as const },
+  { value: 80, suffix: "+", label: "Klien Puas", icon: "Users" as const },
+  { value: 98, suffix: "%", label: "Tingkat Kepuasan", icon: "TrendingUp" as const },
+];
+
+function normalizeStats(items: SiteContentItem[]) {
+  const icons: Record<string, typeof defaultStats[number]["icon"]> = {
+    Briefcase: "Briefcase",
+    Users: "Users",
+    Award: "Award",
+    TrendingUp: "TrendingUp",
+  };
+
+  if (items.length > 0) {
+    return items.map((item, index) => {
+      // Parse value from title (e.g., "120" -> 120, "150+" -> 150)
+      const rawValue = parseInt(item.title?.replace(/\D/g, "") ?? "0", 10);
+      const suffix = item.subtitle ?? defaultStats[index % defaultStats.length].suffix;
+      return {
+        value: rawValue || defaultStats[index % defaultStats.length].value,
+        suffix,
+        label: item.body ?? defaultStats[index % defaultStats.length].label,
+        icon: (icons[item.icon ?? ""] ?? defaultStats[index % defaultStats.length].icon) as typeof defaultStats[number]["icon"],
+      };
+    });
+  }
+  return defaultStats;
+}
+
+// Default testimonials fallback
+const defaultTestimonials = [
+  {
+    id: "1",
+    name: "Ir. Ahmad Wijaya",
+    role: "Direksi PT Nusantara Realty",
+    content: "Sanata Construction menghadirkan solusi konstruksi yang inovatif dan efisien. Tim mereka sangat profesional dalam mengelola proyek kompleks kami.",
+    rating: 5,
+  },
+  {
+    id: "2",
+    name: "Dr. Sarah Putri",
+    role: "Rektor Universitas Teknologi Mandiri",
+    content: "Implementasi sistem BIM dan pendekatan modular dari Sanata membuat proyek kampus kami selesai lebih cepat dari jadwal dengan kualitas premium.",
+    rating: 5,
+  },
+  {
+    id: "3",
+    name: "Hendra Kusuma",
+    role: "CEO PT Green Habitat Indonesia",
+    content: "Komitmen Sanata terhadap keberlanjutan dan penggunaan material ramah lingkungan sejalan dengan visi perusahaan kami untuk hunian masa depan.",
+    rating: 5,
+  },
+];
+
+function normalizeTestimonials(items: SiteContentItem[]) {
+  if (items.length > 0) {
+    return items.map((item) => ({
+      id: item.id,
+      name: item.title ?? "Klien",
+      role: item.subtitle ?? "",
+      content: item.body ?? "",
+      rating: 5,
+    }));
+  }
+  return defaultTestimonials;
+}
+
+// Default FAQ fallback
+const defaultFAQs = [
+  {
+    question: "Bagaimana proses perencanaan proyek di Sanata?",
+    answer: "Kami memulai dengan analisis kebutuhan klien secara mendalam, kemudian membuat desain menggunakan teknologi BIM 4D yang memungkinkan visualisasi proyek secara real-time sebelum konstruksi dimulai.",
+  },
+  {
+    question: "Berapa lama biasanya waktu pengerjaan proyek?",
+    answer: "Waktu pengerjaan bervariasi tergantung skala dan kompleksitas proyek. Proyek residensial biasanya 6-12 bulan, sementara proyek komersial bisa 12-24 bulan atau lebih.",
+  },
+  {
+    question: "Apakah Sanata memberikan garansi untuk proyek?",
+    answer: "Ya, semua proyek kami dilengkapi dengan garansi struktural 10 tahun dan garansi finishing 2 tahun. Kami juga menyediakan layanan maintenance berkala.",
+  },
+  {
+    question: "Bagaimana sistem pembayaran di Sanata?",
+    answer: "Kami menerapkan sistem pembayaran berbasis milestone, di mana pembayaran dilakukan sesuai dengan tahapan penyelesaian proyek yang telah disepakati bersama.",
+  },
+];
+
+function normalizeFAQs(items: SiteContentItem[]) {
+  if (items.length > 0) {
+    return items.map((item) => ({
+      question: item.title ?? "",
+      answer: item.body ?? "",
+    }));
+  }
+  return defaultFAQs;
 }
 
 function ServicePanel({

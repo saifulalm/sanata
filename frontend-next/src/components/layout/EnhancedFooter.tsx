@@ -9,6 +9,7 @@ const linkGroups = [
     links: [
       { href: "/about", label: "Tentang Kami" },
       { href: "/services", label: "Layanan SANATA" },
+      { href: "/process", label: "Cara Kerja" },
       { href: "/projects", label: "Proyek Unggulan" },
       { href: "/career", label: "Karir" },
     ],

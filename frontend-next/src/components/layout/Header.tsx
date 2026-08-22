@@ -20,6 +20,7 @@ const NAV_ITEMS = [
   { href: "/services", homeHref: "/#sanata-services", label: "SANATA Services" },
   { href: "/#rumamesra-services", homeHref: "/#rumamesra-services", label: "RUMAMESRA Services" },
   { href: "/projects", homeHref: "/projects", label: "Projects" },
+  { href: "/process", homeHref: "/process", label: "Our Process" },
   { href: "/journal", homeHref: "/journal", label: "Insights" },
   { href: "/contact", homeHref: "/contact", label: "Contact Us" },
 ] as const;
