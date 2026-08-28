@@ -9,6 +9,7 @@ import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { EmptyState, FilterPill } from "@/components/ui/Surface";
 import { getCategories, getProducts } from "@/lib/api";
 import { getSiteContent, setting } from "@/lib/siteContent";
+import { collectionPageJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Proyek & Portofolio",
@@ -21,13 +22,33 @@ export default async function ProjectsPage({
   searchParams: Promise<{ category?: string }>;
 }) {
   const params = await searchParams;
-  const [categories, content] = await Promise.all([getCategories(), getSiteContent()]);
+  const [categories, content, productsResult] = await Promise.all([
+    getCategories(),
+    getSiteContent(),
+    getProducts({ pageSize: 100 }).catch(() => ({ data: [], meta: { page: 1, pageSize: 100, total: 0, totalPages: 0 } })),
+  ]);
   const activeCategory = categories.find((c) => c.slug === params.category);
+  const { data: projects } = productsResult;
 
-  const { data: projects } = await getProducts({ categoryId: activeCategory?.id, pageSize: 24 });
+  // Filter based on category
+  let filteredProjects = projects;
+  if (activeCategory) {
+    filteredProjects = projects.filter((p) => p.category?.id === activeCategory.id);
+  }
+
+  // Generate CollectionPage schema
+  const projectsSchema = collectionPageJsonLd(
+    "projects",
+    projects.slice(0, 50).map((p) => ({ name: p.name, slug: p.slug }))
+  );
 
   return (
     <>
+      {/* Collection Page Schema untuk Projects listing */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(projectsSchema) }}
+      />
       <PageHero
         eyebrow={setting(content, "projects.hero.eyebrow", "Proyek & Portofolio")}
         title={setting(content, "projects.hero.title", "Karya yang Telah Kami Selesaikan")}

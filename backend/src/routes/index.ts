@@ -19,6 +19,9 @@ import siteMemoRoutes from "@/routes/siteMemo.routes";
 import letterRoutes from "@/routes/letter.routes";
 import signatoryRoutes from "@/routes/signatory.routes";
 import workforceRoleRoutes from "@/routes/workforceRole.routes";
+import scraperRoutes from "@/routes/scraper.routes";
+import santraRoutes from "@/routes/santra.routes";
+import geoRoutes from "@/routes/geo.routes";
 
 const router = Router();
 
@@ -42,5 +45,15 @@ router.use("/site-memos", siteMemoRoutes);
 router.use("/letters", letterRoutes);
 router.use("/signatories", signatoryRoutes);
 router.use("/workforce-roles", workforceRoleRoutes);
+router.use("/scraper", scraperRoutes);
+router.use("/workforce", santraRoutes);
+router.use("/assessments", santraRoutes);
+router.use("/assignments", santraRoutes);
+router.use("/executions", santraRoutes);
+router.use("/qc", santraRoutes);
+router.use("/kpis", santraRoutes);
+router.use("/tools", santraRoutes);
+router.use("/loans", santraRoutes);
+router.use("/geo", geoRoutes);
 
 export default router;

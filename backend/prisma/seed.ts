@@ -1,5 +1,5 @@
 ﻿import { Prisma, PrismaClient } from "@prisma/client";
-import bcrypt from "bcryptjs";
+import * as bcrypt from "bcryptjs";
 import slugify from "slugify";
 import { SITE_SETTING_DEFAULTS } from "../src/config/siteContent";
 
@@ -88,6 +88,7 @@ async function main() {
   await seedBroadcast(admin.id);
   await seedSignatories();
   await seedProjectDocs(admin.id);
+  await seedWorkforce(admin.id);
 
   console.log("Seed complete. Admin login: admin@sanata.id / Admin123!");
 }
@@ -1231,6 +1232,646 @@ async function seedEstimation() {
   }
 
   console.log(`Seeded ${priceItems.length} price items and ${ahspList.length} AHSP entries.`);
+}
+
+// ============================================
+// SANTRA WORKFORCE SEED - FULL CAPACITY
+// 55+ workers dengan distribusi realistis
+// ============================================
+
+async function seedWorkforce(adminId: string) {
+  // Seed WorkforceRoles - semua peran lengkap
+  const workforceRoles = [
+    // Peran manajemen proyek
+    { role: "DIREKTUR_UTAMA" as const, label: "Directeur Utama", order: 1 },
+    { role: "DIREKTUR" as const, label: "Directeur", order: 2 },
+    { role: "MANAGER_PROYEK" as const, label: "Manager Proyek", order: 3 },
+    { role: "SITE_MANAGER" as const, label: "Site Manager", order: 4 },
+    { role: "PIMPINAN_PROYEK" as const, label: "Pimpinan Proyek", order: 5 },
+    // Peran lapangan
+    { role: "KEPALA_TUKANG" as const, label: "Kepala Tukang", order: 10 },
+    { role: "MANDOR" as const, label: "Mandor", order: 11 },
+    { role: "TUKANG_BATU" as const, label: "Tukang Batu", order: 12 },
+    { role: "TUKANG_KAYU" as const, label: "Tukang Kayu", order: 13 },
+    { role: "TUKANG_BESI" as const, label: "Tukang Besi", order: 14 },
+    { role: "OPERATOR" as const, label: "Operator", order: 15 },
+    { role: "PEKERJA" as const, label: "Pekerja", order: 20 },
+    { role: "STAF" as const, label: "Staf", order: 30 },
+    { role: "LAINNYA" as const, label: "Lainnya", order: 99 },
+  ];
+
+  for (const wr of workforceRoles) {
+    await prisma.workforceRole.upsert({
+      where: { role: wr.role },
+      update: { label: wr.label, order: wr.order, isActive: true },
+      create: { role: wr.role, label: wr.label, order: wr.order, isActive: true },
+    });
+  }
+
+  // Initialize all counters
+  const counterPrefixes = ["WORKER-M", "WORKER-T", "WORKER-K", "WORKER-B", "WORKER-O", "WORKER-P", "WORKER-KT", "ASS", "JOB", "LOG", "QC", "KPI", "TL", "LN"];
+  for (const prefix of counterPrefixes) {
+    await prisma.santraCounter.upsert({
+      where: { prefix },
+      update: {},
+      create: { prefix, lastSeq: 0 },
+    });
+  }
+
+  // Check if workers exist - create workers only if none exist
+  const existingWorkers = await prisma.worker.count();
+  if (existingWorkers === 0) {
+    // Create Workers - FULL CAPACITY (55 workers)
+  const workersData = [
+    // ===== MANDOR (4 workers) - Supervisor lapangan senior =====
+    { workerCode: "M-0001", name: "Harsono", role: "MANDOR" as const, phone: "081234567801", ktpNumber: "3201234567890001", grade: "A" as const, skills: ["masonry", "supervision", "concrete"], experienceYears: 15, status: "ACTIVE" as const, joinDate: new Date("2015-03-01") },
+    { workerCode: "M-0002", name: "Dedi Kurniawan", role: "MANDOR" as const, phone: "081234567802", ktpNumber: "3201234567890002", grade: "A" as const, skills: ["carpentry", "supervision", "finishing"], experienceYears: 12, status: "ACTIVE" as const, joinDate: new Date("2017-06-15") },
+    { workerCode: "M-0003", name: "Asep Saepuloh", role: "MANDOR" as const, phone: "081234567803", ktpNumber: "3201234567890003", grade: "B" as const, skills: ["steel", "supervision"], experienceYears: 10, status: "ACTIVE" as const, joinDate: new Date("2019-01-10") },
+    { workerCode: "M-0004", name: "Sukmawan", role: "MANDOR" as const, phone: "081234567804", ktpNumber: "3201234567890004", grade: "B" as const, skills: ["general", "supervision"], experienceYears: 8, status: "ACTIVE" as const, joinDate: new Date("2020-05-20") },
+
+    // ===== KEPALA TUKANG (4 workers) - Lead craftsmen =====
+    { workerCode: "KT-0001", name: "Ucup Surucup", role: "KEPALA_TUKANG" as const, phone: "081234567751", ktpNumber: "3201234567890051", grade: "A" as const, skills: ["masonry", "leadership", "plaster"], experienceYears: 12, status: "ACTIVE" as const, joinDate: new Date("2016-08-01") },
+    { workerCode: "KT-0002", name: "Maman Suparman", role: "KEPALA_TUKANG" as const, phone: "081234567752", ktpNumber: "3201234567890052", grade: "A" as const, skills: ["carpentry", "leadership", "formwork"], experienceYears: 11, status: "ACTIVE" as const, joinDate: new Date("2017-02-15") },
+    { workerCode: "KT-0003", name: "Jajang Cengkar", role: "KEPALA_TUKANG" as const, phone: "081234567753", ktpNumber: "3201234567890053", grade: "A" as const, skills: ["steel", "leadership", "welding"], experienceYears: 10, status: "ACTIVE" as const, joinDate: new Date("2018-04-10") },
+    { workerCode: "KT-0004", name: "Entis Sutisna", role: "KEPALA_TUKANG" as const, phone: "081234567754", ktpNumber: "3201234567890054", grade: "B" as const, skills: ["general", "leadership"], experienceYears: 7, status: "ACTIVE" as const, joinDate: new Date("2021-06-01") },
+
+    // ===== TUKANG BATU (10 workers) =====
+    { workerCode: "T-0001", name: "Udin Hasan", role: "TUKANG_BATU" as const, phone: "081234567811", ktpNumber: "3201234567890011", grade: "A" as const, skills: ["masonry", "plaster", "tiles"], experienceYears: 8, status: "ACTIVE" as const, joinDate: new Date("2020-02-01") },
+    { workerCode: "T-0002", name: "Cecep Supriatna", role: "TUKANG_BATU" as const, phone: "081234567812", ktpNumber: "3201234567890012", grade: "A" as const, skills: ["masonry", "plaster"], experienceYears: 7, status: "ACTIVE" as const, joinDate: new Date("2021-04-15") },
+    { workerCode: "T-0003", name: "Dedi Rohendi", role: "TUKANG_BATU" as const, phone: "081234567813", ktpNumber: "3201234567890013", grade: "B" as const, skills: ["masonry", "tiles"], experienceYears: 5, status: "ACTIVE" as const, joinDate: new Date("2022-07-20") },
+    { workerCode: "T-0004", name: "Tono Wartono", role: "TUKANG_BATU" as const, phone: "081234567814", ktpNumber: "3201234567890014", grade: "B" as const, skills: ["masonry", "plaster"], experienceYears: 4, status: "ACTIVE" as const, joinDate: new Date("2023-01-10") },
+    { workerCode: "T-0005", name: "Juju Jumadi", role: "TUKANG_BATU" as const, phone: "081234567815", ktpNumber: "3201234567890015", grade: "C" as const, skills: ["masonry"], experienceYears: 2, status: "ACTIVE" as const, joinDate: new Date("2024-03-01") },
+    { workerCode: "T-0006", name: "Asep Dudung", role: "TUKANG_BATU" as const, phone: "081234567816", ktpNumber: "3201234567890016", grade: "B" as const, skills: ["masonry", "plaster"], experienceYears: 6, status: "ACTIVE" as const, joinDate: new Date("2022-05-15") },
+    { workerCode: "T-0007", name: "Nana Nurjaman", role: "TUKANG_BATU" as const, phone: "081234567817", ktpNumber: "3201234567890017", grade: "C" as const, skills: ["masonry"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-02-01") },
+    { workerCode: "T-0008", name: "Ujang Komaruddin", role: "TUKANG_BATU" as const, phone: "081234567818", ktpNumber: "3201234567890018", grade: "B" as const, skills: ["masonry", "tiles"], experienceYears: 4, status: "ACTIVE" as const, joinDate: new Date("2023-08-20") },
+    { workerCode: "T-0009", name: "Ahmad Sopian", role: "TUKANG_BATU" as const, phone: "081234567819", ktpNumber: "3201234567890019", grade: "C" as const, skills: ["masonry"], experienceYears: 2, status: "ACTIVE" as const, joinDate: new Date("2024-06-01") },
+    { workerCode: "T-0010", name: "Rudi Hermawan", role: "TUKANG_BATU" as const, phone: "081234567820", ktpNumber: "3201234567890020", grade: "B" as const, skills: ["masonry", "plaster"], experienceYears: 3, status: "ACTIVE" as const, joinDate: new Date("2024-01-15") },
+
+    // ===== TUKANG KAYU (6 workers) =====
+    { workerCode: "K-0001", name: "Iman Sutarman", role: "TUKANG_KAYU" as const, phone: "081234567821", ktpNumber: "3201234567890021", grade: "A" as const, skills: ["carpentry", "formwork", "finishing"], experienceYears: 10, status: "ACTIVE" as const, joinDate: new Date("2018-05-01") },
+    { workerCode: "K-0002", name: "Enjang Kusnadi", role: "TUKANG_KAYU" as const, phone: "081234567822", ktpNumber: "3201234567890022", grade: "B" as const, skills: ["carpentry", "formwork"], experienceYears: 6, status: "ACTIVE" as const, joinDate: new Date("2021-08-15") },
+    { workerCode: "K-0003", name: "Otoy Oom", role: "TUKANG_KAYU" as const, phone: "081234567823", ktpNumber: "3201234567890023", grade: "B" as const, skills: ["carpentry", "finishing"], experienceYears: 4, status: "ACTIVE" as const, joinDate: new Date("2023-02-01") },
+    { workerCode: "K-0004", name: "Dadang Supriatna", role: "TUKANG_KAYU" as const, phone: "081234567824", ktpNumber: "3201234567890024", grade: "B" as const, skills: ["carpentry", "formwork"], experienceYears: 5, status: "ACTIVE" as const, joinDate: new Date("2022-03-10") },
+    { workerCode: "K-0005", name: "Taryo Sumantri", role: "TUKANG_KAYU" as const, phone: "081234567825", ktpNumber: "3201234567890025", grade: "C" as const, skills: ["carpentry"], experienceYears: 2, status: "ACTIVE" as const, joinDate: new Date("2024-04-01") },
+    { workerCode: "K-0006", name: "Arip Saefuloh", role: "TUKANG_KAYU" as const, phone: "081234567826", ktpNumber: "3201234567890026", grade: "C" as const, skills: ["carpentry"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-01-15") },
+
+    // ===== TUKANG BESI (5 workers) =====
+    { workerCode: "B-0001", name: "Hasan Basri", role: "TUKANG_BESI" as const, phone: "081234567831", ktpNumber: "3201234567890031", grade: "A" as const, skills: ["steel", "welding", "fabrication"], experienceYears: 9, status: "ACTIVE" as const, joinDate: new Date("2019-07-01") },
+    { workerCode: "B-0002", name: "Jujun Junaedi", role: "TUKANG_BESI" as const, phone: "081234567832", ktpNumber: "3201234567890032", grade: "B" as const, skills: ["steel", "welding"], experienceYears: 5, status: "ACTIVE" as const, joinDate: new Date("2022-04-10") },
+    { workerCode: "B-0003", name: "Wawan Setiawan", role: "TUKANG_BESI" as const, phone: "081234567833", ktpNumber: "3201234567890033", grade: "B" as const, skills: ["steel", "fabrication"], experienceYears: 4, status: "ACTIVE" as const, joinDate: new Date("2023-05-20") },
+    { workerCode: "B-0004", name: "Deden Mahpudin", role: "TUKANG_BESI" as const, phone: "081234567834", ktpNumber: "3201234567890034", grade: "C" as const, skills: ["steel"], experienceYears: 2, status: "ACTIVE" as const, joinDate: new Date("2024-07-01") },
+    { workerCode: "B-0005", name: "Iif Solihin", role: "TUKANG_BESI" as const, phone: "081234567835", ktpNumber: "3201234567890035", grade: "C" as const, skills: ["steel", "welding"], experienceYears: 3, status: "ACTIVE" as const, joinDate: new Date("2023-11-15") },
+
+    // ===== OPERATOR (4 workers) =====
+    { workerCode: "O-0001", name: "Aceng Cucu", role: "OPERATOR" as const, phone: "081234567841", ktpNumber: "3201234567890041", grade: "A" as const, skills: ["excavator", "loader", "dump_truck"], experienceYears: 8, status: "ACTIVE" as const, joinDate: new Date("2020-01-15") },
+    { workerCode: "O-0002", name: "Arip Aripin", role: "OPERATOR" as const, phone: "081234567842", ktpNumber: "3201234567890042", grade: "B" as const, skills: ["concrete_mixer", "vibrator"], experienceYears: 4, status: "ACTIVE" as const, joinDate: new Date("2023-06-01") },
+    { workerCode: "O-0003", name: "Cepi Supriatna", role: "OPERATOR" as const, phone: "081234567843", ktpNumber: "3201234567890043", grade: "B" as const, skills: ["excavator", "crane"], experienceYears: 6, status: "ACTIVE" as const, joinDate: new Date("2022-02-10") },
+    { workerCode: "O-0004", name: "Dadang Rustandi", role: "OPERATOR" as const, phone: "081234567844", ktpNumber: "3201234567890044", grade: "C" as const, skills: ["concrete_mixer", "vibrator"], experienceYears: 2, status: "ACTIVE" as const, joinDate: new Date("2024-08-01") },
+
+    // ===== PEKERJA (18 workers) =====
+    { workerCode: "P-0001", name: "Sugeng Rahayu", role: "PEKERJA" as const, phone: "081234567851", ktpNumber: "3201234567890051", grade: "B" as const, skills: ["general"], experienceYears: 3, status: "ACTIVE" as const, joinDate: new Date("2023-03-01") },
+    { workerCode: "P-0002", name: "Rahmat Hidayat", role: "PEKERJA" as const, phone: "081234567852", ktpNumber: "3201234567890052", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-01-15") },
+    { workerCode: "P-0003", name: "Iwan Setiawan", role: "PEKERJA" as const, phone: "081234567853", ktpNumber: "3201234567890053", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-06-01") },
+    { workerCode: "P-0004", name: "Asep Jatnika", role: "PEKERJA" as const, phone: "081234567854", ktpNumber: "3201234567890054", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-03-01") },
+    { workerCode: "P-0005", name: "Dedi Hermawan", role: "PEKERJA" as const, phone: "081234567855", ktpNumber: "3201234567890055", grade: "C" as const, skills: ["general"], experienceYears: 2, status: "ACTIVE" as const, joinDate: new Date("2024-05-01") },
+    { workerCode: "P-0006", name: "Ahmad Fadillah", role: "PEKERJA" as const, phone: "081234567856", ktpNumber: "3201234567890056", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-04-15") },
+    { workerCode: "P-0007", name: "Sopian Saprudin", role: "PEKERJA" as const, phone: "081234567857", ktpNumber: "3201234567890057", grade: "C" as const, skills: ["general"], experienceYears: 2, status: "ACTIVE" as const, joinDate: new Date("2024-02-01") },
+    { workerCode: "P-0008", name: "Tarno Slamet", role: "PEKERJA" as const, phone: "081234567858", ktpNumber: "3201234567890058", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-05-01") },
+    { workerCode: "P-0009", name: "Sandi Nugraha", role: "PEKERJA" as const, phone: "081234567859", ktpNumber: "3201234567890059", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-07-01") },
+    { workerCode: "P-0010", name: "Galih Pratama", role: "PEKERJA" as const, phone: "081234567860", ktpNumber: "3201234567890060", grade: "C" as const, skills: ["general"], experienceYears: 2, status: "ACTIVE" as const, joinDate: new Date("2024-09-01") },
+    { workerCode: "P-0011", name: "Rizki Ramadhan", role: "PEKERJA" as const, phone: "081234567861", ktpNumber: "3201234567890061", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-02-15") },
+    { workerCode: "P-0012", name: "Fajar Nugroho", role: "PEKERJA" as const, phone: "081234567862", ktpNumber: "3201234567890062", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-06-15") },
+    { workerCode: "P-0013", name: "Bayu Firmansyah", role: "PEKERJA" as const, phone: "081234567863", ktpNumber: "3201234567890063", grade: "C" as const, skills: ["general"], experienceYears: 2, status: "ACTIVE" as const, joinDate: new Date("2024-04-01") },
+    { workerCode: "P-0014", name: "Gilang Permana", role: "PEKERJA" as const, phone: "081234567864", ktpNumber: "3201234567890064", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-03-15") },
+    { workerCode: "P-0015", name: "Deni Saputra", role: "PEKERJA" as const, phone: "081234567865", ktpNumber: "3201234567890065", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-07-15") },
+    { workerCode: "P-0016", name: "Feri Ferdiansyah", role: "PEKERJA" as const, phone: "081234567866", ktpNumber: "3201234567890066", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-08-01") },
+    { workerCode: "P-0017", name: "Ari Suhendar", role: "PEKERJA" as const, phone: "081234567867", ktpNumber: "3201234567890067", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-04-01") },
+    { workerCode: "P-0018", name: "Hendro Prasetyo", role: "PEKERJA" as const, phone: "081234567868", ktpNumber: "3201234567890068", grade: "C" as const, skills: ["general"], experienceYears: 2, status: "ACTIVE" as const, joinDate: new Date("2024-06-15") },
+  ];
+
+  const workers = [];
+  for (const w of workersData) {
+    const worker = await prisma.worker.create({
+      data: {
+        workerCode: w.workerCode,
+        name: w.name,
+        role: w.role,
+        phone: w.phone,
+        ktpNumber: w.ktpNumber,
+        grade: w.grade,
+        skills: w.skills,
+        experienceYears: w.experienceYears,
+        status: w.status,
+        joinDate: w.joinDate,
+        ktpVerified: true,
+        profileComplete: true,
+      },
+    });
+    workers.push(worker);
+  }
+
+  // Index workers by role
+  const mandors = workers.filter(w => w.role === "MANDOR");
+  const kepalaTukangs = workers.filter(w => w.role === "KEPALA_TUKANG");
+  const tukangBatues = workers.filter(w => w.role === "TUKANG_BATU");
+  const tukangKayus = workers.filter(w => w.role === "TUKANG_KAYU");
+  const tukangBesis = workers.filter(w => w.role === "TUKANG_BESI");
+  const operators = workers.filter(w => w.role === "OPERATOR");
+  const pekerjas = workers.filter(w => w.role === "PEKERJA");
+
+  // Get RABs for assignments
+  const rab1 = await prisma.rab.findFirst({ where: { number: "RAB-2026-001" } });
+  const rab2 = await prisma.rab.findFirst({ where: { number: "RAB-2026-002" } });
+
+  // ============================================
+  // JOB ASSIGNMENTS - Full project assignments
+  // ============================================
+  if (rab1) {
+    const assignments1 = [
+      // Struktur
+      { assignmentCode: "JOB-001", rabId: rab1.id, wbsCode: "WBS-01.01", workItem: "Pekerjaan pondasi Strauss pile D300", status: "COMPLETED" as const, priority: 1, responsiblePersonId: tukangBatues[0]?.id, responsibleMandorId: mandors[0]?.id, plannedStart: new Date("2026-02-01"), plannedEnd: new Date("2026-03-15"), actualStart: new Date("2026-02-01"), actualEnd: new Date("2026-03-10"), progressPct: 100 },
+      { assignmentCode: "JOB-002", rabId: rab1.id, wbsCode: "WBS-01.02", workItem: "Pekerjaan sloof 30x50 cm", status: "COMPLETED" as const, priority: 1, responsiblePersonId: tukangBatues[1]?.id, responsibleMandorId: mandors[0]?.id, plannedStart: new Date("2026-03-11"), plannedEnd: new Date("2026-04-01"), actualStart: new Date("2026-03-11"), actualEnd: new Date("2026-03-28"), progressPct: 100 },
+      { assignmentCode: "JOB-003", rabId: rab1.id, wbsCode: "WBS-01.03", workItem: "Pekerjaan kolom utama 40x40 cm", status: "COMPLETED" as const, priority: 1, responsiblePersonId: tukangBatues[2]?.id, responsibleMandorId: mandors[0]?.id, plannedStart: new Date("2026-04-01"), plannedEnd: new Date("2026-05-15"), actualStart: new Date("2026-04-01"), actualEnd: new Date("2026-05-10"), progressPct: 100 },
+      { assignmentCode: "JOB-004", rabId: rab1.id, wbsCode: "WBS-01.04", workItem: "Pekerjaan balok 30x50 cm", status: "COMPLETED" as const, priority: 1, responsiblePersonId: tukangBatues[3]?.id, responsibleMandorId: mandors[0]?.id, plannedStart: new Date("2026-05-11"), plannedEnd: new Date("2026-06-15"), actualStart: new Date("2026-05-11"), actualEnd: new Date("2026-06-12"), progressPct: 100 },
+      { assignmentCode: "JOB-005", rabId: rab1.id, wbsCode: "WBS-01.05", workItem: "Pekerjaan plat lantai tebal 12 cm", status: "IN_PROGRESS" as const, priority: 1, responsiblePersonId: tukangBatues[4]?.id, responsibleMandorId: mandors[1]?.id, plannedStart: new Date("2026-06-16"), plannedEnd: new Date("2026-08-15"), actualStart: new Date("2026-06-16"), progressPct: 85 },
+      // Arsitektur
+      { assignmentCode: "JOB-006", rabId: rab1.id, wbsCode: "WBS-02.01", workItem: "Pasangan dinding bata merah 1PC:5PP", status: "IN_PROGRESS" as const, priority: 2, responsiblePersonId: tukangBatues[5]?.id, responsibleMandorId: mandors[1]?.id, plannedStart: new Date("2026-07-01"), plannedEnd: new Date("2026-08-30"), actualStart: new Date("2026-07-01"), progressPct: 60 },
+      { assignmentCode: "JOB-007", rabId: rab1.id, wbsCode: "WBS-02.02", workItem: "Plesteran dinding dalam", status: "PENDING" as const, priority: 2, responsiblePersonId: tukangBatues[6]?.id, responsibleMandorId: mandors[1]?.id, plannedStart: new Date("2026-08-01"), plannedEnd: new Date("2026-09-15"), progressPct: 0 },
+      { assignmentCode: "JOB-008", rabId: rab1.id, wbsCode: "WBS-02.03", workItem: "Pengecatan dinding dalam", status: "PENDING" as const, priority: 3, responsiblePersonId: tukangBatues[7]?.id, responsibleMandorId: mandors[1]?.id, plannedStart: new Date("2026-09-01"), plannedEnd: new Date("2026-10-15"), progressPct: 0 },
+      { assignmentCode: "JOB-009", rabId: rab1.id, wbsCode: "WBS-02.04", workItem: "Pemasangan kusen aluminium", status: "PENDING" as const, priority: 3, responsiblePersonId: tukangBatues[8]?.id, responsibleMandorId: mandors[1]?.id, plannedStart: new Date("2026-09-15"), plannedEnd: new Date("2026-10-30"), progressPct: 0 },
+      // MEP
+      { assignmentCode: "JOB-010", rabId: rab1.id, wbsCode: "WBS-03.01", workItem: "Instalasi listrik lengkap", status: "IN_PROGRESS" as const, priority: 2, responsiblePersonId: pekerjas[0]?.id, responsibleMandorId: mandors[2]?.id, plannedStart: new Date("2026-08-01"), plannedEnd: new Date("2026-10-30"), progressPct: 40 },
+      { assignmentCode: "JOB-011", rabId: rab1.id, wbsCode: "WBS-03.02", workItem: "Sistem plumbing & drainase", status: "PENDING" as const, priority: 2, responsiblePersonId: pekerjas[1]?.id, responsibleMandorId: mandors[2]?.id, plannedStart: new Date("2026-08-15"), plannedEnd: new Date("2026-10-15"), progressPct: 0 },
+      { assignmentCode: "JOB-012", rabId: rab1.id, wbsCode: "WBS-03.03", workItem: "AC split 1 PK", status: "IN_PROGRESS" as const, priority: 3, responsiblePersonId: pekerjas[2]?.id, responsibleMandorId: mandors[1]?.id, plannedStart: new Date("2026-08-05"), plannedEnd: new Date("2026-10-15"), actualStart: new Date("2026-08-05"), progressPct: 15 },
+    ];
+    for (const a of assignments1) { await prisma.jobAssignment.create({ data: a }); }
+    console.log(`Seeded ${assignments1.length} job assignments for RAB-2026-001.`);
+  }
+
+  if (rab2) {
+    const assignments2 = [
+      { assignmentCode: "JOB-101", rabId: rab2.id, wbsCode: "WBS-01.01", workItem: "Pekerjaan pembongkaran dinding lama", status: "COMPLETED" as const, priority: 1, responsiblePersonId: tukangBatues[0]?.id, responsibleMandorId: mandors[3]?.id, plannedStart: new Date("2026-06-15"), plannedEnd: new Date("2026-06-30"), actualStart: new Date("2026-06-15"), actualEnd: new Date("2026-06-28"), progressPct: 100 },
+      { assignmentCode: "JOB-102", rabId: rab2.id, wbsCode: "WBS-01.02", workItem: "Pondasi footplat 60x60 cm", status: "COMPLETED" as const, priority: 1, responsiblePersonId: tukangBatues[1]?.id, responsibleMandorId: mandors[3]?.id, plannedStart: new Date("2026-06-29"), plannedEnd: new Date("2026-07-10"), actualStart: new Date("2026-06-29"), actualEnd: new Date("2026-07-08"), progressPct: 100 },
+      { assignmentCode: "JOB-103", rabId: rab2.id, wbsCode: "WBS-01.03", workItem: "Kolom praktis 15x15 cm", status: "COMPLETED" as const, priority: 1, responsiblePersonId: tukangBatues[2]?.id, responsibleMandorId: mandors[3]?.id, plannedStart: new Date("2026-07-11"), plannedEnd: new Date("2026-07-25"), actualStart: new Date("2026-07-11"), actualEnd: new Date("2026-07-22"), progressPct: 100 },
+      { assignmentCode: "JOB-104", rabId: rab2.id, wbsCode: "WBS-01.04", workItem: "Sloof 20x30 cm", status: "COMPLETED" as const, priority: 1, responsiblePersonId: tukangBatues[3]?.id, responsibleMandorId: mandors[3]?.id, plannedStart: new Date("2026-07-26"), plannedEnd: new Date("2026-08-10"), actualStart: new Date("2026-07-26"), actualEnd: new Date("2026-08-08"), progressPct: 100 },
+      { assignmentCode: "JOB-105", rabId: rab2.id, wbsCode: "WBS-01.05", workItem: "Dinding batako 10x20x40 cm", status: "IN_PROGRESS" as const, priority: 2, responsiblePersonId: tukangBatues[4]?.id, responsibleMandorId: mandors[3]?.id, plannedStart: new Date("2026-08-11"), plannedEnd: new Date("2026-08-31"), actualStart: new Date("2026-08-11"), progressPct: 55 },
+      { assignmentCode: "JOB-106", rabId: rab2.id, wbsCode: "WBS-02.01", workItem: "Plesteran dinding baru", status: "PENDING" as const, priority: 2, responsiblePersonId: tukangBatues[5]?.id, responsibleMandorId: mandors[3]?.id, plannedStart: new Date("2026-09-01"), plannedEnd: new Date("2026-09-20"), progressPct: 0 },
+      { assignmentCode: "JOB-107", rabId: rab2.id, wbsCode: "WBS-02.02", workItem: "Pengecatan dinding interior", status: "PENDING" as const, priority: 3, responsiblePersonId: tukangBatues[6]?.id, responsibleMandorId: mandors[3]?.id, plannedStart: new Date("2026-09-21"), plannedEnd: new Date("2026-10-10"), progressPct: 0 },
+      { assignmentCode: "JOB-108", rabId: rab2.id, wbsCode: "WBS-02.03", workItem: "Pemasangan lantai keramik 60x60 cm", status: "PENDING" as const, priority: 2, responsiblePersonId: tukangBatues[7]?.id, responsibleMandorId: mandors[3]?.id, plannedStart: new Date("2026-09-25"), plannedEnd: new Date("2026-10-15"), progressPct: 0 },
+    ];
+    for (const a of assignments2) { await prisma.jobAssignment.create({ data: a }); }
+    console.log(`Seeded ${assignments2.length} job assignments for RAB-2026-002.`);
+  }
+
+  // Get all assignments for execution logs
+  const assignments = await prisma.jobAssignment.findMany();
+
+  // ============================================
+  // EXECUTION LOGS - Daily work documentation
+  // ============================================
+  const year = 2026;
+  let execCount = 0;
+  for (const assignment of assignments) {
+    const startDate = new Date(assignment.actualStart || assignment.plannedStart);
+    const endDate = assignment.actualEnd || new Date(assignment.plannedEnd || Date.now());
+    const days = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+    const execDays = Math.min(days, 14); // Max 14 days per assignment
+    for (let i = 0; i < execDays; i++) {
+      const execDate = new Date(startDate);
+      execDate.setDate(execDate.getDate() + i);
+      if (execDate > new Date()) continue;
+      const counter = await prisma.santraCounter.upsert({
+        where: { prefix: "LOG" },
+        create: { prefix: "LOG", lastSeq: 0 },
+        update: { lastSeq: { increment: 1 } },
+        select: { lastSeq: true },
+      });
+      const workerId = assignment.responsiblePersonId || pekerjas[0]?.id;
+      if (!workerId) continue;
+      const progressStep = 100 / execDays;
+      const currentProgress = Math.min(Math.round(progressStep * (i + 1)), 100);
+      await prisma.executionLog.create({
+        data: {
+          logCode: `LOG-${year}-${String(counter.lastSeq).padStart(4, "0")}`,
+          assignmentId: assignment.id,
+          workerId,
+          logDate: execDate,
+          description: `Pekerjaan ${assignment.workItem} - hari ke-${i + 1}`,
+          progressPct: currentProgress,
+          locationName: `Lokasi Proyek ${assignment.rabId === rab1?.id ? "Gedung Perkantoran" : "Renovasi Rumah"}`,
+        },
+      });
+      execCount++;
+    }
+  }
+  console.log(`Seeded ${execCount} execution logs.`);
+
+  // ============================================
+  // QC RECORDS - Quality control documentation
+  // ============================================
+  const qcTemplates = [
+    { itemDesc: "Pondasi Strauss pile D300", criteria: "Ukuran sesuai spec, kedalaman 12m", measurement: "12.05m", result: "PASS" as const },
+    { itemDesc: "Sloof 30x50 cm", criteria: "Ukuran sesuai gambar, tulangan lengkap", measurement: "30x50 cm OK", result: "PASS" as const },
+    { itemDesc: "Kolom 40x40 cm", criteria: "Tegak, tulangan sesuai", measurement: "Tegak 90°", result: "PASS" as const },
+    { itemDesc: "Pembesian balok", criteria: "Diameter & jarak sesuai spec", measurement: "D13@150mm OK", result: "PASS" as const },
+    { itemDesc: "Plat lantai 12cm", criteria: "Tebal sesuai spec", measurement: "12.2cm", result: "PASS" as const },
+    { itemDesc: "Pasangan bata", criteria: "Rata, vertikal", measurement: "Rata, oprit 2mm", result: "PASS" as const },
+    { itemDesc: "Plesteran", criteria: "Rata, tidak retak", measurement: "Rata, thickness 15mm", result: "PASS" as const },
+    { itemDesc: "Kusen aluminium", criteria: "Rata, kusen sesuai spec", measurement: "Sesuai order", result: "PASS" as const },
+    { itemDesc: "Footplat 60x60", criteria: "Ukuran sesuai spec", measurement: "60x60x40cm OK", result: "PASS" as const },
+    { itemDesc: "Kolom praktis 15x15", criteria: "Tegak, segitiga benar", measurement: "Tegak 90°", result: "PASS" as const },
+  ];
+  let qcCount = 0;
+  for (let i = 0; i < 30; i++) {
+    const template = qcTemplates[i % qcTemplates.length];
+    const workerIdx = i % workers.length;
+    const assignmentIdx = i % assignments.length;
+    const qcCounter = await prisma.santraCounter.upsert({
+      where: { prefix: "QC" },
+      create: { prefix: "QC", lastSeq: 0 },
+      update: { lastSeq: { increment: 1 } },
+      select: { lastSeq: true },
+    });
+    const result = i < 25 ? "PASS" : (i < 28 ? "REWORK" : "FAIL");
+    await prisma.qcRecord.create({
+      data: {
+        qcCode: `QC-${year}-${String(qcCounter.lastSeq).padStart(4, "0")}`,
+        assignmentId: assignments[assignmentIdx]?.id,
+        workerId: workers[workerIdx]?.id,
+        checkDate: new Date(2026, 6, 1 + (i * 2)),
+        itemDesc: template.itemDesc,
+        criteria: template.criteria,
+        measurement: template.measurement,
+        result,
+        defectDesc: result !== "PASS" ? "Perlu perbaikan sesuai instruksi" : null,
+        isRework: result === "REWORK",
+      },
+    });
+    qcCount++;
+  }
+  console.log(`Seeded ${qcCount} QC records.`);
+
+  // ============================================
+  // DAILY REPORTS - Complete with workforce
+  // ============================================
+  const dailyReportsData = [];
+  const weatherOptions = ["CERAH", "BERAWAN", "GERIMIS", "HUJAN"] as const;
+
+  // Generate daily reports for last 30 days for each project
+  for (let day = 30; day >= 1; day--) {
+    const date = new Date(2026, 7, day); // August 2026
+    if (rab1) {
+      const workforce1 = {
+        pekerja: 10 + Math.floor(Math.random() * 8),
+        tukangBatu: 4 + Math.floor(Math.random() * 3),
+        tukangKayu: 2 + Math.floor(Math.random() * 2),
+        tukangBesi: 2 + Math.floor(Math.random() * 2),
+        operator: 2,
+        kepalaTukang: 2,
+        mandor: 2,
+      };
+      const existingReport = await prisma.dailyReport.findFirst({
+        where: { rabId: rab1.id, date: { gte: new Date(date.setHours(0,0,0,0)), lte: new Date(date.setHours(23,59,59,999)) } }
+      });
+      if (!existingReport) {
+        await prisma.dailyReport.create({
+          data: {
+            rabId: rab1.id,
+            date: new Date(date),
+            weatherAfternoon: weatherOptions[Math.floor(Math.random() * weatherOptions.length)],
+            workforce: workforce1,
+            activities: getActivityDescription(day),
+            notes: day % 5 === 0 ? "Koordinasi dengan konsultan pengawas" : null,
+            createdById: adminId,
+          },
+        });
+        dailyReportsData.push({ rab: rab1.id, date });
+      }
+    }
+    if (rab2) {
+      const workforce2 = {
+        pekerja: 4 + Math.floor(Math.random() * 4),
+        tukangBatu: 2 + Math.floor(Math.random() * 2),
+        tukangKayu: 1,
+        kepalaTukang: 1,
+        mandor: 1,
+      };
+      const existingReport2 = await prisma.dailyReport.findFirst({
+        where: { rabId: rab2.id, date: { gte: new Date(date.setHours(0,0,0,0)), lte: new Date(date.setHours(23,59,59,999)) } }
+      });
+      if (!existingReport2) {
+        await prisma.dailyReport.create({
+          data: {
+            rabId: rab2.id,
+            date: new Date(date),
+            weatherAfternoon: weatherOptions[Math.floor(Math.random() * weatherOptions.length)],
+            workforce: workforce2,
+            activities: getActivityDescriptionRumah(day),
+            notes: null,
+            createdById: adminId,
+          },
+        });
+        dailyReportsData.push({ rab: rab2.id, date });
+      }
+    }
+  }
+  console.log(`Seeded ${dailyReportsData.length} daily reports.`);
+
+  // ============================================
+  // WORKER ASSESSMENTS - Semua worker punya minimal 1 assessment
+  // ============================================
+  const assessmentsData = [
+    // Mandors
+    { assessmentCode: "ASS-M0001-2026-0001", workerId: mandors[0]?.id, assessmentDate: new Date("2026-01-15"), interviewer: "Dr. Rina Hartati", technicalScore: 88, interviewScore: 85, teamworkScore: 90, safetyScore: 92, overallScore: 89, grade: "A" as const, recommendation: "Sangat direkomendasikan" },
+    { assessmentCode: "ASS-M0002-2026-0001", workerId: mandors[1]?.id, assessmentDate: new Date("2026-01-20"), interviewer: "Dr. Rina Hartati", technicalScore: 85, interviewScore: 82, teamworkScore: 88, safetyScore: 90, overallScore: 86, grade: "A" as const, recommendation: "Baik untuk supervise" },
+    { assessmentCode: "ASS-M0003-2026-0001", workerId: mandors[2]?.id, assessmentDate: new Date("2026-01-25"), interviewer: "Dr. Rina Hartati", technicalScore: 83, interviewScore: 80, teamworkScore: 86, safetyScore: 88, overallScore: 84, grade: "A" as const, recommendation: "Baik" },
+    { assessmentCode: "ASS-M0004-2026-0001", workerId: mandors[3]?.id, assessmentDate: new Date("2026-02-01"), interviewer: "Agus Prasetyo", technicalScore: 80, interviewScore: 78, teamworkScore: 82, safetyScore: 85, overallScore: 81, grade: "B" as const, recommendation: "Cukup baik" },
+    // Kepala Tukangs
+    { assessmentCode: "ASS-KT001-2026-0001", workerId: kepalaTukangs[0]?.id, assessmentDate: new Date("2026-02-05"), interviewer: "Agus Prasetyo", technicalScore: 86, interviewScore: 82, teamworkScore: 88, safetyScore: 90, overallScore: 86, grade: "A" as const, recommendation: "Sangat baik" },
+    { assessmentCode: "ASS-KT002-2026-0001", workerId: kepalaTukangs[1]?.id, assessmentDate: new Date("2026-02-10"), interviewer: "Agus Prasetyo", technicalScore: 84, interviewScore: 80, teamworkScore: 86, safetyScore: 88, overallScore: 84, grade: "A" as const, recommendation: "Baik" },
+    // Tukang Batues
+    { assessmentCode: "ASS-T0001-2026-0001", workerId: tukangBatues[0]?.id, assessmentDate: new Date("2026-02-20"), interviewer: "Agus Prasetyo", technicalScore: 82, interviewScore: 78, teamworkScore: 85, safetyScore: 88, overallScore: 83, grade: "A" as const, recommendation: "Baik untuk bata" },
+    { assessmentCode: "ASS-T0002-2026-0001", workerId: tukangBatues[1]?.id, assessmentDate: new Date("2026-02-25"), interviewer: "Agus Prasetyo", technicalScore: 80, interviewScore: 76, teamworkScore: 82, safetyScore: 86, overallScore: 81, grade: "A" as const, recommendation: "Baik" },
+    { assessmentCode: "ASS-T0003-2026-0001", workerId: tukangBatues[2]?.id, assessmentDate: new Date("2026-03-01"), interviewer: "Pak Harsono", technicalScore: 78, interviewScore: 75, teamworkScore: 80, safetyScore: 82, overallScore: 79, grade: "B" as const, recommendation: "Cukup baik" },
+    // PEKERJAS - Semua pekerja punya assessment
+    { assessmentCode: "ASS-P0001-2026-0001", workerId: pekerjas[0]?.id, assessmentDate: new Date("2026-03-05"), interviewer: "Pak Harsono", technicalScore: 75, interviewScore: 72, teamworkScore: 78, safetyScore: 80, overallScore: 76, grade: "B" as const, recommendation: "Baik" },
+    { assessmentCode: "ASS-P0002-2026-0001", workerId: pekerjas[1]?.id, assessmentDate: new Date("2026-03-10"), interviewer: "Pak Harsono", technicalScore: 73, interviewScore: 70, teamworkScore: 76, safetyScore: 78, overallScore: 74, grade: "B" as const, recommendation: "Cukup baik" },
+    { assessmentCode: "ASS-P0003-2026-0001", workerId: pekerjas[2]?.id, assessmentDate: new Date("2026-03-15"), interviewer: "Pak Harsono", technicalScore: 70, interviewScore: 68, teamworkScore: 75, safetyScore: 77, overallScore: 72, grade: "B" as const, recommendation: "Perlu bimbingan" },
+    { assessmentCode: "ASS-P0004-2026-0001", workerId: pekerjas[3]?.id, assessmentDate: new Date("2026-03-20"), interviewer: "Pak Harsono", technicalScore: 72, interviewScore: 70, teamworkScore: 74, safetyScore: 76, overallScore: 73, grade: "B" as const, recommendation: "Cukup baik" },
+    { assessmentCode: "ASS-P0005-2026-0001", workerId: pekerjas[4]?.id, assessmentDate: new Date("2026-03-25"), interviewer: "Pak Harsono", technicalScore: 71, interviewScore: 68, teamworkScore: 73, safetyScore: 75, overallScore: 72, grade: "B" as const, recommendation: "Perlu bimbingan" },
+  ];
+  for (const a of assessmentsData) {
+    if (a.workerId) {
+      await prisma.workerAssessment.create({ data: a });
+    }
+  }
+  console.log(`Seeded ${assessmentsData.length} assessments.`);
+  } // End of if (existingWorkers === 0)
+
+  // ============================================
+  // MASTER TOOLS - Always seed tools (outside workers check)
+  // ============================================
+  const toolsData = [
+    { toolCode: "TL-2026-0001", name: "Theodolit", category: "measurement", trade: "survey", currentCondition: "GOOD" as const, owner: "COMPANY" as const },
+    { toolCode: "TL-2026-0002", name: "Waterpass", category: "measurement", trade: "survey", currentCondition: "GOOD" as const, owner: "COMPANY" as const },
+    { toolCode: "TL-2026-0003", name: "Meteran 50m", category: "measurement", trade: "general", currentCondition: "FAIR" as const, owner: "COMPANY" as const },
+    { toolCode: "TL-2026-0004", name: "Gerinda Potong", category: "power_tool", trade: "steel", currentCondition: "GOOD" as const, owner: "COMPANY" as const },
+    { toolCode: "TL-2026-0005", name: "Mesin Las Listrik", category: "power_tool", trade: "steel", currentCondition: "GOOD" as const, owner: "COMPANY" as const },
+    { toolCode: "TL-2026-0006", name: "Boru Las", category: "consumable", trade: "steel", currentCondition: "GOOD" as const, owner: "COMPANY" as const },
+    { toolCode: "TL-2026-0007", name: "Palu Konde", category: "hand_tool", trade: "masonry", currentCondition: "GOOD" as const, owner: "COMPANY" as const },
+    { toolCode: "TL-2026-0008", name: "Gergaji Kayu", category: "hand_tool", trade: "carpentry", currentCondition: "FAIR" as const, owner: "COMPANY" as const },
+    { toolCode: "TL-2026-0009", name: "Sekop", category: "hand_tool", trade: "general", currentCondition: "GOOD" as const, owner: "COMPANY" as const },
+    { toolCode: "TL-2026-0010", name: "Gerobak Sorong", category: "equipment", trade: "general", currentCondition: "FAIR" as const, owner: "COMPANY" as const },
+    { toolCode: "TL-2026-0011", name: "Concreter Vibrator", category: "equipment", trade: "concrete", currentCondition: "GOOD" as const, owner: "COMPANY" as const },
+    { toolCode: "TL-2026-0012", name: "Scaffolding Set", category: "equipment", trade: "general", currentCondition: "GOOD" as const, owner: "COMPANY" as const, minQuantity: 5 },
+    { toolCode: "TL-2026-0013", name: "Helmet Safety", category: "safety", trade: "general", currentCondition: "GOOD" as const, owner: "COMPANY" as const, minQuantity: 25 },
+    { toolCode: "TL-2026-0014", name: "Sarung Tangan Kerja", category: "safety", trade: "general", currentCondition: "GOOD" as const, owner: "COMPANY" as const, minQuantity: 30 },
+    { toolCode: "TL-2026-0015", name: "Rompi Safety", category: "safety", trade: "general", currentCondition: "GOOD" as const, owner: "COMPANY" as const, minQuantity: 25 },
+    { toolCode: "TL-2026-0016", name: "Sepatu Safety", category: "safety", trade: "general", currentCondition: "GOOD" as const, owner: "COMPANY" as const, minQuantity: 25 },
+  ];
+
+  const createdTools = [];
+  for (const t of toolsData) {
+    const tool = await prisma.masterTool.upsert({
+      where: { toolCode: t.toolCode },
+      update: {},
+      create: {
+        toolCode: t.toolCode,
+        name: t.name,
+        category: t.category,
+        trade: t.trade,
+        currentCondition: t.currentCondition,
+        owner: t.owner,
+        minQuantity: t.minQuantity || 1,
+        unit: t.minQuantity ? "set" : "pcs",
+        isActive: true,
+      },
+    });
+    createdTools.push(tool);
+  }
+  console.log(`Seeded ${toolsData.length} master tools.`);
+
+  // ============================================
+  // TOOL LOANS - Always seed loans (check if exist first)
+  // ============================================
+  const existingLoans = await prisma.toolLoan.count();
+  if (existingLoans === 0 && createdTools.length > 0) {
+    // Get admin user for issuedBy
+    const adminUser = await prisma.user.findFirst({ where: { role: "ADMIN" } });
+    const adminUserId = adminUser?.id || adminId;
+
+    // Get workers for loan assignments
+    const mandors = await prisma.worker.findMany({ where: { role: "MANDOR" }, take: 5 });
+    const tukangBatues = await prisma.worker.findMany({ where: { role: "TUKANG_BATU" }, take: 10 });
+    const tukangBesis = await prisma.worker.findMany({ where: { role: "TUKANG_BESI" }, take: 5 });
+    const tukangKayus = await prisma.worker.findMany({ where: { role: "TUKANG_KAYU" }, take: 6 });
+    const operators = await prisma.worker.findMany({ where: { role: "OPERATOR" }, take: 5 });
+
+    // Create sample loans - some OPEN (currently borrowed), some RETURNED
+    const loansData = [
+      // LOAN 1: Currently borrowed - Gerinda Potong by Harsono (Mandor)
+      {
+        toolId: createdTools.find(t => t.name === "Gerinda Potong")?.id,
+        workerId: mandors[0]?.id,
+        status: "OPEN" as const,
+        issuedAt: new Date("2026-08-25"),
+        notes: "Untuk pemotongan besi struktur lantai 3",
+      },
+      // LOAN 2: Currently borrowed - Waterpass by Udin Hasan
+      {
+        toolId: createdTools.find(t => t.name === "Waterpass")?.id,
+        workerId: tukangBatues[0]?.id,
+        status: "OPEN" as const,
+        issuedAt: new Date("2026-08-20"),
+        notes: "Untuk pengukuran level lantai 2",
+      },
+      // LOAN 3: Currently borrowed - Mesin Las by Hasan Basri
+      {
+        toolId: createdTools.find(t => t.name === "Mesin Las Listrik")?.id,
+        workerId: tukangBesis[0]?.id,
+        status: "OPEN" as const,
+        issuedAt: new Date("2026-08-26"),
+        notes: "Untuk pengelasan railing tangga",
+      },
+      // LOAN 4: Returned - Theodolit by Iman Sutarman (returned 5 days ago)
+      {
+        toolId: createdTools.find(t => t.name === "Theodolit")?.id,
+        workerId: tukangKayus[0]?.id,
+        status: "RETURNED" as const,
+        issuedAt: new Date("2026-08-10"),
+        returnedAt: new Date("2026-08-23"),
+        returnedCondition: "GOOD" as const,
+        notes: "Untuk pengukuran seluruh area proyek",
+      },
+      // LOAN 5: Returned - Meteran 50m by Udin Hasan
+      {
+        toolId: createdTools.find(t => t.name === "Meteran 50m")?.id,
+        workerId: tukangBatues[0]?.id,
+        status: "RETURNED" as const,
+        issuedAt: new Date("2026-08-05"),
+        returnedAt: new Date("2026-08-12"),
+        returnedCondition: "FAIR" as const,
+        notes: "Meteran sedikit kusut tapi masih berfungsi",
+      },
+      // LOAN 6: Returned - Gergaji Kayu by Iman Sutarman
+      {
+        toolId: createdTools.find(t => t.name === "Gergaji Kayu")?.id,
+        workerId: tukangKayus[0]?.id,
+        status: "RETURNED" as const,
+        issuedAt: new Date("2026-08-01"),
+        returnedAt: new Date("2026-08-15"),
+        returnedCondition: "GOOD" as const,
+        notes: "Sudah selesai pemotongan kayu",
+      },
+      // LOAN 7: Returned - Boru Las by Jujun Junaedi
+      {
+        toolId: createdTools.find(t => t.name === "Boru Las")?.id,
+        workerId: tukangBesis[1]?.id,
+        status: "RETURNED" as const,
+        issuedAt: new Date("2026-08-08"),
+        returnedAt: new Date("2026-08-22"),
+        returnedCondition: "GOOD" as const,
+        notes: "Pemakaian normal",
+      },
+      // LOAN 8: OVERDUE - Sekop by Dedi Rohendi (borrowed 10 days ago)
+      {
+        toolId: createdTools.find(t => t.name === "Sekop")?.id,
+        workerId: tukangBatues[2]?.id,
+        status: "OVERDUE" as const,
+        issuedAt: new Date("2026-08-18"),
+        notes: "Untuk penggalian fondasi",
+      },
+      // LOAN 9: Returned - Scaffolding Set by Harsono
+      {
+        toolId: createdTools.find(t => t.name === "Scaffolding Set")?.id,
+        workerId: mandors[0]?.id,
+        status: "RETURNED" as const,
+        issuedAt: new Date("2026-07-20"),
+        returnedAt: new Date("2026-08-10"),
+        returnedCondition: "GOOD" as const,
+        notes: "Scaffolding untuk pekerjaan kolom lantai 2",
+      },
+      // LOAN 10: Returned - Concreter Vibrator by Aceng Cucu
+      {
+        toolId: createdTools.find(t => t.name === "Concreter Vibrator")?.id,
+        workerId: operators[0]?.id,
+        status: "RETURNED" as const,
+        issuedAt: new Date("2026-07-15"),
+        returnedAt: new Date("2026-08-01"),
+        returnedCondition: "FAIR" as const,
+        notes: "Vibrator sedikit aus setelah penggunaan intensif",
+      },
+    ];
+
+    let loansCount = 0;
+    for (const loanData of loansData) {
+      if (!loanData.toolId || !loanData.workerId) continue;
+
+      const counter = await prisma.santraCounter.upsert({
+        where: { prefix: "LN" },
+        create: { prefix: "LN", lastSeq: 0 },
+        update: { lastSeq: { increment: 1 } },
+        select: { lastSeq: true },
+      });
+
+      await prisma.toolLoan.create({
+        data: {
+          loanCode: `LN-2026-${String(counter.lastSeq).padStart(4, "0")}`,
+          toolId: loanData.toolId,
+          workerId: loanData.workerId,
+          issuedById: adminUserId,
+          issuedAt: loanData.issuedAt,
+          status: loanData.status,
+          notes: loanData.notes,
+          returnedAt: "returnedAt" in loanData ? (loanData as any).returnedAt : null,
+          returnedCondition: "returnedCondition" in loanData ? (loanData as any).returnedCondition : null,
+        },
+      });
+      loansCount++;
+    }
+    console.log(`Seeded ${loansCount} tool loans.`);
+  } else if (existingLoans > 0) {
+    console.log("Skipping tool loans seed — loans already exist.");
+  }
+
+  // Only seed KPI records if workers were created
+  if (existingWorkers === 0) {
+    // Get workers for KPI records (they were just created)
+    const workersForKpi = await prisma.worker.findMany();
+
+    // ============================================
+    // KPI RECORDS - ALL workers per month (2 periods)
+    // ============================================
+    const periods = ["2026-07", "2026-08"];
+    for (const worker of workersForKpi) {
+      for (const period of periods) {
+        const kpiCounter = await prisma.santraCounter.upsert({
+          where: { prefix: "KPI" },
+          create: { prefix: "KPI", lastSeq: 0 },
+          update: { lastSeq: { increment: 1 } },
+          select: { lastSeq: true },
+        });
+        const qualityScore = 75 + Math.floor(Math.random() * 20);
+        const productivityScore = 70 + Math.floor(Math.random() * 25);
+        const attendanceScore = 80 + Math.floor(Math.random() * 18);
+        const safetyScore = 82 + Math.floor(Math.random() * 15);
+        const overallScore = Math.round((qualityScore + productivityScore + attendanceScore + safetyScore) / 4);
+        await prisma.kpiRecord.create({
+          data: {
+            kpiCode: `KPI-${worker.workerCode}-${period.replace("-", "")}`,
+            workerId: worker.id,
+            period,
+            periodStart: new Date(period + "-01"),
+            periodEnd: new Date(period + "-28"),
+            qualityScore,
+            productivityScore,
+            attendanceScore,
+            safetyScore,
+            reworkCount: Math.floor(Math.random() * 3),
+            defectCount: Math.floor(Math.random() * 2),
+            completedTasks: 5 + Math.floor(Math.random() * 10),
+            lateDays: Math.floor(Math.random() * 3),
+            overallScore,
+          },
+        });
+      }
+    }
+    console.log(`Seeded KPI records for ${workersForKpi.length} workers x ${periods.length} periods.`);
+  } else {
+    console.log("Skipping KPI seed — workers already exist.");
+  }
+
+  console.log("Workforce & documentation seed complete!");
+}
+
+function getActivityDescription(day: number): string {
+  const activities = [
+    "Pemasangan batu bata dinding lantai 2 area A",
+    "Pengecoran plat lantai 3",
+    "Pembesian balok lantai 3",
+    "Pemasangan bekisting kolom",
+    "Plesteran dinding lantai 1",
+    "Pengecatan dasar dinding",
+    "Pemasangan kusen jendela",
+    "Pemasangan conduit listrik",
+    "Pemasangan pipa plumbing",
+    "Pembersihan lokasi",
+  ];
+  return activities[day % activities.length];
+}
+
+function getActivityDescriptionRumah(day: number): string {
+  const activities = [
+    "Pemasangan dinding batako perluasan",
+    "Pemasangan kolom praktis",
+    "Pengecoran sloof",
+    "Pemasangan footplat",
+    "Pembongkaran dinding lama",
+    "Pembersihan material bekas bongkar",
+    "Pemasangan bouwplank",
+    "Penggalian fondasi",
+  ];
+  return activities[day % activities.length];
 }
 
 main()

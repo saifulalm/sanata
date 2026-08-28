@@ -18,12 +18,16 @@ export async function loginAction(_prevState: LoginState, formData: FormData): P
   const totpCode = String(formData.get("totpCode") ?? "") || undefined;
   const next = String(formData.get("next") ?? "/admin");
 
+  console.log("[Login Action] Attempting login for:", email);
+
   let result: LoginWithExpressResult;
   try {
     result = await loginWithExpress(email, password, totpCode);
   } catch {
     return { status: "error", message: "Tidak dapat terhubung ke backend. Pastikan server backend berjalan." };
   }
+
+  console.log("[Login Action] Login result:", result.ok ? "SUCCESS" : "FAILED - " + result.message);
 
   if (!result.ok) {
     if (result.errors?.requiresTwoFactor) {
@@ -37,10 +41,18 @@ export async function loginAction(_prevState: LoginState, formData: FormData): P
   }
 
   const store = await cookies();
-  store.set(ACCESS_COOKIE, result.accessToken, { httpOnly: true, sameSite: "lax", maxAge: ACCESS_MAX_AGE, path: "/" });
+  console.log("[Login Action] Setting cookies...");
+  console.log("[Login Action] Access token:", result.accessToken.substring(0, 30) + "...");
+  console.log("[Login Action] Refresh token:", result.refreshToken ? result.refreshToken.substring(0, 30) + "..." : "NONE");
+
+  // Note: ACCESS_COOKIE must NOT be httpOnly so client-side components can read the token
+  // The token is short-lived (15 min) so this is acceptable for a SPA pattern
+  store.set(ACCESS_COOKIE, result.accessToken, { sameSite: "lax", maxAge: ACCESS_MAX_AGE, path: "/" });
   if (result.refreshToken) {
     store.set(REFRESH_COOKIE, result.refreshToken, { httpOnly: true, sameSite: "lax", maxAge: REFRESH_MAX_AGE, path: "/" });
   }
+
+  console.log("[Login Action] Cookies set successfully");
 
   redirect(next);
 }

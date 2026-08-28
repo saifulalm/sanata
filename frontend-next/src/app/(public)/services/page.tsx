@@ -9,6 +9,7 @@ import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { EmptyState, FilterPill, inputClass } from "@/components/ui/Surface";
 import { getCategories, getProducts } from "@/lib/api";
 import { getSiteContent, setting } from "@/lib/siteContent";
+import { collectionPageJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Layanan",
@@ -21,17 +22,39 @@ export default async function ServicesPage({
   searchParams: Promise<{ category?: string; q?: string }>;
 }) {
   const params = await searchParams;
-  const [categories, content] = await Promise.all([getCategories(), getSiteContent()]);
+  const [categories, content, productsResult] = await Promise.all([
+    getCategories(),
+    getSiteContent(),
+    getProducts({ pageSize: 100 }).catch(() => ({ data: [], meta: { page: 1, pageSize: 100, total: 0, totalPages: 0 } })),
+  ]);
   const activeCategory = categories.find((c) => c.slug === params.category);
+  const { data: services, meta } = productsResult;
 
-  const { data: services, meta } = await getProducts({
-    categoryId: activeCategory?.id,
-    search: params.q,
-    pageSize: 24,
-  });
+  // Filter based on search params
+  let filteredServices = services;
+  if (params.q) {
+    const q = params.q.toLowerCase();
+    filteredServices = services.filter(
+      (s) => s.name.toLowerCase().includes(q) || s.description.toLowerCase().includes(q)
+    );
+  }
+  if (activeCategory) {
+    filteredServices = filteredServices.filter((s) => s.category?.id === activeCategory.id);
+  }
+
+  // Generate CollectionPage schema
+  const servicesSchema = collectionPageJsonLd(
+    "services",
+    services.slice(0, 50).map((s) => ({ name: s.name, slug: s.slug }))
+  );
 
   return (
     <>
+      {/* Collection Page Schema untuk Services listing */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesSchema) }}
+      />
       <PageHero
         eyebrow={setting(content, "services.hero.eyebrow", "Layanan Kami")}
         title={setting(content, "services.hero.title", "Layanan Konstruksi Sanata")}

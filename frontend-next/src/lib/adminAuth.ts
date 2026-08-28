@@ -2,7 +2,7 @@ import { fetchWithTimeout, isHttpRequestError, readJsonSafely } from "@/lib/http
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000/api";
 
 export const ACCESS_COOKIE = "admin_access";
-export const REFRESH_COOKIE = "admin_refresh";
+export const REFRESH_COOKIE = "sanata_refresh";
 
 export interface AdminUser {
   id: string;
@@ -112,19 +112,43 @@ export async function loginWithExpress(email: string, password: string, totpCode
 }
 
 export async function refreshWithExpress(refreshToken: string) {
+  console.log("[refreshWithExpress] Starting refresh...");
+  console.log("[refreshWithExpress] Refresh token length:", refreshToken.length);
+
   try {
+    // Send via Cookie header (more reliable)
     const res = await fetchWithTimeout(`${API_URL}/auth/refresh`, {
       method: "POST",
-      headers: { Cookie: `sanata_refresh=${refreshToken}` },
+      headers: {
+        Cookie: `sanata_refresh=${refreshToken}`,
+      },
     });
 
-    if (!res.ok) return { ok: false as const };
+    console.log("[refreshWithExpress] Response status:", res.status);
+    console.log("[refreshWithExpress] Response ok:", res.ok);
 
-    const json = await readJsonSafely<{ data?: { accessToken: string; user: AdminUser } }>(res);
-    if (!json?.data?.accessToken || !json?.data?.user) return { ok: false as const };
+    if (!res.ok) {
+      console.log("[refreshWithExpress] Response not ok");
+      return { ok: false as const };
+    }
+
+    const json = await readJsonSafely<{ success?: boolean; data?: { accessToken: string; user: AdminUser } }>(res);
+    console.log("[refreshWithExpress] JSON response:", json);
+
+    if (!json) {
+      console.log("[refreshWithExpress] JSON is null");
+      return { ok: false as const };
+    }
+
+    if (!json.success || !json.data?.accessToken || !json.data?.user) {
+      console.log("[refreshWithExpress] Missing data in response");
+      return { ok: false as const };
+    }
 
     const setCookie = res.headers.get("set-cookie") ?? "";
     const newRefreshToken = extractCookieValue(setCookie, "sanata_refresh");
+
+    console.log("[refreshWithExpress] SUCCESS! New access token:", json.data.accessToken.substring(0, 30) + "...");
 
     return {
       ok: true as const,
@@ -132,7 +156,8 @@ export async function refreshWithExpress(refreshToken: string) {
       refreshToken: newRefreshToken ?? refreshToken,
       user: json.data.user,
     };
-  } catch {
+  } catch (err) {
+    console.log("[refreshWithExpress] CATCH ERROR:", err);
     return { ok: false as const };
   }
 }

@@ -70,7 +70,7 @@ export async function createCollectionItem(input: CollectionItemInput) {
   const item = await prisma.siteCollectionItem.create({
     data: {
       collection: input.collection,
-      title: input.title ?? null,
+      title: input.title ?? "",
       subtitle: input.subtitle ?? null,
       body: input.body ?? null,
       icon: input.icon ?? null,
@@ -92,7 +92,7 @@ export async function updateCollectionItem(id: string, input: CollectionItemUpda
   const item = await prisma.siteCollectionItem.update({
     where: { id },
     data: {
-      ...(input.title !== undefined ? { title: input.title } : {}),
+      ...(input.title !== undefined ? { title: input.title ?? existing.title } : {}),
       ...(input.subtitle !== undefined ? { subtitle: input.subtitle } : {}),
       ...(input.body !== undefined ? { body: input.body } : {}),
       ...(input.icon !== undefined ? { icon: input.icon } : {}),

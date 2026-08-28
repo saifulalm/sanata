@@ -174,3 +174,21 @@ export async function deleteContent(id: string) {
 export async function incrementViews(id: string) {
   await prisma.content.update({ where: { id }, data: { views: { increment: 1 } } });
 }
+
+/**
+ * Check if a slug already exists
+ */
+export async function isSlugExists(slug: string): Promise<boolean> {
+  const count = await prisma.content.count({ where: { slug } });
+  return count > 0;
+}
+
+/**
+ * Find content by canonical URL
+ */
+export async function findByCanonicalUrl(canonicalUrl: string) {
+  return prisma.content.findFirst({
+    where: { canonicalUrl },
+    select: { id: true, title: true, slug: true },
+  });
+}

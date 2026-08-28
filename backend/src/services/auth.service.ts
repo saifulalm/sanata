@@ -9,7 +9,10 @@ import { env } from "@/config/env";
 import type { RegisterInput, LoginInput } from "@/validators/auth.validator";
 
 function hashToken(token: string) {
-  return crypto.createHash("sha256").update(token).digest("hex");
+  const hash = crypto.createHash("sha256").update(token).digest("hex");
+  console.log("[AuthService/hashToken] Token length:", token.length);
+  console.log("[AuthService/hashToken] Hash:", hash.substring(0, 20) + "...");
+  return hash;
 }
 
 function publicUser(user: {
@@ -31,13 +34,18 @@ function publicUser(user: {
 }
 
 async function issueTokens(user: { id: string; name: string; email: string; role: "ADMIN" | "EDITOR" | "USER" }) {
+  console.log("[AuthService/issueTokens] Starting for user:", user.id);
   const accessToken = signAccessToken({ sub: user.id, role: user.role, name: user.name });
   const refreshToken = signRefreshToken(user.id);
 
   const expiresAt = new Date(Date.now() + env.jwt.refreshExpiresDays * 24 * 60 * 60 * 1000);
+  console.log("[AuthService/issueTokens] Refresh token expiresAt:", expiresAt.toISOString());
+  console.log("[AuthService/issueTokens] Refresh token expiry (Unix):", Math.floor(expiresAt.getTime() / 1000));
+
   await prisma.refreshToken.create({
     data: { tokenHash: hashToken(refreshToken), userId: user.id, expiresAt },
   });
+  console.log("[AuthService/issueTokens] Refresh token stored in DB");
 
   return { accessToken, refreshToken };
 }
@@ -79,24 +87,54 @@ export async function login(input: LoginInput & { totpCode?: string }) {
 }
 
 export async function refresh(refreshToken: string) {
-  let payload: { sub: string };
+  console.log("[AuthService/refresh] Starting refresh...");
+  let payload: { sub: string; exp: number; iat: number };
   try {
     payload = verifyRefreshToken(refreshToken);
-  } catch {
+  } catch (err) {
+    console.log("[AuthService/refresh] Token verification failed:", err instanceof Error ? err.message : "Unknown");
     throw ApiError.unauthorized("Invalid refresh token");
   }
 
+  console.log("[AuthService/refresh] Token payload:", payload);
+  console.log("[AuthService/refresh] Token exp (Unix):", payload.exp);
+  console.log("[AuthService/refresh] Current time (Unix):", Math.floor(Date.now() / 1000));
+  console.log("[AuthService/refresh] Token expired?", payload.exp < Math.floor(Date.now() / 1000));
+
   const tokenHash = hashToken(refreshToken);
+  console.log("[AuthService/refresh] Looking for tokenHash:", tokenHash.substring(0, 20) + "...");
+
   const stored = await prisma.refreshToken.findUnique({ where: { tokenHash } });
-  if (!stored || stored.revokedAt || stored.expiresAt < new Date()) {
+  console.log("[AuthService/refresh] Stored token found:", stored ? "YES" : "NO");
+  if (stored) {
+    console.log("[AuthService/refresh] Stored expiresAt:", stored.expiresAt);
+    console.log("[AuthService/refresh] Stored revokedAt:", stored.revokedAt);
+    console.log("[AuthService/refresh] expiresAt < now?", stored.expiresAt < new Date());
+  }
+
+  if (!stored) {
+    console.log("[AuthService/refresh] REJECTED: Token not found in database");
+    throw ApiError.unauthorized("Refresh token expired or revoked");
+  }
+  if (stored.revokedAt) {
+    console.log("[AuthService/refresh] REJECTED: Token was revoked");
+    throw ApiError.unauthorized("Refresh token expired or revoked");
+  }
+  if (stored.expiresAt < new Date()) {
+    console.log("[AuthService/refresh] REJECTED: Token expired");
     throw ApiError.unauthorized("Refresh token expired or revoked");
   }
 
   const user = await prisma.user.findUnique({ where: { id: payload.sub } });
-  if (!user || !user.isActive) throw ApiError.unauthorized("User not found");
+  if (!user || !user.isActive) {
+    console.log("[AuthService/refresh] REJECTED: User not found or inactive");
+    throw ApiError.unauthorized("User not found");
+  }
 
+  console.log("[AuthService/refresh] SUCCESS: About to revoke old token and issue new ones");
   await prisma.refreshToken.update({ where: { tokenHash }, data: { revokedAt: new Date() } });
   const tokens = await issueTokens(user);
+  console.log("[AuthService/refresh] SUCCESS: New tokens issued");
   return { user: publicUser(user), ...tokens };
 }
 

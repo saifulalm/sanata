@@ -554,6 +554,9 @@ model Rab {
   memos        SiteMemo[]
   letters      ProjectLetter[]
 
+  // SANTRA relations
+  jobAssignments JobAssignment[]
+
   @@index([status])
   @@index([createdById])
 }
@@ -780,6 +783,9 @@ model DailyReport {
   updatedAt   DateTime @updatedAt
   createdById String?
   createdBy   User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  // SANTRA relations
+  executionLogs ExecutionLog[]
 
   /// Satu laporan per proyek per hari.
   @@unique([rabId, date])
@@ -1226,5 +1232,566 @@ model ProjectLetter {
   @@index([rabId, type])
   @@index([status])
   @@index([billingId])
+}
+
+// ============================================================================
+// SANTRA — DIGITAL WORKFORCE, QC & LOGISTICS SYSTEM
+//
+// Modul ini mengelola:
+// - Database tenaga kerja dengan skill matrix
+// - Assessment dan grading kompetensi
+// - Penugasan pekerjaan berbasis WBS
+// - Dokumentasi harian dengan foto & GPS
+// - Quality Control dengan evidence
+// - KPI tracking per tenaga kerja
+// - Tools inventory dan loan management
+// ============================================================================
+
+// --- ENUMS ---
+
+enum WorkerStatus {
+  ACTIVE
+  INACTIVE
+  ON_LEAVE
+  TERMINATED
+}
+
+enum WorkerGrade {
+  A
+  B
+  C
+  D
+}
+
+enum AssignmentStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum QcResult {
+  PASS
+  FAIL
+  REWORK
+}
+
+enum ToolCondition {
+  GOOD
+  FAIR
+  DAMAGED
+  LOST
+}
+
+enum ToolOwner {
+  COMPANY
+  PERSONAL
+  RENTED
+}
+
+enum LoanStatus {
+  OPEN
+  RETURNED
+  OVERDUE
+  LOST
+}
+
+// --- WORKER / TENAGA KERJA ---
+
+/// Database tenaga kerja dengan profil lengkap
+/// Sinkron dengan WorkforceRole di master role
+model Worker {
+  id              String        @id @default(cuid())
+  workerCode      String        @unique  // M-0001, T-0001, K-0001 based on role
+  name            String
+  role            ProjectRole
+
+  // Identity & Photos
+  ktpNumber       String?       @unique
+  ktpPhotoUrl     String?
+  facePhotoUrl    String?
+
+  // Contact
+  phone           String?
+  address         String?
+
+  // Employment
+  status          WorkerStatus  @default(ACTIVE)
+  joinDate        DateTime?
+
+  // Skills & Competency
+  grade           WorkerGrade?
+  rate            Decimal?      @db.Decimal(12, 2)
+  skills          String[]       // ["masonry", "carpentry", "welding"]
+  experienceYears Int?        @default(0)
+  certificates    String[]      // Array of cert names/urls
+  skillNotes     String?       @db.Text
+
+  // Tools owned
+  personalTools  String[]       // Array of tool codes this person owns
+
+  // Status flags
+  ktpVerified    Boolean      @default(false)
+  profileComplete Boolean      @default(false)
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  assessments      WorkerAssessment[]
+  assignments      JobAssignment[]      @relation("ResponsiblePerson")
+  mandorAssignments JobAssignment[] @relation("ResponsibleMandor")
+  executions       ExecutionLog[]
+  qcRecords       QcRecord[]
+  kpis             KpiRecord[]
+  toolLoans        ToolLoan[]
+  toolOwnerships   MasterTool[]   @relation("PersonalToolsOwner")
+
+  @@index([workerCode])
+  @@index([role])
+  @@index([status])
+  @@index([grade])
+}
+
+// --- SKILL ASSESSMENT ---
+
+/// Penilaian skill per tenaga kerja
+model WorkerAssessment {
+  id              String        @id @default(cuid())
+  assessmentCode  String        @unique
+
+  workerId        String
+  worker          Worker        @relation(fields: [workerId], references: [id], onDelete: Cascade)
+
+  assessmentDate   DateTime      @default(now())
+  interviewer     String?       // Name of interviewer/assessor
+
+  // Scores (0-100)
+  technicalScore   Int?
+  interviewScore  Int?
+  teamworkScore   Int?
+  safetyScore     Int?
+  overallScore    Int?
+
+  // Grade & Recommendation
+  grade           WorkerGrade?
+  recommendation String?       @db.Text
+  notes           String?       @db.Text
+
+  // Evidence
+  evidenceUrl     String?
+
+  createdAt       DateTime      @default(now())
+
+  @@index([workerId])
+  @@index([assessmentDate])
+}
+
+// --- JOB ASSIGNMENT (WBS-based) ---
+
+/// Penugasan pekerjaan berbasis WBS
+/// Terhubung ke RAB untuk integrasi dengan laporan harian
+model JobAssignment {
+  id              String          @id @default(cuid())
+  assignmentCode  String          @unique
+
+  // Project Reference
+  rabId           String?
+  rab             Rab?            @relation(fields: [rabId], references: [id], onDelete: SetNull)
+
+  // WBS Reference
+  wbsCode         String?         // e.g., "WBS-001"
+  workItem        String          @db.Text
+  methodRef       String?         // Shop drawing/method reference
+
+  // Responsible Persons
+  responsiblePersonId String?
+  responsiblePerson   Worker?       @relation("ResponsiblePerson", fields: [responsiblePersonId], references: [id], onDelete: SetNull)
+
+  responsibleMandorId String?
+  responsibleMandor  Worker?        @relation("ResponsibleMandor", fields: [responsibleMandorId], references: [id], onDelete: SetNull)
+
+  // Status & Timeline
+  status          AssignmentStatus @default(PENDING)
+  priority        Int             @default(5)  // 1-10, 1=highest
+  plannedStart    DateTime?
+  plannedEnd      DateTime?
+  actualStart    DateTime?
+  actualEnd      DateTime?
+
+  // Work Scope
+  scopeDescription String?       @db.Text
+  materials        String?         @db.Text
+  toolsNeeded      String[]        // Tool codes needed
+
+  // Progress
+  progressPct     Int             @default(0)
+
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  // Relations
+  executions      ExecutionLog[]
+  qcRecords       QcRecord[]
+
+  @@index([rabId])
+  @@index([responsiblePersonId])
+  @@index([responsibleMandorId])
+  @@index([status])
+  @@index([wbsCode])
+}
+
+// --- EXECUTION LOG ---
+
+/// Dokumentasi harian pekerjaan dengan foto
+model ExecutionLog {
+  id              String        @id @default(cuid())
+  logCode        String        @unique
+
+  // References
+  assignmentId    String
+  assignment      JobAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+
+  workerId       String
+  worker          Worker        @relation(fields: [workerId], references: [id], onDelete: Cascade)
+
+  // Timestamp & Location
+  logDate         DateTime      @default(now())
+  description     String?       @db.Text
+
+  // GPS Location
+  latitude        Decimal?      @db.Decimal(10, 7)
+  longitude       Decimal?      @db.Decimal(10, 7)
+  locationName    String?       // "Pabrikasi Lantai 2"
+
+  // Progress
+  progressPct     Int?          @default(0)
+
+  // Daily Report Link
+  dailyReportId   String?
+  dailyReport    DailyReport?  @relation(fields: [dailyReportId], references: [id], onDelete: SetNull)
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  photos          ExecutionPhoto[]
+
+  @@index([assignmentId])
+  @@index([workerId])
+  @@index([logDate])
+  @@index([dailyReportId])
+}
+
+model ExecutionPhoto {
+  id              String        @id @default(cuid())
+  logId           String
+  log             ExecutionLog @relation(fields: [logId], references: [id], onDelete: Cascade)
+
+  url             String
+  caption         String?
+  location        String?
+  takenAt        DateTime?
+  order           Int          @default(0)
+
+  createdAt       DateTime      @default(now())
+
+  @@index([logId])
+}
+
+// --- QUALITY CONTROL ---
+
+/// Record QC per item pekerjaan
+model QcRecord {
+  id              String        @id @default(cuid())
+  qcCode        String        @unique
+
+  // References
+  assignmentId    String
+  assignment      JobAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+
+  workerId       String
+  worker          Worker        @relation(fields: [workerId], references: [id], onDelete: Cascade)
+
+  // QC Details
+  checkDate       DateTime      @default(now())
+  itemDesc        String?       @db.Text
+  criteria        String?       @db.Text
+  measurement     String?       // Actual measurement result
+  result          QcResult
+
+  // Defect info if FAIL
+  defectDesc      String?       @db.Text
+  defectPhotoUrl   String?
+
+  // Rework tracking
+  isRework        Boolean       @default(false)
+  reworkOfId      String?
+  reworkOf         QcRecord?    @relation("ReworkChain", fields: [reworkOfId], references: [id], onDelete: SetNull)
+  reworkChain     QcRecord[]    @relation("ReworkChain")
+
+  // Approval
+  approvedById    String?
+  approvedAt      DateTime?
+
+  // Evidence
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  photos          QcPhoto[]
+
+  @@index([assignmentId])
+  @@index([workerId])
+  @@index([result])
+  @@index([checkDate])
+}
+
+model QcPhoto {
+  id              String        @id @default(cuid())
+  qcId            String
+  qc              QcRecord     @relation(fields: [qcId], references: [id], onDelete: Cascade)
+
+  url             String
+  caption         String?
+  order           Int          @default(0)
+
+  createdAt       DateTime      @default(now())
+
+  @@index([qcId])
+}
+
+// --- KPI TRACKING ---
+
+/// Key Performance Indicator per tenaga kerja per periode
+model KpiRecord {
+  id              String        @id @default(cuid())
+  kpiCode        String        @unique
+
+  workerId        String
+  worker          Worker        @relation(fields: [workerId], references: [id], onDelete: Cascade)
+
+  // Period (ISO week or month format)
+  period          String        // "2026-W01", "2026-01"
+  periodStart    DateTime
+  periodEnd      DateTime
+
+  // Scores (0-100)
+  qualityScore       Int?
+  productivityScore   Int?
+  attendanceScore    Int?
+  safetyScore        Int?
+
+  // Metrics
+  reworkCount      Int          @default(0)
+  defectCount     Int          @default(0)
+  completedTasks   Int         @default(0)
+  lateDays        Int          @default(0)
+
+  // Overall
+  overallScore   Int?
+  rank            Int?          // Ranking this period
+
+  // Approval
+  approvedById    String?
+  approvedAt      DateTime?
+  notes           String?       @db.Text
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@unique([workerId, period])
+  @@index([workerId])
+  @@index([period])
+}
+
+// --- TOOLS / LOGISTICS ---
+
+// Maintenance status for tools
+enum MaintenanceType {
+  PREVENTIVE    // Pemeliharaan rutin
+  CORRECTIVE    // Perbaikan akibat kerusakan
+  INSPECTION    // Inspeksi/pemeriksaan
+}
+
+// Tool maintenance log
+model ToolMaintenance {
+  id            String          @id @default(cuid())
+  maintenanceCode String          @unique
+
+  toolId        String
+  tool          MasterTool      @relation(fields: [toolId], references: [id], onDelete: Cascade)
+
+  type          MaintenanceType @default(PREVENTIVE)
+  description   String         @db.Text
+  performedById  String?
+
+  // Schedule vs actual
+  scheduledDate DateTime?
+  performedDate DateTime?
+
+  // Cost
+  cost          Decimal?       @db.Decimal(12, 2)
+  vendor        String?
+
+  // Result
+  conditionAfter ToolCondition?
+  notes         String?        @db.Text
+
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([toolId])
+  @@index([scheduledDate])
+  @@index([performedDate])
+}
+
+// Tool activity log for complete history
+model ToolActivity {
+  id            String        @id @default(cuid())
+  toolId        String
+  tool          MasterTool    @relation(fields: [toolId], references: [id], onDelete: Cascade)
+
+  // Activity type
+  type          String        // CREATED, CONDITION_UPDATE, LOAN_ISSUED, LOAN_RETURNED, MAINTENANCE, TRANSFER, STOCK_UPDATE
+
+  // Details
+  description   String        @db.Text
+  performedById  String?
+
+  // Related entities
+  loanId        String?
+  workerId      String?        // Worker involved
+  condition     ToolCondition? // Condition after this activity
+  metadata      Json?         // Additional data (before/after values, etc.)
+
+  createdAt     DateTime      @default(now())
+
+  @@index([toolId])
+  @@index([type])
+  @@index([createdAt])
+}
+
+/// Master tools database
+model MasterTool {
+  id              String        @id @default(cuid())
+  toolCode       String        @unique
+
+  name            String
+  category        String        // "measurement", "safety", "electrical", "general"
+  trade           String?       // Trade/skill requirement
+
+  // Specifications
+  minQuantity     Int          @default(1)
+  unit           String        @default("pcs")
+  brand           String?       // Merek alat
+  model           String?       // Model/type alat
+  serialNumber    String?       // Nomor seri alat
+  purchaseDate    DateTime?     // Tanggal pembelian
+  warrantyExpiry  DateTime?     // Masa garansi habis
+  purchasePrice   Decimal?      @db.Decimal(12, 2) // Harga beli
+
+  // Condition tracking
+  currentCondition ToolCondition @default(GOOD)
+
+  // Ownership
+  owner           ToolOwner     @default(COMPANY)
+
+  // Personal tools owner
+  personalOwnerId  String?
+  personalOwner   Worker?      @relation("PersonalToolsOwner", fields: [personalOwnerId], references: [id], onDelete: SetNull)
+
+  // Status
+  isActive        Boolean       @default(true)
+  isAvailable     Boolean       @default(true) // Available for loan
+  notes           String?       @db.Text
+  imageUrl        String?
+
+  // Maintenance settings
+  needsMaintenance Boolean       @default(false) // Butuh maintenance rutin
+  maintenanceIntervalDays Int?    // Hari interval maintenance
+  lastMaintenanceDate DateTime?
+  nextMaintenanceDate DateTime?
+
+  // Location tracking
+  currentLocation String?       // Lokasi alat saat ini
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  loans           ToolLoan[]
+  maintenanceLogs ToolMaintenance[]
+  activities      ToolActivity[]
+  photos          ToolPhoto[]
+
+  @@index([category])
+  @@index([isActive])
+  @@index([currentCondition])
+}
+
+/// Tool photo gallery - multiple photos per tool
+model ToolPhoto {
+  id        String     @id @default(cuid())
+  toolId    String
+  tool      MasterTool @relation(fields: [toolId], references: [id], onDelete: Cascade)
+  url       String
+  caption   String?
+  isPrimary Boolean    @default(false)
+  order     Int        @default(0)
+  createdAt DateTime   @default(now())
+
+  @@index([toolId])
+}
+
+/// Tool loan/borrow tracking
+model ToolLoan {
+  id              String        @id @default(cuid())
+  loanCode       String        @unique
+
+  toolId          String
+  tool            MasterTool    @relation(fields: [toolId], references: [id], onDelete: Cascade)
+
+  workerId        String
+  worker          Worker        @relation(fields: [workerId], references: [id], onDelete: Cascade)
+
+  // Issuing
+  issuedById      String
+  issuedAt        DateTime      @default(now())
+
+  // Return
+  returnedAt      DateTime?
+  returnedCondition ToolCondition?
+
+  // Status
+  status          LoanStatus   @default(OPEN)
+
+  // Evidence
+  issuedPhotoUrl   String?
+  returnedPhotoUrl String?
+
+  // Location tracking
+  issuedLocation  String?       // Lokasi saat dipinjam
+  returnLocation  String?       // Lokasi saat dikembalikan
+
+  // Notes
+  notes           String?       @db.Text
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([toolId])
+  @@index([workerId])
+  @@index([status])
+  @@index([issuedAt])
+}
+
+/// Counter untuk kode SANTRA (worker, assignment, log, QC, KPI, tool)
+model SantraCounter {
+  id              String        @id @default(cuid())
+  prefix          String        @unique  // "WORKER-M", "WORKER-T", "WORKER-K", "JOB", "LOG", "QC", "KPI", "TOOL"
+  lastSeq         Int           @default(0)
+  year            Int?          // For yearly reset
+  updatedAt       DateTime      @updatedAt
 }
 

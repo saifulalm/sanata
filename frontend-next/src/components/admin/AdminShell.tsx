@@ -27,6 +27,13 @@ import {
   Menu,
   Sparkles,
   X,
+  Rss,
+  HardHat,
+  ClipboardCheck,
+  Briefcase,
+  Camera,
+  Star,
+  Wrench,
   type LucideIcon,
 } from "lucide-react";
 import { logoutAction } from "@/app/admin/actions";
@@ -64,6 +71,19 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
+    label: "SANTRA",
+    items: [
+      { href: "/admin/workforce", label: "Workforce Dashboard", icon: HardHat },
+      { href: "/admin/workforce/workers", label: "Database Worker", icon: Users },
+      { href: "/admin/workforce/assessments", label: "Assessment", icon: ClipboardCheck },
+      { href: "/admin/workforce/assignments", label: "Penugasan", icon: Briefcase },
+      { href: "/admin/workforce/executions", label: "Execution", icon: Camera },
+      { href: "/admin/workforce/qc", label: "Quality Control", icon: ShieldCheck },
+      { href: "/admin/workforce/kpi", label: "KPI Performance", icon: Star },
+      { href: "/admin/workforce/tools", label: "Tools & Inventory", icon: Wrench },
+    ],
+  },
+  {
     label: "Pelaporan",
     items: [
       { href: "/admin/daily-reports", label: "Laporan Harian", icon: ScrollText },
@@ -90,6 +110,7 @@ const navGroups: NavGroup[] = [
     items: [
       { href: "/admin/site-content", label: "Konten Situs", icon: LayoutList },
       { href: "/admin/contents", label: "Artikel & Halaman", icon: FileText },
+      { href: "/admin/scraper", label: "Article Scraper", icon: Rss },
       { href: "/admin/media", label: "Pustaka Media", icon: ImageIcon },
       { href: "/admin/seo", label: "SEO", icon: Search },
       { href: "/admin/products", label: "Layanan", icon: ShoppingBag },

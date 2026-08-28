@@ -1,14 +1,19 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Building2, CheckCircle2, Clock } from "lucide-react";
+import { Building2, CheckCircle2, Clock, Home } from "lucide-react";
 import { PageHero } from "@/components/layout/PageHero";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { Eyebrow, GlassPanel } from "@/components/ui/Surface";
 import { getProductBySlug } from "@/lib/api";
-import { getSeoConfig } from "@/lib/seo";
+import {
+  getSeoConfig,
+  serviceJsonLd,
+  breadcrumbsJsonLd,
+} from "@/lib/seo";
 import { collection, getSiteContent, resolveIcon, setting } from "@/lib/siteContent";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -37,8 +42,20 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ServiceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const [service, content] = await Promise.all([getProductBySlug(slug).catch(() => null), getSiteContent()]);
+  const [service, content, seo] = await Promise.all([
+    getProductBySlug(slug).catch(() => null),
+    getSiteContent(),
+    getSeoConfig(),
+  ]);
   if (!service) notFound();
+
+  // Build breadcrumb items
+  const breadcrumbItems = [
+    { name: "Beranda", url: "/" },
+    { name: "Layanan", url: "/services" },
+    ...(service.category ? [{ name: service.category.name, url: `/services?category=${service.category.slug}` }] : []),
+    { name: service.name, url: `/services/${service.slug}` },
+  ];
 
   const advantageItems = collection(content, "service_detail_advantages");
   const advantages =
@@ -91,11 +108,68 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
 
   return (
     <>
+      {/* Service Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            serviceJsonLd({
+              name: service.name,
+              description: service.description,
+              slug: service.slug,
+              image: service.images?.[0]?.url,
+              price: service.price,
+              category: service.category?.name,
+            })
+          ),
+        }}
+      />
+      {/* Breadcrumbs Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd(breadcrumbItems)) }}
+      />
       <PageHero
         eyebrow={service.category?.name ?? "Layanan"}
         title={service.name}
         description={`Estimasi mulai Rp ${Number(service.price).toLocaleString("id-ID")}`}
       />
+
+      {/* Breadcrumb Navigation */}
+      <div className="border-b border-white/10 bg-slate-950/50">
+        <Container>
+          <nav aria-label="Breadcrumb" className="py-3">
+            <ol className="flex items-center gap-2 text-xs text-slate-400">
+              <li>
+                <Link href="/" className="flex items-center gap-1 hover:text-cyan-300 transition-colors">
+                  <Home size={12} />
+                  Beranda
+                </Link>
+              </li>
+              <li className="text-slate-600">/</li>
+              <li>
+                <Link href="/services" className="hover:text-cyan-300 transition-colors">
+                  Layanan
+                </Link>
+              </li>
+              {service.category && (
+                <>
+                  <li className="text-slate-600">/</li>
+                  <li>
+                    <Link href={`/services?category=${service.category.slug}`} className="hover:text-cyan-300 transition-colors">
+                      {service.category.name}
+                    </Link>
+                  </li>
+                </>
+              )}
+              <li className="text-slate-600">/</li>
+              <li className="text-slate-200" aria-current="page">
+                {service.name}
+              </li>
+            </ol>
+          </nav>
+        </Container>
+      </div>
 
       <section className="py-20">
         <Container className="grid gap-12 lg:grid-cols-[1.4fr_1fr]">

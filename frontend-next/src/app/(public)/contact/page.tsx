@@ -6,6 +6,7 @@ import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { GlassPanel, IconTile } from "@/components/ui/Surface";
 import { collection, getSiteContent, resolveIcon, setting } from "@/lib/siteContent";
+import { contactJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Kontak",
@@ -32,8 +33,27 @@ export default async function ContactPage() {
     "https://maps.google.com/maps?q=Jakarta%20Selatan&t=&z=13&ie=UTF8&iwloc=&output=embed"
   );
 
+  // Build contact info for schema
+  const phone = setting(content, "contact.phone");
+  const email = setting(content, "contact.email");
+  const address = setting(content, "contact.address");
+
   return (
     <>
+      {/* Contact Page Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            contactJsonLd({
+              phone: phone || undefined,
+              email: email || undefined,
+              address: address || undefined,
+              whatsapp: whatsappNumber || undefined,
+            })
+          ),
+        }}
+      />
       <PageHero
         eyebrow={setting(content, "contact.hero.eyebrow", "Hubungi Kami")}
         title={setting(content, "contact.hero.title", "Mari Diskusikan Proyek Anda")}

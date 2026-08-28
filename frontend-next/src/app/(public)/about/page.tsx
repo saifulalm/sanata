@@ -8,6 +8,7 @@ import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { GlassPanel, IconTile } from "@/components/ui/Surface";
 import { collection, getSiteContent, resolveIcon, setting } from "@/lib/siteContent";
 import { mediaSrc } from "@/lib/media";
+import { aboutJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Tentang Kami",
@@ -67,6 +68,17 @@ export default async function AboutPage() {
 
   return (
     <>
+      {/* About Page Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            aboutJsonLd(
+              leadership.map((l) => ({ name: l.name, role: l.role }))
+            )
+          ),
+        }}
+      />
       <PageHero
         eyebrow={setting(content, "about.hero.eyebrow", "Tentang Kami")}
         title={setting(content, "about.hero.title", "Your Building Partner")}

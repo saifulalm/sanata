@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { Building2, MapPin, CalendarDays } from "lucide-react";
+import { Building2, MapPin, CalendarDays, Home } from "lucide-react";
 import { PageHero } from "@/components/layout/PageHero";
 import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
@@ -10,7 +10,11 @@ import { Button } from "@/components/ui/Button";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { GlassPanel } from "@/components/ui/Surface";
 import { getProductBySlug, getProducts } from "@/lib/api";
-import { getSeoConfig } from "@/lib/seo";
+import {
+  getSeoConfig,
+  projectJsonLd,
+  breadcrumbsJsonLd,
+} from "@/lib/seo";
 import { getSiteContent, setting } from "@/lib/siteContent";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -46,9 +50,73 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     ? (await getProducts({ categoryId: project.category.id, pageSize: 4 })).data.filter((p) => p.id !== project.id).slice(0, 3)
     : [];
 
+  // Build breadcrumb items
+  const breadcrumbItems = [
+    { name: "Beranda", url: "/" },
+    { name: "Proyek", url: "/projects" },
+    ...(project.category ? [{ name: project.category.name, url: `/projects?category=${project.category.slug}` }] : []),
+    { name: project.name, url: `/projects/${project.slug}` },
+  ];
+
   return (
     <>
+      {/* Project/Product Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            projectJsonLd({
+              name: project.name,
+              description: project.description,
+              slug: project.slug,
+              image: project.images?.[0]?.url,
+              category: project.category?.name,
+            })
+          ),
+        }}
+      />
+      {/* Breadcrumbs Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd(breadcrumbItems)) }}
+      />
       <PageHero eyebrow={project.category?.name ?? "Proyek"} title={project.name} />
+
+      {/* Breadcrumb Navigation */}
+      <div className="border-b border-white/10 bg-slate-950/50">
+        <Container>
+          <nav aria-label="Breadcrumb" className="py-3">
+            <ol className="flex items-center gap-2 text-xs text-slate-400">
+              <li>
+                <Link href="/" className="flex items-center gap-1 hover:text-cyan-300 transition-colors">
+                  <Home size={12} />
+                  Beranda
+                </Link>
+              </li>
+              <li className="text-slate-600">/</li>
+              <li>
+                <Link href="/projects" className="hover:text-cyan-300 transition-colors">
+                  Proyek
+                </Link>
+              </li>
+              {project.category && (
+                <>
+                  <li className="text-slate-600">/</li>
+                  <li>
+                    <Link href={`/projects?category=${project.category.slug}`} className="hover:text-cyan-300 transition-colors">
+                      {project.category.name}
+                    </Link>
+                  </li>
+                </>
+              )}
+              <li className="text-slate-600">/</li>
+              <li className="text-slate-200" aria-current="page">
+                {project.name}
+              </li>
+            </ol>
+          </nav>
+        </Container>
+      </div>
 
       <section className="py-20">
         <Container className="grid gap-12 lg:grid-cols-[1.4fr_1fr]">

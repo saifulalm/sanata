@@ -221,3 +221,426 @@ export async function getIndexableProducts(): Promise<IndexableProduct[]> {
     return [];
   }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BREADCRUMBS JSON-LD
+// Memudahkan Google memahami struktur hierarki halaman
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
+/**
+ * Generate BreadcrumbList schema untuk halaman detail
+ * @example
+ * breadcrumbsJsonLd([
+ *   { name: "Beranda", url: "/" },
+ *   { name: "Layanan", url: "/services" },
+ *   { name: "Renovasi Rumah", url: "/services/renovasi-rumah" }
+ * ])
+ */
+export function breadcrumbsJsonLd(items: BreadcrumbItem[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": items.map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": item.name,
+      "item": `${SITE_URL}${item.url}`,
+    })),
+  };
+}
+
+/**
+ * Generate breadcrumb items untuk Journal article
+ */
+export function articleBreadcrumbs(categoryName?: string | null) {
+  const items: BreadcrumbItem[] = [
+    { name: "Beranda", url: "/" },
+    { name: "Insight", url: "/journal" },
+  ];
+  if (categoryName) {
+    items.push({ name: categoryName, url: `/journal?category=${categoryName.toLowerCase().replace(/\s+/g, '-')}` });
+  }
+  return items;
+}
+
+/**
+ * Generate breadcrumb items untuk Services/Projects listing
+ */
+export function listingBreadcrumbs(type: "services" | "projects", categoryName?: string | null) {
+  const typeName = type === "services" ? "Layanan" : "Proyek";
+  const typeUrl = type === "services" ? "/services" : "/projects";
+
+  const items: BreadcrumbItem[] = [
+    { name: "Beranda", url: "/" },
+    { name: typeName, url: typeUrl },
+  ];
+  if (categoryName) {
+    items.push({ name: categoryName, url: `${typeUrl}?category=${categoryName.toLowerCase().replace(/\s+/g, '-')}` });
+  }
+  return items;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FAQ SCHEMA
+// Membantu Google menampilkan FAQ di hasil pencarian
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+/**
+ * Generate FAQPage schema untuk halaman FAQ
+ */
+export function faqJsonLd(faqs: FaqItem[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map((faq) => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer,
+      },
+    })),
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SERVICE/PRODUCT OFFER SCHEMA
+// Untuk rich results pada layanan dengan harga
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface OfferData {
+  price: string | number;
+  priceCurrency?: string;
+  availability?: string;
+}
+
+/**
+ * Generate Offer schema untuk layanan
+ */
+export function offerJsonLd(offer: OfferData) {
+  return {
+    "@type": "Offer",
+    "priceCurrency": offer.priceCurrency ?? "IDR",
+    "price": offer.price,
+    "availability": offer.availability ?? "https://schema.org/InStock",
+    "url": SITE_URL, // Will be overridden by caller
+  };
+}
+
+/**
+ * Generate Product/Service schema untuk layanan
+ */
+export function serviceJsonLd(service: {
+  name: string;
+  description: string;
+  slug: string;
+  image?: string | null;
+  price?: string | number;
+  category?: string | null;
+}) {
+  const url = `${SITE_URL}/services/${service.slug}`;
+
+  const schema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": service.name,
+    "description": service.description,
+    "url": url,
+    ...(service.image ? { image: service.image.startsWith("http") ? service.image : `${SITE_URL}${service.image}` } : {}),
+    ...(service.category ? { "serviceType": service.category } : {}),
+  };
+
+  // Add price specification if available
+  if (service.price) {
+    schema["hasOfferCatalog"] = {
+      "@type": "OfferCatalog",
+      "name": service.name,
+      "hasOffer": {
+        "@type": "Offer",
+        "price": service.price,
+        "priceCurrency": "IDR",
+        "availability": "https://schema.org/InStock",
+        "url": url,
+      },
+    };
+  }
+
+  // Add provider
+  schema["provider"] = {
+    "@type": "Organization",
+    "name": "Sanata Construction",
+    "url": SITE_URL,
+  };
+
+  return schema;
+}
+
+/**
+ * Generate Product schema untuk proyek (portofolio)
+ */
+export function projectJsonLd(project: {
+  name: string;
+  description: string;
+  slug: string;
+  image?: string | null;
+  category?: string | null;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": project.name,
+    "description": project.description,
+    "url": `${SITE_URL}/projects/${project.slug}`,
+    ...(project.image ? { image: project.image.startsWith("http") ? project.image : `${SITE_URL}${project.image}` } : {}),
+    "brand": {
+      "@type": "Organization",
+      "name": "Sanata Construction",
+    },
+    ...(project.category ? { "category": project.category } : {}),
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CONTACT PAGE SCHEMA
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface ContactInfo {
+  phone?: string;
+  email?: string;
+  address?: string;
+  whatsapp?: string;
+}
+
+/**
+ * Generate ContactPage schema
+ */
+export function contactJsonLd(contact?: ContactInfo) {
+  const schema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Hubungi Sanata Construction",
+    "description": "Hubungi kami untuk konsultasi dan permintaan penawaran proyek konstruksi.",
+    "url": `${SITE_URL}/contact`,
+  };
+
+  if (contact) {
+    const contactPoints = [];
+
+    if (contact.phone) {
+      contactPoints.push({
+        "@type": "ContactPoint",
+        "telephone": contact.phone,
+        "contactType": "customer service",
+        "availableLanguage": ["Indonesian", "English"],
+      });
+    }
+
+    if (contact.whatsapp) {
+      contactPoints.push({
+        "@type": "ContactPoint",
+        "telephone": `+${contact.whatsapp.replace(/\D/g, "")}`,
+        "contactType": "customer service",
+        "description": "WhatsApp",
+        "url": `https://wa.me/${contact.whatsapp.replace(/\D/g, "")}`,
+      });
+    }
+
+    if (contact.email) {
+      contactPoints.push({
+        "@type": "ContactPoint",
+        "email": contact.email,
+        "contactType": "customer service",
+      });
+    }
+
+    if (contactPoints.length > 0) {
+      schema["contactPoint"] = contactPoints;
+    }
+  }
+
+  return schema;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LOCAL BUSINESS SCHEMA
+// Untuk SEO lokal (perbaikan visibilitas地图)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export function localBusinessJsonLd(config?: SeoConfig, contact?: ContactInfo) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "GeneralContractor",
+    "name": config?.companyName ?? "Sanata Construction",
+    "description": config?.description,
+    "url": config?.siteUrl ?? SITE_URL,
+    ...(config?.ogImage ? { image: config.ogImage } : {}),
+    "priceRange": "$$",
+    ...(contact?.address ? {
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": contact.address,
+        "addressLocality": "Jakarta",
+        "addressRegion": "DKI Jakarta",
+        "postalCode": "12345",
+        "addressCountry": "ID"
+      }
+    } : {}),
+    ...(contact?.phone ? { "telephone": contact.phone } : {}),
+    ...(contact?.email ? { "email": contact.email } : {}),
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      "opens": "08:00",
+      "closes": "17:00"
+    },
+    "areaServed": config?.areaServed ?? "Jabodetabek",
+    "hasMap": `${SITE_URL}/contact#map`,
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ABOUT PAGE SCHEMA
+// ─────────────────────────────────────────────────────────────────────────────
+
+export function aboutJsonLd(leadership?: Array<{ name: string; role: string }>) {
+  const schema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "Tentang Sanata Construction",
+    "description": "Profil, visi misi, dan tim Sanata Construction - kontraktor konstruksi terpercaya.",
+    "url": `${SITE_URL}/about`,
+  };
+
+  if (leadership && leadership.length > 0) {
+    schema["mainEntity"] = {
+      "@type": "Organization",
+      "name": "Sanata Construction",
+      "employee": leadership.map((person) => ({
+        "@type": "Person",
+        "name": person.name,
+        "jobTitle": person.role,
+      })),
+    };
+  }
+
+  return schema;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// COLLECTION PAGE SCHEMA (Services, Projects, Journal listing)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface CollectionItem {
+  name: string;
+  slug: string;
+}
+
+export function collectionPageJsonLd(
+  type: "services" | "projects" | "journal",
+  items: CollectionItem[]
+) {
+  const typeMap = {
+    services: { type: "Service", name: "Layanan Konstruksi" },
+    projects: { type: "Product", name: "Proyek" },
+    journal: { type: "Blog", name: "Insight & Artikel" },
+  };
+
+  const { type: itemType, name } = typeMap[type];
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": name,
+    "description": `Kumpulan ${name.toLowerCase()} dari Sanata Construction`,
+    "url": `${SITE_URL}/${type}`,
+    "mainEntity": {
+      "@type": `ItemList`,
+      "itemListElement": items.map((item, index) => ({
+        "@type": "ListItem",
+        "position": index + 1,
+        "url": `${SITE_URL}/${type}/${item.slug}`,
+        "name": item.name,
+      })),
+    },
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ENHANCED ARTICLE SCHEMA WITH BREADCRUMBS
+// ─────────────────────────────────────────────────────────────────────────────
+
+export function enhancedArticleJsonLd(article: {
+  title: string;
+  metaDescription?: string | null;
+  excerpt?: string | null;
+  slug: string;
+  coverImage?: string | null;
+  ogImage?: string | null;
+  publishedAt?: string | null;
+  updatedAt?: string | null;
+  author?: { name: string } | null;
+  category?: { name: string } | null;
+  body?: string;
+}) {
+  const image = article.ogImage || article.coverImage;
+  const breadcrumbUrl = `${SITE_URL}/journal/${article.slug}`;
+
+  // Estimate reading time from body
+  let estimatedReadingTime = 5; // default minutes
+  if (article.body) {
+    const wordCount = article.body.replace(/<[^>]*>/g, " ").split(/\s+/).filter(Boolean).length;
+    estimatedReadingTime = Math.max(1, Math.round(wordCount / 200));
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": article.title,
+    "description": article.metaDescription || article.excerpt || undefined,
+    ...(image ? {
+      image: {
+        "@type": "ImageObject",
+        "url": image.startsWith("http") ? image : `${SITE_URL}${image}`,
+        "width": 1200,
+        "height": 630,
+      }
+    } : {}),
+    "datePublished": article.publishedAt ?? undefined,
+    "dateModified": article.updatedAt ?? article.publishedAt ?? undefined,
+    "author": {
+      "@type": "Organization",
+      "name": article.author?.name ?? "Sanata Construction",
+      "url": SITE_URL,
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Sanata Construction",
+      "logo": {
+        "@type": "ImageObject",
+        "url": `${SITE_URL}/icon`,
+        "width": 200,
+        "height": 60,
+      },
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": breadcrumbUrl,
+    },
+    "wordCount": article.body ? article.body.replace(/<[^>]*>/g, " ").split(/\s+/).filter(Boolean).length : undefined,
+    "timeRequired": `PT${estimatedReadingTime}M`,
+    ...(article.category ? {
+      "articleSection": article.category.name,
+      "keywords": article.category.name,
+    } : {}),
+  };
+}

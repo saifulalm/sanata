@@ -9,6 +9,7 @@ import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 import { EmptyState, FilterPill, inputClass } from "@/components/ui/Surface";
 import { getArticles, getCategories } from "@/lib/api";
 import { getSiteContent, setting } from "@/lib/siteContent";
+import { collectionPageJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Insight",
@@ -21,13 +22,27 @@ export default async function JournalPage({
   searchParams: Promise<{ category?: string; q?: string }>;
 }) {
   const params = await searchParams;
-  const [categories, content] = await Promise.all([getCategories(), getSiteContent()]);
+  const [categories, content, articlesResult] = await Promise.all([
+    getCategories(),
+    getSiteContent(),
+    getArticles({ pageSize: 100 }).catch(() => ({ data: [] })),
+  ]);
   const activeCategory = categories.find((c) => c.slug === params.category);
+  const { data: articles } = articlesResult;
 
-  const { data: articles } = await getArticles({ categoryId: activeCategory?.id, search: params.q, pageSize: 24 });
+  // Generate CollectionPage schema
+  const journalSchema = collectionPageJsonLd(
+    "journal",
+    articles.slice(0, 50).map((a) => ({ name: a.title, slug: a.slug }))
+  );
 
   return (
     <>
+      {/* Collection Page Schema untuk Journal listing */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(journalSchema) }}
+      />
       <PageHero
         eyebrow={setting(content, "journal.hero.eyebrow", "Insight")}
         title={setting(content, "journal.hero.title", "Wawasan & Berita Konstruksi")}
