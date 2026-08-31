@@ -6,6 +6,7 @@ build/
 .env.production
 backend/uploads/*
 !backend/uploads/.gitkeep
+backend/whatsapp-sessions/
 *.log
 .DS_Store
 .claude/

@@ -11,6 +11,7 @@ import apiRoutes from "@/routes";
 import { errorHandler, notFoundHandler } from "@/middleware/errorHandler";
 import { globalApiLimiter } from "@/middleware/rateLimiters";
 import { openapiSpec } from "@/config/openapi";
+import { createGatewayRouter } from "@/gateway";
 
 export function createApp() {
   const app = express();
@@ -42,6 +43,9 @@ export function createApp() {
   );
 
   app.use("/api", apiRoutes);
+
+  // WhatsApp Baileys Gateway
+  app.use("/gateway", createGatewayRouter());
 
   app.use(notFoundHandler);
   app.use(errorHandler);

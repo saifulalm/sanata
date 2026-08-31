@@ -34,6 +34,8 @@ import {
   Camera,
   Star,
   Wrench,
+  Lightbulb,
+  FileBadge,
   type LucideIcon,
 } from "lucide-react";
 import { logoutAction } from "@/app/admin/actions";
@@ -79,6 +81,9 @@ const navGroups: NavGroup[] = [
       { href: "/admin/workforce/assignments", label: "Penugasan", icon: Briefcase },
       { href: "/admin/workforce/executions", label: "Execution", icon: Camera },
       { href: "/admin/workforce/qc", label: "Quality Control", icon: ShieldCheck },
+      { href: "/admin/workforce/method-statements", label: "Method Statements", icon: FileBadge },
+      { href: "/admin/workforce/qc-templates", label: "QC Templates", icon: ClipboardCheck },
+      { href: "/admin/workforce/lesson-learned", label: "Lesson Learned", icon: Lightbulb },
       { href: "/admin/workforce/kpi", label: "KPI Performance", icon: Star },
       { href: "/admin/workforce/tools", label: "Tools & Inventory", icon: Wrench },
     ],
@@ -219,9 +224,17 @@ export function AdminShell({
         <div className="admin-theme flex min-h-screen">
           <aside className="hidden w-72 flex-col border-r border-white/10 bg-[#06111f]/90 backdrop-blur-2xl md:flex">
             <div className="flex items-center gap-3 border-b border-white/10 px-6 py-5">
-              <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-cyan-300/30 bg-white/10 text-sm font-bold text-cyan-100 shadow-[0_0_25px_rgba(56,189,248,0.15)]">
-                SR
-          </span>
+              <div className="relative h-11 w-11 overflow-hidden rounded-2xl border border-cyan-300/30 bg-white/10">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <svg width="28" height="28" viewBox="0 0 40 40" className="opacity-80">
+                    <rect x="6" y="8" width="14" height="24" rx="1" fill="#38bdf8" opacity="0.3" />
+                    <rect x="5" y="8" width="14" height="24" rx="1" fill="none" stroke="#38bdf8" strokeWidth="2" />
+                    <rect x="20" y="14" width="14" height="18" rx="1" fill="#38bdf8" opacity="0.3" />
+                    <rect x="19" y="14" width="14" height="18" rx="1" fill="none" stroke="#38bdf8" strokeWidth="2" />
+                    <circle cx="15" cy="11" r="2" fill="#f59e0b" />
+                  </svg>
+                </div>
+              </div>
               <span className="leading-none">
                 <span className="block font-display text-sm font-semibold uppercase tracking-[0.24em] text-white">Sanata Admin</span>
                 <span className="mt-1 block text-[10px] uppercase tracking-[0.26em] text-slate-500">Futuristic Control Hub</span>

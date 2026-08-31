@@ -14,6 +14,7 @@ import {
   MessageSquare,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Logo } from "@/components/ui/Logo";
 
 interface NavItem {
   label: string;
@@ -71,14 +72,7 @@ export function EnhancedHeader() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between lg:h-20">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-300/30 bg-white/10 text-sm font-bold text-cyan-100 shadow-[0_0_20px_rgba(56,189,248,0.15)]">
-                SR
-              </div>
-              <span className="hidden font-display text-lg font-semibold uppercase tracking-[0.2em] text-white sm:block">
-                Sanata
-              </span>
-            </Link>
+            <Logo className="hidden lg:flex" />
 
             {/* Desktop Navigation */}
             <nav className="hidden items-center gap-1 lg:flex">
@@ -178,9 +172,7 @@ export function EnhancedHeader() {
               className="fixed bottom-0 right-0 top-0 z-50 w-80 overflow-y-auto border-l border-white/10 bg-[#06111f] p-6 lg:hidden"
             >
               <div className="mb-6 flex items-center justify-between">
-                <span className="font-display text-lg font-semibold uppercase tracking-[0.2em] text-white">
-                  Menu
-                </span>
+                <Logo variant="icon" />
                 <button
                   onClick={() => setMobileOpen(false)}
                   className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white"

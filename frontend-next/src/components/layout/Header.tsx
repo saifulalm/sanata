@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, Sparkles, X } from "lucide-react";
+import { Menu, X, Settings } from "lucide-react";
 import clsx from "clsx";
 import { Button } from "@/components/ui/Button";
+import { Logo } from "@/components/ui/Logo";
 
 /**
  * Beberapa entri punya tujuan berbeda tergantung halaman: di beranda mereka
@@ -64,20 +65,7 @@ export function Header() {
       )}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between container-px py-4">
-        <Link href="/" className="group flex items-center gap-3">
-          <span className="relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl border border-cyan-300/30 bg-white/10 text-cyan-100 shadow-[0_0_25px_rgba(56,189,248,0.18)] backdrop-blur-xl">
-            <span className="absolute inset-1 rounded-xl border border-white/10" />
-            <span className="relative text-sm font-semibold tracking-[0.26em]">SR</span>
-          </span>
-          <span className="leading-none">
-            <span className="block text-sm font-semibold uppercase tracking-[0.28em] text-white">
-              SANATA <span className="text-cyan-300">RUMAMESRA</span>
-            </span>
-            <span className={clsx("mt-1 block text-[10px] uppercase tracking-[0.32em]", solid ? "text-slate-400" : "text-white/55")}>
-              Futuristic Construction System
-            </span>
-          </span>
-        </Link>
+        <Logo />
 
         <nav className="hidden items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] px-2 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-xl xl:flex">
           {navItems.map((item) => (
@@ -101,7 +89,7 @@ export function Header() {
             variant="outline"
             className="!border-cyan-300/35 !bg-cyan-300/10 !py-2.5 !text-xs !uppercase !tracking-[0.22em] !text-cyan-100 hover:!bg-cyan-300/20"
           >
-            <Sparkles size={14} /> Admin Login
+            <Settings size={14} /> Admin Login
           </Button>
         </div>
 

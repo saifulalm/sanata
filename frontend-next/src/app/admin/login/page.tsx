@@ -26,9 +26,17 @@ export default async function AdminLoginPage({
       />
           <div className="relative w-full max-w-sm rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 shadow-[0_35px_100px_rgba(0,0,0,0.35)] backdrop-blur-2xl">
         <div className="mb-6 flex justify-center">
-              <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-cyan-300/30 bg-white/10 font-display text-base font-bold text-cyan-100 shadow-[0_0_24px_rgba(56,189,248,0.16)]">
-                SR
-          </span>
+              <div className="relative h-12 w-12 overflow-hidden rounded-2xl border border-cyan-300/30 bg-white/10">
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <svg width="32" height="32" viewBox="0 0 40 40" className="opacity-80">
+                    <rect x="6" y="8" width="14" height="24" rx="1" fill="#38bdf8" opacity="0.3" />
+                    <rect x="5" y="8" width="14" height="24" rx="1" fill="none" stroke="#38bdf8" strokeWidth="2" />
+                    <rect x="20" y="14" width="14" height="18" rx="1" fill="#38bdf8" opacity="0.3" />
+                    <rect x="19" y="14" width="14" height="18" rx="1" fill="none" stroke="#38bdf8" strokeWidth="2" />
+                    <circle cx="15" cy="11" r="2" fill="#f59e0b" />
+                  </svg>
+                </div>
+              </div>
         </div>
             <p className="mb-2 text-center text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-300">Futuristic Control Access</p>
             <p className="mb-6 text-center text-sm text-slate-400">Masuk ke panel admin Sanata Construction</p>

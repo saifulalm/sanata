@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Mail, MapPin, Phone, Sparkles } from "lucide-react";
+import { Mail, MapPin, Phone, Globe } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { Logo } from "@/components/ui/Logo";
 import { getSiteContent, setting } from "@/lib/siteContent";
 
 const linkGroups = [
@@ -53,21 +54,14 @@ export async function Footer() {
       <Container className="relative py-16 sm:py-20">
         <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr]">
           <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 shadow-[0_30px_90px_rgba(0,0,0,0.3)] backdrop-blur-xl sm:p-8">
-            <div className="flex items-center gap-4">
-              <div className="flex h-14 w-14 items-center justify-center rounded-[1.2rem] border border-cyan-300/30 bg-cyan-300/10 text-cyan-100 shadow-[0_0_30px_rgba(56,189,248,0.18)]">
-                <Sparkles size={18} />
-              </div>
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.28em] text-white">{companyName}</p>
-                <p className="mt-1 text-[11px] uppercase tracking-[0.3em] text-slate-400">Futuristic Construction Interface</p>
-              </div>
-            </div>
+            {/* Logo */}
+            <Logo />
 
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
               {[
                 { label: "Email", value: email, icon: Mail },
                 { label: "Phone", value: phone, icon: Phone },
-                { label: "Website", value: website, icon: Sparkles },
+                { label: "Website", value: website, icon: Globe },
                 { label: "Location", value: address, icon: MapPin },
               ].map((item) => (
                 <div key={item.label} className="rounded-[1.4rem] border border-white/10 bg-slate-950/65 p-4">
