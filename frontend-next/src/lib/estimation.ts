@@ -268,6 +268,18 @@ export const WEATHER_LABEL: Record<Weather, string> = {
   HUJAN_LEBAT: "Hujan Lebat",
 };
 
+/// Jam cuaca per laporan.
+export interface WeatherLogEntry {
+  hour: string; // "08:00", "09:00", ...
+  weather: Weather;
+}
+
+/// Aktivitas per bangunan.
+export interface WorkActivityEntry {
+  building: string;
+  activities: string[];
+}
+
 export interface DailyReportPhoto {
   id: string;
   url: string;
@@ -281,11 +293,14 @@ export interface DailyReport {
   date: string;
   weatherMorning: Weather | null;
   weatherAfternoon: Weather | null;
+  weatherLog: WeatherLogEntry[] | null;
   workforce: Record<string, number> | null;
   workforceTotal: number;
+  workActivities: WorkActivityEntry[] | null;
   equipment: string | null;
   materials: string | null;
   activities: string;
+  testPerformed: string | null;
   obstacles: string | null;
   notes: string | null;
   createdByName: string | null;

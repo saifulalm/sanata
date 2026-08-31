@@ -5,7 +5,7 @@
  */
 
 import { Router } from "express";
-import { requireRole } from "@/middleware/auth";
+import { requireAuth, requireRole } from "@/middleware/auth";
 import {
   scrapeUrl,
   previewScrape,
@@ -16,8 +16,8 @@ import {
 
 const router = Router();
 
-// All routes require admin/editor role
-router.use(requireRole("ADMIN", "EDITOR"));
+// All routes require authentication AND admin/editor role
+router.use(requireAuth, requireRole("ADMIN", "EDITOR"));
 
 /**
  * POST /api/scraper/scrape

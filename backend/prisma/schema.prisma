@@ -754,6 +754,10 @@ model RabProgressPhoto {
 }
 
 /// Laporan harian lapangan — catatan pelaksanaan per tanggal.
+///
+/// Nilainya kumulatif (bukan tambahan) karena itulah yang dilaporkan pengawas:
+/// "pekerjaan ini sudah 40% per tanggal sekian". Kurva realisasi memakai
+/// catatan terakhir pada atau sebelum akhir tiap periode.
 model DailyReport {
   id    String   @id @default(cuid())
   rabId String
@@ -762,6 +766,10 @@ model DailyReport {
 
   weatherMorning   Weather?
   weatherAfternoon Weather?
+
+  /// Log cuaca per jam [08:00 - 03:00].
+  /// Struktur: [{ hour: "08:00", weather: "CERAH" }, ...]
+  weatherLog Json?
 
   /// Jumlah tenaga kerja per jabatan, mis. { "Tukang batu": 4, "Pekerja": 10 }.
   /// Bentuk bebas karena susunan tim berbeda tiap proyek dan tiap tahap.
@@ -773,7 +781,17 @@ model DailyReport {
 
   equipment  String? @db.Text
   materials  String? @db.Text
+
+  /// Aktivitas per bangunan.
+  /// Struktur: [{ building: "Bangunan Rumah 1", activities: ["Pekerjaan 1", "Pekerjaan 2"] }, ...]
+  workActivities Json?
+
+  /// Catatan aktivitas tunggal (legacy - untuk backward compatibility).
   activities String  @db.Text
+
+  /// Hasil pengujian/inspection yang dilakukan hari itu.
+  testPerformed String? @db.Text
+
   obstacles  String? @db.Text
   notes      String? @db.Text
 
@@ -1296,6 +1314,48 @@ enum LoanStatus {
   LOST
 }
 
+// ============================================================
+// SANTARA QC ENHANCEMENT - WBS & Method Statement
+// Following Santara Digital QC Flow PDF specifications
+// ============================================================
+
+/// 18 WBS stages from QC Flow PDF Page 2
+enum WbsStage {
+  PRE_CONSTRUCTION    // 01: Pre-Construction - GEN-001
+  SITE_PREPARATION    // 02: Site Preparation - CIV-001
+  EARTHWORK           // 03: Earthwork - CIV-002
+  FOUNDATION          // 04: Foundation - STR-001
+  STRUCTURE           // 05: Structure - STR-002
+  MASONRY             // 06: Masonry - ARC-001
+  ROOF                // 07: Roof - ARC-002
+  MEP                 // 08: MEP - MEP-001
+  WATERPROOFING       // 09: Waterproofing - ARC-003
+  PLASTER_SCREED      // 10: Plaster & Screed - ARC-004
+  FLOOR_WALL_FINISH   // 11: Floor & Wall Finish - FIN-001
+  CEILING             // 12: Ceiling - FIN-002
+  DOORS_WINDOWS       // 13: Doors & Windows - FIN-003
+  PAINTING            // 14: Painting - FIN-004
+  EXTERNAL_WORKS      // 15: External Works - EXT-001
+  TESTING_COMMISSIONING // 16: Testing & Commissioning - T&C-001
+  SNAGGING            // 17: Snagging - QA-001
+  HANDOVER            // 18: Handover - DOC-001
+}
+
+/// Check type for QC inspection
+enum CheckType {
+  PRE_CHECK    // Pre-inspection before work
+  POST_CHECK   // Post-inspection after work
+  FINAL_CHECK  // Final inspection before handover
+}
+
+/// Severity level for QC issues
+enum QcSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
 // --- WORKER / TENAGA KERJA ---
 
 /// Database tenaga kerja dengan profil lengkap
@@ -1401,8 +1461,17 @@ model JobAssignment {
 
   // WBS Reference
   wbsCode         String?         // e.g., "WBS-001"
+  wbsStage        WbsStage?       // Link to WBS stage enum
   workItem        String          @db.Text
   methodRef       String?         // Shop drawing/method reference
+  methodCode      String?         // Denormalized for easy access
+
+  // Method Statement Reference (NEW)
+  methodStatementId String?
+  methodStatement   MethodStatement? @relation(fields: [methodStatementId], references: [id], onDelete: SetNull)
+  acceptanceCriteria String?       @db.Text
+  tolerance         String?
+  evidenceRequirement String[]
 
   // Responsible Persons
   responsiblePersonId String?
@@ -1439,6 +1508,7 @@ model JobAssignment {
   @@index([responsibleMandorId])
   @@index([status])
   @@index([wbsCode])
+  @@index([methodStatementId])
 }
 
 // --- EXECUTION LOG ---
@@ -1502,33 +1572,57 @@ model ExecutionPhoto {
 // --- QUALITY CONTROL ---
 
 /// Record QC per item pekerjaan
+/// Extended with WBS stage, Method Statement reference, and Traceable data (GPS, Weather)
 model QcRecord {
   id              String        @id @default(cuid())
-  qcCode        String        @unique
+  qcCode          String        @unique
 
   // References
   assignmentId    String
   assignment      JobAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
 
-  workerId       String
+  workerId        String
   worker          Worker        @relation(fields: [workerId], references: [id], onDelete: Cascade)
+
+  // WBS & Method Reference (NEW)
+  wbsStage        WbsStage?
+  methodCode      String?
+  methodStatement  MethodStatement? @relation(fields: [methodCode], references: [methodCode], onDelete: SetNull)
+  checkType       CheckType    @default(POST_CHECK)
+  templateId      String?
+  template        QcTemplate?  @relation(fields: [templateId], references: [id], onDelete: SetNull)
 
   // QC Details
   checkDate       DateTime      @default(now())
   itemDesc        String?       @db.Text
   criteria        String?       @db.Text
   measurement     String?       // Actual measurement result
+  tolerance       String?       // Tolerance from method statement
   result          QcResult
 
   // Defect info if FAIL
   defectDesc      String?       @db.Text
-  defectPhotoUrl   String?
+  defectPhotoUrl  String?
 
   // Rework tracking
   isRework        Boolean       @default(false)
   reworkOfId      String?
-  reworkOf         QcRecord?    @relation("ReworkChain", fields: [reworkOfId], references: [id], onDelete: SetNull)
-  reworkChain     QcRecord[]    @relation("ReworkChain")
+  reworkOf        QcRecord?    @relation("ReworkChain", fields: [reworkOfId], references: [id], onDelete: SetNull)
+  reworkChain     QcRecord[]   @relation("ReworkChain")
+
+  // Hold Point System (NEW)
+  holdPoint       Boolean       @default(false)
+  isReleased      Boolean       @default(false)
+  releasedById    String?
+  releasedAt      DateTime?
+
+  // Traceable Data (NEW) - Following PDF TRACEABLE principle
+  latitude        Decimal?      @db.Decimal(10, 7)
+  longitude       Decimal?      @db.Decimal(10, 7)
+  weather         String?       // CERAH, BERAWAN, GERIMIS, HUJAN, HUJAN_LEBAT
+  temperature     Decimal?      @db.Decimal(5, 2)
+  photosCount     Int           @default(0)
+  notes           String?       @db.Text
 
   // Approval
   approvedById    String?
@@ -1540,11 +1634,19 @@ model QcRecord {
 
   // Relations
   photos          QcPhoto[]
+  approvalLogs    QcApprovalLog[]
+  lessonLearned   LessonLearned[]
 
   @@index([assignmentId])
   @@index([workerId])
   @@index([result])
   @@index([checkDate])
+  @@index([wbsStage])
+  @@index([methodCode])
+  @@index([checkType])
+  @@index([holdPoint])
+  @@index([isReleased])
+  @@index([weather])
 }
 
 model QcPhoto {
@@ -1559,6 +1661,118 @@ model QcPhoto {
   createdAt       DateTime      @default(now())
 
   @@index([qcId])
+}
+
+// Multi-level Approval Log (NEW)
+model QcApprovalLog {
+  id              String        @id @default(cuid())
+  qcId            String
+  qc              QcRecord     @relation(fields: [qcId], references: [id], onDelete: Cascade)
+
+  approverId      String
+  approverName    String?
+  approverRole    String?
+  status          String        @default("PENDING") // PENDING, APPROVED, REJECTED, REQUESTED_INFO
+  note            String?
+
+  createdAt       DateTime      @default(now())
+
+  @@index([qcId])
+  @@index([approverId])
+}
+
+// Lesson Learned for Continuous Improvement (NEW)
+model LessonLearned {
+  id              String        @id @default(cuid())
+  wbsStage        WbsStage?
+  qcRecordId      String?
+  qcRecord        QcRecord?    @relation(fields: [qcRecordId], references: [id], onDelete: SetNull)
+
+  title           String
+  description     String        @db.Text
+  rootCause       String?       @db.Text
+  correctiveAction String?      @db.Text
+  preventiveAction String?      @db.Text
+  severity        QcSeverity   @default(MEDIUM)
+  occurredAt      DateTime?
+
+  createdById     String?
+  isResolved      Boolean       @default(false)
+  resolvedAt      DateTime?
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([wbsStage])
+  @@index([qcRecordId])
+  @@index([severity])
+  @@index([isResolved])
+}
+
+// Method Statement Master (NEW)
+model MethodStatement {
+  id              String        @id @default(cuid())
+  methodCode      String        @unique
+
+  wbsStage        WbsStage
+  workItem        String
+  scope           String?       @db.Text
+  reference       String?
+
+  tools           String[]
+  materials       String[]
+  precondition    String?       @db.Text
+  sequence        Json?         // Array of steps
+  criticalPoints  String?       @db.Text
+
+  acceptanceCriteria String      @db.Text
+  tolerance       String?
+  holdPoint       Boolean       @default(false)
+  safety          String?       @db.Text
+  evidenceRequirement String[]
+
+  reworkProcedure String?       @db.Text
+  responsibleRoles String[]
+  revision        Int           @default(1)
+  lessonLearned   String?       @db.Text
+
+  isActive        Boolean       @default(true)
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  templates       QcTemplate[]
+  jobAssignments  JobAssignment[]
+  qcRecords      QcRecord[]
+
+  @@index([wbsStage])
+  @@index([methodCode])
+  @@index([isActive])
+}
+
+// QC Checklist Template (NEW)
+model QcTemplate {
+  id              String        @id @default(cuid())
+  wbsStage        WbsStage
+  methodCode      String?
+  methodStatement MethodStatement? @relation(fields: [methodCode], references: [methodCode], onDelete: SetNull)
+
+  name            String
+  description     String?       @db.Text
+  items           Json          // Array of checklist items
+  // Item structure: [{itemDesc, criteria, tolerance, isMandatory, order}]
+
+  isActive        Boolean       @default(true)
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  qcRecords       QcRecord[]
+
+  @@index([wbsStage])
+  @@index([isActive])
 }
 
 // --- KPI TRACKING ---

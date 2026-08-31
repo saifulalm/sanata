@@ -60,15 +60,33 @@ export const baselineSchema = z.object({
 
 const weather = z.enum(["CERAH", "BERAWAN", "GERIMIS", "HUJAN", "HUJAN_LEBAT"]);
 
+/// Jam cuaca: { hour: "08:00", weather: "CERAH" }
+const weatherEntry = z.object({
+  hour: z.string().regex(/^\d{2}:\d{2}$/, "Format jam HH:MM"),
+  weather: weather,
+});
+
+/// Aktivitas per bangunan: { building: "Bangunan Rumah 1", activities: ["Pekerjaan 1", ...] }
+const workActivityEntry = z.object({
+  building: z.string().min(1).max(200),
+  activities: z.array(z.string().min(1).max(500)).max(50),
+});
+
 export const dailyReportSchema = z.object({
   date: dateOnly,
   weatherMorning: weather.optional().nullable(),
   weatherAfternoon: weather.optional().nullable(),
+  /// Log cuaca per jam [08:00 - 03:00].
+  weatherLog: z.array(weatherEntry).max(20).optional().nullable(),
   /** { "Tukang batu": 4, "Pekerja": 10 } — susunan tim berbeda tiap proyek. */
   workforce: z.record(z.string().max(60), z.number().int().min(0).max(10000)).optional().nullable(),
   equipment: z.string().max(2000).optional().nullable(),
   materials: z.string().max(2000).optional().nullable(),
+  /// Aktivitas per bangunan.
+  workActivities: z.array(workActivityEntry).max(20).optional().nullable(),
   activities: z.string().min(1).max(5000),
+  /// Hasil pengujian/inspection.
+  testPerformed: z.string().max(2000).optional().nullable(),
   obstacles: z.string().max(2000).optional().nullable(),
   notes: z.string().max(2000).optional().nullable(),
   photos: z

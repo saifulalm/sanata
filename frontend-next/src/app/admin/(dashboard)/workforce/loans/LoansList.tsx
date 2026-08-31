@@ -9,6 +9,19 @@ import {
 } from "@/lib/workforceApi";
 import { Badge, Button, Card, Dialog, Input, Textarea, useToast } from "@/components/admin/ExtendedUI";
 
+const ACCESS_COOKIE = "admin_access";
+
+/**
+ * Get access token from cookie (client-side)
+ */
+function getAccessTokenFromCookie(): string | null {
+  if (typeof document === "undefined") return null;
+
+  // Fixed: Use correct regex pattern for cookie parsing
+  const match = document.cookie.match(new RegExp(ACCESS_COOKIE + "=([^;]+)"));
+  return match ? match[1] : null;
+}
+
 const STATUS_MAP: Record<LoanStatus, { label: string; tone: "success" | "warning" | "danger" | "neutral" }> = {
   OPEN: { label: "Dipinjam", tone: "warning" },
   RETURNED: { label: "Kembali", tone: "success" },
@@ -45,11 +58,19 @@ function PhotoUpload({
       const formData = new FormData();
       formData.append("file", file);
 
+      // Get access token from cookie
+      const accessToken = getAccessTokenFromCookie();
+
+      // Build headers
+      const headers: Record<string, string> = {};
+      if (accessToken) {
+        headers["Authorization"] = `Bearer ${accessToken}`;
+      }
+
       const res = await fetch("/api/media/upload", {
         method: "POST",
-        headers: {
-          "Authorization": `Bearer ${document.cookie.match(/access_token=([^;]+)/)?.[1] || ""}`,
-        },
+        headers,
+        credentials: "include",
         body: formData,
       });
 

@@ -232,14 +232,27 @@ export async function deleteBaselineAction(rabId: string, baselineId: string): P
 
 // --- Laporan harian ---------------------------------------------------------
 
+export interface WeatherLogEntry {
+  hour: string;
+  weather: string;
+}
+
+export interface WorkActivityEntry {
+  building: string;
+  activities: string[];
+}
+
 export interface DailyReportPayload {
   date: string;
   weatherMorning: string | null;
   weatherAfternoon: string | null;
+  weatherLog: WeatherLogEntry[] | null;
   workforce: Record<string, number> | null;
   equipment: string | null;
   materials: string | null;
+  workActivities: WorkActivityEntry[] | null;
   activities: string;
+  testPerformed: string | null;
   obstacles: string | null;
   notes: string | null;
   photos: { url: string; caption: string | null; location: string | null }[];

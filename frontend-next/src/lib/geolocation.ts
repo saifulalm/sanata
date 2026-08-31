@@ -296,18 +296,36 @@ export async function reverseGeocode(
  * @param options - Optional settings
  * @returns Array of search results
  */
+export interface NominatimSearchResult {
+  lat: string;
+  lon: string;
+  display_name: string;
+  type: string;
+  address?: {
+    city?: string;
+    town?: string;
+    village?: string;
+    state?: string;
+    country?: string;
+  };
+}
+
+export interface LocationSearchResult {
+  lat: string;
+  lon: string;
+  displayName: string;
+  type: string;
+  city?: string;
+  state?: string;
+}
+
 export async function searchLocation(
   query: string,
   options?: {
     limit?: number;
     format?: "json" | "xml";
   }
-): Promise<Array<{
-  lat: string;
-  lon: string;
-  displayName: string;
-  type: string;
-}>> {
+): Promise<LocationSearchResult[]> {
   if (!query.trim()) {
     return [];
   }
@@ -336,7 +354,20 @@ export async function searchLocation(
     }
 
     const data = await response.json();
-    return Array.isArray(data) ? data : [];
+
+    if (!Array.isArray(data)) {
+      return [];
+    }
+
+    // Transform API response to match our interface
+    return data.map((item: NominatimSearchResult): LocationSearchResult => ({
+      lat: item.lat || "",
+      lon: item.lon || "",
+      displayName: item.display_name || item.type || "Unknown Location",
+      type: item.type || "place",
+      city: item.address?.city || item.address?.town || item.address?.village,
+      state: item.address?.state,
+    }));
   } catch (error) {
     console.error("Nominatim search failed:", error);
     return [];

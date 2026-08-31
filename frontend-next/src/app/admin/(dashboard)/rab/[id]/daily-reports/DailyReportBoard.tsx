@@ -221,7 +221,26 @@ export function DailyReportBoard({
 
                 {/* Fields grid */}
                 <div className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+                  {/* Work Activities per Building */}
+                  {report.workActivities && report.workActivities.length > 0 && (
+                    <div className="sm:col-span-2">
+                      <dt className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">Aktivitas per Bangunan</dt>
+                      <dd className="space-y-2">
+                        {report.workActivities.map((wa, idx) => (
+                          <div key={idx} className="rounded-lg border border-white/10 bg-white/[0.03] p-2.5">
+                            <p className="mb-1 text-xs font-medium text-cyan-400">{wa.building}</p>
+                            <ol className="list-decimal list-inside space-y-0.5 pl-3 text-xs text-slate-300">
+                              {wa.activities.map((act, actIdx) => (
+                                <li key={actIdx}>{act}</li>
+                              ))}
+                            </ol>
+                          </div>
+                        ))}
+                      </dd>
+                    </div>
+                  )}
                   <Field label="Aktivitas" value={report.activities} />
+                  {report.testPerformed && <Field label="Hasil Pengujian" value={report.testPerformed} tone="info" />}
                   {report.workforce && Object.keys(report.workforce).length > 0 && (
                     <Field
                       label="Tenaga Kerja"
@@ -234,6 +253,26 @@ export function DailyReportBoard({
                   {report.materials && <Field label="Material Masuk" value={report.materials} />}
                   {report.obstacles && <Field label="Kendala" value={report.obstacles} tone="warning" />}
                   {report.notes && <Field label="Catatan" value={report.notes} />}
+
+                  {/* Hourly Weather */}
+                  {report.weatherLog && report.weatherLog.length > 0 && (
+                    <div className="sm:col-span-2">
+                      <dt className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">Cuaca Per Jam</dt>
+                      <dd className="flex flex-wrap gap-1">
+                        {report.weatherLog.map((w) => (
+                          <span
+                            key={w.hour}
+                            className="inline-flex items-center gap-1 rounded-md border border-white/10 bg-white/[0.05] px-2 py-0.5 text-[10px] text-slate-400"
+                            title={WEATHER_LABEL[w.weather as Weather]}
+                          >
+                            <span className="font-mono">{w.hour}</span>
+                            <span className="text-slate-500">·</span>
+                            <span>{WEATHER_LABEL[w.weather as Weather]}</span>
+                          </span>
+                        ))}
+                      </dd>
+                    </div>
+                  )}
                 </div>
 
                 {/* Photo grid */}
@@ -281,11 +320,11 @@ export function DailyReportBoard({
   );
 }
 
-function Field({ label, value, tone }: { label: string; value: string; tone?: "warning" }) {
+function Field({ label, value, tone }: { label: string; value: string; tone?: "warning" | "info" }) {
   return (
     <div>
       <dt className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">{label}</dt>
-      <dd className={`whitespace-pre-line text-sm leading-relaxed ${tone === "warning" ? "text-amber-300" : "text-slate-300"}`}>
+      <dd className={`whitespace-pre-line text-sm leading-relaxed ${tone === "warning" ? "text-amber-300" : tone === "info" ? "text-cyan-300" : "text-slate-300"}`}>
         {value}
       </dd>
     </div>

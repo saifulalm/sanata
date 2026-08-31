@@ -74,7 +74,19 @@ export default async function ExecutionsPage() {
   // Ensure user is authenticated
   await getAdminSession();
 
-  const { data: executions, meta } = await getExecutions({ page: 1, pageSize: 24 });
+  console.log("[ExecutionsPage] Fetching executions...");
+
+  let executions: any[] = [];
+  let meta = { page: 1, pageSize: 24, total: 0, totalPages: 0 };
+
+  try {
+    const result = await getExecutions({ page: 1, pageSize: 24 });
+    executions = result.data;
+    meta = result.meta;
+    console.log("[ExecutionsPage] Got", executions.length, "executions");
+  } catch (error: any) {
+    console.error("[ExecutionsPage] Error:", error?.status, error?.message);
+  }
 
   return (
     <div className="space-y-6">

@@ -89,6 +89,7 @@ async function main() {
   await seedSignatories();
   await seedProjectDocs(admin.id);
   await seedWorkforce(admin.id);
+  await seedLessonLearned();
 
   console.log("Seed complete. Admin login: admin@sanata.id / Admin123!");
 }
@@ -1886,3 +1887,201 @@ main()
     await prisma.$disconnect();
     process.exit(process.exitCode ?? 0);
   });
+
+/**
+ * Seed Lesson Learned - Continuous improvement data from QC rework
+ */
+async function seedLessonLearned() {
+  const existingCount = await prisma.lessonLearned.count();
+  if (existingCount > 0) {
+    console.log("Skipping Lesson Learned seed — already exists.");
+    return;
+  }
+
+  // Get admin user for createdById
+  const adminUser = await prisma.user.findFirst({
+    where: { role: "ADMIN" },
+    select: { id: true },
+  });
+  const createdById = adminUser?.id || null;
+
+  const lessons = [
+    {
+      wbsStage: "FOUNDATION" as const,
+      severity: "CRITICAL" as const,
+      title: "Strauss pile deviation exceeds tolerance",
+      description: "During QC inspection, 3 of 15 strauss piles were found with verticality deviation > 1.5% from center line, exceeding project tolerance of 1%.",
+      rootCause: "Drilling operator did not use guide template consistently; soil conditions harder than anticipated causing bit wandering.",
+      correctiveAction: "Re-drilled affected piles with strict guide template usage. Implemented 100% verticality check before concrete pouring.",
+      preventiveAction: "Require mandatory use of guide template for all strauss pile drilling. Add soil investigation section to method statement.",
+      occurredAt: new Date("2026-05-15"),
+      isResolved: true,
+    },
+    {
+      wbsStage: "FOUNDATION" as const,
+      severity: "HIGH" as const,
+      title: "Concrete cover on pile cap insufficient",
+      description: "Reinforcement cage cover measured only 40mm instead of required 75mm on pile cap top layer.",
+      rootCause: "Spacer blocks were placed only on bottom and sides, forgotten for top layer.",
+      correctiveAction: "Installed additional spacer blocks. Added top layer cover check to pre-pour checklist.",
+      preventiveAction: "Create specific spacer placement checklist with photo evidence requirement.",
+      isResolved: true,
+    },
+    {
+      wbsStage: "STRUCTURE" as const,
+      severity: "HIGH" as const,
+      title: "Column concrete honeycombing at construction joint",
+      description: "Honeycombing found at column-beam joint interface on 4th floor, spanning approximately 30cm width.",
+      rootCause: "Concrete vibration not reaching bottom of beam-column intersection due to dense reinforcement.",
+      correctiveAction: "Chipped out honeycombed concrete and grouted with non-shrink mortar.",
+      preventiveAction: "Require second vibrator for dense reinforcement areas. Add inspection point for construction joints.",
+      occurredAt: new Date("2026-06-10"),
+      isResolved: true,
+    },
+    {
+      wbsStage: "STRUCTURE" as const,
+      severity: "HIGH" as const,
+      title: "Column reinforcement lap splice location non-compliant",
+      description: "Lap splice location at column-floor intersection where tension forces are highest, violating SNI 2847 requirements.",
+      rootCause: "Rebar fixer misunderstood drawing - thought lap could be at any floor level.",
+      correctiveAction: "Additional rebar dowels anchored into column from above.",
+      preventiveAction: "All lap splice locations must be highlighted in shop drawing.",
+      isResolved: true,
+    },
+    {
+      wbsStage: "STRUCTURE" as const,
+      severity: "CRITICAL" as const,
+      title: "Scaffolding near-miss incident",
+      description: "Worker fell 2 meters from scaffolding due to unsecured platform board. Near-miss - no serious injury due to safety net below.",
+      rootCause: "Platform board not lashed/secured. Morning toolbox meeting did not cover scaffolding checks.",
+      correctiveAction: "100% inspection of all scaffolding before use. All platform boards secured with clips.",
+      preventiveAction: "Scaffolding checklist mandatory before each shift. Weekly third-party inspection.",
+      occurredAt: new Date("2026-07-20"),
+      isResolved: true,
+    },
+    {
+      wbsStage: "MASONRY" as const,
+      severity: "MEDIUM" as const,
+      title: "Masonry wall verticality out of tolerance",
+      description: "3 meter high masonry wall leaning 12mm from vertical (tolerance 6mm per 3m height).",
+      rootCause: "Mortar mixing done manually without proper proportioning. Some batches too dry causing slippage.",
+      correctiveAction: "Dismantled and rebuilt 2.5m of affected wall section.",
+      preventiveAction: "Use mechanical mixer with automated proportioning. Implement string line guide.",
+      isResolved: true,
+    },
+    {
+      wbsStage: "WATERPROOFING" as const,
+      severity: "CRITICAL" as const,
+      title: "Water tank waterproofing failure",
+      description: "Water seepage through waterproofed water tank walls 2 weeks after completion.",
+      rootCause: "Membrane application at corner joints insufficient overlap (50mm instead of 100mm).",
+      correctiveAction: "Complete waterproofing removal and reapplication by specialist contractor.",
+      preventiveAction: "Require certified waterproofing specialist for all tank/basin work.",
+      occurredAt: new Date("2026-06-28"),
+      isResolved: true,
+    },
+    {
+      wbsStage: "WATERPROOFING" as const,
+      severity: "HIGH" as const,
+      title: "Roof deck waterproofing blistering",
+      description: "Multiple blisters appeared on applied waterproofing membrane after 1 week.",
+      rootCause: "Moisture trapped under membrane - concrete substrate not fully cured/dry when membrane applied.",
+      correctiveAction: "Blistered sections cut out, substrate dried with torch, patch repairs applied.",
+      preventiveAction: "Implement moisture content test (<5%) before membrane application.",
+      isResolved: false,
+    },
+    {
+      wbsStage: "PLASTER_SCREED" as const,
+      severity: "MEDIUM" as const,
+      title: "Plaster cracking along beam-wall interface",
+      description: "Hairline cracks appeared along plaster-beam intersection after 2 weeks curing.",
+      rootCause: "Plaster applied without mesh reinforcement at dissimilar material junction.",
+      correctiveAction: "Routed cracks and filled with flexible sealant.",
+      preventiveAction: "Mandatory PVC mesh strip reinforcement at all beam-wall junctions.",
+      occurredAt: new Date("2026-08-10"),
+      isResolved: true,
+    },
+    {
+      wbsStage: "FLOOR_WALL_FINISH" as const,
+      severity: "MEDIUM" as const,
+      title: "Ceramic tile debonding in wet area",
+      description: "Multiple tiles debonded from bathroom floor 1 month after handover.",
+      rootCause: "Tile adhesive pot life exceeded. Coverage < 85% at some tiles.",
+      correctiveAction: "Removed and re-laid all affected tiles with fresh adhesive and proper waterproofing.",
+      preventiveAction: "Pot life signage at mixing station. Minimum 90% adhesive coverage requirement.",
+      isResolved: true,
+    },
+    {
+      wbsStage: "PAINTING" as const,
+      severity: "MEDIUM" as const,
+      title: "Paint peeling on exterior wall",
+      description: "Large area of paint peeling from exterior wall after first rain season.",
+      rootCause: "Moisture in substrate not addressed before painting. Wrong primer used on lower floors.",
+      correctiveAction: "Removed all peeling paint, dried substrate, applied proper exterior primer.",
+      preventiveAction: "Moisture meter reading required <10% before painting.",
+      occurredAt: new Date("2026-07-01"),
+      isResolved: true,
+    },
+    {
+      wbsStage: "ROOF" as const,
+      severity: "HIGH" as const,
+      title: "Roof gutter overflow during heavy rain",
+      description: "Gutters overflowed causing water ingress at ceiling junction.",
+      rootCause: "Gutter capacity calculated incorrectly. Downpipe positions created overflow points.",
+      correctiveAction: "Added additional downpipes. Modified gutter shape to increase capacity.",
+      preventiveAction: "Recalculate gutter sizing per SNI with 100-year rain intensity data.",
+      isResolved: true,
+    },
+    {
+      wbsStage: "MEP" as const,
+      severity: "HIGH" as const,
+      title: "Electrical conduit clash with structural beam",
+      description: "Electrical conduit routing conflicted with structural beam during installation.",
+      rootCause: "MEP drawings coordinated separately from structural without proper clash detection.",
+      correctiveAction: "Rerouted conduits through slab with additional core drilling.",
+      preventiveAction: "Mandatory BIM coordination with all trades before construction.",
+      isResolved: true,
+    },
+    {
+      wbsStage: "MEP" as const,
+      severity: "MEDIUM" as const,
+      title: "Plumbing blockage due to incorrect gradient",
+      description: "Bathroom drain frequently clogged. CCTV inspection revealed standing water in pipe.",
+      rootCause: "Pipe gradient only 1% instead of minimum 2% per code.",
+      correctiveAction: "Re-pitched affected pipes to 2.5% gradient. Additional cleanouts installed.",
+      preventiveAction: "All drainage gradients must be surveyed before concealment.",
+      occurredAt: new Date("2026-08-12"),
+      isResolved: false,
+    },
+    {
+      wbsStage: "PRE_CONSTRUCTION" as const,
+      severity: "HIGH" as const,
+      title: "Shop drawing approval delay causing rework",
+      description: "Approved shop drawings did not match as-built conditions.",
+      rootCause: "As-built measurement taken from old drawings not verified on-site.",
+      correctiveAction: "On-site re-measurement and revised shop drawings.",
+      preventiveAction: "Mandatory site measurement verification before all shop drawing preparation.",
+      isResolved: true,
+    },
+  ];
+
+  for (const lesson of lessons) {
+    await prisma.lessonLearned.create({
+      data: {
+        wbsStage: lesson.wbsStage,
+        title: lesson.title,
+        description: lesson.description,
+        rootCause: lesson.rootCause,
+        correctiveAction: lesson.correctiveAction,
+        preventiveAction: lesson.preventiveAction,
+        severity: lesson.severity,
+        occurredAt: lesson.occurredAt,
+        isResolved: lesson.isResolved,
+        resolvedAt: lesson.isResolved ? new Date() : null,
+        createdById,
+      },
+    });
+  }
+
+  console.log(`Seeded ${lessons.length} Lesson Learned records.`);
+}

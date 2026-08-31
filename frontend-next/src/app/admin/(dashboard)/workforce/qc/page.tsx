@@ -75,7 +75,19 @@ export default async function QcPage() {
   // Ensure user is authenticated
   await getAdminSession();
 
-  const { data: records, meta } = await getQcRecords({ page: 1, pageSize: 20 });
+  console.log("[QcPage] Fetching QC records...");
+
+  let records: any[] = [];
+  let meta = { page: 1, pageSize: 20, total: 0, totalPages: 0 };
+
+  try {
+    const result = await getQcRecords({ page: 1, pageSize: 20 });
+    records = result.data;
+    meta = result.meta;
+    console.log("[QcPage] Got", records.length, "QC records");
+  } catch (error: any) {
+    console.error("[QcPage] Error:", error?.status, error?.message);
+  }
 
   return (
     <div className="space-y-6">

@@ -24,13 +24,16 @@ function serialize(report: Prisma.DailyReportGetPayload<{
     date: isoDate(startOfDay(report.date)),
     weatherMorning: report.weatherMorning,
     weatherAfternoon: report.weatherAfternoon,
+    weatherLog: report.weatherLog as Array<{ hour: string; weather: string }> | null,
     workforce: (report.workforce as Record<string, number> | null) ?? null,
     workforceTotal: report.workforce
       ? Object.values(report.workforce as Record<string, number>).reduce((a, b) => a + Number(b || 0), 0)
       : 0,
+    workActivities: report.workActivities as Array<{ building: string; activities: string[] }> | null,
     equipment: report.equipment,
     materials: report.materials,
     activities: report.activities,
+    testPerformed: report.testPerformed,
     obstacles: report.obstacles,
     notes: report.notes,
     createdByName: report.createdBy?.name ?? null,
@@ -71,15 +74,26 @@ function writeData(input: DailyReportInput) {
     date: parseDateOnly(input.date),
     weatherMorning: input.weatherMorning ?? null,
     weatherAfternoon: input.weatherAfternoon ?? null,
+    // Log cuaca per jam.
+    weatherLog:
+      input.weatherLog && input.weatherLog.length > 0
+        ? (input.weatherLog as Prisma.InputJsonValue)
+        : Prisma.DbNull,
     // Objek kosong disimpan sebagai SQL NULL, bukan JSON `null` — di JSONB
     // keduanya nilai berbeda.
     workforce:
       input.workforce && Object.keys(input.workforce).length > 0
         ? (input.workforce as Prisma.InputJsonValue)
         : Prisma.DbNull,
+    // Aktivitas per bangunan.
+    workActivities:
+      input.workActivities && input.workActivities.length > 0
+        ? (input.workActivities as Prisma.InputJsonValue)
+        : Prisma.DbNull,
     equipment: input.equipment ?? null,
     materials: input.materials ?? null,
     activities: input.activities,
+    testPerformed: input.testPerformed ?? null,
     obstacles: input.obstacles ?? null,
     notes: input.notes ?? null,
   };

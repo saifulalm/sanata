@@ -68,6 +68,10 @@ export interface Worker {
   skillNotes: string | null;
   ktpVerified: boolean;
   profileComplete: boolean;
+  personalTools?: string[];
+  assessments?: WorkerAssessment[];
+  assignments?: JobAssignment[];
+  kpis?: KpiRecord[];
   createdAt: string;
   updatedAt: string;
 }
@@ -363,7 +367,10 @@ async function authFetch<T>(path: string, init?: RequestInit): Promise<T> {
   const access = store.get(ACCESS_COOKIE)?.value;
   const refresh = store.get(REFRESH_COOKIE)?.value;
 
-  if (!access) throw new AdminApiError(401, "Login diperlukan");
+  if (!access) {
+    console.error("[API] No access token found in cookies");
+    throw new AdminApiError(401, "Login diperlukan");
+  }
 
   const headers: Record<string, string> = {
     Authorization: `Bearer ${access}`,
@@ -376,23 +383,37 @@ async function authFetch<T>(path: string, init?: RequestInit): Promise<T> {
     headers: { ...headers, ...(init?.headers as Record<string, string> | undefined) },
   });
 
+  // Debug: log response status
+  console.log(`[API] ${init?.method || 'GET'} ${path} -> ${first.status}`);
+
+  // Handle 401 with refresh token
   if (first.status === 401 && refresh) {
+    console.log("[API] Got 401, trying refresh...");
     const fresh = await refreshWithExpress(refresh);
     if (fresh.ok) {
+      console.log("[API] Refresh succeeded, retrying with new token...");
       const secondUrl = `${API_URL}${path}`;
       const second = await fetchWithTimeout(secondUrl, {
         ...init,
         headers: { ...headers, Authorization: `Bearer ${fresh.accessToken}`, ...(init?.headers as Record<string, string> | undefined) },
       });
+      console.log(`[API] ${init?.method || 'GET'} ${path} (retry) -> ${second.status}`);
       const ok = await readJsonSafely<{ message?: string } & T>(second);
-      if (!ok) throw new AdminApiError(second.status, "Gagal");
+      if (!ok) throw new AdminApiError(second.status, "Gagal parsing response");
       if (!second.ok) throw new AdminApiError(second.status, ok?.message ?? "Request gagal");
       return ok;
+    } else {
+      console.error("[API] Refresh failed");
     }
   }
 
   const json = await readJsonSafely<{ message?: string } & T>(first);
-  if (!first.ok) throw new AdminApiError(first.status, json?.message ?? "Request gagal");
+
+  // Better error logging with full details
+  if (!first.ok) {
+    console.error(`[API Error] ${path} -> ${first.status}`, json);
+    throw new AdminApiError(first.status, json?.message ?? `Error ${first.status}`);
+  }
   if (!json) throw new AdminApiError(502, "Respons backend tidak valid");
   return json;
 }
@@ -912,6 +933,15 @@ export async function updateToolCondition(id: string, condition: ToolCondition):
   return res.data;
 }
 
+export async function deleteTool(id: string): Promise<void> {
+  await authFetch(`/workforce/tools/${id}`, { method: "DELETE" });
+}
+
+export async function getToolByCode(code: string): Promise<MasterTool> {
+  const res = await authFetch<{ data: MasterTool }>(`/workforce/tools/code/${code}`);
+  return res.data;
+}
+
 export async function getToolsEnhanced(params?: {
   page?: number;
   pageSize?: number;
@@ -955,12 +985,12 @@ export async function addToolPhoto(toolId: string, data: {
   return res.data;
 }
 
-export async function deleteToolPhoto(photoId: string): Promise<void> {
-  await authFetch(`/workforce/photos/${photoId}`, { method: "DELETE" });
+export async function deleteToolPhoto(toolId: string, photoId: string): Promise<void> {
+  await authFetch(`/workforce/tools/${toolId}/photos/${photoId}`, { method: "DELETE" });
 }
 
-export async function setPrimaryPhoto(photoId: string): Promise<void> {
-  await authFetch(`/workforce/photos/${photoId}/primary`, { method: "PUT" });
+export async function setPrimaryPhoto(toolId: string, photoId: string): Promise<void> {
+  await authFetch(`/workforce/tools/${toolId}/photos/${photoId}/primary`, { method: "PUT" });
 }
 
 // ============================================
@@ -1089,6 +1119,149 @@ export async function markOverdueLoans(): Promise<{ updated: number }> {
     method: "POST",
   });
   return res.data;
+}
+
+// ============================================
+// METHOD STATEMENTS API
+// ============================================
+
+export type WbsStage = "PRE_CONSTRUCTION" | "SITE_PREPARATION" | "EARTHWORK" | "FOUNDATION"
+  | "STRUCTURE" | "MASONRY" | "ROOF" | "MEP" | "WATERPROOFING"
+  | "PLASTER_SCREED" | "FLOOR_WALL_FINISH" | "CEILING" | "DOORS_WINDOWS"
+  | "PAINTING" | "EXTERNAL_WORKS" | "TESTING_COMMISSIONING" | "SNAGGING" | "HANDOVER";
+
+export interface MethodStatement {
+  id: string;
+  methodCode: string;
+  wbsStage: WbsStage;
+  workItem: string;
+  scope: string | null;
+  reference: string | null;
+  tools: string[];
+  materials: string[];
+  precondition: string | null;
+  sequence: unknown | null;
+  criticalPoints: string | null;
+  acceptanceCriteria: string;
+  tolerance: string | null;
+  holdPoint: boolean;
+  safety: string | null;
+  evidenceRequirement: string[];
+  reworkProcedure: string | null;
+  responsibleRoles: string[];
+  revision: number;
+  lessonLearned: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export async function getMethodStatements(params?: {
+  wbsStage?: WbsStage;
+  search?: string;
+  page?: number;
+  pageSize?: number;
+}): Promise<{ data: MethodStatement[]; meta: PaginatedMeta }> {
+  const qs = new URLSearchParams({
+    page: String(params?.page ?? 1),
+    pageSize: String(params?.pageSize ?? 50),
+    ...(params?.wbsStage && { wbsStage: params.wbsStage }),
+    ...(params?.search && { search: params.search }),
+  });
+  return authFetch<{ data: MethodStatement[]; meta: PaginatedMeta }>(`/workforce/method-statements?${qs.toString()}`);
+}
+
+// ============================================
+// QC TEMPLATES API
+// ============================================
+
+export interface QcTemplateItem {
+  itemDesc: string;
+  criteria: string;
+  tolerance?: string;
+  isMandatory: boolean;
+  order: number;
+}
+
+export interface QcTemplate {
+  id: string;
+  wbsStage: WbsStage;
+  methodCode: string | null;
+  name: string;
+  description: string | null;
+  items: QcTemplateItem[] | string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  methodStatement?: {
+    methodCode: string;
+    workItem: string;
+    wbsStage: WbsStage;
+  };
+}
+
+export async function getQcTemplates(params?: {
+  wbsStage?: WbsStage;
+  methodCode?: string;
+  page?: number;
+  pageSize?: number;
+}): Promise<{ data: QcTemplate[]; meta: PaginatedMeta }> {
+  const qs = new URLSearchParams({
+    page: String(params?.page ?? 1),
+    pageSize: String(params?.pageSize ?? 50),
+    ...(params?.wbsStage && { wbsStage: params.wbsStage }),
+    ...(params?.methodCode && { methodCode: params.methodCode }),
+  });
+  return authFetch<{ data: QcTemplate[]; meta: PaginatedMeta }>(`/workforce/qc-templates?${qs.toString()}`);
+}
+
+// ============================================
+// LESSON LEARNED API
+// ============================================
+
+export type QcSeverity = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+
+export interface LessonLearned {
+  id: string;
+  wbsStage: WbsStage | null;
+  qcRecordId: string | null;
+  qcRecord?: {
+    id: string;
+    qcCode: string;
+    result: string;
+    checkDate: string;
+  };
+  title: string;
+  description: string;
+  rootCause: string | null;
+  correctiveAction: string | null;
+  preventiveAction: string | null;
+  severity: QcSeverity;
+  occurredAt: string | null;
+  createdById: string | null;
+  isResolved: boolean;
+  resolvedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export async function getLessonLearned(params?: {
+  wbsStage?: WbsStage;
+  severity?: QcSeverity;
+  isResolved?: boolean;
+  search?: string;
+  page?: number;
+  pageSize?: number;
+}): Promise<{ data: LessonLearned[]; meta: PaginatedMeta }> {
+  const qs = new URLSearchParams({
+    page: String(params?.page ?? 1),
+    pageSize: String(params?.pageSize ?? 20),
+    ...(params?.wbsStage && { wbsStage: params.wbsStage }),
+    ...(params?.severity && { severity: params.severity }),
+    ...(params?.isResolved !== undefined && { isResolved: String(params.isResolved) }),
+    ...(params?.search && { search: params.search }),
+  });
+  return authFetch<{ data: LessonLearned[]; meta: PaginatedMeta }>(`/workforce/lesson-learned?${qs.toString()}`);
 }
 
 // ============================================

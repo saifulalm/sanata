@@ -43,7 +43,7 @@ export const updateToolSchema = z.object({
   notes: z.string().optional(),
   imageUrl: z.string().url().optional().or(z.literal("")),
   needsMaintenance: z.boolean().optional(),
-  maintenanceIntervalDays: z.number().int().positive().optional().nullable(),
+  maintenanceIntervalDays: z.number().int().positive().optional(),
   currentLocation: z.string().optional(),
 });
 

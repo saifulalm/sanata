@@ -1,17 +1,16 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { MapPin, Loader2, Navigation, X, Check, AlertCircle } from "lucide-react";
+import { useState, useCallback, useRef, useEffect } from "react";
+import { MapPin, Loader2, Navigation, X, Check, AlertCircle, Search, Building, Home } from "lucide-react";
 import {
   getCurrentPosition,
   reverseGeocode,
+  searchLocation,
   getShortLocationName,
   isGeolocationSupported,
-  checkGeolocationPermission,
   formatCoordinatesDecimal,
   isValidCoordinates,
-  type GeoCoordinates,
-  type ReverseGeocodeResult,
+  type LocationSearchResult,
   type GeolocationError,
 } from "@/lib/geolocation";
 
@@ -43,7 +42,19 @@ export function GpsInput({
   const [gpsState, setGpsState] = useState<GpsState>("idle");
   const [gpsError, setGpsError] = useState<string | null>(null);
   const [isResolving, setIsResolving] = useState(false);
-  const [geocodeResult, setGeocodeResult] = useState<ReverseGeocodeResult | null>(null);
+  const [geocodeResult, setGeocodeResult] = useState<{
+    displayName?: string;
+    city?: string;
+    state?: string;
+  } | null>(null);
+
+  // Location search state
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<LocationSearchResult[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   const lat = value.latitude;
   const lng = value.longitude;
@@ -51,42 +62,131 @@ export function GpsInput({
 
   const hasCoordinates = lat && lng && isValidCoordinates(parseFloat(lat), parseFloat(lng));
 
+  // Close results when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (resultsRef.current && !resultsRef.current.contains(event.target as Node)) {
+        setShowResults(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Search location with debounce
+  const handleSearch = useCallback((query: string) => {
+    setSearchQuery(query);
+
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+
+    if (!query.trim() || query.length < 3) {
+      setSearchResults([]);
+      setShowResults(false);
+      return;
+    }
+
+    searchTimeoutRef.current = setTimeout(async () => {
+      setIsSearching(true);
+      try {
+        const results = await searchLocation(query, { limit: 8 });
+        setSearchResults(results || []);
+        setShowResults(true);
+      } catch (err) {
+        console.error("Search failed:", err);
+        setSearchResults([]);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 300);
+  }, []);
+
+  // Handle selecting a search result
+  const handleSelectResult = useCallback(async (result: LocationSearchResult) => {
+    const latitude = parseFloat(result.lat);
+    const longitude = parseFloat(result.lon);
+
+    // Validate coordinates
+    if (isNaN(latitude) || isNaN(longitude)) {
+      console.error("Invalid coordinates from search result");
+      return;
+    }
+
+    // Get short name from displayName
+    const shortName = result.displayName?.split(",")[0]?.trim() || "Unknown Location";
+
+    // Update form with coordinates and location name
+    onChange({
+      latitude: latitude.toString(),
+      longitude: longitude.toString(),
+      locationName: shortName,
+    });
+
+    setSearchQuery(result.displayName?.split(",")[0]?.trim() || "");
+    setShowResults(false);
+    setSearchResults([]);
+    setGpsState("success");
+    setGeocodeResult({
+      displayName: result.displayName,
+      city: result.city,
+      state: result.state,
+    });
+
+    // Reverse geocode for more details (optional enhancement)
+    setIsResolving(true);
+    try {
+      const details = await reverseGeocode(latitude, longitude);
+      if (details) {
+        setGeocodeResult(details);
+      }
+    } catch (err) {
+      console.error("Reverse geocode failed:", err);
+    } finally {
+      setIsResolving(false);
+    }
+  }, [onChange]);
+
   const handleGetLocation = useCallback(async () => {
     setGpsState("loading");
     setGpsError(null);
     setGeocodeResult(null);
 
     try {
-      // Check if supported
       if (!isGeolocationSupported()) {
-        throw { code: "POSITION_UNAVAILABLE", message: "Geolocation tidak tersedia di browser ini" };
+        throw {
+          code: "POSITION_UNAVAILABLE" as GeolocationError["code"],
+          message: "Geolocation tidak tersedia di browser ini"
+        };
       }
 
-      // Get coordinates
       const coords = await getCurrentPosition();
-
       setGpsState("success");
 
-      // Update form with coordinates
-      onChange({
+      const newValue = {
         latitude: coords.latitude.toString(),
         longitude: coords.longitude.toString(),
         locationName: locationName || undefined,
-      });
+      };
 
-      // Reverse geocode to get location name
+      onChange(newValue);
+
       setIsResolving(true);
-      const result = await reverseGeocode(coords.latitude, coords.longitude);
-      setIsResolving(false);
-
-      if (result) {
-        setGeocodeResult(result);
-        const shortName = getShortLocationName(result);
-        onChange({
-          latitude: coords.latitude.toString(),
-          longitude: coords.longitude.toString(),
-          locationName: shortName,
-        });
+      try {
+        const result = await reverseGeocode(coords.latitude, coords.longitude);
+        if (result) {
+          setGeocodeResult(result);
+          const shortName = getShortLocationName(result);
+          onChange({
+            ...newValue,
+            locationName: shortName,
+          });
+          setSearchQuery(shortName);
+        }
+      } catch {
+        // Reverse geocode is optional, don't fail if it errors
+      } finally {
+        setIsResolving(false);
       }
     } catch (err) {
       setGpsState("error");
@@ -99,6 +199,8 @@ export function GpsInput({
     setGpsState("idle");
     setGpsError(null);
     setGeocodeResult(null);
+    setSearchQuery("");
+    setSearchResults([]);
     onChange({
       latitude: "",
       longitude: "",
@@ -107,7 +209,6 @@ export function GpsInput({
   }, [onChange]);
 
   const handleManualInput = useCallback((field: "latitude" | "longitude", inputValue: string) => {
-    // Allow empty or valid decimal numbers
     if (inputValue === "" || /^-?\d*\.?\d*$/.test(inputValue)) {
       const newValue = {
         ...value,
@@ -115,7 +216,6 @@ export function GpsInput({
       };
       onChange(newValue);
 
-      // Clear state if coordinates cleared
       if (!newValue.latitude || !newValue.longitude) {
         setGpsState("idle");
         setGeocodeResult(null);
@@ -124,31 +224,112 @@ export function GpsInput({
   }, [value, onChange]);
 
   const handleLocationNameChange = useCallback((inputValue: string) => {
+    setSearchQuery(inputValue);
     onChange({
       ...value,
       locationName: inputValue,
     });
   }, [value, onChange]);
 
+  // Get icon for location type
+  const getLocationIcon = (type?: string) => {
+    switch (type) {
+      case "city":
+      case "town":
+      case "village":
+        return <Building size={14} className="text-cyan-400" />;
+      default:
+        return <MapPin size={14} className="text-emerald-400" />;
+    }
+  };
+
+  // Safely get display name parts
+  const getDisplayNameParts = (displayName?: string) => {
+    if (!displayName) return { primary: "", secondary: "" };
+    const parts = displayName.split(",");
+    return {
+      primary: parts[0]?.trim() || "Unknown",
+      secondary: parts.slice(1, 3).join(",").trim(),
+    };
+  };
+
   return (
     <div className="space-y-4">
-      {/* Location Name Input */}
-      <div>
-        <label className="mb-1.5 block text-xs font-medium text-slate-400">
-          Nama Lokasi
+      {/* Location Search with Autocomplete */}
+      <div className="relative">
+        <label className="mb-1.5 flex items-center gap-2 text-xs font-medium text-slate-400">
+          <Search size={12} />
+          Cari Lokasi
           {required && <span className="ml-1 text-rose-400">*</span>}
         </label>
         <div className="relative">
-          <MapPin size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
           <input
             type="text"
-            value={locationName || ""}
-            onChange={(e) => handleLocationNameChange(e.target.value)}
-            placeholder="Contoh: Lantai 2, Area A"
+            value={searchQuery}
+            onChange={(e) => handleSearch(e.target.value)}
+            onFocus={() => searchQuery.length >= 3 && setShowResults(true)}
+            placeholder="Ketik nama lokasi, alamat, kota..."
             disabled={disabled}
-            className="w-full rounded-xl border border-white/10 bg-white/5 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none disabled:opacity-50"
+            className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-10 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none disabled:opacity-50"
           />
+          {isSearching && (
+            <Loader2 size={16} className="absolute right-3 top-1/2 -translate-y-1/2 animate-spin text-slate-500" />
+          )}
+          {searchQuery && !isSearching && (
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery("");
+                setSearchResults([]);
+                setShowResults(false);
+              }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white"
+            >
+              <X size={16} />
+            </button>
+          )}
         </div>
+
+        {/* Search Results Dropdown */}
+        {showResults && searchResults.length > 0 && (
+          <div
+            ref={resultsRef}
+            className="absolute z-50 mt-1 w-full rounded-xl border border-white/10 bg-slate-900 shadow-xl"
+          >
+            <div className="max-h-64 overflow-y-auto p-1">
+              {searchResults.map((result, index) => {
+                const { primary, secondary } = getDisplayNameParts(result.displayName);
+                return (
+                  <button
+                    key={`${result.lat}-${result.lon}-${index}`}
+                    type="button"
+                    onClick={() => handleSelectResult(result)}
+                    className="flex w-full items-start gap-3 rounded-lg p-3 text-left transition-colors hover:bg-white/10"
+                  >
+                    <div className="mt-0.5">{getLocationIcon(result.type)}</div>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm text-white">{primary}</p>
+                      {secondary && (
+                        <p className="truncate text-xs text-slate-500">{secondary}</p>
+                      )}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {showResults && searchResults.length === 0 && searchQuery.length >= 3 && !isSearching && (
+          <div className="absolute z-50 mt-1 w-full rounded-xl border border-white/10 bg-slate-900 p-4 text-center">
+            <p className="text-sm text-slate-500">Tidak ada hasil untuk "{searchQuery}"</p>
+          </div>
+        )}
+
+        {searchQuery.length > 0 && searchQuery.length < 3 && (
+          <p className="mt-1 text-xs text-slate-500">Minimal 3 karakter untuk mencari</p>
+        )}
       </div>
 
       {/* GPS Coordinates */}
@@ -174,7 +355,7 @@ export function GpsInput({
             ) : (
               <>
                 <Navigation size={12} />
-                Deteksi Otomatis
+                Deteksi GPS
               </>
             )}
           </button>
@@ -188,7 +369,7 @@ export function GpsInput({
           </div>
         )}
 
-        {gpsState === "error" && (
+        {gpsState === "error" && gpsError && (
           <div className="mb-2 flex items-start gap-1.5 rounded-lg border border-rose-400/30 bg-rose-400/10 p-2 text-xs text-rose-300">
             <AlertCircle size={12} className="mt-0.5 shrink-0" />
             <span>{gpsError}</span>
@@ -226,10 +407,10 @@ export function GpsInput({
         </div>
 
         {/* Formatted Coordinates Display */}
-        {hasCoordinates && (
+        {hasCoordinates && lat && lng && (
           <div className="mt-2 flex items-center justify-between">
             <span className="text-xs text-slate-500">
-              {formatCoordinatesDecimal(parseFloat(lat!), parseFloat(lng!))}
+              {formatCoordinatesDecimal(parseFloat(lat), parseFloat(lng))}
             </span>
 
             {gpsState === "success" && (
@@ -246,11 +427,11 @@ export function GpsInput({
         )}
 
         {/* Geocoded Address Preview */}
-        {(isResolving || geocodeResult) && (
-          <div className="mt-2 rounded-lg border border-white/10 bg-white/5 p-2">
+        {(isResolving || geocodeResult?.displayName) && (
+          <div className="mt-2 rounded-lg border border-white/10 bg-white/5 p-3">
             <div className="mb-1 flex items-center gap-1.5 text-xs text-slate-500">
               <MapPin size={10} />
-              {isResolving ? "Mendeteksi nama lokasi..." : "Alamat:"}
+              {isResolving ? "Mendeteksi nama lokasi..." : "Detail Lokasi:"}
             </div>
             {isResolving ? (
               <div className="flex items-center gap-1.5 text-xs text-slate-400">
@@ -271,9 +452,17 @@ export function GpsInput({
       </div>
 
       {/* Helper Text */}
-      <p className="text-xs text-slate-600">
-        💡 Koordinat bisa diisi manual atau gunakan tombol &quot;Deteksi Otomatis&quot; untuk mendapatkan lokasi dari GPS perangkat.
-      </p>
+      <div className="flex items-start gap-2 rounded-lg border border-cyan-400/20 bg-cyan-400/5 p-3">
+        <MapPin size={14} className="mt-0.5 shrink-0 text-cyan-400" />
+        <div className="text-xs text-slate-400">
+          <p className="font-medium text-cyan-400">💡 Tips:</p>
+          <ul className="mt-1 space-y-0.5 text-slate-500">
+            <li>• Ketik nama lokasi untuk mencari otomatis</li>
+            <li>• Atau klik &quot;Deteksi GPS&quot; untuk lokasi saat ini</li>
+            <li>• Koordinat bisa diisi manual jika diperlukan</li>
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }

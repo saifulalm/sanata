@@ -1,6 +1,7 @@
 import { getAdminSession } from "@/lib/adminApi";
 import { getDashboardSummary } from "@/lib/adminResources";
 import { AdminShell } from "@/components/admin/AdminShell";
+import { ToastProviderWrapper } from "@/components/admin/ToastProviderWrapper";
 
 export default async function AdminRootLayout({ children }: { children: React.ReactNode }) {
   const session = await getAdminSession();
@@ -13,7 +14,9 @@ export default async function AdminRootLayout({ children }: { children: React.Re
 
   return (
     <AdminShell session={session} badges={{ "/admin/inquiries": newInquiries }}>
-      {children}
+      <ToastProviderWrapper>
+        {children}
+      </ToastProviderWrapper>
     </AdminShell>
   );
 }

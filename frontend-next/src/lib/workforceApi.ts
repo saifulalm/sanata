@@ -100,6 +100,7 @@ export interface Worker {
   skillNotes: string | null;
   ktpVerified: boolean;
   profileComplete: boolean;
+  personalTools?: string[];
   createdAt: string;
   updatedAt: string;
 }
@@ -247,6 +248,160 @@ export interface QcStats {
   pass: number;
   fail: number;
   rework: number;
+}
+
+export interface QcStatsExtended extends QcStats {
+  pending: number;
+  released: number;
+  holdPoints: number;
+  passRate: number;
+  reworkRate: number;
+}
+
+// WBS Stages (18 stages from QC Flow PDF)
+export type WbsStage =
+  | "PRE_CONSTRUCTION" | "SITE_PREPARATION" | "EARTHWORK" | "FOUNDATION"
+  | "STRUCTURE" | "MASONRY" | "ROOF" | "MEP" | "WATERPROOFING"
+  | "PLASTER_SCREED" | "FLOOR_WALL_FINISH" | "CEILING" | "DOORS_WINDOWS"
+  | "PAINTING" | "EXTERNAL_WORKS" | "TESTING_COMMISSIONING" | "SNAGGING" | "HANDOVER";
+
+export const WBS_STAGES: Record<WbsStage, { label: string; methodCode: string; order: number }> = {
+  PRE_CONSTRUCTION: { label: "Pre-Construction", methodCode: "GEN-001", order: 1 },
+  SITE_PREPARATION: { label: "Site Preparation", methodCode: "CIV-001", order: 2 },
+  EARTHWORK: { label: "Earthwork", methodCode: "CIV-002", order: 3 },
+  FOUNDATION: { label: "Foundation", methodCode: "STR-001", order: 4 },
+  STRUCTURE: { label: "Structure", methodCode: "STR-002", order: 5 },
+  MASONRY: { label: "Masonry", methodCode: "ARC-001", order: 6 },
+  ROOF: { label: "Roof", methodCode: "ARC-002", order: 7 },
+  MEP: { label: "MEP", methodCode: "MEP-001", order: 8 },
+  WATERPROOFING: { label: "Waterproofing", methodCode: "ARC-003", order: 9 },
+  PLASTER_SCREED: { label: "Plaster & Screed", methodCode: "ARC-004", order: 10 },
+  FLOOR_WALL_FINISH: { label: "Floor & Wall Finish", methodCode: "FIN-001", order: 11 },
+  CEILING: { label: "Ceiling", methodCode: "FIN-002", order: 12 },
+  DOORS_WINDOWS: { label: "Doors & Windows", methodCode: "FIN-003", order: 13 },
+  PAINTING: { label: "Painting", methodCode: "FIN-004", order: 14 },
+  EXTERNAL_WORKS: { label: "External Works", methodCode: "EXT-001", order: 15 },
+  TESTING_COMMISSIONING: { label: "Testing & Commissioning", methodCode: "T&C-001", order: 16 },
+  SNAGGING: { label: "Snagging", methodCode: "QA-001", order: 17 },
+  HANDOVER: { label: "Handover", methodCode: "DOC-001", order: 18 },
+};
+
+export type CheckType = "PRE_CHECK" | "POST_CHECK" | "FINAL_CHECK";
+export type QcSeverity = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+
+// Method Statement
+export interface MethodStatement {
+  id: string;
+  methodCode: string;
+  wbsStage: WbsStage;
+  workItem: string;
+  scope: string | null;
+  reference: string | null;
+  tools: string[];
+  materials: string[];
+  precondition: string | null;
+  sequence: unknown | null;
+  criticalPoints: string | null;
+  acceptanceCriteria: string;
+  tolerance: string | null;
+  holdPoint: boolean;
+  safety: string | null;
+  evidenceRequirement: string[];
+  reworkProcedure: string | null;
+  responsibleRoles: string[];
+  revision: number;
+  lessonLearned: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// QC Template
+export interface QcTemplateItem {
+  itemDesc: string;
+  criteria: string;
+  tolerance?: string;
+  isMandatory: boolean;
+  order: number;
+}
+
+export interface QcTemplate {
+  id: string;
+  wbsStage: WbsStage;
+  methodCode: string | null;
+  name: string;
+  description: string | null;
+  items: QcTemplateItem[] | string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  methodStatement?: {
+    methodCode: string;
+    workItem: string;
+    wbsStage: WbsStage;
+  };
+}
+
+// Extended QcRecord
+export interface QcRecordExtended extends QcRecord {
+  wbsStage: WbsStage | null;
+  methodCode: string | null;
+  checkType: CheckType;
+  templateId: string | null;
+  holdPoint: boolean;
+  isReleased: boolean;
+  releasedById: string | null;
+  releasedAt: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  weather: string | null;
+  temperature: number | null;
+  photosCount: number;
+  notes: string | null;
+  methodStatement?: {
+    methodCode: string;
+    workItem: string;
+    wbsStage: WbsStage;
+  };
+  template?: QcTemplate;
+  approvalLogs?: QcApprovalLog[];
+}
+
+// QC Approval Log
+export interface QcApprovalLog {
+  id: string;
+  qcId: string;
+  approverId: string;
+  approverName: string | null;
+  approverRole: string | null;
+  status: string;
+  note: string | null;
+  createdAt: string;
+}
+
+// Lesson Learned
+export interface LessonLearned {
+  id: string;
+  wbsStage: WbsStage | null;
+  qcRecordId: string | null;
+  qcRecord?: {
+    id: string;
+    qcCode: string;
+    result: string;
+    checkDate: string;
+  };
+  title: string;
+  description: string;
+  rootCause: string | null;
+  correctiveAction: string | null;
+  preventiveAction: string | null;
+  severity: QcSeverity;
+  occurredAt: string | null;
+  createdById: string | null;
+  isResolved: boolean;
+  resolvedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // KPI Record
@@ -725,6 +880,230 @@ export async function createRework(
   return res.data;
 }
 
+export async function releaseHoldPoint(
+  id: string,
+  note?: string
+): Promise<QcRecord> {
+  const res = await adminFetch<{ data: QcRecord }>(`/workforce/qc/${id}/release`, {
+    method: "POST",
+    body: JSON.stringify({ note }),
+  });
+  return res.data;
+}
+
+export async function getQcStatsExtended(rabId?: string): Promise<QcStatsExtended> {
+  const qs = rabId ? `?rabId=${rabId}` : "";
+  const res = await adminFetch<{ data: QcStatsExtended }>(`/workforce/qc/stats-extended${qs}`);
+  return res.data;
+}
+
+export async function getQcStatsByWbsStage(rabId?: string): Promise<Record<string, { total: number; pass: number; fail: number; rework: number }>> {
+  const qs = rabId ? `?rabId=${rabId}` : "";
+  const res = await adminFetch<{ data: Record<string, { total: number; pass: number; fail: number; rework: number }> }>(`/workforce/qc/stats-by-wbs${qs}`);
+  return res.data;
+}
+
+export async function createQcFromTemplate(data: {
+  assignmentId: string;
+  workerId: string;
+  wbsStage: WbsStage;
+  methodCode?: string;
+  templateId?: string;
+  checkType: CheckType;
+  holdPoint?: boolean;
+  latitude?: number;
+  longitude?: number;
+  weather?: string;
+  temperature?: number;
+  items: Array<{
+    itemDesc: string;
+    criteria: string;
+    measurement?: string;
+    tolerance?: string;
+    result?: QcResult;
+    isMandatory: boolean;
+    notes?: string;
+  }>;
+  notes?: string;
+}): Promise<QcRecord> {
+  const res = await adminFetch<{ data: QcRecord }>("/workforce/qc/from-template", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+  return res.data;
+}
+
+// ============================================
+// Method Statement API
+// ============================================
+
+export async function getMethodStatements(params?: {
+  wbsStage?: WbsStage;
+  search?: string;
+  page?: number;
+  pageSize?: number;
+}): Promise<{ data: MethodStatement[]; meta: PaginatedMeta }> {
+  const qs = new URLSearchParams({
+    page: String(params?.page ?? 1),
+    pageSize: String(params?.pageSize ?? 50),
+    ...(params?.wbsStage && { wbsStage: params.wbsStage }),
+    ...(params?.search && { search: params.search }),
+  });
+  return adminFetch(`/workforce/method-statements?${qs.toString()}`);
+}
+
+export async function getMethodStatement(id: string): Promise<MethodStatement> {
+  const res = await adminFetch<{ data: MethodStatement }>(`/workforce/method-statements/${id}`);
+  return res.data;
+}
+
+export async function getMethodStatementByCode(code: string): Promise<MethodStatement> {
+  const res = await adminFetch<{ data: MethodStatement }>(`/workforce/method-statements/code/${code}`);
+  return res.data;
+}
+
+export async function getMethodStatementsByWbsStage(wbsStage: WbsStage): Promise<MethodStatement[]> {
+  const res = await adminFetch<{ data: MethodStatement[] }>(`/workforce/method-statements/wbs/${wbsStage}`);
+  return res.data;
+}
+
+export async function createMethodStatement(data: Partial<MethodStatement>): Promise<MethodStatement> {
+  const res = await adminFetch<{ data: MethodStatement }>("/workforce/method-statements", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+  return res.data;
+}
+
+export async function updateMethodStatement(id: string, data: Partial<MethodStatement>): Promise<MethodStatement> {
+  const res = await adminFetch<{ data: MethodStatement }>(`/workforce/method-statements/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+  return res.data;
+}
+
+export async function deleteMethodStatement(id: string): Promise<void> {
+  await adminFetch(`/workforce/method-statements/${id}`, { method: "DELETE" });
+}
+
+// ============================================
+// QC Template API
+// ============================================
+
+export async function getQcTemplates(params?: {
+  wbsStage?: WbsStage;
+  methodCode?: string;
+  page?: number;
+  pageSize?: number;
+}): Promise<{ data: QcTemplate[]; meta: PaginatedMeta }> {
+  const qs = new URLSearchParams({
+    page: String(params?.page ?? 1),
+    pageSize: String(params?.pageSize ?? 50),
+    ...(params?.wbsStage && { wbsStage: params.wbsStage }),
+    ...(params?.methodCode && { methodCode: params.methodCode }),
+  });
+  return adminFetch(`/workforce/qc-templates?${qs.toString()}`);
+}
+
+export async function getQcTemplate(id: string): Promise<QcTemplate> {
+  const res = await adminFetch<{ data: QcTemplate }>(`/workforce/qc-templates/${id}`);
+  return res.data;
+}
+
+export async function getQcTemplatesByWbsStage(wbsStage: WbsStage): Promise<QcTemplate[]> {
+  const res = await adminFetch<{ data: QcTemplate[] }>(`/workforce/qc-templates/wbs/${wbsStage}`);
+  return res.data;
+}
+
+export async function createQcTemplate(data: Partial<QcTemplate>): Promise<QcTemplate> {
+  const res = await adminFetch<{ data: QcTemplate }>("/workforce/qc-templates", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+  return res.data;
+}
+
+export async function updateQcTemplate(id: string, data: Partial<QcTemplate>): Promise<QcTemplate> {
+  const res = await adminFetch<{ data: QcTemplate }>(`/workforce/qc-templates/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+  return res.data;
+}
+
+export async function deleteQcTemplate(id: string): Promise<void> {
+  await adminFetch(`/workforce/qc-templates/${id}`, { method: "DELETE" });
+}
+
+// ============================================
+// Lesson Learned API
+// ============================================
+
+export async function getLessonLearned(params?: {
+  wbsStage?: WbsStage;
+  severity?: QcSeverity;
+  isResolved?: boolean;
+  search?: string;
+  page?: number;
+  pageSize?: number;
+}): Promise<{ data: LessonLearned[]; meta: PaginatedMeta }> {
+  const qs = new URLSearchParams({
+    page: String(params?.page ?? 1),
+    pageSize: String(params?.pageSize ?? 20),
+    ...(params?.wbsStage && { wbsStage: params.wbsStage }),
+    ...(params?.severity && { severity: params.severity }),
+    ...(params?.isResolved !== undefined && { isResolved: String(params.isResolved) }),
+    ...(params?.search && { search: params.search }),
+  });
+  return adminFetch(`/workforce/lesson-learned?${qs.toString()}`);
+}
+
+export async function getLessonLearnedById(id: string): Promise<LessonLearned> {
+  const res = await adminFetch<{ data: LessonLearned }>(`/workforce/lesson-learned/${id}`);
+  return res.data;
+}
+
+export async function getUnresolvedLessonLearned(wbsStage?: WbsStage): Promise<LessonLearned[]> {
+  const qs = wbsStage ? `?wbsStage=${wbsStage}` : "";
+  const res = await adminFetch<{ data: LessonLearned[] }>(`/workforce/lesson-learned/unresolved${qs}`);
+  return res.data;
+}
+
+export async function createLessonLearned(data: Partial<LessonLearned>): Promise<LessonLearned> {
+  const res = await adminFetch<{ data: LessonLearned }>("/workforce/lesson-learned", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+  return res.data;
+}
+
+export async function createLessonLearnedFromRework(qcId: string): Promise<LessonLearned> {
+  const res = await adminFetch<{ data: LessonLearned }>(`/workforce/lesson-learned/from-rework/${qcId}`, {
+    method: "POST",
+  });
+  return res.data;
+}
+
+export async function updateLessonLearned(id: string, data: Partial<LessonLearned>): Promise<LessonLearned> {
+  const res = await adminFetch<{ data: LessonLearned }>(`/workforce/lesson-learned/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+  return res.data;
+}
+
+export async function resolveLessonLearned(id: string): Promise<LessonLearned> {
+  const res = await adminFetch<{ data: LessonLearned }>(`/workforce/lesson-learned/${id}/resolve`, {
+    method: "POST",
+  });
+  return res.data;
+}
+
+export async function deleteLessonLearned(id: string): Promise<void> {
+  await adminFetch(`/workforce/lesson-learned/${id}`, { method: "DELETE" });
+}
+
 // ============================================
 // KPI API
 // ============================================
@@ -870,6 +1249,15 @@ export async function updateToolCondition(id: string, condition: ToolCondition):
   return res.data;
 }
 
+export async function deleteTool(id: string): Promise<void> {
+  await adminFetch(`/workforce/tools/${id}`, { method: "DELETE" });
+}
+
+export async function getToolByCode(code: string): Promise<MasterTool> {
+  const res = await adminFetch<{ data: MasterTool }>(`/workforce/tools/code/${code}`);
+  return res.data;
+}
+
 // ============================================
 // TOOL PHOTOS API
 // ============================================
@@ -902,12 +1290,12 @@ export async function addToolPhoto(toolId: string, data: {
   return res.data;
 }
 
-export async function deleteToolPhoto(photoId: string): Promise<void> {
-  await adminFetch(`/workforce/photos/${photoId}`, { method: "DELETE" });
+export async function deleteToolPhoto(toolId: string, photoId: string): Promise<void> {
+  await adminFetch(`/workforce/tools/${toolId}/photos/${photoId}`, { method: "DELETE" });
 }
 
-export async function setPrimaryPhoto(photoId: string): Promise<void> {
-  await adminFetch(`/workforce/photos/${photoId}/primary`, { method: "PUT" });
+export async function setPrimaryPhoto(toolId: string, photoId: string): Promise<void> {
+  await adminFetch(`/workforce/tools/${toolId}/photos/${photoId}/primary`, { method: "PUT" });
 }
 
 // ============================================
@@ -967,6 +1355,48 @@ export interface MaintenanceScheduleItem {
 export async function getUpcomingMaintenance(days: number = 30): Promise<MaintenanceScheduleItem[]> {
   const res = await adminFetch<{ success: boolean; data: MaintenanceScheduleItem[] }>(
     `/workforce/maintenance/upcoming?days=${days}`
+  );
+  return res.data;
+}
+
+export async function getToolMaintenance(toolId: string): Promise<unknown[]> {
+  const res = await adminFetch<{ success: boolean; data: unknown[] }>(
+    `/workforce/tools/${toolId}/maintenance`
+  );
+  return res.data;
+}
+
+export async function scheduleMaintenance(data: {
+  toolId: string;
+  type: string;
+  scheduledDate?: string;
+  notes?: string;
+}): Promise<unknown> {
+  const res = await adminFetch<{ success: boolean; data: unknown }>(
+    `/workforce/maintenance`,
+    {
+      method: "POST",
+      body: JSON.stringify(data),
+    }
+  );
+  return res.data;
+}
+
+export async function completeMaintenance(
+  maintenanceId: string,
+  data: {
+    performedDate: string;
+    notes?: string;
+    nextDate?: string;
+    cost?: number;
+  }
+): Promise<unknown> {
+  const res = await adminFetch<{ success: boolean; data: unknown }>(
+    `/workforce/maintenance/${maintenanceId}/complete`,
+    {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }
   );
   return res.data;
 }

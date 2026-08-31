@@ -1,12 +1,19 @@
 import { Router } from "express";
 import * as rabController from "@/controllers/rab.controller";
 import * as projectDoc from "@/controllers/projectDoc.controller";
+import * as scheduleImport from "@/controllers/scheduleImport.controller";
 import { requireAuth, requireRole } from "@/middleware/auth";
 import { writeLimiter } from "@/middleware/rateLimiters";
 
 const router = Router();
 
 router.use(requireAuth, requireRole("ADMIN", "EDITOR"));
+
+// Timeline import endpoints
+router.post("/import-timeline", writeLimiter, scheduleImport.importTimeline);
+router.post("/:id/import-timeline", writeLimiter, scheduleImport.replaceTimeline);
+router.post("/:id/update-schedule-dates", writeLimiter, scheduleImport.updateScheduleDates);
+router.get("/:id/schedule-preview", scheduleImport.schedulePreview);
 
 router.get("/daily-reports/summary", rabController.dailyReportSummary);
 router.get("/", rabController.list);

@@ -22,19 +22,22 @@ import { Prisma } from "@prisma/client";
 
 export const listTools = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const filters = toolFiltersSchema.parse({
+    const parsed = toolFiltersSchema.parse({
       category: req.query.category,
       owner: req.query.owner,
       status: req.query.status,
       search: req.query.search,
       condition: req.query.condition,
     });
+    // Cast status to the service's narrow type
+    const filters = {
+      ...parsed,
+      status: parsed.status as "available" | "borrowed" | "needs_maintenance" | undefined,
+    };
     const tools = await toolsService.listTools(filters);
     res.json({ success: true, data: tools });
   } catch (error) {
-    if (error instanceof ZodError) {
-      return res.status(400).json({ success: false, error: error.errors });
-    }
+    if (error instanceof ZodError) return res.status(422).json({ success: false, error: error.errors });
     throw error;
   }
 });
@@ -121,10 +124,16 @@ export const getLoan = asyncHandler(async (req: Request, res: Response) => {
 export const issueTool = asyncHandler(async (req: Request, res: Response) => {
   try {
     const data = issueLoanSchema.parse(req.body);
-    const loan = await toolsService.issueTool({
-      ...data,
-      issuedById: req.user!.sub,
-    });
+    const loan = await toolsService.borrowTool(
+      data.toolId,
+      {
+        workerId: data.workerId,
+        notes: data.notes,
+        issuedPhotoUrl: data.issuedPhotoUrl,
+        issuedLocation: data.issuedLocation,
+      },
+      req.user!.sub
+    );
     res.status(201).json({ success: true, data: loan });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -137,7 +146,15 @@ export const issueTool = asyncHandler(async (req: Request, res: Response) => {
 export const returnTool = asyncHandler(async (req: Request, res: Response) => {
   try {
     const { condition, photoUrl, returnLocation } = returnLoanSchema.parse(req.body);
-    const loan = await toolsService.returnTool(req.params.id, condition, photoUrl, returnLocation);
+    const notes = returnLocation ? `Lokasi: ${returnLocation}` : "";
+    const loan = await toolsService.returnTool(
+      req.params.id,
+      condition,
+      notes,
+      req.user?.sub || "",
+      photoUrl || undefined,
+      returnLocation || undefined
+    );
     res.json({ success: true, data: loan });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -175,11 +192,16 @@ export const getLoansByWorker = asyncHandler(async (req: Request, res: Response)
 // Maintenance
 export const scheduleMaintenance = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const data = maintenanceSchema.parse(req.body);
+    const { toolId, type, description, scheduledDate, notes } = maintenanceSchema.parse(req.body);
+    if (!scheduledDate) {
+      return res.status(400).json({ success: false, error: "Tanggal jadwal wajib diisi" });
+    }
     const maintenance = await toolsService.scheduleMaintenance({
-      ...data,
-      performedById: req.user?.sub,
-    });
+      toolId,
+      type,
+      scheduledDate,
+      notes: description || notes,
+    }, req.user?.sub);
     res.status(201).json({ success: true, data: maintenance });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -191,8 +213,13 @@ export const scheduleMaintenance = asyncHandler(async (req: Request, res: Respon
 
 export const completeMaintenance = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const data = completeMaintenanceSchema.parse(req.body);
-    const maintenance = await toolsService.completeMaintenance(req.params.id, data);
+    const { performedDate, notes, cost, vendor, conditionAfter } = completeMaintenanceSchema.parse(req.body);
+    const maintenance = await toolsService.completeMaintenance(req.params.id, {
+      performedDate,
+      notes,
+      cost,
+      conditionAfter,
+    });
     res.json({ success: true, data: maintenance });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -203,7 +230,7 @@ export const completeMaintenance = asyncHandler(async (req: Request, res: Respon
 });
 
 export const getToolMaintenance = asyncHandler(async (req: Request, res: Response) => {
-  const logs = await toolsService.getToolMaintenance(req.params.toolId);
+  const logs = await toolsService.getToolMaintenance(req.params.id);
   res.json({ success: true, data: logs });
 });
 

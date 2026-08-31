@@ -4,6 +4,9 @@ import { cn } from "@/lib/utils";
 
 // Re-export from ui.tsx
 export { Badge, EmptyState, PageHeader, Panel, Toolbar, TableWrap, Th, Td, Tr } from "./ui";
+
+// Re-export useToast from client component
+export { useToast, type ToastType } from "./ToastProviderWrapper";
 // Table helpers
 export function TableRow({ children, className }: { children: ReactNode; className?: string }) {
   return <tr className={cn("transition hover:bg-white/[0.03]", className)}>{children}</tr>;
@@ -295,30 +298,5 @@ export function Tabs({ tabs, activeTab, onTabChange }: TabsProps) {
   );
 }
 
-// Toast Hook
-type ToastType = "success" | "error" | "warning" | "info";
-
-interface ToastState {
-  message: string;
-  type: ToastType;
-}
-
-// Re-export empty Toast component for compatibility
+// Legacy Toast component
 export function Toast() { return null; }
-
-export function useToast() {
-  const show = (message: string, type: ToastType = "info") => {
-    // Simple alert for now - in production would use a toast library
-    if (typeof window !== "undefined") {
-      if (type === "success") {
-        console.log(`✓ ${message}`);
-      } else if (type === "error") {
-        console.error(`✗ ${message}`);
-      } else {
-        console.log(message);
-      }
-    }
-  };
-
-  return { toast: show };
-}

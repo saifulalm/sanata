@@ -19,25 +19,51 @@ interface Props {
 export default async function WorkerDetailPage({ params }: Props) {
   const { id } = await params;
 
-  try {
-    const [worker, assessments, kpis, executions] = await Promise.all([
-      getWorker(id),
-      getWorkerAssessments(id),
-      getWorkerKpis(id),
-      getWorkerExecutions(id),
-    ]);
+  let worker = null;
+  let assessments: any[] = [];
+  let kpis: any[] = [];
+  let executions: any[] = [];
+  let fetchError = null;
 
-    return (
-      <div className="space-y-6">
-        <WorkerDetail
-          worker={worker}
-          assessments={assessments}
-          kpis={kpis}
-          executions={executions}
-        />
-      </div>
-    );
-  } catch {
+  try {
+    worker = await getWorker(id);
+  } catch (e: any) {
+    console.error("Failed to fetch worker:", e);
+    fetchError = e;
+  }
+
+  // Try to fetch related data even if worker fetch failed
+  try {
+    assessments = await getWorkerAssessments(id);
+  } catch (e) {
+    console.error("Failed to fetch assessments:", e);
+  }
+
+  try {
+    kpis = await getWorkerKpis(id);
+  } catch (e) {
+    console.error("Failed to fetch kpis:", e);
+  }
+
+  try {
+    executions = await getWorkerExecutions(id);
+  } catch (e) {
+    console.error("Failed to fetch executions:", e);
+  }
+
+  // If worker not found, show 404
+  if (!worker || fetchError?.status === 404) {
     notFound();
   }
+
+  return (
+    <div className="space-y-6">
+      <WorkerDetail
+        worker={worker}
+        assessments={assessments}
+        kpis={kpis}
+        executions={executions}
+      />
+    </div>
+  );
 }

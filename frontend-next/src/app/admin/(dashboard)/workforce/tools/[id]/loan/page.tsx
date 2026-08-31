@@ -1,13 +1,26 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRightLeft, User, Package, Calendar, Clock, CheckCircle, AlertTriangle, Loader2, Camera, X, Upload } from "lucide-react";
+import { ArrowLeft, ArrowRightLeft, User, Package, Calendar, Clock, CheckCircle, AlertTriangle, Loader2, Camera, X, Upload, RefreshCw } from "lucide-react";
 import { PageHeader } from "@/components/admin/ui";
 import { Badge, Button, Card, Dialog, Input, Textarea, Select, useToast } from "@/components/admin/ExtendedUI";
 import { issueTool, getAvailableWorkers, getLoans, getTool, type MasterTool, type ToolLoan } from "@/lib/workforceApi";
 import type { ToolCondition, LoanStatus } from "@/lib/workforceApi";
+
+const ACCESS_COOKIE = "admin_access";
+
+/**
+ * Get access token from cookie (client-side)
+ */
+function getAccessTokenFromCookie(): string | null {
+  if (typeof document === "undefined") return null;
+
+  // Fixed: Use correct regex pattern for cookie parsing
+  const match = document.cookie.match(new RegExp(ACCESS_COOKIE + "=([^;]+)"));
+  return match ? match[1] : null;
+}
 
 const CONDITION_MAP: Record<ToolCondition, { label: string; color: string }> = {
   GOOD: { label: "Baik", color: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30" },
@@ -45,8 +58,18 @@ function PhotoUpload({
       const formData = new FormData();
       formData.append("file", file);
 
+      // Get access token from cookie
+      const accessToken = getAccessTokenFromCookie();
+
+      // Build headers
+      const headers: Record<string, string> = {};
+      if (accessToken) {
+        headers["Authorization"] = `Bearer ${accessToken}`;
+      }
+
       const res = await fetch("/api/media/upload", {
         method: "POST",
+        headers,
         credentials: "include",
         body: formData,
       });
@@ -124,7 +147,25 @@ export default function ToolLoanPage() {
   const params = useParams();
   const router = useRouter();
   const { toast } = useToast();
+
+  // Use ref to avoid infinite loop from toast function changing on each render
+  const toastRef = useRef(toast);
+  toastRef.current = toast;
+
   const toolId = params.id as string;
+
+  // Refs for controlling fetch - use capture pattern
+  const fetchControlRef = useRef<{
+    isFetching: boolean;
+    hasFetched: boolean;
+    cancelled: boolean;
+    retryCount: number;
+  }>({
+    isFetching: false,
+    hasFetched: false,
+    cancelled: false,
+    retryCount: 0,
+  });
 
   const [tool, setTool] = useState<MasterTool | null>(null);
   const [workers, setWorkers] = useState<Array<{ id: string; name: string; workerCode: string; role: string }>>([]);
@@ -140,33 +181,91 @@ export default function ToolLoanPage() {
   const [returnCondition, setReturnCondition] = useState<ToolCondition>("GOOD");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
 
-  // Fetch data
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const [toolData, workersData, loansData] = await Promise.all([
-          getTool(toolId),
-          getAvailableWorkers(),
-          getLoans({ toolId, pageSize: 50 }),
-        ]);
-        setTool(toolData);
-        setWorkers(workersData.map(w => ({
-          id: w.id,
-          name: w.name,
-          workerCode: w.workerCode,
-          role: w.role,
-        })));
-        setLoans(loansData.data);
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-        toast("Gagal memuat data", "error");
-      } finally {
+  // Fetch data function
+  const doFetch = useCallback(async (isRetry = false) => {
+    const ctrl = fetchControlRef.current;
+
+    // Prevent concurrent fetches or re-fetching after success
+    if (!isRetry && ctrl.hasFetched) {
+      console.log("[ToolLoanPage] Skipping fetch - already fetched");
+      setIsLoading(false);
+      return;
+    }
+
+    if (ctrl.isFetching) {
+      console.log("[ToolLoanPage] Skipping fetch - already in progress");
+      return;
+    }
+
+    ctrl.isFetching = true;
+    ctrl.cancelled = false;
+
+    console.log(`[ToolLoanPage] Starting fetch (retry=${isRetry}, attempt=${ctrl.retryCount})`);
+
+    setIsLoading(true);
+    setHasError(false);
+
+    try {
+      const [toolData, workersData, loansData] = await Promise.all([
+        getTool(toolId),
+        getAvailableWorkers(),
+        getLoans({ toolId, pageSize: 50 }),
+      ]);
+
+      if (ctrl.cancelled) {
+        console.log("[ToolLoanPage] Fetch cancelled, skipping state update");
+        return;
+      }
+
+      setTool(toolData);
+      setWorkers(workersData.map(w => ({
+        id: w.id,
+        name: w.name,
+        workerCode: w.workerCode,
+        role: w.role,
+      })));
+      setLoans(loansData.data);
+      ctrl.hasFetched = true;
+      console.log("[ToolLoanPage] Fetch completed successfully");
+    } catch (error) {
+      if (ctrl.cancelled) {
+        console.log("[ToolLoanPage] Fetch error ignored - was cancelled");
+        return;
+      }
+
+      console.error("[ToolLoanPage] Fetch failed:", error);
+      setHasError(true);
+      toastRef.current("Gagal memuat data", "error");
+      ctrl.retryCount++;
+
+      // Don't set hasFetched=true on error so retry is possible
+    } finally {
+      ctrl.isFetching = false;
+      if (!ctrl.cancelled) {
         setIsLoading(false);
       }
     }
-    fetchData();
-  }, [toolId, toast]);
+  }, [toolId]);
+
+  // Initial fetch on mount
+  useEffect(() => {
+    console.log("[ToolLoanPage] Mount/Remount - toolId:", toolId, "fetched:", fetchControlRef.current.hasFetched);
+    doFetch();
+
+    return () => {
+      console.log("[ToolLoanPage] Cleanup - cancelling pending fetches");
+      fetchControlRef.current.cancelled = true;
+      fetchControlRef.current.isFetching = false;
+    };
+  }, [toolId, doFetch]);
+
+  // Retry function
+  const handleRetry = useCallback(() => {
+    console.log("[ToolLoanPage] Retry triggered");
+    doFetch(true);
+  }, [doFetch]);
 
   const handleIssue = async () => {
     if (!selectedWorker) {
@@ -251,10 +350,17 @@ export default function ToolLoanPage() {
     );
   }
 
-  if (!tool) {
+  if (hasError || !tool) {
     return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <p className="text-slate-400">Alat tidak ditemukan</p>
+      <div className="flex min-h-[400px] flex-col items-center justify-center gap-4">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-rose-500/10 text-rose-400">
+          <AlertTriangle size={32} />
+        </div>
+        <p className="text-slate-400">Gagal memuat data alat</p>
+        <Button variant="secondary" onClick={handleRetry}>
+          <RefreshCw size={16} />
+          Coba Lagi
+        </Button>
       </div>
     );
   }

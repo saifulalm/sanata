@@ -15,6 +15,19 @@ import { captureBaselineAction, deleteBaselineAction } from "../../actions";
 import { formatDate } from "@/lib/format";
 import { Badge, Panel, EmptyState } from "@/components/admin/ui";
 
+const ACCESS_COOKIE = "admin_access";
+
+/**
+ * Get access token from cookie (client-side)
+ */
+function getAccessTokenFromCookie(): string | null {
+  if (typeof document === "undefined") return null;
+
+  // Fixed: Use correct regex pattern for cookie parsing
+  const match = document.cookie.match(new RegExp(ACCESS_COOKIE + "=([^;]+)"));
+  return match ? match[1] : null;
+}
+
 export function BaselinePanel({
   rabId,
   baselines,
@@ -35,7 +48,17 @@ export function BaselinePanel({
     if (scheduleProp) return;
     async function load() {
       try {
-        const res = await fetch(`/api/rab/${rabId}/schedule`, { cache: "no-store" });
+        const accessToken = getAccessTokenFromCookie();
+        const headers: Record<string, string> = {};
+        if (accessToken) {
+          headers["Authorization"] = `Bearer ${accessToken}`;
+        }
+
+        const res = await fetch(`/api/rab/${rabId}/schedule`, {
+          headers,
+          credentials: "include",
+          cache: "no-store"
+        });
         if (res.ok) {
           const data = await res.json();
           setSchedule(data.data);

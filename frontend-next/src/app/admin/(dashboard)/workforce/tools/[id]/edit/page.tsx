@@ -191,7 +191,7 @@ export default function EditToolPage() {
 
   const handleDeletePhoto = async (photoId: string) => {
     try {
-      await deleteToolPhoto(photoId);
+      await deleteToolPhoto(toolId, photoId);
       setPhotos(prev => prev.filter(p => p.id !== photoId));
       toast("Foto dihapus", "success");
     } catch (error) {
@@ -201,7 +201,7 @@ export default function EditToolPage() {
 
   const handleSetPrimary = async (photoId: string) => {
     try {
-      await setPrimaryPhoto(photoId);
+      await setPrimaryPhoto(toolId, photoId);
       setPhotos(prev => prev.map(p => ({ ...p, isPrimary: p.id === photoId })));
       toast("Foto utama diperbarui", "success");
     } catch (error) {

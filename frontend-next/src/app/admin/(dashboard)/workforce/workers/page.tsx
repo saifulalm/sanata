@@ -14,7 +14,19 @@ export default async function WorkersPage() {
   // Ensure user is authenticated - this will redirect to login if not
   await getAdminSession();
 
-  const { data: workers, meta } = await getWorkers({ page: 1, pageSize: 20 });
+  console.log("[WorkersPage] Fetching workers...");
+
+  let workers: any[] = [];
+  let meta = { page: 1, pageSize: 20, total: 0, totalPages: 0 };
+
+  try {
+    const result = await getWorkers({ page: 1, pageSize: 20 });
+    workers = result.data;
+    meta = result.meta;
+    console.log("[WorkersPage] Got", workers.length, "workers");
+  } catch (error: any) {
+    console.error("[WorkersPage] Error:", error?.status, error?.message);
+  }
 
   return (
     <div className="space-y-6">

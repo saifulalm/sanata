@@ -14,7 +14,20 @@ export default async function AssignmentsPage() {
   // Ensure user is authenticated
   await getAdminSession();
 
-  const { data: assignments, meta } = await getAssignments({ page: 1, pageSize: 20 });
+  console.log("[AssignmentsPage] Fetching assignments...");
+
+  let assignments: any[] = [];
+  let meta = { page: 1, pageSize: 20, total: 0, totalPages: 0 };
+
+  try {
+    const result = await getAssignments({ page: 1, pageSize: 20 });
+    assignments = result.data;
+    meta = result.meta;
+    console.log("[AssignmentsPage] Got", assignments.length, "assignments");
+  } catch (error: any) {
+    console.error("[AssignmentsPage] Error fetching assignments:", error?.status, error?.message);
+    // Don't throw, show empty state instead
+  }
 
   return (
     <div className="space-y-6">

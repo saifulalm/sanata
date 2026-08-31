@@ -11,6 +11,9 @@ import * as executionCtrl from "@/controllers/execution.controller";
 import * as qcCtrl from "@/controllers/qc.controller";
 import * as kpiCtrl from "@/controllers/kpi.controller";
 import * as toolsCtrl from "@/controllers/tools.controller";
+import * as methodStatementCtrl from "@/controllers/methodStatement.controller";
+import * as qcTemplateCtrl from "@/controllers/qcTemplate.controller";
+import * as lessonLearnedCtrl from "@/controllers/lessonLearned.controller";
 
 const router = Router({ mergeParams: true });
 
@@ -60,12 +63,48 @@ router.delete("/executions/photos/:photoId", executionCtrl.deletePhoto);
 // --- QC Records ---
 router.get("/qc", qcCtrl.list);
 router.get("/qc/stats", qcCtrl.stats);
+router.get("/qc/stats-extended", qcCtrl.statsExtended);
+router.get("/qc/stats-by-wbs", qcCtrl.statsByWbsStage);
 router.get("/qc/:id", qcCtrl.get);
 router.post("/qc", qcCtrl.create);
+router.post("/qc/from-template", qcCtrl.createFromTemplate);
 router.put("/qc/:id", qcCtrl.approve);
 router.post("/qc/:id/approve", qcCtrl.approve);
 router.post("/qc/:id/rework", qcCtrl.rework);
+router.post("/qc/:id/release", qcCtrl.release);
+router.post("/qc/:id/approval-log", qcCtrl.addApprovalLog);
+router.get("/qc/:id/approval-logs", qcCtrl.getApprovalLogs);
 router.delete("/qc/:id", qcCtrl.remove);
+
+// --- Method Statements ---
+router.get("/method-statements", methodStatementCtrl.list);
+router.get("/method-statements/overview", methodStatementCtrl.getWbsOverview);
+router.get("/method-statements/wbs/:wbsStage", methodStatementCtrl.getByWbsStage);
+router.get("/method-statements/code/:code", methodStatementCtrl.getByCode);
+router.get("/method-statements/:id", methodStatementCtrl.get);
+router.post("/method-statements", methodStatementCtrl.create);
+router.put("/method-statements/:id", methodStatementCtrl.update);
+router.delete("/method-statements/:id", methodStatementCtrl.remove);
+
+// --- QC Templates ---
+router.get("/qc-templates", qcTemplateCtrl.list);
+router.get("/qc-templates/wbs/:wbsStage", qcTemplateCtrl.getByWbsStage);
+router.get("/qc-templates/:id", qcTemplateCtrl.get);
+router.get("/qc-templates/:id/items", qcTemplateCtrl.getWithItems);
+router.post("/qc-templates", qcTemplateCtrl.create);
+router.put("/qc-templates/:id", qcTemplateCtrl.update);
+router.delete("/qc-templates/:id", qcTemplateCtrl.remove);
+
+// --- Lesson Learned ---
+router.get("/lesson-learned", lessonLearnedCtrl.list);
+router.get("/lesson-learned/unresolved", lessonLearnedCtrl.getUnresolved);
+router.get("/lesson-learned/wbs/:wbsStage", lessonLearnedCtrl.getByWbsStage);
+router.get("/lesson-learned/:id", lessonLearnedCtrl.get);
+router.post("/lesson-learned", lessonLearnedCtrl.create);
+router.post("/lesson-learned/from-rework/:qcId", lessonLearnedCtrl.createFromRework);
+router.put("/lesson-learned/:id", lessonLearnedCtrl.update);
+router.post("/lesson-learned/:id/resolve", lessonLearnedCtrl.resolve);
+router.delete("/lesson-learned/:id", lessonLearnedCtrl.remove);
 
 // --- KPIs ---
 router.get("/kpis", kpiCtrl.list);
@@ -93,11 +132,11 @@ router.put("/tools/:id/condition", toolsCtrl.updateCondition);
 // Tool Photos
 router.get("/tools/:id/photos", toolsCtrl.getToolPhotos);
 router.post("/tools/:id/photos", toolsCtrl.addToolPhoto);
-router.delete("/photos/:photoId", toolsCtrl.deleteToolPhoto);
-router.put("/photos/:photoId/primary", toolsCtrl.setPrimaryPhoto);
+router.delete("/tools/:id/photos/:photoId", toolsCtrl.deleteToolPhoto);
+router.put("/tools/:id/photos/:photoId/primary", toolsCtrl.setPrimaryPhoto);
 
 // Tool Maintenance
-router.get("/tools/:toolId/maintenance", toolsCtrl.getToolMaintenance);
+router.get("/tools/:id/maintenance", toolsCtrl.getToolMaintenance);
 router.get("/maintenance/upcoming", toolsCtrl.getUpcomingMaintenance);
 router.get("/maintenance/calendar", toolsCtrl.getMaintenanceCalendar);
 router.post("/maintenance", toolsCtrl.scheduleMaintenance);
