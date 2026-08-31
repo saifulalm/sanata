@@ -84,12 +84,24 @@ export function ToolsList({ initialTools, initialCategories }: ToolsListProps) {
   });
   const [cond, setCond] = useState<ToolCondition>("GOOD");
 
-  // Fetch categories on mount
+  // Fetch categories on mount - but don't fail if it errors
   useEffect(() => {
-    getToolCategories().then(setCategories).catch(console.error);
-  }, []);
+    // Use initial categories if available, otherwise try to fetch
+    if (initialCategories.length > 0) {
+      setCategories(initialCategories);
+    }
+    getToolCategories()
+      .then(setCategories)
+      .catch((err) => {
+        console.error("[ToolsList] Failed to fetch categories:", err);
+        // Keep using initial categories
+      });
+  }, [initialCategories]);
 
-  // Refresh tools when filters change
+  // Track if we have initial data
+  const hasInitialData = initialTools.length > 0;
+
+  // Refresh tools when filters change - use initial data as fallback
   useEffect(() => {
     start(async () => {
       try {
@@ -102,13 +114,24 @@ export function ToolsList({ initialTools, initialCategories }: ToolsListProps) {
           pageSize: 50,
         });
         setTools(result.data);
-      } catch {
-        // Fallback to simple list
-        const simpleTools = await getTools({ status: statusFilter !== "all" ? statusFilter : undefined });
-        setTools(simpleTools);
+      } catch (err) {
+        console.error("[ToolsList] Failed to fetch tools:", err);
+        // Keep using initial data if available
+        if (hasInitialData) {
+          console.log("[ToolsList] Using initial tools data as fallback");
+        } else {
+          // Try simple list as last resort
+          try {
+            const simpleTools = await getTools({ status: statusFilter !== "all" ? statusFilter : undefined });
+            setTools(simpleTools);
+          } catch {
+            // All attempts failed, show empty
+            setTools([]);
+          }
+        }
       }
     });
-  }, [search, categoryFilter, conditionFilter, statusFilter]);
+  }, [search, categoryFilter, conditionFilter, statusFilter, hasInitialData]);
 
   const handleAdd = () => {
     if (!form.name.trim()) {

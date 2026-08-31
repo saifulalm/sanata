@@ -35,8 +35,14 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
 
   console.log("[Auth] Generated token:", accessToken.substring(0, 30) + "...");
   console.log("[Auth] Token payload:", JSON.parse(Buffer.from(accessToken.split(".")[1], "base64url").toString()));
+  console.log("[Auth] Refresh token:", refreshToken ? refreshToken.substring(0, 20) + "..." : "NONE");
 
   setRefreshCookie(res, refreshToken);
+
+  // Log the set-cookie header
+  const setCookieHeader = res.getHeader("set-cookie");
+  console.log("[Auth] set-cookie header:", setCookieHeader);
+
   res.json({ success: true, data: { user, accessToken } });
 });
 

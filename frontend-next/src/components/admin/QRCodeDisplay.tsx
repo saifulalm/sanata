@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import { Download, QrCode, RefreshCw, ExternalLink } from "lucide-react";
 
+const ACCESS_COOKIE = "admin_access";
+
 interface QrCodeData {
   toolId: string;
   toolCode: string;
@@ -16,6 +18,17 @@ interface QRCodeDisplayProps {
   toolName: string;
   apiUrl: string;
   size?: number;
+}
+
+/**
+ * Get access token from cookie (client-side)
+ */
+function getAccessTokenFromCookie(): string | null {
+  if (typeof document === "undefined") return null;
+
+  // Fixed: Use correct regex pattern for cookie parsing
+  const match = document.cookie.match(new RegExp(ACCESS_COOKIE + "=([^;]+)"));
+  return match ? match[1] : null;
 }
 
 export function QRCodeDisplay({ toolId, toolCode, toolName, apiUrl, size = 200 }: QRCodeDisplayProps) {
@@ -34,13 +47,48 @@ export function QRCodeDisplay({ toolId, toolCode, toolName, apiUrl, size = 200 }
     setError(null);
 
     try {
+      // Build full URL - handle both absolute and relative apiUrl
+      let baseUrl = apiUrl;
+      if (!baseUrl) {
+        baseUrl = window.location.origin;
+      } else if (baseUrl.startsWith("/")) {
+        // Relative path - prepend origin
+        baseUrl = `${window.location.origin}${baseUrl}`;
+      }
+      // Remove trailing slash if present
+      baseUrl = baseUrl.replace(/\/$/, "");
+      // Remove /api suffix if present to avoid duplication
+      baseUrl = baseUrl.replace(/\/api$/, "");
+
+      const url = `${baseUrl}/api/workforce/tools/${toolId}/qrcode`;
+
+      // Get access token from cookie
+      const accessToken = getAccessTokenFromCookie();
+
+      // Build headers
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+
+      if (accessToken) {
+        headers["Authorization"] = `Bearer ${accessToken}`;
+      }
+
       // Get QR data from our API
-      const response = await fetch(`${apiUrl}/api/workforce/tools/${toolId}/qrcode`, {
+      const response = await fetch(url, {
+        headers,
         credentials: "include",
       });
 
       if (!response.ok) {
-        throw new Error("Gagal menghasilkan QR code");
+        let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorData.error || errorMessage;
+        } catch {
+          // Ignore JSON parse errors
+        }
+        throw new Error(errorMessage);
       }
 
       const result = await response.json();
@@ -52,10 +100,12 @@ export function QRCodeDisplay({ toolId, toolCode, toolName, apiUrl, size = 200 }
         const encodedUrl = encodeURIComponent(result.data.url);
         const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodedUrl}&format=png&margin=10`;
         setQrImageUrl(qrUrl);
+      } else {
+        throw new Error(result.message || "Gagal mendapatkan data QR code");
       }
     } catch (err) {
       console.error("QR generation error:", err);
-      setError("Gagal menghasilkan QR code");
+      setError(err instanceof Error ? err.message : "Gagal menghasilkan QR code");
     } finally {
       setLoading(false);
     }

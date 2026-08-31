@@ -45,11 +45,26 @@ export async function loginAction(_prevState: LoginState, formData: FormData): P
   console.log("[Login Action] Access token:", result.accessToken.substring(0, 30) + "...");
   console.log("[Login Action] Refresh token:", result.refreshToken ? result.refreshToken.substring(0, 30) + "..." : "NONE");
 
-  // Note: ACCESS_COOKIE must NOT be httpOnly so client-side components can read the token
-  // The token is short-lived (15 min) so this is acceptable for a SPA pattern
-  store.set(ACCESS_COOKIE, result.accessToken, { sameSite: "lax", maxAge: ACCESS_MAX_AGE, path: "/" });
+  // ACCESS_COOKIE must be readable by client-side JavaScript for API calls
+  // It's non-httpOnly and short-lived (15 min) for SPA pattern
+  store.set(ACCESS_COOKIE, result.accessToken, {
+    httpOnly: false, // Explicitly set to false for client-side access
+    sameSite: "lax",
+    maxAge: ACCESS_MAX_AGE,
+    path: "/",
+  });
+  console.log("[Login Action] ACCESS_COOKIE set:", ACCESS_COOKIE);
+
   if (result.refreshToken) {
-    store.set(REFRESH_COOKIE, result.refreshToken, { httpOnly: true, sameSite: "lax", maxAge: REFRESH_MAX_AGE, path: "/" });
+    store.set(REFRESH_COOKIE, result.refreshToken, {
+      httpOnly: true,
+      sameSite: "lax",
+      maxAge: REFRESH_MAX_AGE,
+      path: "/",
+    });
+    console.log("[Login Action] REFRESH_COOKIE set:", REFRESH_COOKIE);
+  } else {
+    console.log("[Login Action] WARNING: No refresh token to set!");
   }
 
   console.log("[Login Action] Cookies set successfully");
