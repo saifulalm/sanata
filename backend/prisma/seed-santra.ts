@@ -102,10 +102,8 @@ async function main() {
               workerId: job.responsiblePersonId || workers[0].id,
               logDate: d,
               description: "Pekerjaan " + job.workItem + " hari ke-" + (i + 1),
-              progressPct: Math.round(((i + 1) / days * 100),
+              progressPct: Math.round(((i + 1) / days) * 100),
               locationName: job.rabId === rab1?.id ? "Gedung" : job.rabId === rab2?.id ? "Rumah" : "Lain",
-            },
-          });
             },
           });
           cnt++;

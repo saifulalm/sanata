@@ -1330,45 +1330,51 @@ async function seedWorkforce(adminId: string) {
     { workerCode: "O-0004", name: "Dadang Rustandi", role: "OPERATOR" as const, phone: "081234567844", ktpNumber: "3201234567890044", grade: "C" as const, skills: ["concrete_mixer", "vibrator"], experienceYears: 2, status: "ACTIVE" as const, joinDate: new Date("2024-08-01") },
 
     // ===== PEKERJA (18 workers) =====
-    { workerCode: "P-0001", name: "Sugeng Rahayu", role: "PEKERJA" as const, phone: "081234567851", ktpNumber: "3201234567890051", grade: "B" as const, skills: ["general"], experienceYears: 3, status: "ACTIVE" as const, joinDate: new Date("2023-03-01") },
-    { workerCode: "P-0002", name: "Rahmat Hidayat", role: "PEKERJA" as const, phone: "081234567852", ktpNumber: "3201234567890052", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-01-15") },
-    { workerCode: "P-0003", name: "Iwan Setiawan", role: "PEKERJA" as const, phone: "081234567853", ktpNumber: "3201234567890053", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-06-01") },
-    { workerCode: "P-0004", name: "Asep Jatnika", role: "PEKERJA" as const, phone: "081234567854", ktpNumber: "3201234567890054", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-03-01") },
-    { workerCode: "P-0005", name: "Dedi Hermawan", role: "PEKERJA" as const, phone: "081234567855", ktpNumber: "3201234567890055", grade: "C" as const, skills: ["general"], experienceYears: 2, status: "ACTIVE" as const, joinDate: new Date("2024-05-01") },
-    { workerCode: "P-0006", name: "Ahmad Fadillah", role: "PEKERJA" as const, phone: "081234567856", ktpNumber: "3201234567890056", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-04-15") },
-    { workerCode: "P-0007", name: "Sopian Saprudin", role: "PEKERJA" as const, phone: "081234567857", ktpNumber: "3201234567890057", grade: "C" as const, skills: ["general"], experienceYears: 2, status: "ACTIVE" as const, joinDate: new Date("2024-02-01") },
-    { workerCode: "P-0008", name: "Tarno Slamet", role: "PEKERJA" as const, phone: "081234567858", ktpNumber: "3201234567890058", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-05-01") },
-    { workerCode: "P-0009", name: "Sandi Nugraha", role: "PEKERJA" as const, phone: "081234567859", ktpNumber: "3201234567890059", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-07-01") },
-    { workerCode: "P-0010", name: "Galih Pratama", role: "PEKERJA" as const, phone: "081234567860", ktpNumber: "3201234567890060", grade: "C" as const, skills: ["general"], experienceYears: 2, status: "ACTIVE" as const, joinDate: new Date("2024-09-01") },
-    { workerCode: "P-0011", name: "Rizki Ramadhan", role: "PEKERJA" as const, phone: "081234567861", ktpNumber: "3201234567890061", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-02-15") },
-    { workerCode: "P-0012", name: "Fajar Nugroho", role: "PEKERJA" as const, phone: "081234567862", ktpNumber: "3201234567890062", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-06-15") },
-    { workerCode: "P-0013", name: "Bayu Firmansyah", role: "PEKERJA" as const, phone: "081234567863", ktpNumber: "3201234567890063", grade: "C" as const, skills: ["general"], experienceYears: 2, status: "ACTIVE" as const, joinDate: new Date("2024-04-01") },
-    { workerCode: "P-0014", name: "Gilang Permana", role: "PEKERJA" as const, phone: "081234567864", ktpNumber: "3201234567890064", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-03-15") },
-    { workerCode: "P-0015", name: "Deni Saputra", role: "PEKERJA" as const, phone: "081234567865", ktpNumber: "3201234567890065", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-07-15") },
-    { workerCode: "P-0016", name: "Feri Ferdiansyah", role: "PEKERJA" as const, phone: "081234567866", ktpNumber: "3201234567890066", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-08-01") },
-    { workerCode: "P-0017", name: "Ari Suhendar", role: "PEKERJA" as const, phone: "081234567867", ktpNumber: "3201234567890067", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-04-01") },
-    { workerCode: "P-0018", name: "Hendro Prasetyo", role: "PEKERJA" as const, phone: "081234567868", ktpNumber: "3201234567890068", grade: "C" as const, skills: ["general"], experienceYears: 2, status: "ACTIVE" as const, joinDate: new Date("2024-06-15") },
+    { workerCode: "P-0001", name: "Sugeng Rahayu", role: "PEKERJA" as const, phone: "081234567851", ktpNumber: "3201234567890061", grade: "B" as const, skills: ["general"], experienceYears: 3, status: "ACTIVE" as const, joinDate: new Date("2023-03-01") },
+    { workerCode: "P-0002", name: "Rahmat Hidayat", role: "PEKERJA" as const, phone: "081234567852", ktpNumber: "3201234567890062", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-01-15") },
+    { workerCode: "P-0003", name: "Iwan Setiawan", role: "PEKERJA" as const, phone: "081234567853", ktpNumber: "3201234567890063", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-06-01") },
+    { workerCode: "P-0004", name: "Asep Jatnika", role: "PEKERJA" as const, phone: "081234567854", ktpNumber: "3201234567890064", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-03-01") },
+    { workerCode: "P-0005", name: "Dedi Hermawan", role: "PEKERJA" as const, phone: "081234567855", ktpNumber: "3201234567890065", grade: "C" as const, skills: ["general"], experienceYears: 2, status: "ACTIVE" as const, joinDate: new Date("2024-05-01") },
+    { workerCode: "P-0006", name: "Ahmad Fadillah", role: "PEKERJA" as const, phone: "081234567856", ktpNumber: "3201234567890066", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-04-15") },
+    { workerCode: "P-0007", name: "Sopian Saprudin", role: "PEKERJA" as const, phone: "081234567857", ktpNumber: "3201234567890067", grade: "C" as const, skills: ["general"], experienceYears: 2, status: "ACTIVE" as const, joinDate: new Date("2024-02-01") },
+    { workerCode: "P-0008", name: "Tarno Slamet", role: "PEKERJA" as const, phone: "081234567858", ktpNumber: "3201234567890068", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-05-01") },
+    { workerCode: "P-0009", name: "Sandi Nugraha", role: "PEKERJA" as const, phone: "081234567859", ktpNumber: "3201234567890069", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-07-01") },
+    { workerCode: "P-0010", name: "Galih Pratama", role: "PEKERJA" as const, phone: "081234567860", ktpNumber: "3201234567890070", grade: "C" as const, skills: ["general"], experienceYears: 2, status: "ACTIVE" as const, joinDate: new Date("2024-09-01") },
+    { workerCode: "P-0011", name: "Rizki Ramadhan", role: "PEKERJA" as const, phone: "081234567861", ktpNumber: "3201234567890071", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-02-15") },
+    { workerCode: "P-0012", name: "Fajar Nugroho", role: "PEKERJA" as const, phone: "081234567862", ktpNumber: "3201234567890072", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-06-15") },
+    { workerCode: "P-0013", name: "Bayu Firmansyah", role: "PEKERJA" as const, phone: "081234567863", ktpNumber: "3201234567890073", grade: "C" as const, skills: ["general"], experienceYears: 2, status: "ACTIVE" as const, joinDate: new Date("2024-04-01") },
+    { workerCode: "P-0014", name: "Gilang Permana", role: "PEKERJA" as const, phone: "081234567864", ktpNumber: "3201234567890074", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-03-15") },
+    { workerCode: "P-0015", name: "Deni Saputra", role: "PEKERJA" as const, phone: "081234567865", ktpNumber: "3201234567890075", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-07-15") },
+    { workerCode: "P-0016", name: "Feri Ferdiansyah", role: "PEKERJA" as const, phone: "081234567866", ktpNumber: "3201234567890076", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-08-01") },
+    { workerCode: "P-0017", name: "Ari Suhendar", role: "PEKERJA" as const, phone: "081234567867", ktpNumber: "3201234567890077", grade: "C" as const, skills: ["general"], experienceYears: 1, status: "ACTIVE" as const, joinDate: new Date("2025-04-01") },
+    { workerCode: "P-0018", name: "Hendro Prasetyo", role: "PEKERJA" as const, phone: "081234567868", ktpNumber: "3201234567890078", grade: "C" as const, skills: ["general"], experienceYears: 2, status: "ACTIVE" as const, joinDate: new Date("2024-06-15") },
   ];
 
   const workers = [];
   for (const w of workersData) {
-    const worker = await prisma.worker.create({
-      data: {
-        workerCode: w.workerCode,
-        name: w.name,
-        role: w.role,
-        phone: w.phone,
-        ktpNumber: w.ktpNumber,
-        grade: w.grade,
-        skills: w.skills,
-        experienceYears: w.experienceYears,
-        status: w.status,
-        joinDate: w.joinDate,
-        ktpVerified: true,
-        profileComplete: true,
-      },
-    });
-    workers.push(worker);
+    // Use upsert to make seeding idempotent (safe to run multiple times)
+    const existing = await prisma.worker.findUnique({ where: { workerCode: w.workerCode } });
+    if (existing) {
+      workers.push(existing);
+    } else {
+      const worker = await prisma.worker.create({
+        data: {
+          workerCode: w.workerCode,
+          name: w.name,
+          role: w.role,
+          phone: w.phone,
+          ktpNumber: w.ktpNumber,
+          grade: w.grade,
+          skills: w.skills,
+          experienceYears: w.experienceYears,
+          status: w.status,
+          joinDate: w.joinDate,
+          ktpVerified: true,
+          profileComplete: true,
+        },
+      });
+      workers.push(worker);
+    }
   }
 
   // Index workers by role
