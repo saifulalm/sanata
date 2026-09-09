@@ -2,45 +2,47 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getProjects } from "@/lib/clientPortalApi";
-import { Building2, MapPin, Calendar, TrendingUp, ChevronRight, FileText, CheckCircle2, Clock } from "lucide-react";
-
-interface ProjectAccess {
-  accessId: string;
-  accessLevel: string;
-  project: {
-    id: string;
-    number: string;
-    title: string;
-    clientName: string | null;
-    location: string | null;
-    status: string;
-    scheduleStart: string | null;
-    total: number;
-    progress: number;
-    totalItems: number;
-    completedItems: number;
-    billingCount: number;
-  };
-}
+import {
+  getProjects,
+  formatCurrency,
+  formatDate,
+  getStatusBadge,
+  type ProjectAccess,
+} from "@/lib/clientPortal";
+import {
+  Building2,
+  MapPin,
+  Calendar,
+  TrendingUp,
+  ChevronRight,
+  FileText,
+  CheckCircle2,
+  Clock,
+  Loader2,
+  RefreshCw,
+} from "lucide-react";
 
 export default function ClientDashboard() {
   const [projects, setProjects] = useState<ProjectAccess[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  async function loadProjects() {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getProjects();
+      setProjects(data);
+    } catch {
+      setError("Gagal memuat proyek");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
     loadProjects();
   }, []);
-
-  async function loadProjects() {
-    try {
-      const data = await getProjects();
-      setProjects(data);
-    } catch (e) {
-      console.error("Failed to load projects:", e);
-    }
-    setLoading(false);
-  }
 
   function formatCurrency(amount: number) {
     return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
@@ -52,19 +54,29 @@ export default function ClientDashboard() {
 
   if (loading) {
     return (
-      <div className="p-6">
-        <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-gray-200 rounded w-48" />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[1, 2, 3].map(i => <div key={i} className="h-24 bg-gray-200 rounded-xl" />)}
-          </div>
-        </div>
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64">
+        <p className="text-red-600 mb-4">{error}</p>
+        <button
+          onClick={loadProjects}
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700"
+        >
+          <RefreshCw className="w-4 h-4" />
+          Coba Lagi
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="p-6">
+    <>
       <h1 className="text-2xl font-bold text-gray-900 mb-2">Dashboard</h1>
       <p className="text-gray-500 mb-8">Selamat datang di Portal Klien Sanata Construction</p>
 
@@ -119,7 +131,7 @@ export default function ClientDashboard() {
       ) : (
         <div className="space-y-4">
           {projects.map(access => (
-            <Link key={access.accessId} href={`/client/dashboard/project/${access.project.id}`}
+            <Link key={access.accessId} href={`/client/project/${access.project.id}`}
               className="block bg-white rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all p-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
@@ -154,6 +166,6 @@ export default function ClientDashboard() {
           ))}
         </div>
       )}
-    </div>
+    </>
   );
 }
