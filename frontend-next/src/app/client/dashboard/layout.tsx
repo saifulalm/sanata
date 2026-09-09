@@ -1,23 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { getMe, logout, getNotifications, type ClientUser, type Notification } from "@/lib/clientPortalApi";
-import {
-  Building2,
-  LayoutDashboard,
-  FolderKanban,
-  Bell,
-  Settings,
-  LogOut,
-  Menu,
-  X,
-  ChevronDown,
-} from "lucide-react";
+import { usePathname } from "next/navigation";
+import { getMe, logout, getNotifications } from "@/lib/clientPortalApi";
+import { Bell, Settings, LogOut, Menu, X, ChevronDown, Building2, LayoutDashboard, FolderKanban } from "lucide-react";
+
+interface ClientUser {
+  id: string;
+  email: string;
+  name: string;
+}
+
+interface Notification {
+  id: string;
+  isRead: boolean;
+}
 
 export default function ClientDashboardLayout({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
   const pathname = usePathname();
   const [user, setUser] = useState<ClientUser | null>(null);
   const [notifications, setNotifications] = useState<{ notifications: Notification[]; unreadCount: number }>({ notifications: [], unreadCount: 0 });
@@ -31,23 +31,31 @@ export default function ClientDashboardLayout({ children }: { children: React.Re
   }, []);
 
   async function loadUser() {
-    const me = await getMe();
-    if (!me) {
-      router.push("/client/login");
-      return;
+    try {
+      const me = await getMe();
+      if (!me) {
+        window.location.href = "/client/login";
+        return;
+      }
+      setUser(me);
+    } catch {
+      window.location.href = "/client/login";
     }
-    setUser(me);
     setLoading(false);
   }
 
   async function loadNotifications() {
-    const notifs = await getNotifications();
-    setNotifications(notifs);
+    try {
+      const notifs = await getNotifications();
+      setNotifications(notifs);
+    } catch (e) {
+      console.error("Failed to load notifications:", e);
+    }
   }
 
   async function handleLogout() {
     await logout();
-    router.push("/client/login");
+    window.location.href = "/client/login";
   }
 
   if (loading) {
@@ -59,9 +67,14 @@ export default function ClientDashboardLayout({ children }: { children: React.Re
   }
 
   const navItems = [
-    { href: "/client/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/client/dashboard/projects", label: "Proyek Saya", icon: FolderKanban },
+    { href: "/client", label: "Dashboard", icon: LayoutDashboard, exact: true },
+    { href: "/client/dashboard", label: "Proyek Saya", icon: FolderKanban, exact: false },
   ];
+
+  function isActive(href: string, exact: boolean) {
+    if (exact) return pathname === href;
+    return pathname.startsWith(href);
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -71,13 +84,10 @@ export default function ClientDashboardLayout({ children }: { children: React.Re
           <div className="flex items-center justify-between h-16">
             {/* Left: Logo & Menu Toggle */}
             <div className="flex items-center gap-4">
-              <button
-                onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="lg:hidden p-2 text-gray-500 hover:text-gray-700"
-              >
+              <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 text-gray-500 hover:text-gray-700 lg:hidden">
                 {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
-              <Link href="/client/dashboard" className="flex items-center gap-2">
+              <Link href="/client" className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                   <Building2 className="w-5 h-5 text-white" />
                 </div>
@@ -85,13 +95,9 @@ export default function ClientDashboardLayout({ children }: { children: React.Re
               </Link>
             </div>
 
-            {/* Right: User & Notifications */}
+            {/* Right: Notifications & User Menu */}
             <div className="flex items-center gap-2">
-              {/* Notifications */}
-              <Link
-                href="/client/dashboard/notifications"
-                className="relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg"
-              >
+              <Link href="/client/notifications" className="relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg">
                 <Bell className="w-5 h-5" />
                 {notifications.unreadCount > 0 && (
                   <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-xs font-medium rounded-full flex items-center justify-center">
@@ -102,11 +108,8 @@ export default function ClientDashboardLayout({ children }: { children: React.Re
 
               {/* User Menu */}
               <div className="relative">
-                <button
-                  onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-lg"
-                >
-                  <div className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-medium">
+                <button onClick={() => setUserMenuOpen(!userMenuOpen)} className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-lg">
+                  <div className="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-medium text-sm">
                     {user?.name?.charAt(0)?.toUpperCase() || "U"}
                   </div>
                   <span className="hidden sm:block text-sm font-medium text-gray-700">{user?.name}</span>
@@ -121,20 +124,11 @@ export default function ClientDashboardLayout({ children }: { children: React.Re
                         <p className="font-medium text-gray-900">{user?.name}</p>
                         <p className="text-sm text-gray-500">{user?.email}</p>
                       </div>
-                      <Link
-                        href="/client/dashboard/settings"
-                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                        onClick={() => setUserMenuOpen(false)}
-                      >
-                        <Settings className="w-4 h-4" />
-                        Pengaturan
+                      <Link href="/client/settings" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                        <Settings className="w-4 h-4" />Pengaturan
                       </Link>
-                      <button
-                        onClick={handleLogout}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        Keluar
+                      <button onClick={handleLogout} className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                        <LogOut className="w-4 h-4" />Keluar
                       </button>
                     </div>
                   </>
@@ -147,23 +141,16 @@ export default function ClientDashboardLayout({ children }: { children: React.Re
 
       <div className="flex">
         {/* Sidebar */}
-        <aside className={`fixed lg:static inset-y-0 left-0 z-30 w-64 bg-white border-r border-gray-200 pt-16 transform transition-transform lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+        <aside className={`fixed lg:static inset-y-0 left-0 z-30 w-64 bg-white border-r border-gray-200 pt-16 transform lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} transition-transform`}>
           <nav className="p-4 space-y-1">
             {navItems.map((item) => {
               const Icon = item.icon;
-              const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+              const active = isActive(item.href, item.exact);
               return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    isActive
-                      ? "bg-blue-50 text-blue-700"
-                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                  }`}
-                >
-                  <Icon className="w-5 h-5" />
-                  {item.label}
+                <Link key={item.href} href={item.href}
+                  onClick={() => setSidebarOpen(false)}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${active ? "bg-blue-50 text-blue-700" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"}`}>
+                  <Icon className="w-5 h-5" />{item.label}
                 </Link>
               );
             })}
@@ -172,16 +159,11 @@ export default function ClientDashboardLayout({ children }: { children: React.Re
 
         {/* Mobile overlay */}
         {sidebarOpen && (
-          <div
-            className="fixed inset-0 bg-black/50 z-20 lg:hidden"
-            onClick={() => setSidebarOpen(false)}
-          />
+          <div className="fixed inset-0 bg-black/50 z-20 lg:hidden" onClick={() => setSidebarOpen(false)} />
         )}
 
         {/* Main Content */}
-        <main className="flex-1 min-h-[calc(100vh-4rem)]">
-          {children}
-        </main>
+        <main className="flex-1 min-h-[calc(100vh-4rem)]">{children}</main>
       </div>
     </div>
   );
