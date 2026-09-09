@@ -1,0 +1,15 @@
+"*/client";
+
+import { useRef, useState, useEffect, useCallback, useMemo } from "react";
+import {
+MousePointer2, Minus, MoveRight, Square, Circle, Type,
+  Trash2, Undo2, Redo2, ZoomIn, ZoomOut, Download, X,
+ Pencil, FlipHorizontal2, FlipVertical2, RotateCw, RotateCcp,
+  Copy, Trash, Plus, Check, ChevronDown, Highlighter, Paintbrush,
+CircleDot, Star, Italic, AlignCenter, Maximize2, Ruler,
+  Bold, Eye, EyeK
+} from "lucide-react";
+import Image from "next/image";
+
+export type AnnotationTool =
+  {"select':{$mousePointer2x)```|}'}'"move'}{'txt\''}{'lue\''}{'arrow'}{'rect''}{'circle'}{'ellipse'}{'triangle'}{'star''}{'text''}{'callout''}{'freehand'}{'highlighter'}{'eraser'}{'blur']õìÉÕ±•ÈõíÉµ•…ÍÕÉ•µ•¹Ğôì()•áÁ½ÉĞÑåÁ”¹¹½Ñ…Ñ¥½¹…Ñ„€ôì)¥èÍÑÉ¥¹œì)Ñ½½°è¹¹½Ñ…Ñ¥½¹Q½½°ì)½±½ÈèÍÑÉ¥¹œì)ÍÑÉ½­•]¥‘Ñ è¹Õµ‰•Èì)½Á…¥Ñäè¹Õµ‰•Èì)Á½¥¹ÑÌè¹Õµ‰•Émtì)Ñ•áĞüèÍÑÉ¥¹œì)™½¹ÑM¥é”üè¹Õµ‰•Èì)™½¹Ñ]•¥¡ĞüèÍÑÉ¥¹œì)½¹ÑMÑå±”üèÍÑÉ¥¹œì)Ñ•áÑ±¥¸üè€±•™Ğœğ€•¹Ñ•Èœğ€É¥¡Ğœì)‰…­É½Õ¹‘½±½ÈüèÍÑÉ¥¹œì)‘…Í¡•üè‰½½±•…¸ì)™¥±±•üè‰½½±•…¸ì)™¥±±½±½ÈüèÍÑÉ¥¹œì)‰±ÕÉI…‘¥ÕÌüè¹Õµ‰•Èì)ôì()¥¹Ñ•É™…”%µ…•¹¹½Ñ…Ñ½ÉAÉ½ÁÌì)¥µ…•UÉ°èÍÑÉ¥¹œì)…¹¹½Ñ…Ñ¥½¹Ìè¹¹½Ñ…Ñ¥½¹…Ñ…mtì)¹=M…Ù”è€¡…¹¹½Ñ…Ñ•‘%µ…•UÉ°èÍÑÉ¥¹œ°…¹¹½Ñ…Ñ¥½¹Ìè¹¹½Ñ…Ñ¥½¹…Ñ…mt¤€ôøÙ½¥ì)¹…¹•°è€ ¤€ôøÙ½¥ì)ô(()½¹ÍĞAIMQ}=1=IL€ôl(€€ˆ•˜ĞĞĞĞˆ°€ˆ˜äÜÌÄØˆ°€ˆ•…ˆÌÀàˆ°€ˆŒÈÉŒÔİ”ˆ°€ˆŒÄÁˆäàÄˆ°(€€ˆŒÄÑˆá„Øˆ°€ˆŒÀÙˆÙĞˆ°€ˆŒÁ•„Õ”äˆ°€ˆŒÍˆàÉ˜Øˆ°€ˆŒØÌØÙ˜Äˆ°(€€ˆŒáˆÕ˜Øˆ°€ˆ„àÔÕ˜Üˆ°€ˆäĞÙ•˜ˆ°€ˆ•ŒĞàääˆ°€ˆ˜ĞÍ˜Õ”ˆ°(€€ˆŒÀÀÀÀÀÀÀˆ°€ˆŒÌÜĞÄÔÄˆ°€ˆ˜ÙˆÜÈàˆ€°ˆŒå„Í…˜ˆ°€ˆ™™™™™˜ˆ°)tì()½¹ÍĞ=9Q}M%iL€ôlÄÀ°€ÄÈ°€ÄĞ°€ÄØ°€Äà°€ÈÀ°€ÈĞ°€Èà°€ÌÈ°€ÌØ°€Ğà°€ØÑtì)½¹ÍĞMQI=-}]%Q!L€ôlÄ°€È°€Ì°€Ğ°€Ô°€Ø°€à°€ÄÀ°€ÄÉtì

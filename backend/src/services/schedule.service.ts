@@ -172,6 +172,156 @@ async function loadRab(rabId: string) {
   return rab;
 }
 
+/** Satu periode pada kurva per section. */
+export interface ScheduleSectionBucket {
+  sectionId: string;
+  sectionName: string;
+  totalWeight: number;
+  buckets: ScheduleBucket[];
+}
+
+/**
+ * Calculate S-curve buckets per section for multi-section visualization.
+ * IMPORTANT: Section weights are calculated against SECTION subtotal, not project subtotal.
+ * This ensures each section's S-curve correctly shows 0-100% of that section's work.
+ */
+function calculateSectionBuckets(
+  rab: Awaited<ReturnType<typeof loadRab>>,
+  calendar: WorkCalendar,
+  start: Date,
+  weeks: number,
+  totalCalendarDays: number,
+  subtotal: Prisma.Decimal,
+  hasValue: boolean
+): ScheduleSectionBucket[] {
+  // First, calculate section subtotals
+  const sectionSubtotals = new Map<string, Prisma.Decimal>();
+  for (const section of rab.sections) {
+    let sectionTotal = new Prisma.Decimal(0);
+    for (const item of section.items) {
+      const amount = toDecimal(item.amount);
+      sectionTotal = sectionTotal.plus(amount);
+    }
+    sectionSubtotals.set(section.id, sectionTotal);
+  }
+
+  // Build section items with CORRECT section-based weights
+  const sectionItems = new Map<string, {
+    sectionId: string;
+    sectionName: string;
+    items: {
+      weight: Prisma.Decimal; // Weight relative to SECTION, not project
+      amount: Prisma.Decimal;
+      startOffsetDays: number;
+      durationDays: number;
+      progress: { date: Date; percent: Prisma.Decimal }[];
+    }[];
+    sectionSubtotal: Prisma.Decimal;
+    totalWeight: Prisma.Decimal; // Sum of section-based weights
+  }>();
+
+  for (const section of rab.sections) {
+    const sectionSubtotal = sectionSubtotals.get(section.id) ?? new Prisma.Decimal(0);
+    const sectionHasValue = sectionSubtotal.greaterThan(0);
+
+    sectionItems.set(section.id, {
+      sectionId: section.id,
+      sectionName: section.name,
+      items: [],
+      sectionSubtotal,
+      totalWeight: new Prisma.Decimal(0),
+    });
+
+    for (const item of section.items) {
+      const amount = toDecimal(item.amount);
+      // Weight calculated against SECTION subtotal (this is the fix!)
+      const weight = sectionHasValue ? amount.div(sectionSubtotal).mul(100) : new Prisma.Decimal(0);
+
+      sectionItems.get(section.id)!.items.push({
+        weight,
+        amount,
+        startOffsetDays: item.startOffsetDays,
+        durationDays: item.durationDays,
+        progress: item.progress.map((p) => ({
+          date: startOfDay(p.date),
+          percent: toDecimal(p.percent),
+        })),
+      });
+    }
+  }
+
+  // Calculate buckets for each section
+  const result: ScheduleSectionBucket[] = [];
+
+  for (const [sectionId, sectionData] of sectionItems) {
+    if (sectionData.items.length === 0) continue;
+
+    // Skip if section has no value
+    if (sectionData.sectionSubtotal.isZero()) continue;
+
+    const buckets: ScheduleBucket[] = [];
+
+    for (let w = 0; w < weeks; w += 1) {
+      const bucketStart = addDays(start, w * 7);
+      const lastDayOffset = Math.min((w + 1) * 7 - 1, totalCalendarDays - 1);
+      const bucketEnd = addDays(start, lastDayOffset);
+      const workedByBucketEnd = calendar.elapsedWorkingDays(bucketEnd);
+
+      let planned = new Prisma.Decimal(0);
+      let actual = new Prisma.Decimal(0);
+
+      for (const c of sectionData.items) {
+        if (c.durationDays > 0) {
+          const elapsed = workedByBucketEnd - c.startOffsetDays;
+          const clamped = Math.max(0, Math.min(elapsed, c.durationDays));
+          if (clamped > 0) {
+            // Use section-based weight
+            planned = planned.plus(c.weight.mul(clamped).div(c.durationDays));
+          }
+        }
+
+        let latest: Prisma.Decimal | null = null;
+        for (const p of c.progress) {
+          if (p.date.getTime() <= bucketEnd.getTime()) latest = p.percent;
+          else break;
+        }
+        if (latest) actual = actual.plus(c.weight.mul(latest).div(100));
+      }
+
+      const plannedPct = planned.toDecimalPlaces(2, Prisma.Decimal.ROUND_HALF_UP);
+      const actualPct = actual.toDecimalPlaces(2, Prisma.Decimal.ROUND_HALF_UP);
+
+      buckets.push({
+        index: w + 1,
+        startDate: isoDate(bucketStart),
+        endDate: isoDate(bucketEnd),
+        plannedPct: plannedPct.toString(),
+        actualPct: actualPct.toString(),
+        plannedValue: money(sectionData.sectionSubtotal.mul(planned).div(100)).toString(),
+        actualValue: money(sectionData.sectionSubtotal.mul(actual).div(100)).toString(),
+        deviationPct: actualPct.minus(plannedPct).toString(),
+        cumulativePlanned: Number(plannedPct.toString()),
+        cumulativeActual: Number(actualPct.toString()),
+      });
+    }
+
+    // Calculate total section weight (sum of all item weights = 100% of section)
+    const totalWeight = sectionData.items.reduce(
+      (sum, item) => sum.plus(item.weight),
+      new Prisma.Decimal(0)
+    );
+
+    result.push({
+      sectionId: sectionData.sectionId,
+      sectionName: sectionData.sectionName,
+      totalWeight: Number(totalWeight.toDecimalPlaces(2, Prisma.Decimal.ROUND_HALF_UP).toString()),
+      buckets,
+    });
+  }
+
+  return result;
+}
+
 export async function getRabSchedule(rabId: string) {
   const rab = await loadRab(rabId);
 
@@ -342,6 +492,8 @@ export async function getRabSchedule(rabId: string) {
     holidays,
     items,
     buckets,
+    // Section-level S-curves for multi-section visualization
+    sectionBuckets: calculateSectionBuckets(rab, calendar, start, weeks, totalCalendarDays, subtotal, hasValue),
   };
 }
 

@@ -3,14 +3,16 @@ import { env } from "@/config/env";
 
 export type AccessTokenPayload = {
   sub: string;
-  role: "ADMIN" | "EDITOR" | "USER";
+  role: "ADMIN" | "EDITOR" | "USER" | "CLIENT";
   name: string;
+  type?: "client" | "admin";
 };
 
 export type RefreshTokenPayload = {
   sub: string;
   exp: number;
   iat: number;
+  type?: "client" | "admin";
 };
 
 /**
@@ -122,8 +124,8 @@ export function verifyAccessToken(token: string): AccessTokenPayload {
   }
 }
 
-export function signRefreshToken(userId: string): string {
-  return jwt.sign({ sub: userId }, env.jwt.refreshSecret, {
+export function signRefreshToken(userId: string, type?: "client" | "admin"): string {
+  return jwt.sign({ sub: userId, type }, env.jwt.refreshSecret, {
     expiresIn: `${env.jwt.refreshExpiresDays}d` as SignOptions["expiresIn"],
   });
 }

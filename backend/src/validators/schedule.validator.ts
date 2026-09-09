@@ -16,6 +16,18 @@ const dateOnly = z
 const photoSchema = z.object({
   url: z.string().min(1).max(500),
   caption: z.string().max(200).optional().nullable(),
+  location: z.string().max(200).optional().nullable(),
+  /** Data annotasi gambar dalam format JSON. */
+  annotations: z.array(z.object({
+    id: z.string(),
+    tool: z.string(),
+    color: z.string(),
+    strokeWidth: z.number(),
+    points: z.array(z.number()),
+    text: z.string().optional(),
+  })).optional().nullable(),
+  /** URL gambar asli sebelum di-annotate. */
+  originalUrl: z.string().max(500).optional().nullable(),
 });
 
 export const scheduleUpdateSchema = z.object({
@@ -95,6 +107,17 @@ export const dailyReportSchema = z.object({
         url: z.string().min(1).max(500),
         caption: z.string().max(200).optional().nullable(),
         location: z.string().max(120).optional().nullable(),
+        /** Data annotasi gambar. */
+        annotations: z.array(z.object({
+          id: z.string(),
+          tool: z.string(),
+          color: z.string(),
+          strokeWidth: z.number(),
+          points: z.array(z.number()),
+          text: z.string().optional(),
+        })).optional().nullable(),
+        /** URL gambar asli sebelum di-annotate. */
+        originalUrl: z.string().max(500).optional().nullable(),
       })
     )
     .max(30)

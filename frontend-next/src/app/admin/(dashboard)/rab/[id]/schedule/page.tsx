@@ -7,7 +7,7 @@ import { formatDate, formatRupiah } from "@/lib/format";
 import { Panel } from "@/components/admin/ui";
 import { ProjectHeader } from "@/components/admin/ProjectHeader";
 import { StatCard } from "@/components/admin/StatCard";
-import { SCurveChart } from "./SCurveChart";
+import { SCurveChartWrapper } from "./SCurveChartWrapper";
 import { ScheduleEditor } from "./ScheduleEditor";
 import { BaselinePanel } from "./BaselinePanel";
 import { ProgressReviewPanel } from "./ProgressReviewPanel";
@@ -44,6 +44,9 @@ export default async function RabSchedulePage({ params }: { params: Promise<{ id
   const deviation = lastReported ? Number(lastReported.deviationPct) : 0;
   const behind = deviation < 0;
   const pending = entries.filter((e) => e.status === "PENDING").length;
+
+  // Check if we have section data for multi-section chart
+  const hasSectionData = schedule.sectionBuckets && schedule.sectionBuckets.length > 0;
 
   return (
     <div className="space-y-6">
@@ -92,7 +95,12 @@ export default async function RabSchedulePage({ params }: { params: Promise<{ id
 
       <Panel title="Kurva S — rencana vs realisasi">
         {schedule.buckets.length > 0 ? (
-          <SCurveChart buckets={schedule.buckets} lastReportedIndex={lastReportedIndex} baselines={baselines} />
+          <SCurveChartWrapper
+            buckets={schedule.buckets}
+            sectionBuckets={schedule.sectionBuckets || []}
+            lastReportedIndex={lastReportedIndex}
+            baselines={baselines}
+          />
         ) : (
           <p className="py-12 text-center text-sm text-slate-400">
             Isi tanggal mulai dan durasi tiap pekerjaan di bawah, lalu simpan untuk memunculkan kurva.

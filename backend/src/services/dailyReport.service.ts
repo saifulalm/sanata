@@ -40,7 +40,21 @@ function serialize(report: Prisma.DailyReportGetPayload<{
     createdAt: report.createdAt.toISOString(),
     photos: [...report.photos]
       .sort((a, b) => a.order - b.order)
-      .map((p) => ({ id: p.id, url: p.url, caption: p.caption, location: p.location })),
+      .map((p) => ({
+        id: p.id,
+        url: p.url,
+        caption: p.caption,
+        location: p.location,
+        annotations: p.annotations as Array<{
+          id: string;
+          tool: string;
+          color: string;
+          strokeWidth: number;
+          points: number[];
+          text?: string;
+        }> | null,
+        originalUrl: p.originalUrl,
+      })),
   };
 }
 
@@ -105,6 +119,8 @@ function photoData(input: DailyReportInput) {
     caption: p.caption ?? null,
     location: p.location ?? null,
     order: index,
+    annotations: p.annotations ? (p.annotations as Prisma.InputJsonValue) : Prisma.DbNull,
+    originalUrl: p.originalUrl ?? null,
   }));
 }
 

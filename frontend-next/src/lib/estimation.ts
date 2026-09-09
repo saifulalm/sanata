@@ -203,6 +203,15 @@ export interface RabSchedule {
   holidays: ScheduleHoliday[];
   items: ScheduleItemLine[];
   buckets: ScheduleBucket[];
+  /** Section-level S-curves for multi-section visualization */
+  sectionBuckets?: ScheduleSectionBucket[];
+}
+
+export interface ScheduleSectionBucket {
+  sectionId: string;
+  sectionName: string;
+  totalWeight: number;
+  buckets: ScheduleBucket[];
 }
 
 export type ProgressStatus = "PENDING" | "APPROVED" | "REJECTED";
@@ -285,6 +294,17 @@ export interface DailyReportPhoto {
   url: string;
   caption: string | null;
   location: string | null;
+  /** Data annotasi gambar. */
+  annotations: Array<{
+    id: string;
+    tool: string;
+    color: string;
+    strokeWidth: number;
+    points: number[];
+    text?: string;
+  }> | null;
+  /** URL gambar asli sebelum di-annotate. */
+  originalUrl: string | null;
 }
 
 export interface DailyReport {

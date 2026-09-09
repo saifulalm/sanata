@@ -557,8 +557,132 @@ model Rab {
   // SANTRA relations
   jobAssignments JobAssignment[]
 
+  // Client Portal relations
+  clientAccess ClientProjectAccess[]
+
   @@index([status])
   @@index([createdById])
+}
+
+// ============================================================================
+// CLIENT PORTAL - Customer Monitoring System
+// ============================================================================
+
+/// Enum for client access status
+enum ClientAccessStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  REVOKED
+}
+
+/// Client account for project monitoring portal
+/// Clients can register and link their accounts to RAB projects
+model Client {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+
+  // Contact info
+  phone        String?
+  companyName  String?
+
+  // Profile
+  avatarUrl    String?
+  isActive    Boolean  @default(true)
+  emailVerified Boolean @default(false)
+
+  // Preferences
+  preferredLanguage String?  @default("id")
+  notifyProgress  Boolean @default(true)
+  notifyDocuments Boolean @default(true)
+  notifyMessages  Boolean @default(true)
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  lastLoginAt DateTime?
+
+  // Relations
+  refreshTokens ClientRefreshToken[]
+  projects     ClientProjectAccess[]
+  notifications ClientNotification[]
+
+  @@index([email])
+  @@index([isActive])
+}
+
+/// Client's refresh tokens for authentication
+model ClientRefreshToken {
+  id         String   @id @default(cuid())
+  tokenHash  String   @unique
+  clientId  String
+  client    Client  @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([clientId])
+}
+
+/// Link between clients and their accessible projects
+/// Controls which RAB projects a client can view
+model ClientProjectAccess {
+  id          String           @id @default(cuid())
+  clientId   String
+  client     Client           @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  rabId      String
+  rab        Rab             @relation(fields: [rabId], references: [id], onDelete: Cascade)
+
+  // Access control
+  status     ClientAccessStatus @default(PENDING)
+  accessLevel String           @default("VIEW")  // VIEW, COMMENT, APPROVE
+
+  // Which data can be accessed
+  canViewProgress     Boolean @default(true)
+  canViewDailyReports Boolean @default(true)
+  canViewPhotos      Boolean @default(true)
+  canViewQC         Boolean @default(true)
+  canViewDocuments   Boolean @default(true)
+  canViewFinancials  Boolean @default(false)  // Invoice amounts - opt-in
+
+  // Metadata
+  grantedById String?
+  grantedAt   DateTime @default(now())
+  expiresAt  DateTime?
+  notes      String?
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([clientId, rabId])
+  @@index([rabId])
+  @@index([status])
+}
+
+/// Client notifications for project updates
+model ClientNotification {
+  id        String   @id @default(cuid())
+  clientId  String
+  client    Client  @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  // Notification content
+  type      String   // PROGRESS_UPDATE, NEW_REPORT, QC_ALERT, DOCUMENT_ADDED, MESSAGE
+  title     String
+  message   String   @db.Text
+  link      String?  // URL to relevant page
+
+  // Status
+  isRead    Boolean @default(false)
+  readAt    DateTime?
+
+  // Related entity (optional)
+  rabId     String?
+
+  createdAt DateTime @default(now())
+
+  @@index([clientId, isRead])
+  @@index([createdAt])
 }
 
 /// Hari libur khusus proyek (Lebaran, cuti bersama, force majeure).
@@ -828,6 +952,10 @@ model DailyReportPhoto {
   location String?
   takenAt  DateTime?
   order    Int         @default(0)
+  /// Data annotasi gambar (garis, panah, kotak, teks) dalam format JSON.
+  annotations Json?
+  /// URL gambar asli sebelum di-annotate (jika annotations terisi).
+  originalUrl String?
 
   @@index([reportId])
 }

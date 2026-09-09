@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Plus, Trash2, Search, FileText, Calculator } from "lucide-react";
+import { Plus, Trash2, Search, FileText, Calculator, GitCompare, Upload } from "lucide-react";
 import { deleteRabAction } from "./actions";
 import { RAB_STATUS_LABEL, type RabListRow, type RabStatus } from "@/lib/estimation";
 import { formatDate, formatRupiah } from "@/lib/format";
@@ -75,12 +75,26 @@ export function RabList({
         title="RAB"
         description="Rencana Anggaran Biaya proyek dan penawaran."
         actions={
-          <Link
-            href="/admin/rab/new"
-            className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-xs font-semibold text-cyan-300 transition-all hover:border-cyan-400/60 hover:bg-cyan-400/20"
-          >
-            <Plus size={14} /> RAB Baru
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/admin/rab/multi-schedule"
+              className="inline-flex items-center gap-2 rounded-full border border-teal-400/30 bg-teal-400/10 px-4 py-2 text-xs font-semibold text-teal-300 transition-all hover:border-teal-400/60 hover:bg-teal-400/20"
+            >
+              <GitCompare size={14} /> Bandingkan Kurva S
+            </Link>
+            <Link
+              href="/admin/rab/import"
+              className="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/10 px-4 py-2 text-xs font-semibold text-amber-300 transition-all hover:border-amber-400/60 hover:bg-amber-400/20"
+            >
+              <Upload size={14} /> Import Excel
+            </Link>
+            <Link
+              href="/admin/rab/new"
+              className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-xs font-semibold text-cyan-300 transition-all hover:border-cyan-400/60 hover:bg-cyan-400/20"
+            >
+              <Plus size={14} /> RAB Baru
+            </Link>
+          </div>
         }
       />
 

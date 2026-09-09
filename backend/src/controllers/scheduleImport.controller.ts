@@ -8,6 +8,128 @@ import { prisma } from "@/lib/prisma";
 import { ApiError } from "@/utils/ApiError";
 import { parseDateOnly } from "@/utils/date";
 import { asyncHandler } from "@/utils/asyncHandler";
+import * as excelParser from "@/services/excelParser.service";
+
+/**
+ * POST /api/rab/import-timeline-excel
+ * Import timeline dari file Excel TIME LINE (RE-SCHEDULE)
+ */
+export const importTimelineExcel = asyncHandler(async (req: Request, res: Response) => {
+  // Check if file was uploaded
+  if (!req.file) {
+    throw ApiError.badRequest("No Excel file uploaded. Please upload a file with field name 'file'");
+  }
+
+  const file = req.file;
+
+  // Validate file type
+  const allowedMimeTypes = [
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "application/octet-stream"
+  ];
+
+  const allowedExtensions = [".xlsx", ".xls"];
+  const fileExt = file.originalname.toLowerCase().slice(file.originalname.lastIndexOf("."));
+
+  if (!allowedMimeTypes.includes(file.mimetype) && !allowedExtensions.includes(fileExt)) {
+    throw ApiError.badRequest("Invalid file type. Please upload an Excel file (.xlsx or .xls)");
+  }
+
+  // Parse the Excel file
+  let parsed: excelParser.ParsedTimeline;
+  try {
+    parsed = excelParser.parseTimelineExcel(file.buffer);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to parse Excel file";
+    throw ApiError.badRequest(message);
+  }
+
+  // Validate parsed data
+  const validation = excelParser.validateParsedTimeline(parsed);
+  if (!validation.valid) {
+    throw ApiError.badRequest(`Invalid timeline data: ${validation.errors.join("; ")}`);
+  }
+
+  // Convert to import format
+  const importData = excelParser.timelineToImportFormat(parsed);
+
+  // Check for duplicate RAB number
+  const existing = await prisma.rab.findUnique({
+    where: { number: importData.rab.number }
+  });
+
+  if (existing) {
+    throw ApiError.badRequest(`RAB with number "${importData.rab.number}" already exists`);
+  }
+
+  // Create RAB with sections and items in transaction
+  const result = await prisma.$transaction(async (tx) => {
+    // Create RAB
+    const newRab = await tx.rab.create({
+      data: {
+        number: importData.rab.number,
+        title: importData.rab.title,
+        clientName: importData.rab.clientName || null,
+        location: importData.rab.location || null,
+        projectDate: importData.rab.projectDate ? parseDateOnly(importData.rab.projectDate) : null,
+        scheduleStart: parseDateOnly(importData.rab.scheduleStart),
+        restDays: importData.rab.restDays || [0],
+        notes: importData.rab.notes || null,
+        status: "APPROVED",
+        createdById: req.user!.sub
+      }
+    });
+
+    // Create sections and items
+    let sectionsCreated = 0;
+    let itemsCreated = 0;
+
+    for (const section of importData.sections) {
+      const newSection = await tx.rabSection.create({
+        data: {
+          rabId: newRab.id,
+          name: section.name,
+          order: section.order
+        }
+      });
+      sectionsCreated++;
+
+      for (const item of section.items) {
+        await tx.rabItem.create({
+          data: {
+            sectionId: newSection.id,
+            description: item.description,
+            unit: item.unit || "LS",
+            volume: item.volume || 1,
+            unitPrice: item.unitPrice || 0,
+            amount: item.amount || 0,
+            order: item.order,
+            startOffsetDays: item.startOffsetDays || 0,
+            durationDays: item.durationDays || 0
+          }
+        });
+        itemsCreated++;
+      }
+    }
+
+    return {
+      rabId: newRab.id,
+      number: newRab.number,
+      title: newRab.title,
+      scheduleStart: importData.rab.scheduleStart,
+      sectionsCreated,
+      itemsCreated,
+      totalBobot: parsed.totalBobot
+    };
+  });
+
+  res.status(201).json({
+    success: true,
+    message: "Timeline imported successfully from Excel file",
+    data: result
+  });
+});
 
 /**
  * POST /api/rab/import-timeline

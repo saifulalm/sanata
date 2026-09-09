@@ -81,14 +81,14 @@ export function requireAuth(req: Request, _res: Response, next: NextFunction) {
   }
 }
 
-export function requireRole(...roles: Array<"ADMIN" | "EDITOR" | "USER">) {
+export function requireRole(...roles: Array<"ADMIN" | "EDITOR" | "USER" | "CLIENT">) {
   return (req: Request, _res: Response, next: NextFunction) => {
     if (!req.user) {
       console.log("[Auth Middleware] requireRole: No user found in request");
       return next(ApiError.unauthorized("Authentication required"));
     }
 
-    if (!roles.includes(req.user.role)) {
+    if (!roles.includes(req.user.role as any)) {
       console.log("[Auth Middleware] requireRole: User role", req.user.role, "not in allowed roles:", roles);
       return next(ApiError.forbidden("Insufficient permissions"));
     }

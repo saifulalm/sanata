@@ -15,6 +15,8 @@ import type {
   RabSchedule,
   RabTakeoff,
   ScheduleBaseline,
+  ScheduleBucket,
+  ScheduleItemLine,
 } from "@/lib/estimation";
 import type { SiteContentItem } from "@/lib/siteContent";
 import type {
@@ -437,6 +439,60 @@ export async function getDailyReportSummary() {
 
 export async function getBillings(id: string) {
   const res = await adminFetch<{ data: ProgressBilling[] }>(`/rab/${id}/billings`);
+  return res.data;
+}
+
+// --- Multi-RAB S-Curve Comparison --------------------------------------------
+
+export interface MultiScheduleProject {
+  id: string;
+  number: string;
+  title: string;
+  subtotal: string;
+  scheduleStart: string | null;
+  scheduleEnd: string | null;
+  totalWorkingDays: number;
+  totalCalendarDays: number;
+  scheduledItems: number;
+  totalItems: number;
+  currentProgress: number;
+  status: "ahead" | "on-track" | "behind";
+  deviationDays: number;
+}
+
+export interface MultiScheduleProjectData {
+  meta: MultiScheduleProject;
+  calendarBuckets: ScheduleBucket[];
+  normalizedBuckets: Array<{
+    progressPct: number;
+    plannedPct: number;
+    actualPct: number;
+    deviationPct: number;
+  }>;
+}
+
+export interface MultiScheduleResponse {
+  projects: MultiScheduleProjectData[];
+  comparisonXAxis: number[];
+  summary: {
+    totalProjects: number;
+    onTrack: number;
+    ahead: number;
+    behind: number;
+    averageProgress: number;
+  };
+}
+
+export async function getMultiSchedule(rabIds: string[]) {
+  if (rabIds.length === 0) {
+    return {
+      projects: [],
+      comparisonXAxis: [],
+      summary: { totalProjects: 0, onTrack: 0, ahead: 0, behind: 0, averageProgress: 0 },
+    };
+  }
+  const idsParam = rabIds.join(",");
+  const res = await adminFetch<{ data: MultiScheduleResponse }>(`/rab/multi-schedule?ids=${idsParam}`);
   return res.data;
 }
 

@@ -21,8 +21,8 @@ export function createApp() {
   app.use(cors({ origin: env.clientUrl, credentials: true }));
   app.use(compression());
   app.use(cookieParser());
-  app.use(express.json({ limit: "2mb" }));
-  app.use(express.urlencoded({ extended: true }));
+  app.use(express.json({ limit: "10mb" }));
+  app.use(express.urlencoded({ extended: true, limit: "10mb" }));
   app.use(morgan(env.isProd ? "combined" : "dev"));
 
   app.use("/api", globalApiLimiter);

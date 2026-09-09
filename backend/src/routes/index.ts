@@ -22,6 +22,7 @@ import workforceRoleRoutes from "@/routes/workforceRole.routes";
 import scraperRoutes from "@/routes/scraper.routes";
 import santraRoutes from "@/routes/santra.routes";
 import geoRoutes from "@/routes/geo.routes";
+import clientRoutes from "@/routes/client.routes";
 
 const router = Router();
 
@@ -55,5 +56,8 @@ router.use("/kpis", santraRoutes);
 router.use("/tools", santraRoutes);
 router.use("/loans", santraRoutes);
 router.use("/geo", geoRoutes);
+
+// Client Portal Routes
+router.use("/client", clientRoutes);
 
 export default router;

@@ -2,15 +2,28 @@ import { Router } from "express";
 import * as rabController from "@/controllers/rab.controller";
 import * as projectDoc from "@/controllers/projectDoc.controller";
 import * as scheduleImport from "@/controllers/scheduleImport.controller";
+import * as rabImport from "@/controllers/rabImport.controller";
+import * as multiScheduleController from "@/controllers/multiSchedule.controller";
 import { requireAuth, requireRole } from "@/middleware/auth";
 import { writeLimiter } from "@/middleware/rateLimiters";
+import { uploadExcel } from "@/middleware/upload";
 
 const router = Router();
 
 router.use(requireAuth, requireRole("ADMIN", "EDITOR"));
 
+// Multi-schedule comparison endpoints (before :id routes to avoid conflict)
+router.get("/multi-schedule", multiScheduleController.getMultiSchedule);
+router.get("/multi-schedule/comparison", multiScheduleController.getComparison);
+
+// Excel Import endpoints (preview + confirm)
+router.post("/import-preview", uploadExcel.single("file"), rabImport.previewImport);
+router.post("/import-confirm", writeLimiter, rabImport.confirmImport);
+router.get("/import-template", rabImport.downloadTemplate);
+
 // Timeline import endpoints
 router.post("/import-timeline", writeLimiter, scheduleImport.importTimeline);
+router.post("/import-timeline-excel", writeLimiter, uploadExcel.single("file"), scheduleImport.importTimelineExcel);
 router.post("/:id/import-timeline", writeLimiter, scheduleImport.replaceTimeline);
 router.post("/:id/update-schedule-dates", writeLimiter, scheduleImport.updateScheduleDates);
 router.get("/:id/schedule-preview", scheduleImport.schedulePreview);
