@@ -9,16 +9,22 @@ Tagline: *"Mitra Konstruksi Terpercaya."*
 ```
 sanata/
 ├── backend/           Express API — Prisma/PostgreSQL, JWT auth, RBAC, CRUD, uploads (src/, prisma/)
-├── frontend-next/       Next.js 16 (App Router) — public site AND admin panel
+├── frontend-next/       Next.js 16 (App Router) — public site AND admin panel AND client portal
 └── package.json         npm workspaces root
 ```
 
 `frontend-next/src/app/(public)/*` is the public marketing site (Header/Footer chrome).
+
 `frontend-next/src/app/admin/*` is the admin panel: `admin/login` is unauthenticated,
 everything under `admin/(dashboard)/*` is protected by `src/proxy.ts` (session-cookie gate
 with automatic token refresh) and a matching `requireAdminRole()`/`getAdminSession()` check
 inside every Server Component and Server Action — defense in depth, since proxy alone doesn't
-guarantee coverage for Server Function calls (see Next.js's own guidance on this).
+guarantee coverage for Server Function calls.
+
+`frontend-next/src/app/client/*` is the **Client Portal** — a separate authenticated area
+for construction project clients to monitor their projects. Routes under `/client/login` and
+`/client/register` are public; all other `/client/*` routes are protected client-side by
+`layout.tsx` which checks for a valid token in localStorage before rendering.
 
 ## Stack
 
@@ -103,6 +109,110 @@ guarantee coverage for Server Function calls (see Next.js's own guidance on this
   2. run `npm run prisma:migrate`
   3. run `npm run prisma:seed`
 - If you need a fully clean demo database, recreate the database first, run migrations, then run the seeder once.
+
+### Client Portal Access Guide
+
+The Client Portal allows construction project clients to monitor their projects online. Access is managed through a separate `Client` model in the database.
+
+**Client Portal URL:** `http://localhost:5001/client/login`
+
+#### How Client Access Works
+
+1. **Registration** — Clients register at `/client/register` with email, password, name, phone, and company name
+2. **Login** — Clients login at `/client/login` with their credentials
+3. **Access Grant** — Admin must grant project access to clients from the RAB details page (`/admin/rab/{id}`)
+4. **Project Access** — Once granted, clients can view their assigned projects in the Client Portal
+
+#### Seeding Demo Clients
+
+To create demo client accounts for testing:
+
+```bash
+cd backend
+npx tsx prisma/seed-client.ts
+```
+
+Or add clients manually via Admin panel or database:
+
+```sql
+-- Create a client user
+INSERT INTO "Client" (id, email, password, name, phone, "companyName", "notifyProgress", "notifyDocuments", "notifyMessages", "createdAt")
+VALUES (
+  gen_random_uuid(),
+  'demo@sanata.id',
+  '$2b$10$...', -- hashed password (use bcrypt)
+  'Demo Client',
+  '081234567890',
+  'PT Demo Indonesia',
+  true,
+  true,
+  true,
+  NOW()
+);
+
+-- Grant project access (link client to RAB)
+INSERT INTO "ClientProjectAccess" (id, "clientId", "rabId", "accessLevel", "grantedAt")
+VALUES (
+  gen_random_uuid(),
+  (SELECT id FROM "Client" WHERE email = 'demo@sanata.id'),
+  (SELECT id FROM "Rab" LIMIT 1), -- link to first RAB
+  'FULL',
+  NOW()
+);
+```
+
+#### Client Portal Features
+
+- **Dashboard** — Overview of all accessible projects with progress stats
+- **Projects** — List of all assigned projects with status and progress
+- **Project Details** — Detailed view of a specific project including:
+  - Project information (title, location, dates, value)
+  - Work progress with S-curve visualization
+  - Daily reports with photos
+  - QC records with pass/fail status
+  - Document list
+- **Notifications** — Real-time notifications about project updates
+- **Settings** — Profile and notification preferences
+
+#### Granting Project Access (Admin)
+
+1. Go to Admin → RAB → Select a project
+2. Scroll to "Akses Klien" section
+3. Enter client email and select access level:
+   - `VIEW_ONLY` — Can only view project details
+   - `FULL` — Can view all including financials
+4. Click "Berikan Akses"
+
+#### Client Portal Auth Flow
+
+```
+Browser                           Frontend                        Backend
+   |                                  |                               |
+   |-- GET /client/login -----------> |                               |
+   |<--------------------------------- |                               |
+   |   (form rendered)               |                               |
+   |                                  |                               |
+   |-- POST /api/client/login ------> | ---- POST /api/client/login -->|
+   |   {email, password}             |         {email, password}    |
+   |                                  |                               |
+   |<--------------------------------- | <-- Set client_refresh cookie |
+   |   {accessToken, client}          | ---- Return {accessToken} -->|
+   |                                  |                               |
+   | (store token in localStorage)    |                               |
+   |-- GET /client/dashboard -------->|                               |
+   |   (include token in header)      |                               |
+   |<--------------------------------- |                               |
+   |   (render dashboard)             |                               |
+```
+
+#### Troubleshooting
+
+| Issue | Solution |
+|-------|---------|
+| Login loop | Clear localStorage: `localStorage.clear()` then refresh |
+| "Memuat..." forever | Check browser console for API errors |
+| No projects shown | Ensure admin has granted access in RAB details |
+| Token expired | Re-login to get new token |
 
 ---
 

@@ -288,6 +288,7 @@ model Inquiry {
   createdAt         DateTime         @default(now())
 
   broadcastContact BroadcastContact?
+  marketingContact MarketingContact?
 
   @@index([status])
 }
@@ -2127,6 +2128,308 @@ model ToolLoan {
   @@index([status])
   @@index([issuedAt])
 }
+
+// ============================================================================
+// MARKETING SYSTEM
+// Campaign management, contact database, templates, offers/promotions
+// ============================================================================
+
+// --- ENUMS ---
+
+/// Marketing campaign types
+enum MarketingCampaignType {
+  WHATSAPP
+  INSTAGRAM
+  EMAIL
+  OFFER
+}
+
+/// Marketing campaign status
+enum MarketingCampaignStatus {
+  DRAFT
+  SCHEDULED
+  SENDING
+  SENT
+  PAUSED
+  CANCELLED
+}
+
+/// Marketing contact status
+enum MarketingContactStatus {
+  ACTIVE
+  INACTIVE
+  BOUNCE
+  UNSUBSCRIBED
+}
+
+/// Marketing campaign recipient status
+enum CampaignRecipientStatus {
+  PENDING
+  SENT
+  DELIVERED
+  FAILED
+  CLICKED
+  CONVERTED
+  UNSUBSCRIBED
+}
+
+/// Offer/Promotion status
+enum OfferStatus {
+  DRAFT
+  ACTIVE
+  EXPIRED
+  PAUSED
+}
+
+/// Discount type for offers
+enum DiscountType {
+  PERCENTAGE
+  FIXED_AMOUNT
+  FREE_SERVICE
+  BUNDLE
+}
+
+// --- MARKETING CONTACT ---
+
+/// Contact database for marketing campaigns
+/// Can be synced from inquiries or added manually
+model MarketingContact {
+  id               String               @id @default(cuid())
+  name             String
+  email            String?
+  phone            String?
+  instagramHandle  String?
+  telegramChatId   String?
+
+  /// How this contact was acquired
+  source           String?
+  /// Tags for segmentation and filtering
+  tags             Json?
+  /// Lead scoring for prioritization (0-100)
+  leadScore        Int                  @default(0)
+  status           MarketingContactStatus @default(ACTIVE)
+
+  /// Preferences
+  preferredChannel MarketingCampaignType?
+  consentMarketing Boolean              @default(false)
+  consentDate     DateTime?
+
+  /// Tracking
+  lastContactedAt  DateTime?
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+
+  /// Link to original inquiry if imported
+  inquiryId        String?             @unique
+  inquiry          Inquiry?             @relation(fields: [inquiryId], references: [id], onDelete: SetNull)
+
+  // Relations
+  campaignRecipients CampaignRecipient[]
+
+  @@index([email])
+  @@index([phone])
+  @@index([status])
+  @@index([source])
+  @@index([leadScore])
+}
+
+// --- MARKETING TEMPLATE ---
+
+/// Reusable message templates for campaigns
+model MarketingTemplate {
+  id         String   @id @default(cuid())
+  name       String
+  type       MarketingCampaignType
+  subject    String?  /// For email templates
+  content    String   @db.Text
+
+  /// Variable placeholders for personalization
+  /// Format: ["{{name}}", "{{company}}", "{{offer_link}}"]
+  variables  Json?
+
+  /// Template categorization
+  category   String?
+  description String?
+
+  isActive   Boolean  @default(true)
+  usageCount Int      @default(0)
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  /// Reverse relation for campaigns using this template
+  campaigns  MarketingCampaign[]
+
+  @@index([type])
+  @@index([category])
+  @@index([isActive])
+}
+
+// --- MARKETING CAMPAIGN ---
+
+/// Marketing campaign with multi-channel support
+model MarketingCampaign {
+  id             String                    @id @default(cuid())
+  name           String
+  type           MarketingCampaignType
+
+  status         MarketingCampaignStatus  @default(DRAFT)
+
+  /// Target audience definition
+  targetAudience Json?
+  /// JSON array of contact IDs, broadcast list IDs, or filter criteria
+  /// Example: { "contactIds": ["c1", "c2"], "tags": ["leads", "hot"] }
+
+  /// Campaign content
+  content        String?                   @db.Text
+  subject        String?                   /// For email campaigns
+  media          Json?                     /// [{ type: "image", url: "..." }]
+  templateId     String?
+  template       MarketingTemplate?         @relation(fields: [templateId], references: [id])
+
+  /// Scheduling
+  scheduledAt    DateTime?
+  sentAt         DateTime?
+  pausedAt       DateTime?
+
+  /// Campaign statistics
+  statsSent      Int                       @default(0)
+  statsDelivered Int                      @default(0)
+  statsFailed    Int                      @default(0)
+  statsClicked   Int                      @default(0)
+  statsConverted Int                      @default(0)
+  statsUnsubscribed Int                   @default(0)
+
+  /// Budget tracking
+  budget         Decimal?                 @db.Decimal(12, 2)
+  costSpent      Decimal?                 @db.Decimal(12, 2)
+
+  /// Notes
+  notes          String?                   @db.Text
+
+  createdAt      DateTime                 @default(now())
+  updatedAt      DateTime                 @updatedAt
+
+  // Relations
+  recipients     CampaignRecipient[]
+  broadcastLists BroadcastList[]
+
+  @@index([type])
+  @@index([status])
+  @@index([scheduledAt])
+}
+
+// --- CAMPAIGN RECIPIENT ---
+
+/// Individual recipient tracking per campaign
+model CampaignRecipient {
+  id            String                   @id @default(cuid())
+  campaignId    String
+  campaign      MarketingCampaign        @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  contactId     String
+  contact       MarketingContact          @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  /// Status tracking
+  status        CampaignRecipientStatus  @default(PENDING)
+  sentAt        DateTime?
+  deliveredAt   DateTime?
+  clickedAt     DateTime?
+  convertedAt   DateTime?
+
+  /// Error tracking
+  error         String?                   @db.Text
+  retryCount    Int                       @default(0)
+
+  /// Click tracking
+  clickUrl      String?
+
+  /// Personalization data (cached at send time)
+  personalData  Json?
+
+  createdAt     DateTime                 @default(now())
+  updatedAt     DateTime                 @updatedAt
+
+  @@unique([campaignId, contactId])
+  @@index([campaignId, status])
+  @@index([contactId])
+  @@index([status])
+}
+
+// --- BROADCAST LIST ---
+
+/// Named groups of contacts for campaigns
+model BroadcastList {
+  id          String            @id @default(cuid())
+  name        String
+  description String?
+
+  /// Array of MarketingContact IDs
+  contactIds  Json
+
+  /// Statistics
+  contactCount Int               @default(0)
+
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  // Relations
+  campaigns   MarketingCampaign[]
+
+  @@index([name])
+}
+
+// --- OFFER / PROMOTION ---
+
+/// Promotional offers and deals
+model Offer {
+  id           String        @id @default(cuid())
+  title        String
+  description  String        @db.Text
+
+  /// Media
+  imageUrl     String?
+  media        Json?         /// Additional images or videos
+
+  /// Discount configuration
+  discountType DiscountType
+  discountValue Decimal      @db.Decimal(12, 2)
+  minimumOrder  Decimal?     @db.Decimal(12, 2)
+
+  /// Validity
+  validFrom    DateTime
+  validUntil   DateTime
+
+  /// Terms and conditions
+  terms        String?       @db.Text
+
+  /// Target audience for this offer
+  targetAudience Json?
+
+  /// Offer code for redemption
+  offerCode    String?       @unique
+
+  /// Usage tracking
+  usageLimit   Int?
+  usageCount   Int           @default(0)
+
+  status       OfferStatus   @default(DRAFT)
+
+  ///关联项目
+  projectId    String?
+  projectName  String?
+
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([status])
+  @@index([validUntil])
+  @@index([offerCode])
+}
+
+// ============================================================================
+// SANTRA COUNTER
+// ============================================================================
 
 /// Counter untuk kode SANTRA (worker, assignment, log, QC, KPI, tool)
 model SantraCounter {

@@ -27,6 +27,8 @@ function publicClient(client: {
   notifyProgress: boolean;
   notifyDocuments: boolean;
   notifyMessages: boolean;
+  lastLoginAt: Date | null;
+  createdAt: Date;
 }) {
   return {
     id: client.id,
@@ -39,6 +41,8 @@ function publicClient(client: {
     notifyProgress: client.notifyProgress,
     notifyDocuments: client.notifyDocuments,
     notifyMessages: client.notifyMessages,
+    lastLoginAt: client.lastLoginAt?.toISOString() || null,
+    createdAt: client.createdAt.toISOString(),
   };
 }
 
@@ -230,15 +234,36 @@ export async function getClientProjects(clientId: string) {
   return accesses.map((access) => {
     const rab = access.rab;
     const totalItems = rab.sections.reduce((sum, s) => sum + s.items.length, 0);
-    const baseline = rab.baselines[0];
 
-    // Calculate progress percentage (simplified - would need actual progress data)
-    const completedItems = Math.floor(totalItems * 0.4); // Placeholder
+    // Calculate max offset days for schedule end
+    let scheduleEnd: string | null = null;
+    if (rab.scheduleStart && totalItems > 0) {
+      const maxOffsetDays = Math.max(
+        ...rab.sections.flatMap(s => s.items.map(i => (i.startOffsetDays || 0) + (i.durationDays || 0)))
+      );
+      if (maxOffsetDays > 0) {
+        const endDate = new Date(rab.scheduleStart);
+        endDate.setDate(endDate.getDate() + maxOffsetDays);
+        scheduleEnd = endDate.toISOString();
+      }
+    }
+
+    // Calculate progress from actual RabProgress records
+    const progressRecords = rab.sections.flatMap(s =>
+      s.items.map(item => item.progress ? [item.progress] : [])
+    ).flat();
+
+    // If no progress data, estimate from workAssignments
+    const totalProgress = progressRecords.length > 0
+      ? progressRecords.reduce((a, b) => a + b, 0) / totalItems
+      : 0;
+    const progress = totalItems > 0 ? Math.min(100, Math.round(totalProgress)) : 0;
 
     return {
       accessId: access.id,
       accessLevel: access.accessLevel,
       grantedAt: access.grantedAt,
+      expiresAt: access.expiresAt,
       project: {
         id: rab.id,
         number: rab.number,
@@ -246,11 +271,12 @@ export async function getClientProjects(clientId: string) {
         clientName: rab.clientName,
         location: rab.location,
         status: rab.status,
-        scheduleStart: rab.scheduleStart,
+        scheduleStart: rab.scheduleStart?.toISOString() || null,
+        scheduleEnd,
         total: Number(rab.total),
-        progress: completedItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0,
+        progress,
         totalItems,
-        completedItems,
+        completedItems: Math.round((progress / 100) * totalItems),
         billingCount: rab.billings.length,
       },
     };
@@ -294,6 +320,22 @@ export async function getProjectDetails(clientId: string, rabId: string) {
     throw ApiError.notFound("Proyek tidak ditemukan");
   }
 
+  // Calculate schedule end from max offset days
+  let scheduleEnd: string | null = null;
+  if (rab.scheduleStart) {
+    const allItems = rab.sections.flatMap(s => s.items);
+    if (allItems.length > 0) {
+      const maxOffsetDays = Math.max(
+        ...allItems.map(i => (i.startOffsetDays || 0) + (i.durationDays || 0))
+      );
+      if (maxOffsetDays > 0) {
+        const endDate = new Date(rab.scheduleStart);
+        endDate.setDate(endDate.getDate() + maxOffsetDays);
+        scheduleEnd = endDate.toISOString();
+      }
+    }
+  }
+
   return {
     access: {
       canViewProgress: access.canViewProgress,
@@ -310,7 +352,8 @@ export async function getProjectDetails(clientId: string, rabId: string) {
       clientName: rab.clientName,
       location: rab.location,
       status: rab.status,
-      scheduleStart: rab.scheduleStart,
+      scheduleStart: rab.scheduleStart?.toISOString() || null,
+      scheduleEnd,
       subtotal: Number(rab.subtotal),
       discountAmount: Number(rab.discountAmount),
       taxAmount: Number(rab.taxAmount),

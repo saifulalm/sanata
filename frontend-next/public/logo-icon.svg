@@ -1,32 +1,40 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40">
   <defs>
-    <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#38bdf8"/>
-      <stop offset="100%" style="stop-color:#06b6d4"/>
+    <linearGradient id="iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="50%" stop-color="#1d4ed8"/>
+      <stop offset="100%" stop-color="#0891b2"/>
     </linearGradient>
-    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+    <filter id="iconGlow" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="1.5" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
+    <filter id="iconShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#2563eb" flood-opacity="0.3"/>
+    </filter>
   </defs>
 
   <!-- Background -->
-  <rect x="2" y="2" width="36" height="36" rx="8" fill="#0c1829" stroke="#38bdf8" stroke-width="1" opacity="0.5"/>
+  <rect x="2" y="2" width="36" height="36" rx="10" fill="#0f172a" opacity="0.05"/>
 
-  <!-- Icon: Abstract geometric structure -->
-  <g filter="url(#glow)">
-    <path d="M8 6 L18 6 L18 22 L28 22 L28 34 L8 34 Z" fill="url(#iconGradient)" opacity="0.25"/>
-    <path d="M6 6 L16 6 L16 20 L26 20 L26 34 L6 34 Z" fill="none" stroke="url(#iconGradient)" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Icon with shadow -->
+  <g filter="url(#iconShadow)">
+    <g filter="url(#iconGlow)">
+      <!-- Fill layer -->
+      <path d="M10 8 L22 8 L22 22 L32 22 L32 34 L10 34 Z" fill="url(#iconGrad)" opacity="0.2"/>
+      <!-- Main shape -->
+      <path d="M8 8 L20 8 L20 20 L30 20 L30 34 L8 34 Z" fill="none" stroke="url(#iconGrad)" stroke-width="2.5" stroke-linejoin="round"/>
 
-    <!-- Construction lines -->
-    <line x1="6" y1="14" x2="16" y2="14" stroke="url(#iconGradient)" stroke-width="1.2" opacity="0.7"/>
-    <line x1="16" y1="26" x2="26" y2="26" stroke="url(#iconGradient)" stroke-width="1.2" opacity="0.7"/>
-    <line x1="6" y1="30" x2="26" y2="30" stroke="url(#iconGradient)" stroke-width="1.2" opacity="0.7"/>
+      <!-- Construction lines -->
+      <line x1="8" y1="14" x2="20" y2="14" stroke="url(#iconGrad)" stroke-width="1.5" opacity="0.8"/>
+      <line x1="20" y1="26" x2="30" y2="26" stroke="url(#iconGrad)" stroke-width="1.5" opacity="0.8"/>
+      <line x1="8" y1="30" x2="30" y2="30" stroke="url(#iconGrad)" stroke-width="1.5" opacity="0.8"/>
+    </g>
 
     <!-- Accent dot -->
-    <circle cx="20" cy="10" r="2" fill="#f59e0b"/>
+    <circle cx="24" cy="11" r="2.5" fill="#f59e0b"/>
   </g>
 </svg>

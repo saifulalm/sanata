@@ -8,14 +8,16 @@ const nextConfig: NextConfig = {
     root: path.resolve(import.meta.dirname, ".."),
   },
   /**
-   * Berkas unggahan disajikan satu origin dengan aplikasi lewat rewrite, bukan
-   * langsung dari host API. Sejak Next 16, pengoptimal gambar menolak URL yang
-   * menunjuk ke IP privat/loopback (proteksi SSRF), sehingga memakai origin API
-   * secara langsung akan gagal di pengembangan lokal. Cara ini juga yang
-   * dipakai di produksi bila aplikasi berada di belakang reverse proxy.
+   * Proxy API calls to backend during development.
+   * This prevents CORS issues and makes local development easier.
    */
   async rewrites() {
-    return [{ source: "/uploads/:path*", destination: `${API_ORIGIN}/uploads/:path*` }];
+    return [
+      // Proxy uploads to API origin
+      { source: "/uploads/:path*", destination: `${API_ORIGIN}/uploads/:path*` },
+      // Proxy all /api/* calls to backend
+      { source: "/api/:path*", destination: `${API_ORIGIN}/api/:path*` },
+    ];
   },
 };
 
