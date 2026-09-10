@@ -93,12 +93,20 @@ const typeIcons: Record<string, typeof Bell> = {
 
 const typeColors: Record<string, { bg: string; icon: string }> = {
   progress: { bg: "bg-gradient-to-br from-emerald-400 to-green-500", icon: "text-white" },
+  PROGRESS_UPDATE: { bg: "bg-gradient-to-br from-emerald-400 to-green-500", icon: "text-white" },
   document: { bg: "bg-gradient-to-br from-blue-400 to-indigo-500", icon: "text-white" },
+  DOCUMENT: { bg: "bg-gradient-to-br from-blue-400 to-indigo-500", icon: "text-white" },
   qc: { bg: "bg-gradient-to-br from-purple-400 to-pink-500", icon: "text-white" },
+  QC_ALERT: { bg: "bg-gradient-to-br from-purple-400 to-pink-500", icon: "text-white" },
   photo: { bg: "bg-gradient-to-br from-pink-400 to-rose-500", icon: "text-white" },
+  PHOTO: { bg: "bg-gradient-to-br from-pink-400 to-rose-500", icon: "text-white" },
   billing: { bg: "bg-gradient-to-br from-amber-400 to-orange-500", icon: "text-white" },
+  BILLING: { bg: "bg-gradient-to-br from-amber-400 to-orange-500", icon: "text-white" },
   message: { bg: "bg-gradient-to-br from-cyan-400 to-teal-500", icon: "text-white" },
+  MESSAGE: { bg: "bg-gradient-to-br from-cyan-400 to-teal-500", icon: "text-white" },
   milestone: { bg: "bg-gradient-to-br from-indigo-400 to-purple-500", icon: "text-white" },
+  MILESTONE: { bg: "bg-gradient-to-br from-indigo-400 to-purple-500", icon: "text-white" },
+  default: { bg: "bg-gradient-to-br from-slate-400 to-slate-500", icon: "text-white" },
 };
 
 // ============================================================================
@@ -354,7 +362,7 @@ interface NotificationCardProps {
 
 function NotificationCard({ notification, onMarkRead }: NotificationCardProps) {
   const Icon = typeIcons[notification.type] || typeIcons.default;
-  const colors = typeColors[notification.type] || typeColors.default;
+  const colors = typeColors[notification.type] || typeColors.default || { bg: "bg-gradient-to-br from-slate-400 to-slate-500", icon: "text-white" };
 
   return (
     <div
