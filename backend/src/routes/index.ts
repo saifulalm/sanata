@@ -23,6 +23,7 @@ import scraperRoutes from "@/routes/scraper.routes";
 import santraRoutes from "@/routes/santra.routes";
 import geoRoutes from "@/routes/geo.routes";
 import clientRoutes from "@/routes/client.routes";
+import marketingRoutes from "@/routes/marketing.routes";
 
 const router = Router();
 
@@ -59,5 +60,8 @@ router.use("/geo", geoRoutes);
 
 // Client Portal Routes
 router.use("/client", clientRoutes);
+
+// Marketing Routes (Admin)
+router.use("/admin/marketing", marketingRoutes);
 
 export default router;

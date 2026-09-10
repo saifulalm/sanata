@@ -123,6 +123,18 @@ const navGroups: NavGroup[] = [
     ],
   },
   {
+    label: "Marketing",
+    items: [
+      { href: "/admin/marketing", label: "Marketing Dashboard", icon: Megaphone },
+      { href: "/admin/marketing/campaigns", label: "Campaigns", icon: Send },
+      { href: "/admin/marketing/contacts", label: "Contacts", icon: Users },
+      { href: "/admin/marketing/templates", label: "Templates", icon: FileText },
+      { href: "/admin/marketing/offers", label: "Offers", icon: Star },
+      { href: "/admin/marketing/broadcast", label: "Broadcast Lists", icon: LayoutList },
+      { href: "/admin/marketing/analytics", label: "Analytics", icon: Star },
+    ],
+  },
+  {
     label: "Prospek",
     items: [
       { href: "/admin/inquiries", label: "Pesan Masuk", icon: MessageSquare },
