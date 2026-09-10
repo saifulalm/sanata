@@ -259,18 +259,22 @@ function RecentDocumentsPreview({ documents }: { documents: RecentDocument[] }) 
           {documents.slice(0, 5).map((doc) => {
             const Icon = getDocIcon(doc.type);
             return (
-              <Link
+              <div
                 key={doc.id}
-                href={`/client/project/${doc.projectId}`}
                 className="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors group"
               >
-                <div className={clsx("w-10 h-10 rounded-xl flex items-center justify-center shrink-0", getDocColor(doc.type))}>
-                  <Icon className="w-5 h-5" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-slate-900 dark:text-white truncate">{doc.name}</p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">{doc.projectName} • {formatDate(doc.uploadDate, "short")}</p>
-                </div>
+                <Link
+                  href={`/client/project/${doc.projectId}`}
+                  className="flex items-center gap-4 flex-1 min-w-0"
+                >
+                  <div className={clsx("w-10 h-10 rounded-xl flex items-center justify-center shrink-0", getDocColor(doc.type))}>
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-slate-900 dark:text-white truncate">{doc.name}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">{doc.projectName} • {formatDate(doc.uploadDate, "short")}</p>
+                  </div>
+                </Link>
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <a href={doc.url} download className="p-2 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-colors">
                     <Download className="w-4 h-4" />
@@ -279,7 +283,7 @@ function RecentDocumentsPreview({ documents }: { documents: RecentDocument[] }) 
                     <Eye className="w-4 h-4" />
                   </a>
                 </div>
-              </Link>
+              </div>
             );
           })}
         </div>

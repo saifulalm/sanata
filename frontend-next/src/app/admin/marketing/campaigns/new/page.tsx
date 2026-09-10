@@ -1,750 +1,596 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowLeft,
   ArrowRight,
   Check,
   MessageSquare,
   Mail,
-  Image,
-  Send,
+  Instagram,
+  Zap,
   Users,
   Filter,
+  Upload,
   Calendar,
   Clock,
-  Upload,
-  X,
   Eye,
+  Send,
+  ChevronDown,
+  Image,
   FileText,
+  X,
   Sparkles,
 } from "lucide-react";
-import { Panel, Badge, btn } from "@/components/admin/ui";
+import {
+  PageHeader,
+  Panel,
+  Badge,
+  btn,
+  inputClass,
+  selectClass,
+  textareaClass,
+} from "@/components/admin/ui";
 
-type CampaignType = "WHATSAPP" | "EMAIL" | "INSTAGRAM" | "MULTI";
-type AudienceType = "ALL" | "LIST" | "FILTER";
-type ScheduleType = "NOW" | "SCHEDULE";
-
-interface CampaignData {
-  name: string;
-  type: CampaignType;
-  audienceType: AudienceType;
-  audienceId?: string;
-  audienceFilter?: Record<string, any>;
-  audienceCount: number;
-  content: {
-    subject?: string;
-    body: string;
-    mediaUrl?: string;
-  };
-  scheduleType: ScheduleType;
-  scheduledAt?: string;
-  scheduledTime?: string;
-}
-
-const initialData: CampaignData = {
-  name: "",
-  type: "WHATSAPP",
-  audienceType: "ALL",
-  audienceCount: 0,
-  content: {
-    body: "",
-  },
-  scheduleType: "NOW",
-};
-
-const steps = [
-  { id: 1, name: "Channel", description: "Pilih channel" },
-  { id: 2, name: "Audience", description: "Pilih audience" },
-  { id: 3, name: "Content", description: "Buat konten" },
-  { id: 4, name: "Schedule", description: "Jadwalkan" },
-  { id: 5, name: "Review", description: "Review & kirim" },
-];
+type CampaignType = "whatsapp" | "email" | "instagram" | "multi" | null;
+type Step = 1 | 2 | 3 | 4 | 5;
 
 const channelOptions = [
-  { id: "WHATSAPP", name: "WhatsApp", icon: MessageSquare, color: "emerald", description: "Kirim pesan via WhatsApp" },
-  { id: "EMAIL", name: "Email", icon: Mail, color: "cyan", description: "Kirim email marketing" },
-  { id: "INSTAGRAM", name: "Instagram", icon: Image, color: "pink", description: "Post ke Instagram" },
-  { id: "MULTI", name: "Multi-Channel", icon: Send, color: "purple", description: "Kirim ke beberapa channel" },
+  {
+    id: "whatsapp" as CampaignType,
+    label: "WhatsApp",
+    icon: <MessageSquare size={24} />,
+    color: "text-green-400",
+    bgColor: "bg-green-400/10 border-green-400/30",
+    description: "Kirim pesan langsung ke WhatsApp pelanggan",
+  },
+  {
+    id: "email" as CampaignType,
+    label: "Email",
+    icon: <Mail size={24} />,
+    color: "text-blue-400",
+    bgColor: "bg-blue-400/10 border-blue-400/30",
+    description: "Kirim email marketing profesional",
+  },
+  {
+    id: "instagram" as CampaignType,
+    label: "Instagram",
+    icon: <Instagram size={24} />,
+    color: "text-pink-400",
+    bgColor: "bg-pink-400/10 border-pink-400/30",
+    description: "Post dan story di Instagram",
+  },
+  {
+    id: "multi" as CampaignType,
+    label: "Multi-channel",
+    icon: <Zap size={24} />,
+    color: "text-yellow-400",
+    bgColor: "bg-yellow-400/10 border-yellow-400/30",
+    description: "Kirim ke multiple channel sekaligus",
+  },
 ];
 
 const audienceOptions = [
-  { id: "ALL", name: "Semua Kontak", icon: Users, count: 1250, description: "Kirim ke semua kontak" },
-  { id: "LIST", name: "Broadcast List", icon: Filter, count: 850, description: "Pilih dari broadcast list" },
-  { id: "FILTER", name: "Filter Khusus", icon: Filter, count: 0, description: "Filter berdasarkan tag, lokasi, dll" },
+  { id: "all", label: "Semua Kontak", count: 5430, icon: <Users size={16} /> },
+  { id: "active", label: "Pelanggan Aktif", count: 2340, icon: <Sparkles size={16} /> },
+  { id: "newsletter", label: "Newsletter Subscribers", count: 1850, icon: <Mail size={16} /> },
+  { id: "whatsapp", label: "WhatsApp Contacts", count: 3200, icon: <MessageSquare size={16} /> },
 ];
 
-const broadcastLists = [
-  { id: "1", name: "VIP Customers", count: 245 },
-  { id: "2", name: "New Subscribers", count: 580 },
-  { id: "3", name: "Inactive Users", count: 320 },
-  { id: "4", name: "Product Interested", count: 180 },
-  { id: "5", name: "Newsletter", count: 890 },
+const templateOptions = [
+  { id: "promo", name: "Promo Diskon", category: "Promo" },
+  { id: "welcome", name: "Selamat Datang", category: "Welcome" },
+  { id: "followup", name: "Follow-up Penawaran", category: "Sales" },
+  { id: "reminder", name: "Pengingat Meeting", category: "Meeting" },
+  { id: "update", name: "Update Layanan", category: "Info" },
 ];
 
-const templates = [
-  { id: "1", name: "Promo Welcome", category: "WHATSAPP", body: "Selamat datang! Nikmati diskon 20% untuk pembelian pertama Anda dengan kode: WELCOME20" },
-  { id: "2", name: "New Product Alert", category: "WHATSAPP", body: "Produk baru sudah tersedia! Cek koleksi terbaru kami di [link]" },
-  { id: "3", name: "Newsletter Format", category: "EMAIL", subject: "Newsletter {{date}}", body: "Halo {{name}},\n\nBerita terbaru dari kami...\n\nSalam,\nTim kami" },
-  { id: "4", name: "Special Offer", category: "OFFER", body: "Hanya hari ini! Gunakan kode {{code}} untuk potongan harga {{discount}}%" },
+const steps = [
+  { num: 1, label: "Channel" },
+  { num: 2, label: "Audience" },
+  { num: 3, label: "Konten" },
+  { num: 4, label: "Jadwal" },
+  { num: 5, label: "Review" },
 ];
 
-const colorMap: Record<string, { bg: string; text: string; border: string }> = {
-  emerald: { bg: "bg-emerald-500/15", text: "text-emerald-300", border: "border-emerald-500/30" },
-  cyan: { bg: "bg-cyan-500/15", text: "text-cyan-300", border: "border-cyan-500/30" },
-  pink: { bg: "bg-pink-500/15", text: "text-pink-300", border: "border-pink-500/30" },
-  amber: { bg: "bg-amber-500/15", text: "text-amber-300", border: "border-amber-500/30" },
-  purple: { bg: "bg-purple-500/15", text: "text-purple-300", border: "border-purple-500/30" },
-};
-
-function NewCampaignPage() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [currentStep, setCurrentStep] = useState(1);
-  const [data, setData] = useState<CampaignData>({
-    ...initialData,
-    type: (searchParams.get("type")?.toUpperCase() as CampaignType) || "WHATSAPP",
-  });
-  const [showPreview, setShowPreview] = useState(false);
+export default function NewCampaignPage() {
+  const [currentStep, setCurrentStep] = useState<Step>(1);
+  const [selectedChannel, setSelectedChannel] = useState<CampaignType>(null);
+  const [selectedAudience, setSelectedAudience] = useState<string | null>(null);
+  const [messageSubject, setMessageSubject] = useState("");
+  const [messageBody, setMessageBody] = useState("");
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+  const [scheduleType, setScheduleType] = useState<"now" | "schedule">("now");
+  const [scheduleDate, setScheduleDate] = useState("");
+  const [scheduleTime, setScheduleTime] = useState("");
+  const [showPreview, setShowPreview] = useState(false);
+  const [campaignName, setCampaignName] = useState("");
 
-  // Simulated audience count based on selection
-  useEffect(() => {
-    let count = 0;
-    if (data.audienceType === "ALL") {
-      count = 1250;
-    } else if (data.audienceType === "LIST" && data.audienceId) {
-      const list = broadcastLists.find((l) => l.id === data.audienceId);
-      count = list?.count || 0;
-    } else if (data.audienceType === "FILTER") {
-      count = 580; // Simulated filtered count
+  const canProceed = () => {
+    switch (currentStep) {
+      case 1:
+        return selectedChannel !== null;
+      case 2:
+        return selectedAudience !== null;
+      case 3:
+        return messageBody.trim().length > 0;
+      case 4:
+        return scheduleType === "now" || (scheduleDate !== "" && scheduleTime !== "");
+      case 5:
+        return true;
+      default:
+        return false;
     }
-    setData((prev) => ({ ...prev, audienceCount: count }));
-  }, [data.audienceType, data.audienceId]);
-
-  const updateData = (updates: Partial<CampaignData>) => {
-    setData((prev) => ({ ...prev, ...updates }));
   };
 
-  const applyTemplate = (template: typeof templates[0]) => {
-    setSelectedTemplate(template.id);
-    setData((prev) => ({
-      ...prev,
-      content: {
-        ...prev.content,
-        body: template.body,
-        ...(template.subject ? { subject: template.subject } : {}),
+  const handleNext = () => {
+    if (currentStep < 5 && canProceed()) {
+      setCurrentStep((currentStep + 1) as Step);
+    }
+  };
+
+  const handleBack = () => {
+    if (currentStep > 1) {
+      setCurrentStep((currentStep - 1) as Step);
+    }
+  };
+
+  const applyTemplate = (templateId: string) => {
+    const templates: Record<string, { subject: string; body: string }> = {
+      promo: {
+        subject: "🎉 Promo Spesial untuk Anda!",
+        body: "Assalamu'alaikum Warahmatullahi Wabarakatuh,\n\nKami memiliki promo spesial yang sayang untuk dilewatkan!\n\n🎁 Detail Promo:\n• Diskon hingga 25%\n• Bonus eksklusif\n• Berlaku sampai akhir bulan\n\nSegera manfaatkan kesempatan ini. Stok terbatas!\n\nWassalamu'alaikum",
       },
-    }));
-  };
-
-  const nextStep = () => {
-    if (currentStep < 5) setCurrentStep(currentStep + 1);
-  };
-
-  const prevStep = () => {
-    if (currentStep > 1) setCurrentStep(currentStep - 1);
+      welcome: {
+        subject: "Selamat Datang!",
+        body: "Assalamu'alaikum Warahmatullahi Wabarakatuh,\n\nSelamat bergabung bersama kami! Kami sangat senang Anda memilih layanan kami.\n\nTim kami siap membantu Anda. Jangan ragu untuk menghubungi kami jika ada pertanyaan.\n\nSalam hangat,\nTim Kami",
+      },
+    };
+    const template = templates[templateId];
+    if (template) {
+      setMessageSubject(template.subject);
+      setMessageBody(template.body);
+      setSelectedTemplate(templateId);
+    }
   };
 
   const handleSubmit = () => {
-    // In production, this would call the API
-    console.log("Submitting campaign:", data);
-    router.push("/admin/marketing/campaigns");
+    alert("Kampanye berhasil dibuat!");
   };
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Page Header */}
       <div className="flex items-center gap-4">
         <Link
           href="/admin/marketing/campaigns"
-          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.05] text-slate-400 hover:bg-white/10 hover:text-white"
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white"
         >
-          <ArrowLeft className="h-5 w-5" />
+          <ArrowLeft size={18} />
         </Link>
         <div>
-          <h1 className="font-display text-xl font-semibold tracking-tight text-white">
-            Buat Campaign Baru
-          </h1>
-          <p className="text-sm text-slate-400">
-            Langkah {currentStep} dari 5: {steps[currentStep - 1].description}
-          </p>
+          <h1 className="font-display text-2xl font-semibold text-white">Buat Kampanye Baru</h1>
+          <p className="mt-1 text-sm text-slate-400">Buat dan jadwalkan kampanye pemasaran</p>
         </div>
       </div>
 
       {/* Progress Steps */}
       <div className="flex items-center justify-between">
-        {steps.map((step, index) => {
-          const isActive = step.id === currentStep;
-          const isCompleted = step.id < currentStep;
-          return (
-            <div key={step.id} className="flex items-center">
-              <div className="flex items-center gap-3">
-                <div
-                  className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition ${
-                    isCompleted
-                      ? "bg-emerald-500 text-white"
-                      : isActive
-                      ? "bg-cyan-500 text-white"
-                      : "border border-white/20 text-slate-500"
-                  }`}
-                >
-                  {isCompleted ? <Check className="h-4 w-4" /> : step.id}
-                </div>
-                <div className="hidden sm:block">
-                  <p className={`text-sm font-medium ${isActive ? "text-white" : "text-slate-500"}`}>
-                    {step.name}
-                  </p>
-                  <p className="text-xs text-slate-500">{step.description}</p>
-                </div>
+        {steps.map((step, i) => (
+          <div key={step.num} className="flex items-center">
+            <div className="flex items-center">
+              <div
+                className={`flex h-10 w-10 items-center justify-center rounded-full border-2 font-semibold transition ${
+                  currentStep > step.num
+                    ? "border-cyan-400 bg-cyan-400/20 text-cyan-400"
+                    : currentStep === step.num
+                    ? "border-cyan-400 bg-cyan-400/20 text-cyan-400"
+                    : "border-white/20 bg-white/5 text-slate-400"
+                }`}
+              >
+                {currentStep > step.num ? <Check size={18} /> : step.num}
               </div>
-              {index < steps.length - 1 && (
-                <div
-                  className={`mx-4 h-px w-12 sm:w-20 ${
-                    isCompleted ? "bg-emerald-500" : "bg-white/10"
-                  }`}
-                />
-              )}
+              <span
+                className={`ml-3 text-sm font-medium ${
+                  currentStep >= step.num ? "text-white" : "text-slate-400"
+                }`}
+              >
+                {step.label}
+              </span>
             </div>
-          );
-        })}
+            {i < steps.length - 1 && (
+              <div
+                className={`mx-4 h-px w-16 ${
+                  currentStep > step.num ? "bg-cyan-400" : "bg-white/10"
+                }`}
+              />
+            )}
+          </div>
+        ))}
       </div>
 
       {/* Step Content */}
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2">
-          {/* Step 1: Channel Selection */}
-          {currentStep === 1 && (
-            <Panel title="Pilih Channel" description="Pilih channel untuk campaign ini">
-              <div className="grid gap-4 sm:grid-cols-2">
-                {channelOptions.map((channel) => {
-                  const Icon = channel.icon;
-                  const cc = colorMap[channel.color];
-                  const isSelected = data.type === channel.id;
-                  return (
-                    <button
-                      key={channel.id}
-                      onClick={() => updateData({ type: channel.id as CampaignType })}
-                      className={`relative rounded-xl border p-4 text-left transition ${
-                        isSelected
-                          ? `${cc.border} ${cc.bg} ring-2 ring-cyan-400/30`
-                          : "border-white/10 hover:border-white/20 hover:bg-white/[0.03]"
-                      }`}
-                    >
-                      {isSelected && (
-                        <div className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-cyan-500">
-                          <Check className="h-3 w-3 text-white" />
-                        </div>
-                      )}
-                      <div className={`mb-3 flex h-12 w-12 items-center justify-center rounded-xl ${cc.bg}`}>
-                        <Icon className={`h-6 w-6 ${cc.text}`} />
-                      </div>
-                      <h3 className="font-medium text-white">{channel.name}</h3>
-                      <p className="mt-1 text-sm text-slate-400">{channel.description}</p>
-                    </button>
-                  );
-                })}
-              </div>
-            </Panel>
-          )}
-
-          {/* Step 2: Audience Selection */}
-          {currentStep === 2 && (
-            <Panel title="Pilih Audience" description="Tentukan siapa yang akan menerima campaign ini">
-              <div className="space-y-4">
-                {audienceOptions.map((option) => {
-                  const Icon = option.icon;
-                  const isSelected = data.audienceType === option.id;
-                  return (
-                    <button
-                      key={option.id}
-                      onClick={() => updateData({ audienceType: option.id as AudienceType, audienceId: undefined })}
-                      className={`relative w-full rounded-xl border p-4 text-left transition ${
-                        isSelected
-                          ? "border-cyan-500/30 bg-cyan-500/10 ring-2 ring-cyan-400/30"
-                          : "border-white/10 hover:border-white/20 hover:bg-white/[0.03]"
-                      }`}
-                    >
-                      {isSelected && (
-                        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full bg-cyan-500">
-                          <Check className="h-3 w-3 text-white" />
-                        </div>
-                      )}
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/5">
-                          <Icon className="h-5 w-5 text-slate-400" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-medium text-white">{option.name}</h3>
-                          <p className="text-sm text-slate-400">{option.description}</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-lg font-semibold text-white">{option.count.toLocaleString()}</p>
-                          <p className="text-xs text-slate-500">kontak</p>
-                        </div>
-                      </div>
-                    </button>
-                  );
-                })}
-
-                {data.audienceType === "LIST" && (
-                  <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.02] p-4">
-                    <h4 className="mb-3 text-sm font-medium text-white">Pilih Broadcast List</h4>
-                    <div className="space-y-2">
-                      {broadcastLists.map((list) => (
-                        <button
-                          key={list.id}
-                          onClick={() => updateData({ audienceId: list.id })}
-                          className={`flex w-full items-center justify-between rounded-lg border p-3 transition ${
-                            data.audienceId === list.id
-                              ? "border-cyan-500/30 bg-cyan-500/10"
-                              : "border-white/5 hover:border-white/10 hover:bg-white/[0.03]"
-                          }`}
-                        >
-                          <span className="text-sm text-white">{list.name}</span>
-                          <span className="text-xs text-slate-500">{list.count} kontak</span>
-                        </button>
-                      ))}
-                    </div>
+      <div className="min-h-[400px]">
+        {/* Step 1: Select Channel */}
+        {currentStep === 1 && (
+          <Panel title="Pilih Channel Kampanye" description="Pilih channel yang akan digunakan untuk mengirim pesan">
+            <div className="grid gap-4 sm:grid-cols-2">
+              {channelOptions.map((channel) => (
+                <button
+                  key={channel.id}
+                  onClick={() => setSelectedChannel(channel.id)}
+                  className={`flex items-start gap-4 rounded-xl border p-5 text-left transition ${
+                    selectedChannel === channel.id
+                      ? `${channel.bgColor} ring-2 ring-cyan-400/50`
+                      : "border-white/10 bg-white/[0.03] hover:border-white/20"
+                  }`}
+                >
+                  <div className={`flex h-12 w-12 items-center justify-center rounded-xl border border-current/20 ${channel.bgColor} ${channel.color}`}>
+                    {channel.icon}
                   </div>
-                )}
-
-                {data.audienceType === "FILTER" && (
-                  <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.02] p-4">
-                    <h4 className="mb-3 text-sm font-medium text-white">Filter Kontak</h4>
-                    <div className="grid gap-3 sm:grid-cols-3">
-                      <div>
-                        <label className="mb-1 block text-xs text-slate-400">Tags</label>
-                        <select className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white">
-                          <option>Semua Tags</option>
-                          <option>VIP</option>
-                          <option>New</option>
-                          <option>Active</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="mb-1 block text-xs text-slate-400">Lokasi</label>
-                        <select className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white">
-                          <option>Semua Lokasi</option>
-                          <option>Jakarta</option>
-                          <option>Surabaya</option>
-                          <option>Bandung</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="mb-1 block text-xs text-slate-400">Status</label>
-                        <select className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white">
-                          <option>Semua Status</option>
-                          <option>Aktif</option>
-                          <option>Tidak Aktif</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="mt-3 flex items-center justify-between rounded-lg border border-white/10 bg-white/5 p-3">
-                      <span className="text-sm text-slate-400">Perkiraan kontak:</span>
-                      <span className="font-semibold text-cyan-300">580 kontak</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </Panel>
-          )}
-
-          {/* Step 3: Content */}
-          {currentStep === 3 && (
-            <Panel title="Buat Konten" description="Tulis pesan untuk campaign ini">
-              <div className="space-y-4">
-                {/* Campaign Name */}
-                <div>
-                  <label className="mb-1.5 block text-sm text-slate-400">Nama Campaign</label>
-                  <input
-                    type="text"
-                    value={data.name}
-                    onChange={(e) => updateData({ name: e.target.value })}
-                    placeholder="Contoh: Promo中秋特惠活動"
-                    className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
-                  />
-                </div>
-
-                {/* Templates */}
-                <div>
-                  <label className="mb-1.5 block text-sm text-slate-400">Gunakan Template</label>
-                  <div className="grid gap-2 sm:grid-cols-2">
-                    {templates
-                      .filter((t) => t.category === data.type || t.category === "OFFER")
-                      .map((template) => (
-                        <button
-                          key={template.id}
-                          onClick={() => applyTemplate(template)}
-                          className={`flex items-center gap-2 rounded-lg border p-3 text-left text-sm transition ${
-                            selectedTemplate === template.id
-                              ? "border-cyan-500/30 bg-cyan-500/10"
-                              : "border-white/10 hover:border-white/20 hover:bg-white/[0.03]"
-                          }`}
-                        >
-                          <FileText className="h-4 w-4 text-slate-500" />
-                          <span className="text-white">{template.name}</span>
-                        </button>
-                      ))}
-                  </div>
-                </div>
-
-                {/* Subject (Email only) */}
-                {data.type === "EMAIL" && (
                   <div>
-                    <label className="mb-1.5 block text-sm text-slate-400">Subject Email</label>
+                    <h3 className="font-semibold text-white">{channel.label}</h3>
+                    <p className="mt-1 text-sm text-slate-400">{channel.description}</p>
+                  </div>
+                  {selectedChannel === channel.id && (
+                    <div className="ml-auto">
+                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-cyan-400 text-black">
+                        <Check size={14} />
+                      </div>
+                    </div>
+                  )}
+                </button>
+              ))}
+            </div>
+          </Panel>
+        )}
+
+        {/* Step 2: Select Audience */}
+        {currentStep === 2 && (
+          <Panel title="Pilih Audience" description="Tentukan siapa yang akan menerima pesan ini">
+            <div className="space-y-3">
+              {audienceOptions.map((option) => (
+                <button
+                  key={option.id}
+                  onClick={() => setSelectedAudience(option.id)}
+                  className={`flex w-full items-center justify-between rounded-xl border p-4 transition ${
+                    selectedAudience === option.id
+                      ? "border-cyan-400/50 bg-cyan-400/10"
+                      : "border-white/10 bg-white/[0.03] hover:border-white/20"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-400">
+                      {option.icon}
+                    </div>
+                    <div className="text-left">
+                      <p className="font-medium text-white">{option.label}</p>
+                      <p className="text-sm text-slate-400">{option.count.toLocaleString()} kontak</p>
+                    </div>
+                  </div>
+                  {selectedAudience === option.id && (
+                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-cyan-400 text-black">
+                      <Check size={14} />
+                    </div>
+                  )}
+                </button>
+              ))}
+              <button className="flex w-full items-center justify-between rounded-xl border border-dashed border-white/20 p-4 text-slate-400 hover:border-cyan-300/30 hover:text-cyan-300">
+                <div className="flex items-center gap-3">
+                  <Filter size={20} />
+                  <span>Filter Kontak Spesifik</span>
+                </div>
+                <ChevronDown size={18} />
+              </button>
+            </div>
+          </Panel>
+        )}
+
+        {/* Step 3: Content */}
+        {currentStep === 3 && (
+          <Panel title="Buat Konten" description="Tulis pesan yang akan dikirimkan">
+            {/* Campaign Name */}
+            <div className="mb-6">
+              <label className="mb-2 block text-sm font-medium text-slate-300">Nama Kampanye</label>
+              <input
+                type="text"
+                placeholder="Contoh: Promo Ramadan 2026"
+                value={campaignName}
+                onChange={(e) => setCampaignName(e.target.value)}
+                className={inputClass}
+              />
+            </div>
+
+            {/* Template Selection */}
+            <div className="mb-6">
+              <label className="mb-2 block text-sm font-medium text-slate-300">Gunakan Template</label>
+              <div className="flex flex-wrap gap-2">
+                {templateOptions.map((template) => (
+                  <button
+                    key={template.id}
+                    onClick={() => applyTemplate(template.id)}
+                    className={`rounded-lg border px-3 py-1.5 text-sm transition ${
+                      selectedTemplate === template.id
+                        ? "border-cyan-400/50 bg-cyan-400/10 text-cyan-300"
+                        : "border-white/10 bg-white/5 text-slate-400 hover:border-white/20 hover:text-white"
+                    }`}
+                  >
+                    {template.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Subject */}
+            {selectedChannel !== "whatsapp" && selectedChannel !== "instagram" && (
+              <div className="mb-6">
+                <label className="mb-2 block text-sm font-medium text-slate-300">Subjek Pesan</label>
+                <input
+                  type="text"
+                  placeholder="Contoh: Promo Spesial untuk Anda!"
+                  value={messageSubject}
+                  onChange={(e) => setMessageSubject(e.target.value)}
+                  className={inputClass}
+                />
+              </div>
+            )}
+
+            {/* Message Body */}
+            <div className="mb-6">
+              <div className="mb-2 flex items-center justify-between">
+                <label className="text-sm font-medium text-slate-300">Isi Pesan</label>
+                <button
+                  onClick={() => setShowPreview(true)}
+                  className="flex items-center gap-1 text-sm text-cyan-400 hover:text-cyan-300"
+                >
+                  <Eye size={14} />
+                  Preview
+                </button>
+              </div>
+              <textarea
+                placeholder="Tulis pesan Anda di sini..."
+                value={messageBody}
+                onChange={(e) => setMessageBody(e.target.value)}
+                className={textareaClass}
+                rows={8}
+              />
+              <p className="mt-2 text-xs text-slate-500">
+                {messageBody.length} karakter
+              </p>
+            </div>
+
+            {/* Media Upload */}
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-300">Lampirkan Media</label>
+              <div className="flex flex-wrap gap-3">
+                <button className="flex items-center gap-2 rounded-xl border border-dashed border-white/20 px-4 py-3 text-slate-400 hover:border-cyan-300/30 hover:text-cyan-300">
+                  <Image size={18} />
+                  Upload Gambar
+                </button>
+                <button className="flex items-center gap-2 rounded-xl border border-dashed border-white/20 px-4 py-3 text-slate-400 hover:border-cyan-300/30 hover:text-cyan-300">
+                  <FileText size={18} />
+                  Upload PDF
+                </button>
+              </div>
+            </div>
+
+            {/* Preview Modal */}
+            {showPreview && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+                <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-[#111b21] p-4">
+                  <div className="mb-4 flex items-center justify-between">
+                    <h3 className="font-semibold text-white">Preview Pesan</h3>
+                    <button
+                      onClick={() => setShowPreview(false)}
+                      className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-white"
+                    >
+                      <X size={18} />
+                    </button>
+                  </div>
+                  <div className="rounded-2xl rounded-tl-sm bg-[#005c4b] px-4 py-3">
+                    <p className="whitespace-pre-wrap text-sm text-white/90">{messageBody || "Pesan Anda akan muncul di sini..."}</p>
+                  </div>
+                  <p className="mt-2 text-xs text-white/40">WhatsApp Preview</p>
+                </div>
+              </div>
+            )}
+          </Panel>
+        )}
+
+        {/* Step 4: Schedule */}
+        {currentStep === 4 && (
+          <Panel title="Jadwal Pengiriman" description="Tentukan kapan pesan akan dikirim">
+            <div className="space-y-6">
+              {/* Schedule Type */}
+              <div className="flex gap-4">
+                <button
+                  onClick={() => setScheduleType("now")}
+                  className={`flex flex-1 items-center justify-center gap-3 rounded-xl border p-5 transition ${
+                    scheduleType === "now"
+                      ? "border-cyan-400/50 bg-cyan-400/10"
+                      : "border-white/10 bg-white/[0.03] hover:border-white/20"
+                  }`}
+                >
+                  <Send size={20} className={scheduleType === "now" ? "text-cyan-400" : "text-slate-400"} />
+                  <div className="text-left">
+                    <p className="font-semibold text-white">Kirim Sekarang</p>
+                    <p className="text-sm text-slate-400">Pesan akan langsung dikirim</p>
+                  </div>
+                </button>
+                <button
+                  onClick={() => setScheduleType("schedule")}
+                  className={`flex flex-1 items-center justify-center gap-3 rounded-xl border p-5 transition ${
+                    scheduleType === "schedule"
+                      ? "border-cyan-400/50 bg-cyan-400/10"
+                      : "border-white/10 bg-white/[0.03] hover:border-white/20"
+                  }`}
+                >
+                  <Calendar size={20} className={scheduleType === "schedule" ? "text-cyan-400" : "text-slate-400"} />
+                  <div className="text-left">
+                    <p className="font-semibold text-white">Jadwalkan</p>
+                    <p className="text-sm text-slate-400">Pilih tanggal dan waktu</p>
+                  </div>
+                </button>
+              </div>
+
+              {/* Date & Time Picker */}
+              {scheduleType === "schedule" && (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-slate-300">Tanggal</label>
                     <input
-                      type="text"
-                      value={data.content.subject || ""}
-                      onChange={(e) => updateData({ content: { ...data.content, subject: e.target.value } })}
-                      placeholder="Contoh: Newsletter中秋特惠"
-                      className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
+                      type="date"
+                      value={scheduleDate}
+                      onChange={(e) => setScheduleDate(e.target.value)}
+                      className={inputClass}
                     />
                   </div>
-                )}
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-slate-300">Waktu</label>
+                    <input
+                      type="time"
+                      value={scheduleTime}
+                      onChange={(e) => setScheduleTime(e.target.value)}
+                      className={inputClass}
+                    />
+                  </div>
+                </div>
+              )}
 
-                {/* Message Body */}
-                <div>
-                  <label className="mb-1.5 flex items-center justify-between">
-                    <span className="text-sm text-slate-400">Isi Pesan</span>
-                    <button
-                      onClick={() => setShowPreview(true)}
-                      className="flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-300"
-                    >
-                      <Eye className="h-3 w-3" />
-                      Preview
-                    </button>
-                  </label>
-                  <textarea
-                    value={data.content.body}
-                    onChange={(e) => updateData({ content: { ...data.content, body: e.target.value } })}
-                    placeholder={data.type === "WHATSAPP" ? "Ketik pesan WhatsApp Anda...\n\nGunakan {{name}} untuk personalization" : "Ketik email Anda..."}
-                    rows={8}
-                    className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
-                  />
-                  <p className="mt-1 text-xs text-slate-500">
-                    Gunakan {"{{name}}"}, {"{{email}}"}, atau {"{{code}}"} untuk personalization
+              {/* Timezone Info */}
+              <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+                <div className="flex items-center gap-3">
+                  <Clock size={18} className="text-slate-400" />
+                  <div>
+                    <p className="text-sm font-medium text-white">Waktu Jakarta ( WIB / UTC+7 )</p>
+                    <p className="text-xs text-slate-400">Semua waktu ditampilkan dalam zona waktu ini</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Panel>
+        )}
+
+        {/* Step 5: Review */}
+        {currentStep === 5 && (
+          <Panel title="Review & Konfirmasi" description="Periksa detail sebelum mengirim">
+            <div className="space-y-6">
+              {/* Summary */}
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+                  <h3 className="mb-3 text-sm font-semibold text-white">Detail Kampanye</h3>
+                  <dl className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <dt className="text-slate-400">Nama</dt>
+                      <dd className="text-white">{campaignName || "Tanpa nama"}</dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-slate-400">Channel</dt>
+                      <dd className="capitalize text-white">{selectedChannel}</dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-slate-400">Audience</dt>
+                      <dd className="text-white">
+                        {audienceOptions.find((o) => o.id === selectedAudience)?.label}
+                      </dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-slate-400">Jumlah Penerima</dt>
+                      <dd className="text-white">
+                        {audienceOptions.find((o) => o.id === selectedAudience)?.count.toLocaleString()}
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+                <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+                  <h3 className="mb-3 text-sm font-semibold text-white">Jadwal</h3>
+                  <dl className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <dt className="text-slate-400">Tipe</dt>
+                      <dd className="text-white">{scheduleType === "now" ? "Kirim Sekarang" : "Terjadwal"}</dd>
+                    </div>
+                    {scheduleType === "schedule" && (
+                      <>
+                        <div className="flex justify-between">
+                          <dt className="text-slate-400">Tanggal</dt>
+                          <dd className="text-white">{scheduleDate}</dd>
+                        </div>
+                        <div className="flex justify-between">
+                          <dt className="text-slate-400">Waktu</dt>
+                          <dd className="text-white">{scheduleTime}</dd>
+                        </div>
+                      </>
+                    )}
+                  </dl>
+                </div>
+              </div>
+
+              {/* Message Preview */}
+              <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+                <h3 className="mb-3 text-sm font-semibold text-white">Preview Pesan</h3>
+                {messageSubject && (
+                  <p className="mb-2 text-sm text-slate-300">
+                    <span className="text-slate-500">Subjek:</span> {messageSubject}
+                  </p>
+                )}
+                <div className="rounded-xl rounded-tl-sm bg-[#005c4b] px-4 py-3">
+                  <p className="whitespace-pre-wrap text-sm text-white/90">
+                    {messageBody || "Tidak ada konten"}
                   </p>
                 </div>
-
-                {/* Media Upload */}
-                <div>
-                  <label className="mb-1.5 block text-sm text-slate-400">Media (Opsional)</label>
-                  <div className="flex items-center gap-4">
-                    <div className="flex flex-1 items-center justify-center rounded-xl border-2 border-dashed border-white/10 p-6 transition hover:border-white/20">
-                      <div className="text-center">
-                        <Upload className="mx-auto h-8 w-8 text-slate-500" />
-                        <p className="mt-2 text-sm text-slate-400">Klik untuk upload</p>
-                        <p className="text-xs text-slate-500">PNG, JPG, PDF (max 10MB)</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <p className="mt-2 text-xs text-slate-500">{messageBody.length} karakter</p>
               </div>
-            </Panel>
-          )}
 
-          {/* Step 4: Schedule */}
-          {currentStep === 4 && (
-            <Panel title="Jadwalkan Campaign" description="Tentukan kapan campaign akan dikirim">
-              <div className="space-y-4">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <button
-                    onClick={() => updateData({ scheduleType: "NOW" })}
-                    className={`relative rounded-xl border p-4 text-left transition ${
-                      data.scheduleType === "NOW"
-                        ? "border-cyan-500/30 bg-cyan-500/10 ring-2 ring-cyan-400/30"
-                        : "border-white/10 hover:border-white/20 hover:bg-white/[0.03]"
-                    }`}
-                  >
-                    {data.scheduleType === "NOW" && (
-                      <div className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-cyan-500">
-                        <Check className="h-3 w-3 text-white" />
-                      </div>
-                    )}
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-500/15">
-                        <Send className="h-5 w-5 text-cyan-300" />
-                      </div>
-                      <div>
-                        <h3 className="font-medium text-white">Kirim Sekarang</h3>
-                        <p className="text-sm text-slate-400">Campaign akan langsung dikirim</p>
-                      </div>
-                    </div>
-                  </button>
-
-                  <button
-                    onClick={() => updateData({ scheduleType: "SCHEDULE" })}
-                    className={`relative rounded-xl border p-4 text-left transition ${
-                      data.scheduleType === "SCHEDULE"
-                        ? "border-cyan-500/30 bg-cyan-500/10 ring-2 ring-cyan-400/30"
-                        : "border-white/10 hover:border-white/20 hover:bg-white/[0.03]"
-                    }`}
-                  >
-                    {data.scheduleType === "SCHEDULE" && (
-                      <div className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-cyan-500">
-                        <Check className="h-3 w-3 text-white" />
-                      </div>
-                    )}
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/15">
-                        <Calendar className="h-5 w-5 text-amber-300" />
-                      </div>
-                      <div>
-                        <h3 className="font-medium text-white">Jadwalkan</h3>
-                        <p className="text-sm text-slate-400">Pilih tanggal & waktu</p>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-
-                {data.scheduleType === "SCHEDULE" && (
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div>
-                      <label className="mb-1.5 block text-sm text-slate-400">Tanggal</label>
-                      <input
-                        type="date"
-                        value={data.scheduledAt || ""}
-                        onChange={(e) => updateData({ scheduledAt: e.target.value })}
-                        className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
-                      />
-                    </div>
-                    <div>
-                      <label className="mb-1.5 block text-sm text-slate-400">Waktu</label>
-                      <input
-                        type="time"
-                        value={data.scheduledTime || ""}
-                        onChange={(e) => updateData({ scheduledTime: e.target.value })}
-                        className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
-                      />
-                    </div>
+              {/* Final Actions */}
+              <div className="flex items-center justify-between rounded-xl border border-cyan-400/20 bg-cyan-400/10 p-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-400/20 text-cyan-400">
+                    <Send size={18} />
                   </div>
-                )}
-              </div>
-            </Panel>
-          )}
-
-          {/* Step 5: Review */}
-          {currentStep === 5 && (
-            <Panel title="Review & Kirim" description="Periksa kembali sebelum mengirim campaign">
-              <div className="space-y-6">
-                {/* Summary */}
-                <div className="grid gap-4 sm:grid-cols-3">
-                  <div className="rounded-xl border border-white/10 bg-white/[0.02] p-4">
-                    <p className="text-xs text-slate-500">Channel</p>
-                    <p className="mt-1 font-medium text-white">{data.type}</p>
-                  </div>
-                  <div className="rounded-xl border border-white/10 bg-white/[0.02] p-4">
-                    <p className="text-xs text-slate-500">Audience</p>
-                    <p className="mt-1 font-medium text-white">{data.audienceCount.toLocaleString()} kontak</p>
-                  </div>
-                  <div className="rounded-xl border border-white/10 bg-white/[0.02] p-4">
-                    <p className="text-xs text-slate-500">Jadwal</p>
-                    <p className="mt-1 font-medium text-white">
-                      {data.scheduleType === "NOW" ? "Sekarang" : `${data.scheduledAt} ${data.scheduledTime}`}
+                  <div>
+                    <p className="font-semibold text-white">Siap untuk mengirim?</p>
+                    <p className="text-sm text-slate-400">
+                      {audienceOptions.find((o) => o.id === selectedAudience)?.count.toLocaleString()} pesan akan dikirim
                     </p>
                   </div>
                 </div>
-
-                {/* Content Preview */}
-                <div className="rounded-xl border border-white/10 bg-white/[0.02] p-4">
-                  <div className="mb-3 flex items-center justify-between">
-                    <h4 className="font-medium text-white">Preview Konten</h4>
-                    <button
-                      onClick={() => setShowPreview(true)}
-                      className="flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-300"
-                    >
-                      <Eye className="h-3 w-3" />
-                      Lihat Full
-                    </button>
-                  </div>
-                  {data.content.subject && (
-                    <p className="mb-2 text-sm text-slate-400">
-                      <span className="font-medium">Subject:</span> {data.content.subject}
-                    </p>
-                  )}
-                  <div className="max-h-40 overflow-y-auto rounded-lg border border-white/5 bg-white/2.5 p-3">
-                    <p className="whitespace-pre-wrap text-sm text-white">{data.content.body}</p>
-                  </div>
-                </div>
-
-                {/* Confirmation */}
-                <div className="rounded-xl border border-cyan-500/30 bg-cyan-500/10 p-4">
-                  <label className="flex cursor-pointer items-start gap-3">
-                    <input
-                      type="checkbox"
-                      className="mt-1 h-4 w-4 rounded border-white/20 bg-white/5 text-cyan-400 focus:ring-cyan-400/20"
-                    />
-                    <div>
-                      <p className="font-medium text-white">Saya yakin ingin mengirim campaign ini</p>
-                      <p className="mt-1 text-sm text-slate-400">
-                        {data.audienceCount.toLocaleString()} kontak akan menerima pesan ini.
-                        {data.scheduleType === "NOW"
-                          ? " Campaign akan langsung dikirim."
-                          : ` Campaign dijadwalkan untuk ${data.scheduledAt} ${data.scheduledTime}.`}
-                      </p>
-                    </div>
-                  </label>
-                </div>
+                <button onClick={handleSubmit} className={btn("primary")}>
+                  <Send size={15} />
+                  {scheduleType === "now" ? "Kirim Sekarang" : "Jadwalkan"}
+                </button>
               </div>
-            </Panel>
-          )}
+            </div>
+          </Panel>
+        )}
+      </div>
 
-          {/* Navigation */}
-          <div className="flex items-center justify-between">
+      {/* Navigation Buttons */}
+      <div className="flex items-center justify-between border-t border-white/[0.07] pt-6">
+        <button
+          onClick={handleBack}
+          disabled={currentStep === 1}
+          className={`${btn("secondary")} disabled:opacity-50`}
+        >
+          <ArrowLeft size={15} />
+          Kembali
+        </button>
+        <div className="flex items-center gap-3">
+          <span className="text-sm text-slate-400">
+            Langkah {currentStep} dari 5
+          </span>
+          {currentStep < 5 ? (
             <button
-              onClick={prevStep}
-              disabled={currentStep === 1}
-              className={`flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition ${
-                currentStep === 1
-                  ? "cursor-not-allowed border-white/10 text-slate-500"
-                  : "border-white/10 text-white hover:bg-white/[0.05]"
-              }`}
+              onClick={handleNext}
+              disabled={!canProceed()}
+              className={`${btn("primary")} disabled:opacity-50`}
             >
-              <ArrowLeft className="h-4 w-4" />
-              Sebelumnya
+              Lanjut
+              <ArrowRight size={15} />
             </button>
-
-            {currentStep < 5 ? (
-              <button
-                onClick={nextStep}
-                disabled={
-                  (currentStep === 1 && !data.type) ||
-                  (currentStep === 2 && data.audienceCount === 0) ||
-                  (currentStep === 3 && (!data.name || !data.content.body))
-                }
-                className="flex items-center gap-2 rounded-xl bg-cyan-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-cyan-600 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                Lanjut
-                <ArrowRight className="h-4 w-4" />
-              </button>
-            ) : (
-              <button
-                onClick={handleSubmit}
-                className="flex items-center gap-2 rounded-xl bg-emerald-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-600"
-              >
-                <Send className="h-4 w-4" />
-                {data.scheduleType === "NOW" ? "Kirim Sekarang" : "Jadwalkan Campaign"}
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Sidebar */}
-        <div className="space-y-4">
-          <Panel title="Summary" description="Ringkasan campaign">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-400">Channel</span>
-                <span className="font-medium text-white">{data.type}</span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-400">Audience</span>
-                <span className="font-medium text-white">{data.audienceCount.toLocaleString()}</span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-400">Status</span>
-                <Badge tone="neutral">Draft</Badge>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-400">Estimasi Cost</span>
-                <span className="font-medium text-amber-300">Rp 0</span>
-              </div>
-            </div>
-          </Panel>
-
-          <Panel title="Tips" description="Tips untuk campaign sukses">
-            <ul className="space-y-2 text-sm text-slate-400">
-              <li className="flex items-start gap-2">
-                <Sparkles className="mt-0.5 h-4 w-4 text-cyan-400" />
-                Gunakan personalization {"{{name}}"} untuk engagement lebih tinggi
-              </li>
-              <li className="flex items-start gap-2">
-                <Sparkles className="mt-0.5 h-4 w-4 text-cyan-400" />
-                Pastikan subject email menarik dan relevan
-              </li>
-              <li className="flex items-start gap-2">
-                <Sparkles className="mt-0.5 h-4 w-4 text-cyan-400" />
-                Jadwalkan di jam kerja untuk hasil terbaik
-              </li>
-            </ul>
-          </Panel>
+          ) : null}
         </div>
       </div>
-
-      {/* Preview Modal */}
-      {showPreview && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-          <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-[#0a1626] shadow-xl">
-            <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
-              <h3 className="font-semibold text-white">Preview Pesan</h3>
-              <button
-                onClick={() => setShowPreview(false)}
-                className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-white/5 hover:text-white"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            <div className="p-6">
-              {data.type === "WHATSAPP" && (
-                <div className="rounded-xl bg-[#111B21] p-4">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="h-8 w-8 rounded-full bg-emerald-500" />
-                    <div>
-                      <p className="font-medium text-white">Business Name</p>
-                      <p className="text-xs text-slate-400">online</p>
-                    </div>
-                  </div>
-                  <div className="rounded-lg rounded-tl-none bg-emerald-600/30 p-3">
-                    <p className="whitespace-pre-wrap text-sm text-white">
-                      {data.content.body || "Pesan Anda akan muncul di sini..."}
-                    </p>
-                    <p className="mt-1 text-right text-xs text-slate-400">
-                      {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                    </p>
-                  </div>
-                </div>
-              )}
-              {data.type === "EMAIL" && (
-                <div className="rounded-xl border border-white/10 bg-white p-4">
-                  <div className="border-b border-gray-200 pb-3">
-                    <p className="text-xs text-gray-500">From: Business Name</p>
-                    <p className="font-medium text-gray-900">
-                      {data.content.subject || "Subject email"}
-                    </p>
-                  </div>
-                  <div className="py-3">
-                    <p className="whitespace-pre-wrap text-sm text-gray-700">
-                      {data.content.body || "Isi email akan muncul di sini..."}
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
-  );
-}
-
-function LoadingFallback() {
-  return (
-    <div className="flex items-center justify-center min-h-[400px]">
-      <div className="text-center">
-        <div className="w-12 h-12 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin mx-auto mb-4" />
-        <p className="text-slate-400">Memuat...</p>
-      </div>
-    </div>
-  );
-}
-
-export default function NewCampaignPageWrapper() {
-  return (
-    <Suspense fallback={<LoadingFallback />}>
-      <NewCampaignPage />
-    </Suspense>
   );
 }

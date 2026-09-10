@@ -216,37 +216,37 @@ export async function getCampaigns(params?: {
     ...(params?.type ? { type: params.type } : {}),
     ...(params?.search ? { search: params.search } : {}),
   });
-  return apiFetchPaginated<Campaign>(`/marketing/campaigns?${qs.toString()}`);
+  return apiFetchPaginated<Campaign>(`/admin/admin/marketing/campaigns?${qs.toString()}`);
 }
 
 export async function getCampaign(id: string): Promise<Campaign> {
-  return apiFetch<Campaign>(`/marketing/campaigns/${id}`);
+  return apiFetch<Campaign>(`/admin/marketing/campaigns/${id}`);
 }
 
 export async function createCampaign(input: CampaignCreateInput): Promise<Campaign> {
-  return apiFetch<Campaign>("/marketing/campaigns", {
+  return apiFetch<Campaign>("/admin/marketing/campaigns", {
     method: "POST",
     body: JSON.stringify(input),
   });
 }
 
 export async function updateCampaign(id: string, input: Partial<CampaignCreateInput>): Promise<Campaign> {
-  return apiFetch<Campaign>(`/marketing/campaigns/${id}`, {
+  return apiFetch<Campaign>(`/admin/marketing/campaigns/${id}`, {
     method: "PUT",
     body: JSON.stringify(input),
   });
 }
 
 export async function deleteCampaign(id: string): Promise<void> {
-  return apiFetch<void>(`/marketing/campaigns/${id}`, { method: "DELETE" });
+  return apiFetch<void>(`/admin/marketing/campaigns/${id}`, { method: "DELETE" });
 }
 
 export async function sendCampaign(id: string): Promise<Campaign> {
-  return apiFetch<Campaign>(`/marketing/campaigns/${id}/send`, { method: "POST" });
+  return apiFetch<Campaign>(`/admin/marketing/campaigns/${id}/send`, { method: "POST" });
 }
 
 export async function cancelCampaign(id: string): Promise<Campaign> {
-  return apiFetch<Campaign>(`/marketing/campaigns/${id}/cancel`, { method: "POST" });
+  return apiFetch<Campaign>(`/admin/marketing/campaigns/${id}/cancel`, { method: "POST" });
 }
 
 // Contact API
@@ -264,29 +264,29 @@ export async function getContacts(params?: {
     ...(params?.tags ? { tags: params.tags.join(",") } : {}),
     ...(params?.listId ? { listId: params.listId } : {}),
   });
-  return apiFetchPaginated<Contact>(`/marketing/contacts?${qs.toString()}`);
+  return apiFetchPaginated<Contact>(`/admin/marketing/contacts?${qs.toString()}`);
 }
 
 export async function getContact(id: string): Promise<Contact> {
-  return apiFetch<Contact>(`/marketing/contacts/${id}`);
+  return apiFetch<Contact>(`/admin/marketing/contacts/${id}`);
 }
 
 export async function createContact(input: ContactCreateInput): Promise<Contact> {
-  return apiFetch<Contact>("/marketing/contacts", {
+  return apiFetch<Contact>("/admin/marketing/contacts", {
     method: "POST",
     body: JSON.stringify(input),
   });
 }
 
 export async function updateContact(id: string, input: Partial<ContactCreateInput>): Promise<Contact> {
-  return apiFetch<Contact>(`/marketing/contacts/${id}`, {
+  return apiFetch<Contact>(`/admin/marketing/contacts/${id}`, {
     method: "PUT",
     body: JSON.stringify(input),
   });
 }
 
 export async function deleteContact(id: string): Promise<void> {
-  return apiFetch<void>(`/marketing/contacts/${id}`, { method: "DELETE" });
+  return apiFetch<void>(`/admin/marketing/contacts/${id}`, { method: "DELETE" });
 }
 
 export async function importContacts(file: File): Promise<{ imported: number; failed: number }> {
@@ -294,7 +294,7 @@ export async function importContacts(file: File): Promise<{ imported: number; fa
   formData.append("file", file);
 
   const token = localStorage.getItem("token");
-  const res = await fetch(`${API_URL}/marketing/contacts/import`, {
+  const res = await fetch(`${API_URL}/admin/marketing/contacts/import`, {
     method: "POST",
     headers: { Authorization: `Bearer ${token}` },
     body: formData,
@@ -311,7 +311,7 @@ export async function exportContacts(params?: { tags?: string[]; listId?: string
   });
 
   const token = localStorage.getItem("token");
-  const res = await fetch(`${API_URL}/marketing/contacts/export?${qs.toString()}`, {
+  const res = await fetch(`${API_URL}/admin/marketing/contacts/export?${qs.toString()}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
@@ -325,40 +325,40 @@ export async function getBroadcastLists(params?: { page?: number; pageSize?: num
     page: String(params?.page ?? 1),
     pageSize: String(params?.pageSize ?? 20),
   });
-  return apiFetchPaginated<BroadcastList>(`/marketing/broadcast-lists?${qs.toString()}`);
+  return apiFetchPaginated<BroadcastList>(`/admin/marketing/broadcast-lists?${qs.toString()}`);
 }
 
 export async function getBroadcastList(id: string): Promise<BroadcastList & { contacts: Contact[] }> {
-  return apiFetch<BroadcastList & { contacts: Contact[] }>(`/marketing/broadcast-lists/${id}`);
+  return apiFetch<BroadcastList & { contacts: Contact[] }>(`/admin/marketing/broadcast-lists/${id}`);
 }
 
 export async function createBroadcastList(input: { name: string; description?: string; type: string }): Promise<BroadcastList> {
-  return apiFetch<BroadcastList>("/marketing/broadcast-lists", {
+  return apiFetch<BroadcastList>("/admin/marketing/broadcast-lists", {
     method: "POST",
     body: JSON.stringify(input),
   });
 }
 
 export async function updateBroadcastList(id: string, input: { name?: string; description?: string }): Promise<BroadcastList> {
-  return apiFetch<BroadcastList>(`/marketing/broadcast-lists/${id}`, {
+  return apiFetch<BroadcastList>(`/admin/marketing/broadcast-lists/${id}`, {
     method: "PUT",
     body: JSON.stringify(input),
   });
 }
 
 export async function deleteBroadcastList(id: string): Promise<void> {
-  return apiFetch<void>(`/marketing/broadcast-lists/${id}`, { method: "DELETE" });
+  return apiFetch<void>(`/admin/marketing/broadcast-lists/${id}`, { method: "DELETE" });
 }
 
 export async function addContactsToList(listId: string, contactIds: string[]): Promise<void> {
-  return apiFetch<void>(`/marketing/broadcast-lists/${listId}/contacts`, {
+  return apiFetch<void>(`/admin/marketing/broadcast-lists/${listId}/contacts`, {
     method: "POST",
     body: JSON.stringify({ contactIds }),
   });
 }
 
 export async function removeContactsFromList(listId: string, contactIds: string[]): Promise<void> {
-  return apiFetch<void>(`/marketing/broadcast-lists/${listId}/contacts`, {
+  return apiFetch<void>(`/admin/marketing/broadcast-lists/${listId}/contacts`, {
     method: "DELETE",
     body: JSON.stringify({ contactIds }),
   });
@@ -377,11 +377,11 @@ export async function getTemplates(params?: {
     ...(params?.category ? { category: params.category } : {}),
     ...(params?.search ? { search: params.search } : {}),
   });
-  return apiFetchPaginated<Template>(`/marketing/templates?${qs.toString()}`);
+  return apiFetchPaginated<Template>(`/admin/marketing/templates?${qs.toString()}`);
 }
 
 export async function getTemplate(id: string): Promise<Template> {
-  return apiFetch<Template>(`/marketing/templates/${id}`);
+  return apiFetch<Template>(`/admin/marketing/templates/${id}`);
 }
 
 export async function createTemplate(input: {
@@ -389,7 +389,7 @@ export async function createTemplate(input: {
   category: TemplateCategory;
   content: { subject?: string; body: string; mediaUrl?: string };
 }): Promise<Template> {
-  return apiFetch<Template>("/marketing/templates", {
+  return apiFetch<Template>("/admin/marketing/templates", {
     method: "POST",
     body: JSON.stringify(input),
   });
@@ -401,14 +401,14 @@ export async function updateTemplate(id: string, input: Partial<{
   content: { subject?: string; body: string; mediaUrl?: string };
   isActive: boolean;
 }>): Promise<Template> {
-  return apiFetch<Template>(`/marketing/templates/${id}`, {
+  return apiFetch<Template>(`/admin/marketing/templates/${id}`, {
     method: "PUT",
     body: JSON.stringify(input),
   });
 }
 
 export async function deleteTemplate(id: string): Promise<void> {
-  return apiFetch<void>(`/marketing/templates/${id}`, { method: "DELETE" });
+  return apiFetch<void>(`/admin/marketing/templates/${id}`, { method: "DELETE" });
 }
 
 // Offer API
@@ -424,11 +424,11 @@ export async function getOffers(params?: {
     ...(params?.status ? { status: params.status } : {}),
     ...(params?.type ? { type: params.type } : {}),
   });
-  return apiFetchPaginated<Offer>(`/marketing/offers?${qs.toString()}`);
+  return apiFetchPaginated<Offer>(`/admin/marketing/offers?${qs.toString()}`);
 }
 
 export async function getOffer(id: string): Promise<Offer> {
-  return apiFetch<Offer>(`/marketing/offers/${id}`);
+  return apiFetch<Offer>(`/admin/marketing/offers/${id}`);
 }
 
 export async function createOffer(input: {
@@ -442,7 +442,7 @@ export async function createOffer(input: {
   startDate: string;
   endDate: string;
 }): Promise<Offer> {
-  return apiFetch<Offer>("/marketing/offers", {
+  return apiFetch<Offer>("/admin/marketing/offers", {
     method: "POST",
     body: JSON.stringify(input),
   });
@@ -460,14 +460,14 @@ export async function updateOffer(id: string, input: Partial<{
   endDate: string;
   status: OfferStatus;
 }>): Promise<Offer> {
-  return apiFetch<Offer>(`/marketing/offers/${id}`, {
+  return apiFetch<Offer>(`/admin/marketing/offers/${id}`, {
     method: "PUT",
     body: JSON.stringify(input),
   });
 }
 
 export async function deleteOffer(id: string): Promise<void> {
-  return apiFetch<void>(`/marketing/offers/${id}`, { method: "DELETE" });
+  return apiFetch<void>(`/admin/marketing/offers/${id}`, { method: "DELETE" });
 }
 
 // Analytics API
@@ -481,15 +481,15 @@ export async function getMarketingStats(): Promise<{
   totalConversions: number;
   revenue: number;
 }> {
-  return apiFetch("/marketing/stats");
+  return apiFetch("/admin/marketing/stats");
 }
 
 export async function getChannelAnalytics(): Promise<ChannelAnalytics[]> {
-  return apiFetch<ChannelAnalytics[]>("/marketing/analytics/channels");
+  return apiFetch<ChannelAnalytics[]>("/admin/marketing/analytics/channels");
 }
 
 export async function getCampaignAnalytics(campaignId: string): Promise<CampaignAnalytics[]> {
-  return apiFetch<CampaignAnalytics[]>(`/marketing/analytics/campaigns/${campaignId}`);
+  return apiFetch<CampaignAnalytics[]>(`/admin/marketing/analytics/campaigns/${campaignId}`);
 }
 
 export async function getCampaignTimeline(params?: { days?: number }): Promise<{
@@ -499,5 +499,5 @@ export async function getCampaignTimeline(params?: { days?: number }): Promise<{
   conversions: number;
 }[]> {
   const qs = new URLSearchParams({ days: String(params?.days ?? 30) });
-  return apiFetch(`/marketing/analytics/timeline?${qs.toString()}`);
+  return apiFetch(`/admin/marketing/analytics/timeline?${qs.toString()}`);
 }

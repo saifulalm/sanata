@@ -1,380 +1,431 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import {
   Plus,
   Search,
   Filter,
-  DollarSign,
-  Percent,
-  Clock,
-  Gift,
-  Zap,
-  Edit2,
+  Edit3,
   Trash2,
   Eye,
   Copy,
-  ArrowRight,
-  X,
-  Calendar,
+  MoreHorizontal,
   Tag,
-  TrendingUp,
+  Percent,
+  Calendar,
   Users,
-  CheckCircle,
+  TrendingUp,
+  X,
+  Image,
+  ChevronDown,
+  BarChart3,
 } from "lucide-react";
-import { Panel, Badge, btn } from "@/components/admin/ui";
-
-type OfferType = "DISCOUNT" | "PROMO" | "BUNDLE" | "FLASH_SALE";
-type OfferStatus = "ACTIVE" | "SCHEDULED" | "EXPIRED" | "DRAFT";
+import {
+  PageHeader,
+  Panel,
+  Badge,
+  btn,
+  EmptyState,
+  inputClass,
+} from "@/components/admin/ui";
 
 interface Offer {
   id: string;
-  name: string;
-  type: OfferType;
-  status: OfferStatus;
   title: string;
   description: string;
-  discountValue?: number;
-  discountType?: "PERCENTAGE" | "FIXED";
-  minPurchase?: number;
-  code?: string;
+  discount: string;
+  image: string;
+  status: "active" | "scheduled" | "expired" | "draft";
   startDate: string;
   endDate: string;
-  usageCount: number;
-  conversionCount: number;
-  createdAt: string;
+  views: number;
+  clicks: number;
+  conversions: number;
+  targetAudience: string;
 }
 
-const mockOffers: Offer[] = [
-  { id: "1", name: "中秋特惠", type: "DISCOUNT", status: "ACTIVE", title: "Mid-Autumn Festival Special", description: "Diskon spesial untuk节日中秋節", discountValue: 20, discountType: "PERCENTAGE", minPurchase: 100000, code: "MOON20", startDate: "2026-09-01", endDate: "2026-09-30", usageCount: 156, conversionCount: 45, createdAt: "2026-08-28" },
-  { id: "2", name: "會員日", type: "PROMO", status: "ACTIVE", title: "Member Day Special", description: "Promo spesial untuk member aktif", discountValue: 15, discountType: "PERCENTAGE", minPurchase: 0, code: "MEMBER15", startDate: "2026-09-05", endDate: "2026-09-15", usageCount: 89, conversionCount: 32, createdAt: "2026-09-01" },
-  { id: "3", name: "新產品套餐", type: "BUNDLE", status: "SCHEDULED", title: "New Product Bundle", description: "Bundle produk baru dengan harga spesial", discountValue: 50000, discountType: "FIXED", minPurchase: 0, code: "BUNDLE50K", startDate: "2026-09-20", endDate: "2026-10-20", usageCount: 0, conversionCount: 0, createdAt: "2026-09-10" },
-  { id: "4", name: "閃購活動", type: "FLASH_SALE", status: "EXPIRED", title: "Flash Sale 24 Hours", description: "Flash sale 24 jam terbatas", discountValue: 30, discountType: "PERCENTAGE", minPurchase: 50000, code: "FLASH30", startDate: "2026-08-15", endDate: "2026-08-16", usageCount: 234, conversionCount: 78, createdAt: "2026-08-10" },
-  { id: "5", name: "週末促銷", type: "PROMO", status: "DRAFT", title: "Weekend Special", description: "Diskon khusus週末", discountValue: 10, discountType: "PERCENTAGE", minPurchase: 0, code: "WEEKEND10", startDate: "2026-09-25", endDate: "2026-09-27", usageCount: 0, conversionCount: 0, createdAt: "2026-09-12" },
-  { id: "6", name: "VIP專屬", type: "DISCOUNT", status: "ACTIVE", title: "VIP Exclusive Offer", description: "Diskon eksklusif untuk VIP會員", discountValue: 25, discountType: "PERCENTAGE", minPurchase: 0, code: "VIP25", startDate: "2026-09-01", endDate: "2026-12-31", usageCount: 67, conversionCount: 28, createdAt: "2026-08-25" },
+const sampleOffers: Offer[] = [
+  {
+    id: "1",
+    title: "Diskon 20% Layanan AHSP",
+    description: "Dapatkan diskon spesial untuk konsultasi dan pembuatan AHSP",
+    discount: "20%",
+    image: "",
+    status: "active",
+    startDate: "2026-03-01",
+    endDate: "2026-03-31",
+    views: 1234,
+    clicks: 456,
+    conversions: 89,
+    targetAudience: "Semua Kontak",
+  },
+  {
+    id: "2",
+    title: "Gratis Template RAB",
+    description: "Dapatkan template RAB gratis untuk proyek pertama Anda",
+    discount: "GRATIS",
+    image: "",
+    status: "active",
+    startDate: "2026-02-15",
+    endDate: "2026-04-15",
+    views: 890,
+    clicks: 234,
+    conversions: 67,
+    targetAudience: "Newsletter",
+  },
+  {
+    id: "3",
+    title: "Promo Ramadan Bundle",
+    description: "Paket lengkap konsultasi + template + follow-up",
+    discount: "35%",
+    image: "",
+    status: "scheduled",
+    startDate: "2026-03-20",
+    endDate: "2026-04-10",
+    views: 0,
+    clicks: 0,
+    conversions: 0,
+    targetAudience: "Pelanggan Prioritas",
+  },
+  {
+    id: "4",
+    title: "Referral Bonus",
+    description: "Dapatkan bonus untuk setiap referral yang berhasil",
+    discount: "Rp 500K",
+    image: "",
+    status: "active",
+    startDate: "2026-01-01",
+    endDate: "2026-12-31",
+    views: 567,
+    clicks: 189,
+    conversions: 45,
+    targetAudience: "Semua Kontak",
+  },
 ];
 
-const offerTypeIcons: Record<OfferType, typeof Percent> = {
-  DISCOUNT: Percent,
-  PROMO: Tag,
-  BUNDLE: Gift,
-  FLASH_SALE: Zap,
-};
-
-const offerTypeColors: Record<OfferType, string> = {
-  DISCOUNT: "emerald",
-  PROMO: "cyan",
-  BUNDLE: "purple",
-  FLASH_SALE: "amber",
-};
-
-const colorMap: Record<string, { bg: string; text: string; border: string }> = {
-  emerald: { bg: "bg-emerald-500/15", text: "text-emerald-300", border: "border-emerald-500/30" },
-  cyan: { bg: "bg-cyan-500/15", text: "text-cyan-300", border: "border-cyan-500/30" },
-  pink: { bg: "bg-pink-500/15", text: "text-pink-300", border: "border-pink-500/30" },
-  amber: { bg: "bg-amber-500/15", text: "text-amber-300", border: "border-amber-500/30" },
-  purple: { bg: "bg-purple-500/15", text: "text-purple-300", border: "border-purple-500/30" },
-  slate: { bg: "bg-slate-500/15", text: "text-slate-300", border: "border-slate-500/30" },
-};
+function getStatusBadge(status: string) {
+  switch (status) {
+    case "active":
+      return <Badge tone="success">Aktif</Badge>;
+    case "scheduled":
+      return <Badge tone="warning">Terjadwal</Badge>;
+    case "expired":
+      return <Badge tone="neutral">Kadaluarsa</Badge>;
+    case "draft":
+      return <Badge tone="neutral">Draf</Badge>;
+    default:
+      return <Badge tone="neutral">{status}</Badge>;
+  }
+}
 
 export default function OffersPage() {
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("ALL");
-  const [typeFilter, setTypeFilter] = useState<string>("ALL");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [selectedOffer, setSelectedOffer] = useState<Offer | null>(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
 
-  const filteredOffers = mockOffers.filter((offer) => {
-    const matchesSearch = offer.name.toLowerCase().includes(search.toLowerCase()) || offer.code?.toLowerCase().includes(search.toLowerCase());
-    const matchesStatus = statusFilter === "ALL" || offer.status === statusFilter;
-    const matchesType = typeFilter === "ALL" || offer.type === typeFilter;
-    return matchesSearch && matchesStatus && matchesType;
+  const filteredOffers = sampleOffers.filter((offer) => {
+    const matchesSearch = offer.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === "all" || offer.status === statusFilter;
+    return matchesSearch && matchesStatus;
   });
 
-  const getStatusBadge = (status: OfferStatus) => {
-    const tones: Record<OfferStatus, string> = {
-      ACTIVE: "success",
-      SCHEDULED: "warning",
-      EXPIRED: "neutral",
-      DRAFT: "neutral",
-    };
-    return <Badge tone={tones[status] as any}>{status}</Badge>;
+  const openOfferDetail = (offer: Offer) => {
+    setSelectedOffer(offer);
+    setShowDetailModal(true);
   };
 
-  const formatDiscount = (offer: Offer) => {
-    if (!offer.discountValue) return "-";
-    if (offer.discountType === "PERCENTAGE") {
-      return `${offer.discountValue}% OFF`;
-    }
-    return `Rp ${offer.discountValue.toLocaleString()} OFF`;
-  };
-
-  const getConversionRate = (offer: Offer) => {
-    if (offer.usageCount === 0) return "0%";
-    return `${((offer.conversionCount / offer.usageCount) * 100).toFixed(1)}%`;
-  };
+  const totalActive = sampleOffers.filter(o => o.status === "active").length;
+  const totalViews = sampleOffers.reduce((acc, o) => acc + o.views, 0);
+  const totalConversions = sampleOffers.reduce((acc, o) => acc + o.conversions, 0);
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.24em] text-cyan-200/70">
-            Marketing
-          </p>
-          <h1 className="font-display text-2xl font-semibold tracking-tight text-white">
-            Offers & Promotions
-          </h1>
-          <p className="mt-1 text-sm text-slate-400">
-            Kelola promo, diskon, dan penawaran khusus
-          </p>
-        </div>
-        <button onClick={() => setShowCreateModal(true)} className={btn("primary")}>
-          <Plus size={15} />
-          Buat Offer
-        </button>
-      </div>
+      {/* Page Header */}
+      <PageHeader
+        eyebrow="Marketing"
+        title="Penawaran"
+        description="Kelola promo, diskon, dan penawaran khusus"
+        actions={
+          <button onClick={() => setShowCreateModal(true)} className={btn("primary")}>
+            <Plus size={15} />
+            Penawaran Baru
+          </button>
+        }
+      />
 
       {/* Stats */}
-      <div className="grid gap-4 sm:grid-cols-4">
-        {[
-          { label: "Active Offers", value: mockOffers.filter((o) => o.status === "ACTIVE").length, icon: CheckCircle, color: "emerald" },
-          { label: "Scheduled", value: mockOffers.filter((o) => o.status === "SCHEDULED").length, icon: Clock, color: "amber" },
-          { label: "Total Usage", value: mockOffers.reduce((acc, o) => acc + o.usageCount, 0), icon: Users, color: "cyan" },
-          { label: "Total Conversions", value: mockOffers.reduce((acc, o) => acc + o.conversionCount, 0), icon: TrendingUp, color: "purple" },
-        ].map((stat) => {
-          const Icon = stat.icon;
-          const cc = colorMap[stat.color];
-          return (
-            <div key={stat.label} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-              <div className="flex items-center gap-3">
-                <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${cc.bg}`}>
-                  <Icon className={`h-5 w-5 ${cc.text}`} />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-white">{stat.value}</p>
-                  <p className="text-xs text-slate-500">{stat.label}</p>
-                </div>
-              </div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-emerald-400">
+              <Tag size={18} />
             </div>
-          );
-        })}
+            <div>
+              <p className="text-2xl font-semibold text-white">{sampleOffers.length}</p>
+              <p className="text-sm text-slate-400">Total Penawaran</p>
+            </div>
+          </div>
+        </div>
+        <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-400/30 bg-emerald-400/10 text-emerald-400">
+              <TrendingUp size={18} />
+            </div>
+            <div>
+              <p className="text-2xl font-semibold text-white">{totalActive}</p>
+              <p className="text-sm text-slate-400">Aktif</p>
+            </div>
+          </div>
+        </div>
+        <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-400/30 bg-cyan-400/10 text-cyan-400">
+              <Eye size={18} />
+            </div>
+            <div>
+              <p className="text-2xl font-semibold text-white">{totalViews.toLocaleString()}</p>
+              <p className="text-sm text-slate-400">Total Views</p>
+            </div>
+          </div>
+        </div>
+        <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-amber-400/30 bg-amber-400/10 text-amber-400">
+              <Percent size={18} />
+            </div>
+            <div>
+              <p className="text-2xl font-semibold text-white">{totalConversions}</p>
+              <p className="text-sm text-slate-400">Konversi</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-3">
-        <div className="relative flex-1 min-w-[200px] max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+        <div className="relative flex-1 min-w-[200px]">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
           <input
             type="text"
-            placeholder="Cari offer atau kode promo..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-xl border border-white/10 bg-white/[0.04] pl-10 pr-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
+            placeholder="Cari penawaran..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className={`${inputClass} pl-10`}
           />
         </div>
-
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="rounded-xl border border-white/10 bg-[#0a1626] px-3 py-2.5 text-sm text-white focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
+          className="rounded-xl border border-white/10 bg-[#0a1626] px-3.5 py-2.5 text-sm text-white"
         >
-          <option value="ALL">Semua Status</option>
-          <option value="ACTIVE">Active</option>
-          <option value="SCHEDULED">Scheduled</option>
-          <option value="EXPIRED">Expired</option>
-          <option value="DRAFT">Draft</option>
+          <option value="all">Semua Status</option>
+          <option value="active">Aktif</option>
+          <option value="scheduled">Terjadwal</option>
+          <option value="expired">Kadaluarsa</option>
+          <option value="draft">Draf</option>
         </select>
-
-        <select
-          value={typeFilter}
-          onChange={(e) => setTypeFilter(e.target.value)}
-          className="rounded-xl border border-white/10 bg-[#0a1626] px-3 py-2.5 text-sm text-white focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
-        >
-          <option value="ALL">Semua Tipe</option>
-          <option value="DISCOUNT">Discount</option>
-          <option value="PROMO">Promo</option>
-          <option value="BUNDLE">Bundle</option>
-          <option value="FLASH_SALE">Flash Sale</option>
-        </select>
+        <button className={btn("secondary", "sm")}>
+          <Filter size={14} />
+          Filter
+        </button>
       </div>
 
       {/* Offers Grid */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {filteredOffers.map((offer) => {
-          const Icon = offerTypeIcons[offer.type];
-          const typeColor = offerTypeColors[offer.type];
-          const cc = colorMap[typeColor];
-          const conversionRate = getConversionRate(offer);
-
-          return (
+      {filteredOffers.length > 0 ? (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {filteredOffers.map((offer) => (
             <div
               key={offer.id}
-              className="group rounded-xl border border-white/10 bg-white/[0.03] p-5 transition hover:border-white/20 hover:bg-white/[0.05]"
+              className="group rounded-2xl border border-white/10 bg-white/[0.035] overflow-hidden transition hover:border-cyan-300/30"
             >
-              {/* Header */}
-              <div className="mb-4 flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                  <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${cc.bg}`}>
-                    <Icon className={`h-6 w-6 ${cc.text}`} />
+              {/* Image Placeholder */}
+              <div className="relative h-40 bg-gradient-to-br from-cyan-400/20 to-purple-400/20 flex items-center justify-center">
+                <Image size={40} className="text-white/20" />
+                <div className="absolute right-3 top-3">
+                  {getStatusBadge(offer.status)}
+                </div>
+                <div className="absolute bottom-3 left-3">
+                  <span className="rounded-lg bg-black/60 px-3 py-1 text-lg font-bold text-white">
+                    {offer.discount}
+                  </span>
+                </div>
+              </div>
+              <div className="p-4">
+                <h3 className="font-semibold text-white">{offer.title}</h3>
+                <p className="mt-1 text-sm text-slate-400 line-clamp-2">{offer.description}</p>
+                <div className="mt-3 flex items-center gap-4 text-xs text-slate-500">
+                  <span className="flex items-center gap-1">
+                    <Calendar size={12} />
+                    {offer.startDate} - {offer.endDate}
+                  </span>
+                </div>
+                <div className="mt-4 flex items-center justify-between border-t border-white/[0.07] pt-3">
+                  <div className="flex items-center gap-3 text-xs text-slate-400">
+                    <span>{offer.views} views</span>
+                    <span>•</span>
+                    <span>{offer.conversions} konversi</span>
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-white">{offer.name}</h3>
-                    <p className="text-xs text-slate-500">{offer.type}</p>
+                  <div className="flex items-center gap-1 opacity-0 transition group-hover:opacity-100">
+                    <button
+                      onClick={() => openOfferDetail(offer)}
+                      className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-cyan-300"
+                    >
+                      <Eye size={14} />
+                    </button>
+                    <button className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-white">
+                      <Edit3 size={14} />
+                    </button>
+                    <button className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-red-400">
+                      <Trash2 size={14} />
+                    </button>
                   </div>
                 </div>
-                {getStatusBadge(offer.status)}
-              </div>
-
-              {/* Title & Description */}
-              <h4 className="font-medium text-white">{offer.title}</h4>
-              <p className="mt-1 text-sm text-slate-400 line-clamp-2">{offer.description}</p>
-
-              {/* Discount */}
-              <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-emerald-300">{formatDiscount(offer)}</span>
-                  {offer.code && (
-                    <div className="flex items-center gap-2">
-                      <code className="rounded bg-white/10 px-3 py-1 text-sm font-mono text-cyan-300">{offer.code}</code>
-                      <button className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 hover:bg-white/5 hover:text-white">
-                        <Copy className="h-4 w-4" />
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Date Range */}
-              <div className="mt-3 flex items-center gap-2 text-xs text-slate-500">
-                <Calendar className="h-3 w-3" />
-                {offer.startDate} - {offer.endDate}
-              </div>
-
-              {/* Stats */}
-              <div className="mt-4 grid grid-cols-3 gap-2 border-t border-white/5 pt-4">
-                <div className="text-center">
-                  <p className="text-lg font-semibold text-white">{offer.usageCount}</p>
-                  <p className="text-[10px] text-slate-500">Used</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-lg font-semibold text-cyan-300">{offer.conversionCount}</p>
-                  <p className="text-[10px] text-slate-500">Converted</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-lg font-semibold text-emerald-300">{conversionRate}</p>
-                  <p className="text-[10px] text-slate-500">Rate</p>
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="mt-4 flex items-center gap-2 border-t border-white/5 pt-4 opacity-0 transition group-hover:opacity-100">
-                <button className="flex flex-1 items-center justify-center gap-1 rounded-lg border border-white/10 px-3 py-2 text-sm text-slate-300 hover:bg-white/5">
-                  <Eye className="h-4 w-4" />
-                  View
-                </button>
-                <button className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-slate-400 hover:bg-white/5 hover:text-white">
-                  <Edit2 className="h-4 w-4" />
-                </button>
-                <button className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 text-slate-400 hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-400">
-                  <Trash2 className="h-4 w-4" />
-                </button>
               </div>
             </div>
-          );
-        })}
-      </div>
-
-      {filteredOffers.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-16 text-center">
-          <DollarSign className="h-12 w-12 text-slate-500" />
-          <p className="mt-3 text-sm font-medium text-white">Tidak ada offer ditemukan</p>
-          <p className="mt-1 text-sm text-slate-500">Coba ubah filter atau buat offer baru</p>
+          ))}
         </div>
+      ) : (
+        <EmptyState
+          icon={<Tag size={24} />}
+          title="Tidak ada penawaran"
+          description="Buat penawaran pertama untuk memulai promo"
+          action={
+            <button onClick={() => setShowCreateModal(true)} className={btn("primary")}>
+              <Plus size={15} />
+              Buat Penawaran
+            </button>
+          }
+        />
       )}
 
       {/* Create Offer Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-          <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-[#0a1626] shadow-xl">
-            <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
-              <h3 className="font-semibold text-white">Buat Offer Baru</h3>
-              <button onClick={() => setShowCreateModal(false)} className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-white/5 hover:text-white">
-                <X className="h-5 w-5" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-[#0a1626] p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="font-display text-lg font-semibold text-white">Penawaran Baru</h2>
+              <button onClick={() => setShowCreateModal(false)} className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-white">
+                <X size={18} />
               </button>
             </div>
-            <div className="p-6 space-y-4">
+            <div className="space-y-4">
               <div>
-                <label className="mb-1.5 block text-sm text-slate-400">Nama Offer</label>
-                <input
-                  type="text"
-                  placeholder="Contoh:中秋特惠"
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
+                <label className="mb-2 block text-sm font-medium text-slate-300">Judul Penawaran</label>
+                <input type="text" placeholder="Contoh: Diskon 20%" className={inputClass} />
+              </div>
+              <div>
+                <label className="mb-2 block text-sm font-medium text-slate-300">Deskripsi</label>
+                <textarea
+                  placeholder="Jelaskan detail penawaran..."
+                  className={inputClass}
+                  rows={3}
                 />
               </div>
-              <div>
-                <label className="mb-1.5 block text-sm text-slate-400">Tipe</label>
-                <div className="grid grid-cols-2 gap-2">
-                  {(["DISCOUNT", "PROMO", "BUNDLE", "FLASH_SALE"] as OfferType[]).map((type) => {
-                    const Icon = offerTypeIcons[type];
-                    const cc = colorMap[offerTypeColors[type]];
-                    return (
-                      <button key={type} className={`flex items-center gap-2 rounded-xl border p-3 text-sm transition ${cc.border} ${cc.bg} hover:brightness-110`}>
-                        <Icon className={`h-4 w-4 ${cc.text}`} />
-                        {type.replace("_", " ")}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-              <div>
-                <label className="mb-1.5 block text-sm text-slate-400">Kode Promo</label>
-                <input
-                  type="text"
-                  placeholder="Contoh: MOON20"
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="mb-1.5 block text-sm text-slate-400">Nilai Diskon</label>
-                  <input
-                    type="number"
-                    placeholder="20"
-                    className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
-                  />
+                  <label className="mb-2 block text-sm font-medium text-slate-300">Diskon</label>
+                  <input type="text" placeholder="20% atau Rp 500K" className={inputClass} />
                 </div>
                 <div>
-                  <label className="mb-1.5 block text-sm text-slate-400">Tipe Diskon</label>
-                  <select className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10">
-                    <option value="PERCENTAGE">Percentage (%)</option>
-                    <option value="FIXED">Fixed Amount (Rp)</option>
+                  <label className="mb-2 block text-sm font-medium text-slate-300">Target Audience</label>
+                  <select className="w-full rounded-xl border border-white/10 bg-[#0a1626] px-3.5 py-2.5 text-sm text-white">
+                    <option>Semua Kontak</option>
+                    <option>Pelanggan Prioritas</option>
+                    <option>Newsletter</option>
+                    <option>WhatsApp</option>
                   </select>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="mb-1.5 block text-sm text-slate-400">Tanggal Mulai</label>
-                  <input
-                    type="date"
-                    className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
-                  />
+                  <label className="mb-2 block text-sm font-medium text-slate-300">Tanggal Mulai</label>
+                  <input type="date" className={inputClass} />
                 </div>
                 <div>
-                  <label className="mb-1.5 block text-sm text-slate-400">Tanggal Berakhir</label>
-                  <input
-                    type="date"
-                    className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
-                  />
+                  <label className="mb-2 block text-sm font-medium text-slate-300">Tanggal Berakhir</label>
+                  <input type="date" className={inputClass} />
                 </div>
               </div>
+              <div>
+                <label className="mb-2 block text-sm font-medium text-slate-300">Gambar</label>
+                <div className="flex items-center justify-center rounded-xl border border-dashed border-white/20 bg-white/[0.02] p-6">
+                  <div className="text-center">
+                    <Image size={24} className="mx-auto mb-2 text-slate-400" />
+                    <p className="text-sm text-slate-400">Klik untuk upload</p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 pt-2">
+                <button onClick={() => setShowCreateModal(false)} className={btn("secondary")}>
+                  Batal
+                </button>
+                <button onClick={() => setShowCreateModal(false)} className={btn("primary")}>
+                  Simpan
+                </button>
+              </div>
             </div>
-            <div className="flex justify-end gap-3 border-t border-white/10 px-6 py-4">
-              <button onClick={() => setShowCreateModal(false)} className="rounded-xl border border-white/10 px-4 py-2.5 text-sm font-medium text-slate-300 hover:bg-white/5">
-                Batal
+          </div>
+        </div>
+      )}
+
+      {/* Offer Detail Modal */}
+      {showDetailModal && selectedOffer && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-[#0a1626] p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <div>
+                <h2 className="font-display text-lg font-semibold text-white">{selectedOffer.title}</h2>
+                <div className="mt-1">{getStatusBadge(selectedOffer.status)}</div>
+              </div>
+              <button onClick={() => setShowDetailModal(false)} className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-white">
+                <X size={18} />
               </button>
-              <button className="rounded-xl bg-cyan-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-cyan-600">
-                Buat Offer
+            </div>
+            <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+              <p className="text-sm text-slate-300">{selectedOffer.description}</p>
+            </div>
+
+            {/* Analytics */}
+            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+              <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3 text-center">
+                <p className="text-2xl font-semibold text-white">{selectedOffer.views}</p>
+                <p className="text-xs text-slate-400">Views</p>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3 text-center">
+                <p className="text-2xl font-semibold text-cyan-400">{selectedOffer.clicks}</p>
+                <p className="text-xs text-slate-400">Clicks</p>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3 text-center">
+                <p className="text-2xl font-semibold text-emerald-400">{selectedOffer.conversions}</p>
+                <p className="text-xs text-slate-400">Konversi</p>
+              </div>
+            </div>
+
+            <div className="mt-4 space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-slate-400">Diskon</span>
+                <span className="font-semibold text-amber-400">{selectedOffer.discount}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-400">Periode</span>
+                <span className="text-white">{selectedOffer.startDate} - {selectedOffer.endDate}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-400">Target</span>
+                <span className="text-white">{selectedOffer.targetAudience}</span>
+              </div>
+            </div>
+
+            <div className="mt-6 flex gap-2">
+              <button className={`${btn("secondary")} flex-1`}>
+                <Edit3 size={15} />
+                Edit
+              </button>
+              <button className={`${btn("primary")} flex-1`}>
+                <BarChart3 size={15} />
+                Analytics
               </button>
             </div>
           </div>

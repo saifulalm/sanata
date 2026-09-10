@@ -90,6 +90,7 @@ async function main() {
   await seedProjectDocs(admin.id);
   await seedWorkforce(admin.id);
   await seedLessonLearned();
+  await seedMarketing();
 
   console.log("Seed complete. Admin login: admin@sanata.id / Admin123!");
 }
@@ -2090,4 +2091,358 @@ async function seedLessonLearned() {
   }
 
   console.log(`Seeded ${lessons.length} Lesson Learned records.`);
+}
+
+/**
+ * Seed Marketing Data - Contacts, Templates, Campaigns, Offers
+ */
+async function seedMarketing() {
+  const existingContacts = await prisma.marketingContact.count();
+  if (existingContacts > 0) {
+    console.log("Skipping marketing seed — contacts already exist.");
+    return;
+  }
+
+  // ============================================
+  // MARKETING CONTACTS - 15 sample contacts
+  // ============================================
+  const contactsData = [
+    { name: "Dr. Andika Pratama", email: "andika.pratama@email.com", phone: "6281234567001", source: "Website Inquiry", tags: ["hot-lead", "commercial"], leadScore: 85, consentMarketing: true },
+    { name: "Siti Nuraini", email: "siti.nuraini@corp.co.id", phone: "6281234567002", source: "Referral", tags: ["warm-lead", "residential"], leadScore: 72, consentMarketing: true },
+    { name: "PT Borneo Property Indonesia", email: "info@borneo-property.id", phone: "6281234567003", source: "LinkedIn", tags: ["corporate", "hot-lead"], leadScore: 90, consentMarketing: true },
+    { name: "Hendra Wijaya", email: "hendra.wijaya@gmail.com", phone: "6281234567004", source: "Website Inquiry", tags: ["warm-lead", "renovation"], leadScore: 65, consentMarketing: true },
+    { name: "CV Maju Bersama", email: "admin@majubersama.co.id", phone: "6281234567005", source: "Trade Show", tags: ["corporate", "commercial"], leadScore: 78, consentMarketing: true },
+    { name: "Rina Hartati", email: "rina.hartati@properti.co.id", phone: "6281234567006", source: "Website Inquiry", tags: ["warm-lead", "residential"], leadScore: 68, consentMarketing: true },
+    { name: "PT Sentosa Realty", email: "marketing@sentosa-realty.com", phone: "6281234567007", source: "Email Campaign", tags: ["corporate", "commercial", "hot-lead"], leadScore: 82, consentMarketing: true },
+    { name: "Budi Santoso", email: "budi.santoso@email.com", phone: "6281234567008", source: "Website Inquiry", tags: ["residential", "new-client"], leadScore: 55, consentMarketing: true },
+    { name: "PT Cempaka Development", email: "projects@cempaka-dev.co.id", phone: "6281234567009", source: "LinkedIn", tags: ["corporate", "commercial"], leadScore: 88, consentMarketing: true },
+    { name: "Dewi Susilowati", email: "dewi.susilowati@rumah.com", phone: "6281234567010", source: "Referral", tags: ["residential", "warm-lead"], leadScore: 62, consentMarketing: true },
+    { name: "PT Nusantara Properti", email: "info@nusantara-properti.id", phone: "6281234567011", source: "Trade Show", tags: ["corporate", "hot-lead"], leadScore: 91, consentMarketing: true },
+    { name: "Ahmad Fauzi", email: "ahmad.fauzi@email.com", phone: "6281234567012", source: "Website Inquiry", tags: ["residential", "renovation"], leadScore: 48, consentMarketing: true },
+    { name: "PT Graha Timur Property", email: "marketing@graha-timur.co.id", phone: "6281234567013", source: "Email Campaign", tags: ["corporate", "commercial"], leadScore: 75, consentMarketing: true },
+    { name: "Mega Property Group", email: "corp@mega-property.co.id", phone: "6281234567014", source: "LinkedIn", tags: ["corporate", "hot-lead"], leadScore: 95, consentMarketing: true },
+    { name: "Wati Indriyani", email: "wati.indriyani@gmail.com", phone: "6281234567015", source: "Website Inquiry", tags: ["residential"], leadScore: 42, consentMarketing: true },
+  ];
+
+  const contacts = [];
+  for (const c of contactsData) {
+    const contact = await prisma.marketingContact.create({
+      data: {
+        name: c.name,
+        email: c.email,
+        phone: c.phone,
+        source: c.source,
+        tags: c.tags,
+        leadScore: c.leadScore,
+        consentMarketing: c.consentMarketing,
+        consentDate: c.consentMarketing ? new Date() : null,
+        status: "ACTIVE",
+      },
+    });
+    contacts.push(contact);
+  }
+  console.log(`Seeded ${contacts.length} marketing contacts.`);
+
+  // ============================================
+  // MARKETING TEMPLATES - Sample templates
+  // ============================================
+  const templatesData = [
+    {
+      name: "WhatsApp Welcome Message",
+      type: "WHATSAPP" as const,
+      content: "Halo {{name}}! Terima kasih telah menghubungi Sanata Construction. Kami siap membantu Anda dengan kebutuhan konstruksi Anda. Ada yang bisa kami bantu hari ini?",
+      variables: ["{{name}}"],
+      category: "Welcome",
+    },
+    {
+      name: "WhatsApp Offer Follow-up",
+      type: "WHATSAPP" as const,
+      content: "Hallo {{name}}, hope you are doing well! Kami ingin mengingatkan tentang penawaran khusus dari Sanata Construction. Hubungi kami untuk info lebih lanjut ya!",
+      variables: ["{{name}}"],
+      category: "Follow-up",
+    },
+    {
+      name: "Email Newsletter",
+      type: "EMAIL" as const,
+      subject: "Newsletter Sanata Construction - {{month}} {{year}}",
+      content: "<h1>Newsletter Sanata Construction</h1><p>Halo {{name}},</p><p>Berikut update terbaru dari kami...</p><p>Salam,<br/>Tim Sanata</p>",
+      variables: ["{{name}}", "{{month}}", "{{year}}"],
+      category: "Newsletter",
+    },
+    {
+      name: "Email Project Update",
+      type: "EMAIL" as const,
+      subject: "Update Proyek - {{project_name}}",
+      content: "<h2>Update Proyek {{project_name}}</h2><p>Halo {{name}},</p><p>Berikut progres terbaru proyek Anda...</p>",
+      variables: ["{{name}}", "{{project_name}}"],
+      category: "Project Update",
+    },
+    {
+      name: "Instagram Story Template",
+      type: "INSTAGRAM" as const,
+      content: "🏗️ Update proyek {{project_name}} - Progress {{progress}}%\n\n#SanataConstruction #ConstructionUpdate",
+      variables: ["{{project_name}}", "{{progress}}"],
+      category: "Social Media",
+    },
+    {
+      name: "Special Offer Template",
+      type: "OFFER" as const,
+      subject: "Penawaran Spesial dari Sanata Construction!",
+      content: "🎉 {{offer_title}}\n\n{{offer_description}}\n\nDiskon hingga {{discount_value}}!\n\nHubungi kami sekarang: bit.ly/sanata-contact",
+      variables: ["{{offer_title}}", "{{offer_description}}", "{{discount_value}}"],
+      category: "Promotion",
+    },
+    {
+      name: "WhatsApp Survey Request",
+      type: "WHATSAPP" as const,
+      content: "Hallo {{name}}! Bagaimana pengalaman Anda bersama Sanata Construction? Mohon luangkan waktu 2 menit untuk mengisi survey kami: {{survey_link}}\n\nFeedback Anda sangat berarti untuk peningkatan layanan kami! 🙏",
+      variables: ["{{name}}", "{{survey_link}}"],
+      category: "Survey",
+    },
+    {
+      name: "Email Thank You",
+      type: "EMAIL" as const,
+      subject: "Terima Kasih dari Sanata Construction",
+      content: "<h2>Terima Kasih, {{name}}!</h2><p>Kami appreciate kepercayaan Anda kepada Sanata Construction. Tim kami akan segera menghubungi Anda.</p>",
+      variables: ["{{name}}"],
+      category: "Thank You",
+    },
+  ];
+
+  const templates = [];
+  for (const t of templatesData) {
+    const template = await prisma.marketingTemplate.create({
+      data: {
+        name: t.name,
+        type: t.type,
+        subject: t.subject || null,
+        content: t.content,
+        variables: t.variables,
+        category: t.category,
+        isActive: true,
+      },
+    });
+    templates.push(template);
+  }
+  console.log(`Seeded ${templates.length} marketing templates.`);
+
+  // ============================================
+  // BROADCAST LISTS - Sample lists
+  // ============================================
+  const hotLeads = contacts.filter(c => c.leadScore >= 80);
+  const warmLeads = contacts.filter(c => c.leadScore >= 50 && c.leadScore < 80);
+  const corporate = contacts.filter(c => c.tags?.includes("corporate") || c.tags?.includes("commercial"));
+
+  const broadcastListsData = [
+    {
+      name: "Hot Leads",
+      description: "Kontak dengan lead score tinggi (80+), siap ditindaklanjuti",
+      contactIds: hotLeads.map(c => c.id),
+    },
+    {
+      name: "Warm Leads",
+      description: "Kontak dengan lead score menengah (50-79), perlu nurturing",
+      contactIds: warmLeads.map(c => c.id),
+    },
+    {
+      name: "Corporate Clients",
+      description: "Kontak dari perusahaan/corporate",
+      contactIds: corporate.map(c => c.id),
+    },
+    {
+      name: "All Active Contacts",
+      description: "Semua kontak aktif yang consent marketing",
+      contactIds: contacts.filter(c => c.consentMarketing).map(c => c.id),
+    },
+  ];
+
+  for (const list of broadcastListsData) {
+    await prisma.broadcastList.create({
+      data: {
+        name: list.name,
+        description: list.description,
+        contactIds: list.contactIds,
+        contactCount: list.contactIds.length,
+      },
+    });
+  }
+  console.log(`Seeded ${broadcastListsData.length} broadcast lists.`);
+
+  // ============================================
+  // CAMPAIGNS - Sample campaigns
+  // ============================================
+  const waTemplate = templates.find(t => t.name === "WhatsApp Welcome Message");
+  const emailTemplate = templates.find(t => t.name === "Email Newsletter");
+
+  const campaignsData = [
+    {
+      name: "Q3 2026 Newsletter",
+      type: "EMAIL" as const,
+      status: "SENT" as const,
+      content: "Newsletter triwulanan dengan update proyek dan tips konstruksi",
+      subject: "Sanata Construction Newsletter - Q3 2026",
+      templateId: emailTemplate?.id,
+      statsSent: 12,
+      statsDelivered: 11,
+      statsFailed: 1,
+      statsClicked: 4,
+      statsConverted: 1,
+      sentAt: new Date("2026-07-15"),
+    },
+    {
+      name: "Summer Promo WhatsApp Blast",
+      type: "WHATSAPP" as const,
+      status: "SENT" as const,
+      content: "Mengirim penawaran spesial musim panas untuk residential projects",
+      templateId: waTemplate?.id,
+      statsSent: 15,
+      statsDelivered: 14,
+      statsFailed: 1,
+      statsClicked: 0,
+      statsConverted: 2,
+      sentAt: new Date("2026-08-01"),
+    },
+    {
+      name: "Follow-up Hot Leads",
+      type: "WHATSAPP" as const,
+      status: "SENT" as const,
+      content: "Follow-up khusus untuk hot leads yang belum conversion",
+      templateId: waTemplate?.id,
+      statsSent: 6,
+      statsDelivered: 6,
+      statsFailed: 0,
+      statsClicked: 0,
+      statsConverted: 1,
+      sentAt: new Date("2026-08-20"),
+    },
+    {
+      name: "Project Update to Active Clients",
+      type: "EMAIL" as const,
+      status: "SENT" as const,
+      content: "Mengirim update progres proyek kepada klien aktif",
+      subject: "Update Proyek Sanata Construction - Agustus 2026",
+      statsSent: 8,
+      statsDelivered: 8,
+      statsFailed: 0,
+      statsClicked: 6,
+      statsConverted: 0,
+      sentAt: new Date("2026-08-25"),
+    },
+    {
+      name: "New Offer Announcement",
+      type: "OFFER" as const,
+      status: "DRAFT" as const,
+      content: "Mengumumkan paket spesial untuk renovasi rumah dengan diskon 15%",
+      subject: "Penawaran Spesial Renovasi dari Sanata!",
+    },
+  ];
+
+  for (const c of campaignsData) {
+    await prisma.marketingCampaign.create({
+      data: {
+        name: c.name,
+        type: c.type,
+        status: c.status,
+        content: c.content,
+        subject: c.subject,
+        templateId: c.templateId,
+        statsSent: c.statsSent || 0,
+        statsDelivered: c.statsDelivered || 0,
+        statsFailed: c.statsFailed || 0,
+        statsClicked: c.statsClicked || 0,
+        statsConverted: c.statsConverted || 0,
+        sentAt: c.sentAt,
+      },
+    });
+  }
+  console.log(`Seeded ${campaignsData.length} marketing campaigns.`);
+
+  // ============================================
+  // OFFERS - Sample promotional offers
+  // ============================================
+  const offersData = [
+    {
+      title: "Paket Renovasi Rumah Promo Musim Panas",
+      description: "Dapatkan diskon 15% untuk seluruh paket renovasi rumah dengan luas minimal 50 m². Termasuk konsultasi desain gratis dan garansi 2 tahun.",
+      discountType: "PERCENTAGE" as const,
+      discountValue: 15,
+      minimumOrder: 50000000,
+      validFrom: new Date("2026-07-01"),
+      validUntil: new Date("2026-09-30"),
+      offerCode: "SUMMER2026",
+      usageLimit: 20,
+      status: "ACTIVE" as const,
+      terms: " Berlaku untuk renovasi rumah dengan luas minimal 50m²|Include konsultasi desain gratis|Garansi 2 tahun setelah serah terima|Harus booking sebelum 30 September 2026",
+    },
+    {
+      title: "Paket Konstruksi Ruko Hemat",
+      description: "Pembangunan ruko 2-3 lantai dengan harga spesial. Include struktural, arsitektural, dan MEP standar.",
+      discountType: "FIXED_AMOUNT" as const,
+      discountValue: 25000000,
+      minimumOrder: 200000000,
+      validFrom: new Date("2026-08-01"),
+      validUntil: new Date("2026-12-31"),
+      offerCode: "RUKOHEMAT",
+      usageLimit: 10,
+      status: "ACTIVE" as const,
+      terms: " Berlaku untuk pembangunan ruko 2-3 lantai|Minimal luas bangunan 100m²|Include struktural, arsitektural, MEP standar|Pembayaran DP 30%",
+    },
+    {
+      title: "Free Survey untuk Proyek Baru",
+      description: "Konsultasi dan survei lokasi gratis untuk proyek pembangunan baru dengan nilai penawaran di atas Rp 500 juta.",
+      discountType: "FREE_SERVICE" as const,
+      discountValue: 0,
+      validFrom: new Date("2026-06-01"),
+      validUntil: new Date("2026-12-31"),
+      offerCode: "FREESURVEY",
+      status: "ACTIVE" as const,
+      terms: " Berlaku untuk proyek di atas Rp 500 juta|Survey dilakukan maksimal 3 hari kerja setelah booking|Khusus area Jabodetabek",
+    },
+    {
+      title: "Bundle Paket Interior + Konstruksi",
+      description: "Paket lengkap pembangunan + interior dengan diskon 20% untuk bagian interior. Hemat hingga Rp 75 juta!",
+      discountType: "BUNDLE" as const,
+      discountValue: 20,
+      minimumOrder: 300000000,
+      validFrom: new Date("2026-09-01"),
+      validUntil: new Date("2026-11-30"),
+      offerCode: "BUNDLE2026",
+      usageLimit: 15,
+      status: "ACTIVE" as const,
+      terms: "Bundle konstruksi + interior|Minimal nilai paket Rp 300 juta|Diskon 20% khusus bagian interior|Pengiriman max 6 bulan setelah deal",
+    },
+    {
+      title: "Early Bird Discount",
+      description: "Diskon 10% untuk klien yang签合同 (SPK) sebelum akhir bulan ini. Tawaran terbatas!",
+      discountType: "PERCENTAGE" as const,
+      discountValue: 10,
+      validFrom: new Date("2026-09-01"),
+      validUntil: new Date("2026-09-30"),
+      offerCode: "EARLYBIRD",
+      status: "ACTIVE" as const,
+      terms: "Berakhir 30 September 2026|Hanya untuk SPK baru|Minimal nilai kontrak Rp 100 juta|Cannot digabung dengan promo lain",
+    },
+  ];
+
+  for (const o of offersData) {
+    await prisma.offer.create({
+      data: {
+        title: o.title,
+        description: o.description,
+        discountType: o.discountType,
+        discountValue: o.discountValue,
+        minimumOrder: o.minimumOrder || null,
+        validFrom: o.validFrom,
+        validUntil: o.validUntil,
+        offerCode: o.offerCode,
+        usageLimit: o.usageLimit || null,
+        usageCount: 0,
+        status: o.status,
+        terms: o.terms,
+      },
+    });
+  }
+  console.log(`Seeded ${offersData.length} offers.`);
+
+  console.log("Marketing seed complete!");
 }

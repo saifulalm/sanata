@@ -1,515 +1,489 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import {
-  Plus,
   Search,
   Filter,
-  MoreHorizontal,
-  Users,
-  Mail,
-  Phone,
-  Tag,
-  Edit2,
-  Trash2,
+  Plus,
   Download,
-  Upload,
-  ChevronDown,
+  Trash2,
+  Tag,
+  Mail,
+  MessageSquare,
+  MoreHorizontal,
+  ChevronLeft,
+  ChevronRight,
   X,
-  Check,
-  AlertCircle,
+  Upload,
+  Edit3,
+  Eye,
+  Phone,
+  User,
+  Calendar,
+  CheckSquare,
+  Square,
 } from "lucide-react";
-import { Panel, Badge, btn } from "@/components/admin/ui";
+import {
+  PageHeader,
+  Panel,
+  Badge,
+  btn,
+  Toolbar,
+  EmptyState,
+  TableWrap,
+  Th,
+  Td,
+  Tr,
+  inputClass,
+  selectClass,
+} from "@/components/admin/ui";
 
 interface Contact {
   id: string;
   name: string;
-  phone?: string;
-  email?: string;
+  email: string;
+  phone: string;
   tags: string[];
-  lists: string[];
-  totalReceived: number;
-  totalOpened: number;
-  lastReceived?: string;
-  status: "ACTIVE" | "INACTIVE" | "BLOCKED";
+  status: "active" | "inactive";
   createdAt: string;
+  lastContact?: string;
+  source: string;
 }
 
-const mockContacts: Contact[] = [
-  { id: "1", name: "陳大明", phone: "+6281234567890", email: "chen.daming@email.com", tags: ["VIP", "NEW"], lists: ["VIP Customers"], totalReceived: 45, totalOpened: 38, lastReceived: "2026-09-10", status: "ACTIVE", createdAt: "2026-01-15" },
-  { id: "2", name: "王小美", phone: "+6282345678901", email: "wang.xiaomei@email.com", tags: ["REGULAR"], lists: ["Newsletter"], totalReceived: 32, totalOpened: 28, lastReceived: "2026-09-09", status: "ACTIVE", createdAt: "2026-02-20" },
-  { id: "3", name: "李小龍", phone: "+6283456789012", email: "li.xiaolong@email.com", tags: ["VIP", "HIGH_VALUE"], lists: ["VIP Customers", "New Subscribers"], totalReceived: 78, totalOpened: 72, lastReceived: "2026-09-08", status: "ACTIVE", createdAt: "2025-11-05" },
-  { id: "4", name: "張小琳", phone: "+6284567890123", email: "zhang.xiaolin@email.com", tags: ["NEW"], lists: ["New Subscribers"], totalReceived: 5, totalOpened: 4, lastReceived: "2026-09-07", status: "ACTIVE", createdAt: "2026-09-01" },
-  { id: "5", name: "劉德華", phone: "+6285678901234", email: "liu.dehua@email.com", tags: ["INACTIVE"], lists: ["Inactive Users"], totalReceived: 12, totalOpened: 2, lastReceived: "2026-06-15", status: "INACTIVE", createdAt: "2025-08-10" },
-  { id: "6", name: "周杰倫", phone: "+6286789012345", email: "zhou.jielun@email.com", tags: ["VIP"], lists: ["VIP Customers"], totalReceived: 89, totalOpened: 85, lastReceived: "2026-09-11", status: "ACTIVE", createdAt: "2025-05-20" },
-  { id: "7", name: "林志玲", phone: "+6287890123456", email: "lin.zhiling@email.com", tags: ["REGULAR"], lists: ["Newsletter"], totalReceived: 28, totalOpened: 22, lastReceived: "2026-09-05", status: "ACTIVE", createdAt: "2026-03-12" },
-  { id: "8", name: "郭富城", phone: "+6288901234567", email: "guo.fucheng@email.com", tags: ["BLOCKED"], lists: [], totalReceived: 15, totalOpened: 0, status: "BLOCKED", createdAt: "2025-09-08" },
+const sampleContacts: Contact[] = [
+  { id: "1", name: "Ahmad Fauzi", email: "ahmad.fauzi@email.com", phone: "0812-3456-7890", tags: ["priority", "whatsapp"], status: "active", createdAt: "2026-01-15", lastContact: "2026-03-15", source: "Website" },
+  { id: "2", name: "Budi Santoso", email: "budi.s@email.com", phone: "0813-9876-5432", tags: ["newsletter"], status: "active", createdAt: "2026-01-20", lastContact: "2026-03-14", source: "Newsletter" },
+  { id: "3", name: "Dewi Lestari", email: "dewi.lestari@email.com", phone: "0815-2345-6789", tags: ["whatsapp", "vip"], status: "active", createdAt: "2026-02-01", lastContact: "2026-03-10", source: "WhatsApp" },
+  { id: "4", name: "Eko Prasetyo", email: "eko.pras@email.com", phone: "0821-5678-9012", tags: ["newsletter"], status: "active", createdAt: "2026-02-05", lastContact: "2026-03-08", source: "Website" },
+  { id: "5", name: "Fitri Handayani", email: "fitri.h@email.com", phone: "0852-3456-7890", tags: ["priority"], status: "inactive", createdAt: "2026-02-10", lastContact: "2026-02-20", source: "Referral" },
+  { id: "6", name: "Gunawan Wijaya", email: "gunawan.w@email.com", phone: "0878-9012-3456", tags: ["whatsapp"], status: "active", createdAt: "2026-02-15", lastContact: "2026-03-12", source: "WhatsApp" },
+  { id: "7", name: "Hendra Kusuma", email: "hendra.k@email.com", phone: "0896-7890-1234", tags: ["newsletter", "priority"], status: "active", createdAt: "2026-02-20", lastContact: "2026-03-05", source: "Newsletter" },
 ];
 
-const allTags = ["VIP", "REGULAR", "NEW", "HIGH_VALUE", "INACTIVE", "BLOCKED"];
-const allLists = ["VIP Customers", "New Subscribers", "Inactive Users", "Newsletter", "Product Interested"];
+const tagColors: Record<string, string> = {
+  priority: "bg-amber-400/10 border-amber-400/30 text-amber-300",
+  whatsapp: "bg-green-400/10 border-green-400/30 text-green-300",
+  newsletter: "bg-blue-400/10 border-blue-400/30 text-blue-300",
+  vip: "bg-purple-400/10 border-purple-400/30 text-purple-300",
+};
 
 export default function ContactsPage() {
-  const [search, setSearch] = useState("");
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [selectedLists, setSelectedLists] = useState<string[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [selectedContacts, setSelectedContacts] = useState<string[]>([]);
-  const [showAddModal, setShowAddModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const [showImportModal, setShowImportModal] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
-  const [newContact, setNewContact] = useState({ name: "", phone: "", email: "", tags: [] as string[] });
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
+  const [showTagModal, setShowTagModal] = useState(false);
+  const itemsPerPage = 10;
 
-  const filteredContacts = mockContacts.filter((contact) => {
+  const filteredContacts = sampleContacts.filter((contact) => {
     const matchesSearch =
-      contact.name.toLowerCase().includes(search.toLowerCase()) ||
-      contact.email?.toLowerCase().includes(search.toLowerCase()) ||
-      contact.phone?.includes(search);
-    const matchesTags = selectedTags.length === 0 || selectedTags.some((tag) => contact.tags.includes(tag));
-    const matchesLists = selectedLists.length === 0 || selectedLists.some((list) => contact.lists.includes(list));
-    return matchesSearch && matchesTags && matchesLists;
+      contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contact.phone.includes(searchTerm);
+    const matchesStatus = statusFilter === "all" || contact.status === statusFilter;
+    return matchesSearch && matchesStatus;
   });
 
-  const toggleTag = (tag: string) => {
-    setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
-  };
-
-  const toggleList = (list: string) => {
-    setSelectedLists((prev) => (prev.includes(list) ? prev.filter((l) => l !== list) : [...prev, list]));
-  };
-
-  const toggleSelect = (id: string) => {
-    setSelectedContacts((prev) => (prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]));
-  };
+  const totalPages = Math.ceil(filteredContacts.length / itemsPerPage);
+  const paginatedContacts = filteredContacts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const toggleSelectAll = () => {
-    if (selectedContacts.length === filteredContacts.length) {
+    if (selectedContacts.length === paginatedContacts.length) {
       setSelectedContacts([]);
     } else {
-      setSelectedContacts(filteredContacts.map((c) => c.id));
+      setSelectedContacts(paginatedContacts.map((c) => c.id));
     }
   };
 
-  const clearFilters = () => {
-    setSelectedTags([]);
-    setSelectedLists([]);
-    setSearch("");
+  const toggleSelect = (id: string) => {
+    setSelectedContacts((prev) =>
+      prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
+    );
   };
 
-  const hasActiveFilters = selectedTags.length > 0 || selectedLists.length > 0 || search.length > 0;
-
-  const getStatusBadge = (status: Contact["status"]) => {
-    const tones: Record<Contact["status"], string> = {
-      ACTIVE: "success",
-      INACTIVE: "warning",
-      BLOCKED: "danger",
-    };
-    return <Badge tone={tones[status] as any}>{status}</Badge>;
-  };
-
-  const tagColors: Record<string, string> = {
-    VIP: "bg-amber-500/15 text-amber-300 border-amber-500/30",
-    REGULAR: "bg-slate-500/15 text-slate-300 border-slate-500/30",
-    NEW: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
-    HIGH_VALUE: "bg-purple-500/15 text-purple-300 border-purple-500/30",
-    INACTIVE: "bg-red-500/15 text-red-300 border-red-500/30",
-    BLOCKED: "bg-gray-500/15 text-gray-400 border-gray-500/30",
+  const openContactDetail = (contact: Contact) => {
+    setSelectedContact(contact);
+    setShowDetailModal(true);
   };
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.24em] text-cyan-200/70">
-            Marketing
-          </p>
-          <h1 className="font-display text-2xl font-semibold tracking-tight text-white">
-            Contacts
-          </h1>
-          <p className="mt-1 text-sm text-slate-400">
-            Kelola kontak marketing Anda
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            onClick={() => setShowImportModal(true)}
-            className={btn("secondary")}
-          >
-            <Upload size={15} />
-            Import
-          </button>
-          <button className={btn("secondary")}>
-            <Download size={15} />
-            Export
-          </button>
-          <button onClick={() => setShowAddModal(true)} className={btn("primary")}>
-            <Plus size={15} />
-            Tambah Kontak
-          </button>
-        </div>
-      </div>
+      {/* Page Header */}
+      <PageHeader
+        eyebrow="Marketing"
+        title="Kontak"
+        description="Kelola database kontak dan audience"
+        actions={
+          <div className="flex items-center gap-2">
+            <button onClick={() => setShowImportModal(true)} className={btn("secondary")}>
+              <Upload size={15} />
+              Impor CSV
+            </button>
+            <button className={btn("primary")}>
+              <Plus size={15} />
+              Tambah Kontak
+            </button>
+          </div>
+        }
+      />
 
       {/* Stats */}
       <div className="grid gap-4 sm:grid-cols-4">
-        {[
-          { label: "Total Kontak", value: mockContacts.length, icon: Users, color: "cyan" },
-          { label: "Active", value: mockContacts.filter((c) => c.status === "ACTIVE").length, icon: Check, color: "emerald" },
-          { label: "Inactive", value: mockContacts.filter((c) => c.status === "INACTIVE").length, icon: AlertCircle, color: "amber" },
-          { label: "Blocked", value: mockContacts.filter((c) => c.status === "BLOCKED").length, icon: X, color: "red" },
-        ].map((stat) => {
-          const Icon = stat.icon;
-          return (
-            <div key={stat.label} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-              <div className="flex items-center gap-3">
-                <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${
-                  stat.color === "cyan" ? "bg-cyan-500/15" :
-                  stat.color === "emerald" ? "bg-emerald-500/15" :
-                  stat.color === "amber" ? "bg-amber-500/15" : "bg-red-500/15"
-                }`}>
-                  <Icon className={`h-5 w-5 ${
-                    stat.color === "cyan" ? "text-cyan-300" :
-                    stat.color === "emerald" ? "text-emerald-300" :
-                    stat.color === "amber" ? "text-amber-300" : "text-red-300"
-                  }`} />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-white">{stat.value}</p>
-                  <p className="text-xs text-slate-500">{stat.label}</p>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Filters */}
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="relative flex-1 min-w-[200px] max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
-          <input
-            type="text"
-            placeholder="Cari nama, email, atau telepon..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-xl border border-white/10 bg-white/[0.04] pl-10 pr-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
-          />
+        <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
+          <p className="text-sm text-slate-400">Total Kontak</p>
+          <p className="mt-1 text-2xl font-semibold text-white">5,430</p>
         </div>
-
-        <button
-          onClick={() => setShowFilters(!showFilters)}
-          className={`flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition ${
-            showFilters || hasActiveFilters
-              ? "border-cyan-500/30 bg-cyan-500/10 text-cyan-300"
-              : "border-white/10 bg-white/[0.05] text-slate-300 hover:bg-white/[0.08]"
-          }`}
-        >
-          <Filter className="h-4 w-4" />
-          Filter
-          {hasActiveFilters && (
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-cyan-500 text-xs text-white">
-              {selectedTags.length + selectedLists.length}
-            </span>
-          )}
-        </button>
-
-        {hasActiveFilters && (
-          <button onClick={clearFilters} className="flex items-center gap-1 text-sm text-slate-400 hover:text-white">
-            <X className="h-4 w-4" />
-            Clear
-          </button>
-        )}
-      </div>
-
-      {/* Filter Panel */}
-      {showFilters && (
-        <Panel bodyClassName="p-4" padded={false}>
-          <div className="grid gap-6 sm:grid-cols-2">
-            <div>
-              <h4 className="mb-3 text-sm font-medium text-white">Filter by Tags</h4>
-              <div className="flex flex-wrap gap-2">
-                {allTags.map((tag) => (
-                  <button
-                    key={tag}
-                    onClick={() => toggleTag(tag)}
-                    className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
-                      selectedTags.includes(tag)
-                        ? "border-cyan-500/30 bg-cyan-500/10 text-cyan-300"
-                        : "border-white/10 text-slate-400 hover:border-white/20 hover:text-white"
-                    }`}
-                  >
-                    {tag}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h4 className="mb-3 text-sm font-medium text-white">Filter by Lists</h4>
-              <div className="flex flex-wrap gap-2">
-                {allLists.map((list) => (
-                  <button
-                    key={list}
-                    onClick={() => toggleList(list)}
-                    className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
-                      selectedLists.includes(list)
-                        ? "border-cyan-500/30 bg-cyan-500/10 text-cyan-300"
-                        : "border-white/10 text-slate-400 hover:border-white/20 hover:text-white"
-                    }`}
-                  >
-                    {list}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </Panel>
-      )}
-
-      {/* Contacts Table */}
-      <Panel bodyClassName="p-0" padded={false}>
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[800px] text-sm">
-            <thead>
-              <tr className="border-b border-white/[0.07] bg-white/[0.03]">
-                <th className="px-4 py-3 text-left">
-                  <input
-                    type="checkbox"
-                    checked={selectedContacts.length === filteredContacts.length && filteredContacts.length > 0}
-                    onChange={toggleSelectAll}
-                    className="h-4 w-4 rounded border-white/20 bg-white/5 text-cyan-400 focus:ring-cyan-400/20"
-                  />
-                </th>
-                <th className="whitespace-nowrap px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
-                  Kontak
-                </th>
-                <th className="whitespace-nowrap px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
-                  Tags
-                </th>
-                <th className="whitespace-nowrap px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
-                  Lists
-                </th>
-                <th className="whitespace-nowrap px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
-                  Stats
-                </th>
-                <th className="whitespace-nowrap px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
-                  Status
-                </th>
-                <th className="whitespace-nowrap px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
-                  Terakhir
-                </th>
-                <th className="px-4 py-3 text-right">
-                  <span className="sr-only">Actions</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/[0.05]">
-              {filteredContacts.map((contact) => (
-                <tr key={contact.id} className="transition hover:bg-white/[0.03]">
-                  <td className="px-4 py-3">
-                    <input
-                      type="checkbox"
-                      checked={selectedContacts.includes(contact.id)}
-                      onChange={() => toggleSelect(contact.id)}
-                      className="h-4 w-4 rounded border-white/20 bg-white/5 text-cyan-400 focus:ring-cyan-400/20"
-                    />
-                  </td>
-                  <td className="px-4 py-3">
-                    <div>
-                      <p className="font-medium text-white">{contact.name}</p>
-                      <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-500">
-                        {contact.email && (
-                          <span className="flex items-center gap-1">
-                            <Mail className="h-3 w-3" />
-                            {contact.email}
-                          </span>
-                        )}
-                        {contact.phone && (
-                          <span className="flex items-center gap-1">
-                            <Phone className="h-3 w-3" />
-                            {contact.phone}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex flex-wrap gap-1">
-                      {contact.tags.map((tag) => (
-                        <span key={tag} className={`rounded-full border px-2 py-0.5 text-[10px] font-medium ${tagColors[tag]}`}>
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex flex-wrap gap-1">
-                      {contact.lists.slice(0, 2).map((list) => (
-                        <span key={list} className="text-xs text-slate-400">
-                          {list}
-                        </span>
-                      ))}
-                      {contact.lists.length > 2 && (
-                        <span className="text-xs text-slate-500">+{contact.lists.length - 2}</span>
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-sm">
-                    <span className="text-white">{contact.totalReceived}</span>
-                    <span className="text-slate-500">/</span>
-                    <span className="text-cyan-300">{contact.totalOpened}</span>
-                  </td>
-                  <td className="px-4 py-3">{getStatusBadge(contact.status)}</td>
-                  <td className="px-4 py-3 text-xs text-slate-500">{contact.lastReceived || "-"}</td>
-                  <td className="px-4 py-3 text-right">
-                    <div className="flex items-center justify-end gap-1">
-                      <button className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-white/5 hover:text-white">
-                        <Edit2 className="h-4 w-4" />
-                      </button>
-                      <button className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-white/5 hover:text-red-400">
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
+          <p className="text-sm text-slate-400">Aktif</p>
+          <p className="mt-1 text-2xl font-semibold text-emerald-400">4,125</p>
         </div>
-
-        {filteredContacts.length === 0 && (
-          <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
-            <Users className="h-12 w-12 text-slate-500" />
-            <p className="mt-3 text-sm font-medium text-white">Tidak ada kontak ditemukan</p>
-            <p className="mt-1 text-sm text-slate-500">Coba ubah filter atau tambahkan kontak baru</p>
-          </div>
-        )}
-      </Panel>
+        <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
+          <p className="text-sm text-slate-400">WhatsApp</p>
+          <p className="mt-1 text-2xl font-semibold text-green-400">3,200</p>
+        </div>
+        <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
+          <p className="text-sm text-slate-400">Email</p>
+          <p className="mt-1 text-2xl font-semibold text-blue-400">1,850</p>
+        </div>
+      </div>
 
       {/* Bulk Actions */}
       {selectedContacts.length > 0 && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 rounded-2xl border border-white/10 bg-[#0a1626] px-5 py-3 shadow-xl">
-          <span className="text-sm text-slate-300">{selectedContacts.length} kontak dipilih</span>
-          <div className="h-4 w-px bg-white/10" />
-          <button className="flex items-center gap-2 text-sm text-cyan-400 hover:text-cyan-300">
-            <Tag className="h-4 w-4" />
-            Tambah Tag
+        <div className="flex items-center gap-3 rounded-xl border border-cyan-300/20 bg-cyan-300/10 p-3">
+          <span className="text-sm text-cyan-200">{selectedContacts.length} kontak dipilih</span>
+          <button onClick={() => setShowTagModal(true)} className={btn("secondary", "sm")}>
+            <Tag size={14} />
+            Beri Tag
           </button>
-          <button className="flex items-center gap-2 text-sm text-cyan-400 hover:text-cyan-300">
-            <Users className="h-4 w-4" />
-            Tambah ke List
+          <button className={btn("secondary", "sm")}>
+            <Mail size={14} />
+            Kirim Email
           </button>
-          <button className="flex items-center gap-2 text-sm text-red-400 hover:text-red-300">
-            <Trash2 className="h-4 w-4" />
+          <button className={btn("secondary", "sm")}>
+            <MessageSquare size={14} />
+            Kirim WA
+          </button>
+          <button className={btn("danger", "sm")}>
+            <Trash2 size={14} />
             Hapus
           </button>
         </div>
       )}
 
-      {/* Add Contact Modal */}
-      {showAddModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#0a1626] shadow-xl">
-            <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
-              <h3 className="font-semibold text-white">Tambah Kontak Baru</h3>
-              <button onClick={() => setShowAddModal(false)} className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-white/5 hover:text-white">
-                <X className="h-5 w-5" />
+      {/* Filters */}
+      <Panel padded={false}>
+        <div className="flex flex-wrap items-center gap-3 p-4">
+          <div className="relative flex-1 min-w-[200px]">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+            <input
+              type="text"
+              placeholder="Cari nama, email, atau telepon..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className={`${inputClass} pl-10`}
+            />
+          </div>
+
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className={selectClass}
+            style={{ width: "auto" }}
+          >
+            <option value="all">Semua Status</option>
+            <option value="active">Aktif</option>
+            <option value="inactive">Tidak Aktif</option>
+          </select>
+
+          <button className={btn("secondary", "sm")}>
+            <Filter size={14} />
+            Filter Lanjutan
+          </button>
+
+          <button className={btn("secondary", "sm")}>
+            <Download size={14} />
+            Export
+          </button>
+        </div>
+
+        {/* Contacts Table */}
+        {filteredContacts.length > 0 ? (
+          <>
+            <TableWrap>
+              <table className="w-full min-w-[800px] text-sm">
+                <thead>
+                  <tr>
+                    <Th>
+                      <input
+                        type="checkbox"
+                        checked={selectedContacts.length === paginatedContacts.length && paginatedContacts.length > 0}
+                        onChange={toggleSelectAll}
+                        className="h-4 w-4 rounded border-white/20 bg-white/5"
+                      />
+                    </Th>
+                    <Th>Kontak</Th>
+                    <Th>Telepon</Th>
+                    <Th>Tags</Th>
+                    <Th>Status</Th>
+                    <Th>Terakhir Kontak</Th>
+                    <Th></Th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedContacts.map((contact) => (
+                    <Tr key={contact.id}>
+                      <Td>
+                        <input
+                          type="checkbox"
+                          checked={selectedContacts.includes(contact.id)}
+                          onChange={() => toggleSelect(contact.id)}
+                          className="h-4 w-4 rounded border-white/20 bg-white/5"
+                        />
+                      </Td>
+                      <Td>
+                        <div>
+                          <p className="font-medium text-white">{contact.name}</p>
+                          <p className="text-xs text-slate-500">{contact.email}</p>
+                        </div>
+                      </Td>
+                      <Td className="text-slate-400">{contact.phone}</Td>
+                      <Td>
+                        <div className="flex flex-wrap gap-1">
+                          {contact.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase ${tagColors[tag] || "border-white/10 bg-white/5 text-slate-400"}`}
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </Td>
+                      <Td>
+                        <Badge tone={contact.status === "active" ? "success" : "neutral"}>
+                          {contact.status === "active" ? "Aktif" : "Tidak Aktif"}
+                        </Badge>
+                      </Td>
+                      <Td className="text-slate-400">{contact.lastContact || "-"}</Td>
+                      <Td>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => openContactDetail(contact)}
+                            className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-cyan-300"
+                          >
+                            <Eye size={16} />
+                          </button>
+                          <button className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-white">
+                            <Edit3 size={16} />
+                          </button>
+                          <button className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-red-400">
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </Td>
+                    </Tr>
+                  ))}
+                </tbody>
+              </table>
+            </TableWrap>
+
+            {/* Pagination */}
+            <div className="flex items-center justify-between border-t border-white/[0.07] p-4">
+              <span className="text-sm text-slate-400">
+                Menampilkan {(currentPage - 1) * itemsPerPage + 1} -{" "}
+                {Math.min(currentPage * itemsPerPage, filteredContacts.length)} dari{" "}
+                {filteredContacts.length} kontak
+              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className={`${btn("secondary", "sm")} disabled:opacity-50`}
+                >
+                  <ChevronLeft size={14} />
+                </button>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`h-8 w-8 rounded-lg text-sm ${
+                      currentPage === page
+                        ? "bg-cyan-300/20 text-cyan-300"
+                        : "text-slate-400 hover:bg-white/5 hover:text-white"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+                <button
+                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className={`${btn("secondary", "sm")} disabled:opacity-50`}
+                >
+                  <ChevronRight size={14} />
+                </button>
+              </div>
+            </div>
+          </>
+        ) : (
+          <EmptyState
+            icon={<User size={24} />}
+            title="Tidak ada kontak"
+            description="Tambahkan kontak pertama atau impor dari CSV"
+            action={
+              <div className="flex gap-2">
+                <button onClick={() => setShowImportModal(true)} className={btn("secondary")}>
+                  <Upload size={15} />
+                  Impor CSV
+                </button>
+                <button className={btn("primary")}>
+                  <Plus size={15} />
+                  Tambah Kontak
+                </button>
+              </div>
+            }
+          />
+        )}
+      </Panel>
+
+      {/* Import Modal */}
+      {showImportModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-[#0a1626] p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="font-display text-lg font-semibold text-white">Impor Kontak dari CSV</h2>
+              <button
+                onClick={() => setShowImportModal(false)}
+                className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-white"
+              >
+                <X size={18} />
               </button>
             </div>
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="mb-1.5 block text-sm text-slate-400">Nama</label>
-                <input
-                  type="text"
-                  value={newContact.name}
-                  onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
-                  placeholder="Masukkan nama"
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
-                />
-              </div>
-              <div>
-                <label className="mb-1.5 block text-sm text-slate-400">Email</label>
-                <input
-                  type="email"
-                  value={newContact.email}
-                  onChange={(e) => setNewContact({ ...newContact, email: e.target.value })}
-                  placeholder="email@example.com"
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
-                />
-              </div>
-              <div>
-                <label className="mb-1.5 block text-sm text-slate-400">Telepon</label>
-                <input
-                  type="tel"
-                  value={newContact.phone}
-                  onChange={(e) => setNewContact({ ...newContact, phone: e.target.value })}
-                  placeholder="+628..."
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
-                />
-              </div>
-              <div>
-                <label className="mb-1.5 block text-sm text-slate-400">Tags</label>
-                <div className="flex flex-wrap gap-2">
-                  {allTags.map((tag) => (
-                    <button
-                      key={tag}
-                      onClick={() => {
-                        const tags = newContact.tags.includes(tag)
-                          ? newContact.tags.filter((t) => t !== tag)
-                          : [...newContact.tags, tag];
-                        setNewContact({ ...newContact, tags });
-                      }}
-                      className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
-                        newContact.tags.includes(tag)
-                          ? "border-cyan-500/30 bg-cyan-500/10 text-cyan-300"
-                          : "border-white/10 text-slate-400 hover:border-white/20 hover:text-white"
-                      }`}
-                    >
-                      {tag}
-                    </button>
-                  ))}
+            <div className="space-y-4">
+              <div className="flex items-center justify-center rounded-xl border border-dashed border-white/20 bg-white/[0.02] p-8">
+                <div className="text-center">
+                  <Upload size={32} className="mx-auto mb-3 text-slate-400" />
+                  <p className="text-sm text-slate-300">Seret file CSV ke sini</p>
+                  <p className="mt-1 text-xs text-slate-500">atau klik untuk memilih file</p>
+                  <button className="mt-4 rounded-lg bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
+                    Pilih File
+                  </button>
                 </div>
               </div>
-            </div>
-            <div className="flex justify-end gap-3 border-t border-white/10 px-6 py-4">
-              <button onClick={() => setShowAddModal(false)} className="rounded-xl border border-white/10 px-4 py-2.5 text-sm font-medium text-slate-300 hover:bg-white/5">
-                Batal
-              </button>
-              <button className="rounded-xl bg-cyan-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-cyan-600">
-                Simpan
-              </button>
+              <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+                <p className="text-sm font-medium text-white">Format CSV yang didukung:</p>
+                <p className="mt-1 text-xs text-slate-400">
+                  name, email, phone, tags (pisahkan dengan koma)
+                </p>
+              </div>
+              <div className="flex justify-end gap-2">
+                <button onClick={() => setShowImportModal(false)} className={btn("secondary")}>
+                  Batal
+                </button>
+                <button className={btn("primary")}>Impor</button>
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Import Modal */}
-      {showImportModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#0a1626] shadow-xl">
-            <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
-              <h3 className="font-semibold text-white">Import Kontak</h3>
-              <button onClick={() => setShowImportModal(false)} className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-white/5 hover:text-white">
-                <X className="h-5 w-5" />
+      {/* Contact Detail Modal */}
+      {showDetailModal && selectedContact && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-[#0a1626] p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="font-display text-lg font-semibold text-white">Detail Kontak</h2>
+              <button
+                onClick={() => setShowDetailModal(false)}
+                className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-white"
+              >
+                <X size={18} />
               </button>
             </div>
-            <div className="p-6">
-              <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-white/10 p-8 transition hover:border-white/20">
-                <Upload className="h-12 w-12 text-slate-500" />
-                <p className="mt-4 text-sm font-medium text-white">Drop file di sini</p>
-                <p className="mt-1 text-sm text-slate-400">atau klik untuk browse</p>
-                <p className="mt-3 text-xs text-slate-500">CSV, XLSX (max 10MB)</p>
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-cyan-400/20 text-cyan-400">
+                  <User size={24} />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white">{selectedContact.name}</h3>
+                  <p className="text-sm text-slate-400">{selectedContact.email}</p>
+                </div>
               </div>
-              <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.02] p-4">
-                <h4 className="text-sm font-medium text-white">Template Kolom</h4>
-                <p className="mt-1 text-xs text-slate-400">name, email, phone, tags (pisahkan dengan koma)</p>
+              <div className="grid gap-3">
+                <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3">
+                  <Phone size={16} className="text-slate-400" />
+                  <span className="text-white">{selectedContact.phone}</span>
+                </div>
+                <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3">
+                  <Calendar size={16} className="text-slate-400" />
+                  <span className="text-white">Bergabung {selectedContact.createdAt}</span>
+                </div>
+              </div>
+              <div>
+                <p className="mb-2 text-sm font-medium text-slate-400">Tags</p>
+                <div className="flex flex-wrap gap-2">
+                  {selectedContact.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className={`rounded-full border px-3 py-1 text-xs font-semibold uppercase ${tagColors[tag] || "border-white/10 bg-white/5 text-slate-400"}`}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="flex gap-2 pt-4">
+                <button className={`${btn("primary")} flex-1`}>
+                  <MessageSquare size={15} />
+                  Kirim WhatsApp
+                </button>
+                <button className={`${btn("secondary")} flex-1`}>
+                  <Mail size={15} />
+                  Kirim Email
+                </button>
               </div>
             </div>
-            <div className="flex justify-end gap-3 border-t border-white/10 px-6 py-4">
-              <button onClick={() => setShowImportModal(false)} className="rounded-xl border border-white/10 px-4 py-2.5 text-sm font-medium text-slate-300 hover:bg-white/5">
+          </div>
+        </div>
+      )}
+
+      {/* Tag Modal */}
+      {showTagModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#0a1626] p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="font-display text-lg font-semibold text-white">Berikan Tag</h2>
+              <button
+                onClick={() => setShowTagModal(false)}
+                className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-white"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <div className="space-y-2">
+              {["priority", "whatsapp", "newsletter", "vip"].map((tag) => (
+                <button
+                  key={tag}
+                  className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left transition hover:bg-white/5 ${tagColors[tag]}`}
+                >
+                  <CheckSquare size={16} />
+                  <span className="capitalize">{tag}</span>
+                </button>
+              ))}
+            </div>
+            <div className="mt-4 flex justify-end gap-2">
+              <button onClick={() => setShowTagModal(false)} className={btn("secondary")}>
                 Batal
               </button>
-              <button className="rounded-xl bg-cyan-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-cyan-600">
-                Import
+              <button onClick={() => setShowTagModal(false)} className={btn("primary")}>
+                Simpan
               </button>
             </div>
           </div>

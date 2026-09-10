@@ -2,313 +2,360 @@
 
 import { useState } from "react";
 import {
-  Plus,
   Search,
   Filter,
-  FileText,
-  MessageSquare,
-  Mail,
-  Image,
-  DollarSign,
-  Copy,
-  Edit2,
+  Plus,
+  Grid,
+  List,
+  Edit3,
   Trash2,
+  Copy,
   Eye,
-  Star,
-  Clock,
-  Zap,
   X,
+  Mail,
+  MessageSquare,
+  Instagram,
+  Zap,
+  FileText,
+  Tag,
+  ChevronDown,
 } from "lucide-react";
-import { Panel, Badge, btn } from "@/components/admin/ui";
-
-type TemplateCategory = "WHATSAPP" | "EMAIL" | "INSTAGRAM" | "OFFER" | "GENERAL";
+import {
+  PageHeader,
+  Panel,
+  Badge,
+  btn,
+  EmptyState,
+  inputClass,
+  textareaClass,
+} from "@/components/admin/ui";
 
 interface Template {
   id: string;
   name: string;
-  category: TemplateCategory;
-  subject?: string;
-  body: string;
-  variables: string[];
-  isFavorite: boolean;
-  usageCount: number;
+  category: string;
+  channel: string;
+  preview: string;
   lastUsed?: string;
-  createdAt: string;
+  usageCount: number;
 }
 
-const mockTemplates: Template[] = [
-  { id: "1", name: "Welcome Promo", category: "WHATSAPP", body: "Selamat datang! Nikmati diskon 20% untuk pembelian pertama Anda dengan kode: WELCOME20", variables: ["name", "code"], isFavorite: true, usageCount: 156, lastUsed: "2026-09-10", createdAt: "2026-08-01" },
-  { id: "2", name: "New Product Alert", category: "WHATSAPP", body: "Produk baru sudah tersedia! Cek koleksi terbaru kami.\n\n{{product_link}}\n\nJangan sampai kehabisan!", variables: ["name", "product_link"], isFavorite: false, usageCount: 89, lastUsed: "2026-09-08", createdAt: "2026-08-15" },
-  { id: "3", name: "Order Confirmation", category: "WHATSAPP", body: "Terima kasih! Pesanan Anda telah dikonfirmasi.\n\nOrder ID: {{order_id}}\nTotal: {{total}}\n\nKami akan segera memproses pesanan Anda.", variables: ["name", "order_id", "total"], isFavorite: true, usageCount: 234, lastUsed: "2026-09-11", createdAt: "2026-07-20" },
-  { id: "4", name: "Weekly Newsletter", category: "EMAIL", subject: "Newsletter Mingguan - {{week}}", body: "Halo {{name}},\n\nBerikut berita terbaru dari kami minggu ini:\n\n{{news_items}}\n\nSalam,\nTim Kami", variables: ["name", "week", "news_items"], isFavorite: true, usageCount: 45, lastUsed: "2026-09-05", createdAt: "2026-08-10" },
-  { id: "5", name: "Special Offer", category: "OFFER", body: "Hanya untuk Anda!\n\nGunakan kode {{code}} untuk mendapatkan potongan {{discount}}%\n\nBerlaku sampai {{end_date}}", variables: ["name", "code", "discount", "end_date"], isFavorite: false, usageCount: 67, lastUsed: "2026-09-09", createdAt: "2026-08-20" },
-  { id: "6", name: "Flash Sale", category: "OFFER", body: "FLASH SALE!\n\n{{discount}}% OFF untuk {{product}}!\n\nWaktu terbatas hanya {{hours}} jam!\n\n{{link}}", variables: ["discount", "product", "hours", "link"], isFavorite: true, usageCount: 112, lastUsed: "2026-09-07", createdAt: "2026-08-25" },
-  { id: "7", name: "New Post Announcement", category: "INSTAGRAM", body: "Post baru!\n\n{{caption}}\n\n{{hashtags}}", variables: ["caption", "hashtags"], isFavorite: false, usageCount: 34, lastUsed: "2026-09-06", createdAt: "2026-09-01" },
-  { id: "8", name: "Bundle Promo", category: "OFFER", body: "Bundle Deal!\n\nBeli {{qty}} {{product}} dan dapatkan {{bonus}} GRATIS!\n\n{{link}}", variables: ["qty", "product", "bonus", "link"], isFavorite: false, usageCount: 23, lastUsed: "2026-08-30", createdAt: "2026-08-28" },
+const sampleTemplates: Template[] = [
+  { id: "1", name: "Promo Diskon 20%", category: "Promo", channel: "whatsapp", preview: "Assalamu'alaikum! Dapatkan promo spesial...", lastUsed: "2026-03-15", usageCount: 45 },
+  { id: "2", name: "Selamat Datang", category: "Welcome", channel: "whatsapp", preview: "Selamat bergabung! Kami senang...", lastUsed: "2026-03-10", usageCount: 120 },
+  { id: "3", name: "Follow-up Penawaran", category: "Sales", channel: "email", preview: "Terima kasih atas kepercayaan Anda...", lastUsed: "2026-03-12", usageCount: 32 },
+  { id: "4", name: "Pengingat Meeting", category: "Meeting", channel: "whatsapp", preview: "Reminder: Meeting besok pukul...", lastUsed: "2026-03-08", usageCount: 78 },
+  { id: "5", name: "Update Layanan Baru", category: "Info", channel: "email", preview: "Kami telah menambahkan layanan baru...", lastUsed: "2026-03-05", usageCount: 25 },
+  { id: "6", name: "Flash Sale 24 Jam", category: "Promo", channel: "multi", preview: "FLASH SALE! Berlaku 24 jam saja...", lastUsed: "2026-03-01", usageCount: 89 },
+  { id: "7", name: "Terima Kasih", category: "General", channel: "whatsapp", preview: "Terima kasih telah...", lastUsed: "2026-02-28", usageCount: 156 },
+  { id: "8", name: "Newsletter Mingguan", category: "Newsletter", channel: "email", preview: "Halo! Berikut update minggu ini...", lastUsed: "2026-02-25", usageCount: 67 },
 ];
 
-const categories = [
-  { id: "ALL", name: "Semua", icon: FileText, color: "slate" },
-  { id: "WHATSAPP", name: "WhatsApp", icon: MessageSquare, color: "emerald" },
-  { id: "EMAIL", name: "Email", icon: Mail, color: "cyan" },
-  { id: "INSTAGRAM", name: "Instagram", icon: Image, color: "pink" },
-  { id: "OFFER", name: "Offer", icon: DollarSign, color: "amber" },
-];
+const categories = ["Semua", "Promo", "Welcome", "Sales", "Meeting", "Info", "General", "Newsletter"];
+const channels = ["Semua", "whatsapp", "email", "multi"];
 
-const colorMap: Record<string, { bg: string; text: string }> = {
-  emerald: { bg: "bg-emerald-500/15", text: "text-emerald-300" },
-  cyan: { bg: "bg-cyan-500/15", text: "text-cyan-300" },
-  pink: { bg: "bg-pink-500/15", text: "text-pink-300" },
-  amber: { bg: "bg-amber-500/15", text: "text-amber-300" },
-  purple: { bg: "bg-purple-500/15", text: "text-purple-300" },
-  slate: { bg: "bg-slate-500/15", text: "text-slate-300" },
-};
+function getChannelIcon(channel: string) {
+  switch (channel) {
+    case "whatsapp":
+      return <MessageSquare size={14} className="text-green-400" />;
+    case "email":
+      return <Mail size={14} className="text-blue-400" />;
+    case "instagram":
+      return <Instagram size={14} className="text-pink-400" />;
+    case "multi":
+      return <Zap size={14} className="text-yellow-400" />;
+    default:
+      return <FileText size={14} className="text-slate-400" />;
+  }
+}
 
 export default function TemplatesPage() {
-  const [search, setSearch] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState<string>("ALL");
-  const [showPreview, setShowPreview] = useState<Template | null>(null);
-  const [showFavorites, setShowFavorites] = useState(false);
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("Semua");
+  const [channelFilter, setChannelFilter] = useState("Semua");
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+  const [newTemplate, setNewTemplate] = useState({ name: "", category: "Promo", channel: "whatsapp", content: "" });
 
-  const filteredTemplates = mockTemplates.filter((template) => {
-    const matchesSearch = template.name.toLowerCase().includes(search.toLowerCase()) || template.body.toLowerCase().includes(search.toLowerCase());
-    const matchesCategory = categoryFilter === "ALL" || template.category === categoryFilter;
-    const matchesFavorites = !showFavorites || template.isFavorite;
-    return matchesSearch && matchesCategory && matchesFavorites;
+  const filteredTemplates = sampleTemplates.filter((t) => {
+    const matchesSearch = t.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = categoryFilter === "Semua" || t.category === categoryFilter;
+    const matchesChannel = channelFilter === "Semua" || t.channel === channelFilter;
+    return matchesSearch && matchesCategory && matchesChannel;
   });
 
-  const getCategoryIcon = (category: TemplateCategory) => {
-    const icons: Record<TemplateCategory, typeof MessageSquare> = {
-      WHATSAPP: MessageSquare,
-      EMAIL: Mail,
-      INSTAGRAM: Image,
-      OFFER: DollarSign,
-      GENERAL: FileText,
-    };
-    const colors: Record<TemplateCategory, string> = {
-      WHATSAPP: "emerald",
-      EMAIL: "cyan",
-      INSTAGRAM: "pink",
-      OFFER: "amber",
-      GENERAL: "slate",
-    };
-    const Icon = icons[category];
-    const cc = colorMap[colors[category]];
-    return (
-      <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${cc.bg}`}>
-        <Icon className={`h-4 w-4 ${cc.text}`} />
-      </div>
-    );
-  };
-
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
+  const openPreview = (template: Template) => {
+    setSelectedTemplate(template);
+    setShowPreviewModal(true);
   };
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.24em] text-cyan-200/70">
-            Marketing
-          </p>
-          <h1 className="font-display text-2xl font-semibold tracking-tight text-white">
-            Template Library
-          </h1>
-          <p className="mt-1 text-sm text-slate-400">
-            Kelola template pesan untuk campaign Anda
-          </p>
-        </div>
-        <button className={btn("primary")}>
-          <Plus size={15} />
-          Template Baru
-        </button>
-      </div>
+      {/* Page Header */}
+      <PageHeader
+        eyebrow="Marketing"
+        title="Template Library"
+        description="Kelola template pesan untuk kampanye"
+        actions={
+          <button onClick={() => setShowCreateModal(true)} className={btn("primary")}>
+            <Plus size={15} />
+            Template Baru
+          </button>
+        }
+      />
 
-      {/* Category Tabs */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2">
-        {categories.map((cat) => {
-          const Icon = cat.icon;
-          const cc = colorMap[cat.color];
-          const isActive = categoryFilter === cat.id;
-          return (
-            <button
-              key={cat.id}
-              onClick={() => setCategoryFilter(cat.id)}
-              className={`flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition whitespace-nowrap ${
-                isActive
-                  ? `${cc.bg} ${cc.text} border-${cat.color}-500/30`
-                  : "border-white/10 text-slate-400 hover:border-white/20 hover:text-white"
-              }`}
-            >
-              <Icon className="h-4 w-4" />
-              {cat.name}
-              <span className={`ml-1 flex h-5 min-w-[20px] items-center justify-center rounded-full text-xs ${
-                isActive ? "bg-white/10" : "bg-white/5"
-              }`}>
-                {cat.id === "ALL" ? mockTemplates.length : mockTemplates.filter((t) => t.category === cat.id).length}
-              </span>
-            </button>
-          );
-        })}
-        <div className="ml-auto">
+      {/* Filters */}
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="relative flex-1 min-w-[200px]">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+          <input
+            type="text"
+            placeholder="Cari template..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className={`${inputClass} pl-10`}
+          />
+        </div>
+
+        <select
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+          className="rounded-xl border border-white/10 bg-[#0a1626] px-3.5 py-2.5 text-sm text-white"
+        >
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>{cat}</option>
+          ))}
+        </select>
+
+        <select
+          value={channelFilter}
+          onChange={(e) => setChannelFilter(e.target.value)}
+          className="rounded-xl border border-white/10 bg-[#0a1626] px-3.5 py-2.5 text-sm text-white"
+        >
+          {channels.map((ch) => (
+            <option key={ch} value={ch}>{ch === "Semua" ? "Semua Channel" : ch}</option>
+          ))}
+        </select>
+
+        <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-white/5 p-1">
           <button
-            onClick={() => setShowFavorites(!showFavorites)}
-            className={`flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition ${
-              showFavorites
-                ? "border-amber-500/30 bg-amber-500/10 text-amber-300"
-                : "border-white/10 text-slate-400 hover:border-white/20 hover:text-white"
-            }`}
+            onClick={() => setViewMode("grid")}
+            className={`rounded-lg p-2 transition ${viewMode === "grid" ? "bg-cyan-400/20 text-cyan-400" : "text-slate-400 hover:text-white"}`}
           >
-            <Star className={`h-4 w-4 ${showFavorites ? "fill-current" : ""}`} />
-            Favorites
+            <Grid size={16} />
+          </button>
+          <button
+            onClick={() => setViewMode("list")}
+            className={`rounded-lg p-2 transition ${viewMode === "list" ? "bg-cyan-400/20 text-cyan-400" : "text-slate-400 hover:text-white"}`}
+          >
+            <List size={16} />
           </button>
         </div>
       </div>
 
-      {/* Search */}
-      <div className="relative max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
-        <input
-          type="text"
-          placeholder="Cari template..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full rounded-xl border border-white/10 bg-white/[0.04] pl-10 pr-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
-        />
-      </div>
-
-      {/* Templates Grid */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {filteredTemplates.map((template) => (
-          <div
-            key={template.id}
-            className="group rounded-xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-white/20 hover:bg-white/[0.05]"
-          >
-            <div className="mb-3 flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                {getCategoryIcon(template.category)}
-                <div>
-                  <h3 className="font-medium text-white">{template.name}</h3>
-                  <p className="text-xs text-slate-500">{template.category}</p>
+      {/* Templates Display */}
+      {filteredTemplates.length > 0 ? (
+        viewMode === "grid" ? (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {filteredTemplates.map((template) => (
+              <div
+                key={template.id}
+                className="group rounded-2xl border border-white/10 bg-white/[0.035] p-4 transition hover:border-cyan-300/30"
+              >
+                <div className="mb-3 flex items-start justify-between">
+                  <div className="flex items-center gap-2">
+                    {getChannelIcon(template.channel)}
+                    <span className="text-xs text-slate-500 capitalize">{template.channel}</span>
+                  </div>
+                  <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase text-slate-400">
+                    {template.category}
+                  </span>
+                </div>
+                <h3 className="mb-2 font-semibold text-white">{template.name}</h3>
+                <p className="mb-3 line-clamp-2 text-sm text-slate-400">{template.preview}</p>
+                <div className="flex items-center justify-between border-t border-white/[0.07] pt-3">
+                  <span className="text-xs text-slate-500">
+                    {template.usageCount} kali digunakan
+                  </span>
+                  <div className="flex items-center gap-1 opacity-0 transition group-hover:opacity-100">
+                    <button
+                      onClick={() => openPreview(template)}
+                      className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-cyan-300"
+                    >
+                      <Eye size={14} />
+                    </button>
+                    <button className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-white">
+                      <Edit3 size={14} />
+                    </button>
+                    <button className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-red-400">
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
                 </div>
               </div>
-              <div className="flex items-center gap-1 opacity-0 transition group-hover:opacity-100">
-                <button
-                  onClick={() => copyToClipboard(template.body)}
-                  className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 hover:bg-white/5 hover:text-white"
-                  title="Copy"
+            ))}
+          </div>
+        ) : (
+          <Panel padded={false}>
+            <div className="divide-y divide-white/[0.07]">
+              {filteredTemplates.map((template) => (
+                <div
+                  key={template.id}
+                  className="flex items-center justify-between p-4 transition hover:bg-white/[0.02]"
                 >
-                  <Copy className="h-4 w-4" />
-                </button>
-                <button
-                  onClick={() => setShowPreview(template)}
-                  className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 hover:bg-white/5 hover:text-white"
-                  title="Preview"
-                >
-                  <Eye className="h-4 w-4" />
-                </button>
-                <button className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 hover:bg-white/5 hover:text-white">
-                  <Edit2 className="h-4 w-4" />
-                </button>
-              </div>
+                  <div className="flex items-center gap-4">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/5">
+                      {getChannelIcon(template.channel)}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-white">{template.name}</h3>
+                      <p className="text-sm text-slate-400">{template.preview}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="text-right">
+                      <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] font-semibold uppercase text-slate-400">
+                        {template.category}
+                      </span>
+                      <p className="mt-1 text-xs text-slate-500">{template.usageCount} digunakan</p>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <button onClick={() => openPreview(template)} className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-cyan-300">
+                        <Eye size={16} />
+                      </button>
+                      <button className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-white">
+                        <Edit3 size={16} />
+                      </button>
+                      <button className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-red-400">
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
+          </Panel>
+        )
+      ) : (
+        <EmptyState
+          icon={<FileText size={24} />}
+          title="Tidak ada template"
+          description="Buat template pertama untuk mempercepat pembuatan kampanye"
+          action={
+            <button onClick={() => setShowCreateModal(true)} className={btn("primary")}>
+              <Plus size={15} />
+              Buat Template
+            </button>
+          }
+        />
+      )}
 
-            <p className="line-clamp-3 text-sm text-slate-400">{template.body}</p>
-
-            {/* Variables */}
-            {template.variables.length > 0 && (
-              <div className="mt-3 flex flex-wrap gap-1">
-                {template.variables.map((v) => (
-                  <span key={v} className="rounded bg-white/5 px-2 py-0.5 text-[10px] text-cyan-400">
-                    {`{{${v}}}`}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {/* Stats */}
-            <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-3 text-xs text-slate-500">
-              <div className="flex items-center gap-3">
-                <span className="flex items-center gap-1">
-                  <Zap className="h-3 w-3" />
-                  {template.usageCount} uses
-                </span>
-                {template.lastUsed && (
-                  <span className="flex items-center gap-1">
-                    <Clock className="h-3 w-3" />
-                    {template.lastUsed}
-                  </span>
-                )}
-              </div>
-              <button className={`${template.isFavorite ? "text-amber-400" : "text-slate-500 hover:text-amber-400"}`}>
-                <Star className={`h-4 w-4 ${template.isFavorite ? "fill-current" : ""}`} />
+      {/* Create Template Modal */}
+      {showCreateModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-[#0a1626] p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="font-display text-lg font-semibold text-white">Template Baru</h2>
+              <button onClick={() => setShowCreateModal(false)} className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-white">
+                <X size={18} />
               </button>
             </div>
+            <div className="space-y-4">
+              <div>
+                <label className="mb-2 block text-sm font-medium text-slate-300">Nama Template</label>
+                <input
+                  type="text"
+                  placeholder="Contoh: Promo Diskon"
+                  value={newTemplate.name}
+                  onChange={(e) => setNewTemplate({ ...newTemplate, name: e.target.value })}
+                  className={inputClass}
+                />
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-slate-300">Kategori</label>
+                  <select
+                    value={newTemplate.category}
+                    onChange={(e) => setNewTemplate({ ...newTemplate, category: e.target.value })}
+                    className="w-full rounded-xl border border-white/10 bg-[#0a1626] px-3.5 py-2.5 text-sm text-white"
+                  >
+                    {categories.filter(c => c !== "Semua").map((cat) => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-slate-300">Channel</label>
+                  <select
+                    value={newTemplate.channel}
+                    onChange={(e) => setNewTemplate({ ...newTemplate, channel: e.target.value })}
+                    className="w-full rounded-xl border border-white/10 bg-[#0a1626] px-3.5 py-2.5 text-sm text-white"
+                  >
+                    <option value="whatsapp">WhatsApp</option>
+                    <option value="email">Email</option>
+                    <option value="instagram">Instagram</option>
+                    <option value="multi">Multi-channel</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className="mb-2 block text-sm font-medium text-slate-300">Konten Pesan</label>
+                <textarea
+                  placeholder="Tulis template pesan di sini..."
+                  value={newTemplate.content}
+                  onChange={(e) => setNewTemplate({ ...newTemplate, content: e.target.value })}
+                  className={textareaClass}
+                  rows={6}
+                />
+              </div>
+              <div className="flex justify-end gap-2 pt-2">
+                <button onClick={() => setShowCreateModal(false)} className={btn("secondary")}>
+                  Batal
+                </button>
+                <button onClick={() => setShowCreateModal(false)} className={btn("primary")}>
+                  Simpan Template
+                </button>
+              </div>
+            </div>
           </div>
-        ))}
-      </div>
-
-      {filteredTemplates.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-16 text-center">
-          <FileText className="h-12 w-12 text-slate-500" />
-          <p className="mt-3 text-sm font-medium text-white">Tidak ada template ditemukan</p>
-          <p className="mt-1 text-sm text-slate-500">Coba ubah filter atau buat template baru</p>
         </div>
       )}
 
       {/* Preview Modal */}
-      {showPreview && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-          <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-[#0a1626] shadow-xl">
-            <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
-              <div className="flex items-center gap-3">
-                {getCategoryIcon(showPreview.category)}
-                <div>
-                  <h3 className="font-semibold text-white">{showPreview.name}</h3>
-                  <p className="text-xs text-slate-500">{showPreview.category}</p>
-                </div>
-              </div>
-              <button onClick={() => setShowPreview(null)} className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-white/5 hover:text-white">
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            <div className="p-6">
-              {showPreview.subject && (
-                <div className="mb-4">
-                  <p className="mb-1 text-xs text-slate-500">Subject:</p>
-                  <p className="rounded-lg border border-white/10 bg-white/5 p-3 text-sm text-white">
-                    {showPreview.subject}
-                  </p>
-                </div>
-              )}
+      {showPreviewModal && selectedTemplate && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-[#0a1626] p-6">
+            <div className="mb-4 flex items-center justify-between">
               <div>
-                <p className="mb-1 text-xs text-slate-500">Isi Pesan:</p>
-                <div className="max-h-64 overflow-y-auto rounded-lg border border-white/10 bg-white/5 p-4">
-                  <p className="whitespace-pre-wrap text-sm text-white">{showPreview.body}</p>
+                <h2 className="font-display text-lg font-semibold text-white">{selectedTemplate.name}</h2>
+                <div className="mt-1 flex items-center gap-2">
+                  {getChannelIcon(selectedTemplate.channel)}
+                  <span className="text-sm text-slate-400 capitalize">{selectedTemplate.channel}</span>
+                  <span className="text-slate-500">•</span>
+                  <span className="text-sm text-slate-400">{selectedTemplate.category}</span>
                 </div>
               </div>
-              {showPreview.variables.length > 0 && (
-                <div className="mt-4">
-                  <p className="mb-2 text-xs text-slate-500">Variables:</p>
-                  <div className="flex flex-wrap gap-2">
-                    {showPreview.variables.map((v) => (
-                      <span key={v} className="rounded bg-cyan-500/15 px-3 py-1 text-sm text-cyan-300">
-                        {`{{${v}}}`}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-            <div className="flex justify-end gap-3 border-t border-white/10 px-6 py-4">
-              <button onClick={() => copyToClipboard(showPreview.body)} className="flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2.5 text-sm font-medium text-white hover:bg-white/5">
-                <Copy className="h-4 w-4" />
-                Copy
+              <button onClick={() => setShowPreviewModal(false)} className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-white">
+                <X size={18} />
               </button>
-              <button className="rounded-xl bg-cyan-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-cyan-600">
-                Use Template
+            </div>
+            <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+              <p className="whitespace-pre-wrap text-sm text-slate-200">{selectedTemplate.preview}</p>
+            </div>
+            <div className="mt-4 flex items-center justify-between text-sm text-slate-400">
+              <span>Digunakan {selectedTemplate.usageCount} kali</span>
+              {selectedTemplate.lastUsed && <span>Terakhir: {selectedTemplate.lastUsed}</span>}
+            </div>
+            <div className="mt-4 flex gap-2">
+              <button className={`${btn("secondary")} flex-1`}>
+                <Copy size={15} />
+                Gunakan
+              </button>
+              <button className={`${btn("primary")} flex-1`}>
+                <Edit3 size={15} />
+                Edit
               </button>
             </div>
           </div>
