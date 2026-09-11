@@ -30,6 +30,8 @@ const linkGroups = [
       { href: "/contact", label: "Hubungi Kami" },
       { href: "/privacy", label: "Privasi" },
       { href: "/terms", label: "Syarat & Ketentuan" },
+      { href: "/refund", label: "Pengembalian Dana" },
+      { href: "/faq", label: "FAQ" },
       { href: "/sitemap", label: "Peta Situs" },
     ],
   },
@@ -173,6 +175,12 @@ export async function EnhancedFooter() {
             </Link>
             <Link href="/terms" className="transition hover:text-cyan-300">
               Syarat
+            </Link>
+            <Link href="/refund" className="transition hover:text-cyan-300">
+              Refund
+            </Link>
+            <Link href="/faq" className="transition hover:text-cyan-300">
+              FAQ
             </Link>
             <Link href="/sitemap" className="transition hover:text-cyan-300">
               Peta Situs
