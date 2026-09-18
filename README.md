@@ -10,6 +10,8 @@ Tagline: *"Mitra Konstruksi Terpercaya."*
 sanata/
 ├── backend/           Express API — Prisma/PostgreSQL, JWT auth, RBAC, CRUD, uploads (src/, prisma/)
 ├── frontend-next/       Next.js 16 (App Router) — public site AND admin panel AND client portal
+├── prisma/             Seed scripts (paseban, project-docs)
+├── startDatabase.js    Script untuk manage PostgreSQL dan database
 └── package.json         npm workspaces root
 ```
 
@@ -60,22 +62,13 @@ for construction project clients to monitor their projects. Routes under `/clien
    cp frontend-next/.env.example frontend-next/.env.local
    ```
 
-4. Create the database and run migrations — lihat **Tutorial PostgreSQL** di bawah untuk
-   langkah lengkapnya. Ringkasnya:
+4. Setup database dan schema — gunakan script otomatis:
    ```bash
-   psql -U postgres -c "CREATE DATABASE sanata"
-   npm run prisma:migrate
+   node startDatabase.js setup
    ```
+   Ini akan: mulai PostgreSQL, buat database, jalankan migrations, dan seed data demo.
 
-5. Seed demo data (admin/editor accounts, categories, sample content & services, CMS collections/settings, broadcast
-   center defaults, plus 18 basic unit prices and 7 SNI-style AHSP entries):
-   ```bash
-   npm run prisma:seed
-   ```
-   Default admin login: `admin@sanata.id` / `Admin123!`
-   Default editor login: `editor@sanata.id` / `Editor123!`
-
-6. Run in development (separate terminals):
+5. Run in development (separate terminals):
    ```bash
    npm run dev:backend     # http://localhost:5000 — API (docs at /api/docs)
    npm run dev:web         # http://localhost:5001 — public site + admin panel (/admin)
@@ -86,6 +79,10 @@ for construction project clients to monitor their projects. Routes under `/clien
    ```
 
 ### Seeder Guide
+
+**Default login credentials:**
+- Admin: `admin@sanata.id` / `Admin123!`
+- Editor: `editor@sanata.id` / `Editor123!`
 
 - Seeder root command:
   ```bash
@@ -106,8 +103,8 @@ for construction project clients to monitor their projects. Routes under `/clien
   - site content collections are only inserted when a collection is still empty, so existing admin-managed content is not overwritten
 - If you already have an older local database and want the new CMS collections/settings to appear:
   1. pull the latest code
-  2. run `npm run prisma:migrate`
-  3. run `npm run prisma:seed`
+  2. run `node startDatabase.js migrate` (atau `npm run prisma:migrate`)
+  3. run `node startDatabase.js seed` (atau `npm run prisma:seed`)
 - If you need a fully clean demo database, recreate the database first, run migrations, then run the seeder once.
 
 ### Client Portal Access Guide
@@ -221,6 +218,33 @@ Browser                           Frontend                        Backend
 Proyek ini memakai PostgreSQL 14+ (diuji pada 16.1) sebagai satu-satunya database.
 Bagian ini memuat pemasangan, pembuatan database, penerapan skema, verifikasi, sampai
 backup.
+
+### Script Otomatis startDatabase.js
+
+Untuk kemudahan, gunakan script `startDatabase.js` yang menangani semua operasi
+database secara otomatis:
+
+```bash
+node startDatabase.js              # cek status saja
+node startDatabase.js start        # mulai PostgreSQL
+node startDatabase.js stop        # hentikan PostgreSQL
+node startDatabase.js restart     # restart PostgreSQL
+node startDatabase.js status      # tampilkan status lengkap
+node startDatabase.js create      # buat database sanata
+node startDatabase.js migrate     # jalankan Prisma migrations
+node startDatabase.js seed         # jalankan Prisma seeder
+node startDatabase.js setup        # setup lengkap (start + create + migrate + seed)
+node startDatabase.js reset        # reset database (hapus + buat + migrate + seed)
+node startDatabase.js verify       # verifikasi koneksi database
+node startDatabase.js help        # tampilkan bantuan
+```
+
+Script ini menangani:
+- Pemeriksaan PostgreSQL (install, data directory, running status)
+- Pembuatan database jika belum ada
+- Eksekusi Prisma migrations
+- Eksekusi Prisma seed
+- Verifikasi koneksi
 
 ### 1. Menyiapkan server
 
@@ -1263,3 +1287,26 @@ equivalent built-in tools were used instead throughout.
 | `npm run build:web` | Build the Next.js site to `frontend-next/.next` |
 | `npm run prisma:migrate` | Run Prisma migrations |
 | `npm run prisma:seed` | Seed demo data |
+| `npm run prisma:seed:client` | Seed client portal demo data |
+
+## Database Scripts
+
+| Command | Description |
+|---|---|
+| `node startDatabase.js` | Cek status database (PostgreSQL + database sanata) |
+| `node startDatabase.js start` | Mulai PostgreSQL server |
+| `node startDatabase.js stop` | Hentikan PostgreSQL server |
+| `node startDatabase.js restart` | Restart PostgreSQL server |
+| `node startDatabase.js status` | Tampilkan status lengkap database |
+| `node startDatabase.js create` | Buat database sanata |
+| `node startDatabase.js migrate` | Jalankan Prisma migrations |
+| `node startDatabase.js seed` | Jalankan Prisma seeder |
+| `node startDatabase.js setup` | Setup lengkap: mulai PG + buat DB + migrate + seed |
+| `node startDatabase.js reset` | Reset database: hapus + buat + migrate + seed |
+| `node startDatabase.js verify` | Verifikasi koneksi database |
+| `node startDatabase.js help` | Tampilkan bantuan |
+
+**Setup pertama kali (development baru):**
+```bash
+node startDatabase.js setup
+```
