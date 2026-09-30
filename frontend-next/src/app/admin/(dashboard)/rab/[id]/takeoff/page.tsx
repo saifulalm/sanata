@@ -69,6 +69,7 @@ export default async function RabTakeoffPage({ params }: { params: Promise<{ id:
       <Panel padded={false}>
         {takeoff.lines.length > 0 ? (
           <TableWrap>
+            <table className="w-full min-w-[700px] text-sm">
             <thead>
               <tr>
                 <Th>Kode</Th>
@@ -110,6 +111,7 @@ export default async function RabTakeoffPage({ params }: { params: Promise<{ id:
                 </Tr>
               ))}
             </tbody>
+          </table>
           </TableWrap>
         ) : (
           <div className="p-5">
@@ -129,6 +131,7 @@ export default async function RabTakeoffPage({ params }: { params: Promise<{ id:
           padded={false}
         >
           <TableWrap>
+            <table className="w-full min-w-[700px] text-sm">
             <thead>
               <tr>
                 <Th>Uraian</Th>
@@ -147,6 +150,7 @@ export default async function RabTakeoffPage({ params }: { params: Promise<{ id:
                 </Tr>
               ))}
             </tbody>
+            </table>
           </TableWrap>
         </Panel>
       )}

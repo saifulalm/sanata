@@ -163,14 +163,14 @@ export function WorkersTable({ initialWorkers, initialMeta }: WorkersTableProps)
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             placeholder="Cari nama, kode, atau telepon..."
-            className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
+            className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:border-desert-400/40 focus:outline-none focus:ring-2 focus:ring-desert-400/10"
           />
         </div>
 
         <select
           value={statusFilter}
           onChange={(e) => { setStatusFilter(e.target.value as WorkerStatus | ""); fetchWorkers(1); }}
-          className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+          className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
         >
           <option value="">Semua Status</option>
           <option value="ACTIVE">Aktif</option>
@@ -182,7 +182,7 @@ export function WorkersTable({ initialWorkers, initialMeta }: WorkersTableProps)
         <select
           value={gradeFilter}
           onChange={(e) => { setGradeFilter(e.target.value as WorkerGrade | ""); fetchWorkers(1); }}
-          className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+          className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
         >
           <option value="">Semua Grade</option>
           <option value="A">Grade A</option>
@@ -193,7 +193,7 @@ export function WorkersTable({ initialWorkers, initialMeta }: WorkersTableProps)
 
         <Link
           href="/admin/workforce/workers/new"
-          className="inline-flex items-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2.5 text-sm font-medium text-cyan-300 transition-all hover:bg-cyan-400/20"
+          className="inline-flex items-center gap-2 rounded-xl border border-desert-400/30 bg-desert-400/10 px-4 py-2.5 text-sm font-medium text-desert-400 transition-all hover:bg-desert-400/20"
         >
           <UserPlus size={16} />
           Tambah Worker
@@ -209,7 +209,7 @@ export function WorkersTable({ initialWorkers, initialMeta }: WorkersTableProps)
           action={
             <Link
               href="/admin/workforce/workers/new"
-              className="inline-flex items-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-300"
+              className="inline-flex items-center gap-2 rounded-xl border border-desert-400/30 bg-desert-400/10 px-4 py-2 text-sm font-medium text-desert-400"
             >
               <Plus size={16} />
               Tambah Worker
@@ -237,7 +237,7 @@ export function WorkersTable({ initialWorkers, initialMeta }: WorkersTableProps)
                     <TableRow key={worker.id}>
                       <TableCell>
                         <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500/10 text-cyan-400">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-desert-400/10 text-desert-400">
                             {worker.facePhotoUrl ? (
                               <img
                                 src={worker.facePhotoUrl}
@@ -255,7 +255,7 @@ export function WorkersTable({ initialWorkers, initialMeta }: WorkersTableProps)
                         </div>
                       </TableCell>
                       <TableCell>
-                        <span className="font-mono text-sm text-cyan-400">{worker.workerCode}</span>
+                        <span className="font-mono text-sm text-desert-400">{worker.workerCode}</span>
                       </TableCell>
                       <TableCell>
                         <Badge tone="neutral">{worker.role}</Badge>
@@ -291,7 +291,7 @@ export function WorkersTable({ initialWorkers, initialMeta }: WorkersTableProps)
                         <div className="flex items-center justify-end gap-1">
                           <Link
                             href={`/admin/workforce/workers/${worker.id}`}
-                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-400 transition-all hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400"
+                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-400 transition-all hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
                             title="Lihat Detail"
                           >
                             <Eye size={14} />

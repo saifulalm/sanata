@@ -75,7 +75,7 @@ export default async function ContactPage() {
                   </IconTile>
                   <div>
                     <p className="text-sm font-semibold uppercase tracking-[0.14em] text-white">{i.label}</p>
-                    <p className="mt-1 text-sm leading-6 text-slate-400">{i.value}</p>
+                    <p className="mt-1 text-sm leading-6 text-charcoal-300">{i.value}</p>
                   </div>
                 </div>
               ))}

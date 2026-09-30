@@ -93,13 +93,13 @@ export default async function AboutPage() {
         <Container className="grid gap-12 lg:grid-cols-2 lg:items-start">
           <RevealOnScroll>
             <SectionHeading eyebrow="Profil Perusahaan" title="Cerita di Balik Sanata" />
-            <p className="mt-6 leading-8 text-slate-300">
+            <p className="mt-6 leading-8 text-charcoal-200">
               Sanata Construction lahir dari kebiasaan sederhana: membangun sesuatu yang benar-benar dipakai dan
               bertahan lama. Sejak 2010, kami telah menangani proyek residensial dan komersial dengan tim insinyur
               dan tukang berpengalaman, memastikan setiap proyek selesai sesuai rencana, anggaran, dan standar
               kualitas kelas enterprise.
             </p>
-            <p className="mt-4 leading-8 text-slate-400">
+            <p className="mt-4 leading-8 text-charcoal-300">
               Kami percaya bahwa konstruksi yang baik adalah kombinasi antara presisi teknis, komunikasi yang
               transparan, dan komitmen terhadap keselamatan kerja di setiap tahap proyek.
             </p>
@@ -107,9 +107,9 @@ export default async function AboutPage() {
 
           <RevealOnScroll delay={0.1} className="grid gap-6 sm:grid-cols-2">
             <GlassPanel className="p-7">
-              <Target className="text-cyan-300" size={26} />
+              <Target className="text-desert-400" size={26} />
               <p className="mt-4 font-display text-lg font-semibold text-white">Misi</p>
-              <p className="mt-2 text-sm leading-7 text-slate-400">
+              <p className="mt-2 text-sm leading-7 text-charcoal-300">
                 Menghadirkan solusi konstruksi presisi dengan standar keselamatan dan kualitas tertinggi bagi
                 setiap klien.
               </p>
@@ -117,7 +117,7 @@ export default async function AboutPage() {
             <GlassPanel className="p-7">
               <Eye className="text-amber-300" size={26} />
               <p className="mt-4 font-display text-lg font-semibold text-white">Visi</p>
-              <p className="mt-2 text-sm leading-7 text-slate-400">
+              <p className="mt-2 text-sm leading-7 text-charcoal-300">
                 Menjadi kontraktor konstruksi paling dipercaya di Indonesia untuk proyek residensial dan komersial.
               </p>
             </GlassPanel>
@@ -125,7 +125,7 @@ export default async function AboutPage() {
         </Container>
       </section>
 
-      <section className="border-y border-white/10 bg-slate-950/60 py-24">
+      <section className="border-y border-white/10 bg-charcoal-800/60 py-24">
         <Container>
           <SectionHeading eyebrow="Nilai Inti" title="Prinsip yang Kami Pegang" align="center" className="mx-auto" />
           <div className="mt-14 grid gap-6 md:grid-cols-3">
@@ -136,7 +136,7 @@ export default async function AboutPage() {
                     <v.icon size={22} />
                   </IconTile>
                   <p className="mt-5 font-display text-lg font-semibold text-white">{v.title}</p>
-                  <p className="mt-2 text-sm leading-7 text-slate-400">{v.desc}</p>
+                  <p className="mt-2 text-sm leading-7 text-charcoal-300">{v.desc}</p>
                 </GlassPanel>
               </RevealOnScroll>
             ))}
@@ -147,20 +147,20 @@ export default async function AboutPage() {
       <section className="py-24">
         <Container>
           <SectionHeading eyebrow="Perjalanan Kami" title="Sejarah Sanata Construction" />
-          <div className="relative mt-14 space-y-10 border-l border-cyan-300/25 pl-8">
+          <div className="relative mt-14 space-y-10 border-l border-desert-400/25 pl-8">
             {timeline.map((t, i) => (
               <RevealOnScroll key={`${t.year}-${i}`} delay={i * 0.08} className="relative">
-                <span className="absolute -left-[38px] flex h-4 w-4 items-center justify-center rounded-full border border-cyan-300/50 bg-cyan-300/25 shadow-[0_0_20px_rgba(56,189,248,0.35)]" />
+                <span className="absolute -left-[38px] flex h-4 w-4 items-center justify-center rounded-full border border-desert-400/50 bg-desert-400/25 shadow-[0_0_20px_rgba(201,173,130,0.35)]" />
                 <p className="font-display text-2xl font-bold tracking-[0.06em] text-white">{t.year}</p>
-                <p className="mt-1 font-semibold uppercase tracking-[0.14em] text-cyan-100">{t.title}</p>
-                <p className="mt-1 text-sm leading-7 text-slate-400">{t.desc}</p>
+                <p className="mt-1 font-semibold uppercase tracking-[0.14em] text-desert-200">{t.title}</p>
+                <p className="mt-1 text-sm leading-7 text-charcoal-300">{t.desc}</p>
               </RevealOnScroll>
             ))}
           </div>
         </Container>
       </section>
 
-      <section className="border-y border-white/10 bg-slate-950/60 py-24">
+      <section className="border-y border-white/10 bg-charcoal-800/60 py-24">
         <Container>
           <SectionHeading eyebrow="Kepemimpinan" title="Tim di Balik Sanata" align="center" className="mx-auto" />
           <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -168,16 +168,16 @@ export default async function AboutPage() {
               <RevealOnScroll key={`${l.name}-${i}`} delay={i * 0.08}>
                 <GlassPanel className="h-full p-6 text-center">
                   {l.imageUrl ? (
-                    <div className="relative mx-auto h-16 w-16 overflow-hidden rounded-full border border-cyan-300/25">
+                    <div className="relative mx-auto h-16 w-16 overflow-hidden rounded-full border border-desert-400/25">
                       <Image src={mediaSrc(l.imageUrl)} alt={l.name} fill sizes="64px" className="object-cover" />
                     </div>
                   ) : (
-                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-cyan-300/25 bg-cyan-300/10 font-display text-xl font-bold text-cyan-200">
+                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-desert-400/25 bg-desert-400/10 font-display text-xl font-bold text-desert-300">
                       {l.name.charAt(0)}
                     </div>
                   )}
                   <p className="mt-4 font-display font-semibold text-white">{l.name}</p>
-                  <p className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">{l.role}</p>
+                  <p className="mt-1 text-xs uppercase tracking-[0.18em] text-charcoal-300">{l.role}</p>
                 </GlassPanel>
               </RevealOnScroll>
             ))}

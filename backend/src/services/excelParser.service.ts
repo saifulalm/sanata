@@ -292,48 +292,44 @@ export function parseTimelineExcel(buffer: Buffer): ParsedTimeline {
 }
 
 /**
- * Parse header rows (rows 1-3)
+ * Parse header rows (rows 1-3, 1-indexed)
+ *
+ * ACTUAL layout found via file inspection:
+ *   Row 1 (idx 0): col0="Proyek" col3=":" col4="RENOVASI RUMAH  "
+ *   Row 2 (idx 1): col0="Lokasi" col3=":" col4="Jl. Kramat Sawah No. E335, ..."
+ *   Row 3 (idx 2): col0="Date" col3=":" col4="10 Oktober 2025"
+ *   Row 5 (idx 4): BOBOT, DURASI, TIME SCHEDULE, RE-SCHEDULE headers
  */
 function parseHeader(rawData: unknown[][]): TimelineHeader {
   const row1 = rawData[0] || [];
   const row2 = rawData[1] || [];
   const row3 = rawData[2] || [];
 
-  // Try to extract project name - usually in first column or spans multiple columns
-  let projectName = String(row1[0] || "").trim();
+  // Project name: row1 col 4 (idx 4) — skip col 0 which has "Proyek" label
+  let projectName = String(row1[4] || row1[0] || "").trim();
 
-  // Try to find location - usually in row 2
-  let location = "";
-  for (const cell of row2) {
-    if (cell && String(cell).toLowerCase().includes("lokasi")) {
-      const parts = String(cell).split(":");
-      if (parts.length > 1) {
-        location = parts.slice(1).join(":").trim();
-      }
-    }
-  }
-  // Fallback: use first cell of row 2
-  if (!location && row2[0]) {
-    location = String(row2[0]).trim();
+  // Location: row2 col 4 (idx 4)
+  let location = String(row2[4] || row2[0] || "").trim();
+  // Strip "Lokasi" prefix if present
+  if (location.toLowerCase().startsWith("lokasi")) {
+    location = location.replace(/^lokasi\s*:/i, "").trim();
   }
 
-  // Try to extract date - usually in row 3
-  let date = "";
-  for (const cell of row3) {
-    if (cell) {
-      const cellStr = String(cell);
-      // Check if it looks like a date
-      const dateMatch = cellStr.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);
-      if (dateMatch) {
-        date = cellStr;
-        break;
-      }
-      // Also check if cell itself is a date value
-      const parsed = new Date(cellStr);
-      if (!isNaN(parsed.getTime())) {
-        date = formatDate(parsed);
-        break;
-      }
+  // Date: row3 col 4 (idx 4) — "10 Oktober 2025"
+  let date = String(row3[4] || "").trim();
+  // Parse Indonesian month names
+  const months: Record<string, number> = {
+    JANUARI: 1, FEBRUARI: 2, MARET: 3, APRIL: 4, MEI: 5, JUNI: 6,
+    JULI: 7, AGUSTUS: 8, SEPTEMBER: 9, OKTOBER: 10, NOVEMBER: 11, DESEMBER: 12
+  };
+  const dateMatch = date.match(/(\d{1,2})\s+(\w+)\s+(\d{4})/i);
+  if (dateMatch) {
+    const day = parseInt(dateMatch[1]);
+    const monthNum = months[dateMatch[2].toUpperCase()] || 1;
+    const year = parseInt(dateMatch[3]);
+    const parsed = new Date(year, monthNum - 1, day);
+    if (!isNaN(parsed.getTime())) {
+      date = parsed.getFullYear() + "-" + String(parsed.getMonth() + 1).padStart(2, "0") + "-" + String(parsed.getDate()).padStart(2, "0");
     }
   }
 
@@ -341,7 +337,20 @@ function parseHeader(rawData: unknown[][]): TimelineHeader {
 }
 
 /**
- * Parse column information from rows 5-7
+ * Parse column information from rows 5-7 (0-indexed: 4-6)
+ *
+ * ACTUAL structure found via file inspection:
+ *   Row 5 (idx 4): [null x7] "BOBOT" [null x2] "DURASI" [null x2] "TIME SCHEDULE" [null x25] "RE-SCHEDULE"
+ *   Row 6 (idx 5): [null x7] "PEKERJAAN" "MULAI" "SELESAI" "PEKERJAAN" (HARI)
+ *   Row 7 (idx 6): [null x7] [null x3] "HARI" [null x6] W1 W2 W3...
+ *   Row 8 (idx 7): [null x7] [null x3] [null x2] DD/MM/YY dates per week
+ *   Row 11 (idx 10): DATA rows — "0.36%" "10/10/25" "24/10/25" 14
+ *
+ * Key findings (cellDates: true + raw: false):
+ *   - BOBOT in formatted cells = string "X.XX%"
+ *   - MULAI/SELESAI in formatted cells = string "DD/MM/YY"
+ *   - Week date row = idx 7, first date at idx 12 (W1 = 10/10/25)
+ *   - Data rows start at idx 10
  */
 function parseColumnInfo(rawData: unknown[][]): {
   bobotCol: number;
@@ -352,86 +361,81 @@ function parseColumnInfo(rawData: unknown[][]): {
   weeks: { label: string; startDate: string; endDate: string }[];
   weekDates: Date[];
 } {
-  const row5 = rawData[4] || []; // Row 5 (index 4) - column headers
-  const row6 = rawData[5] || []; // Row 6 (index 5) - week serial dates
-  const row7 = rawData[6] || []; // Row 7 (index 6) - week labels
-
-  // Find column indices
+  // Scan row 5 (idx 4) for BOBOT and DURASI
+  const row5 = rawData[4] || [];
   let bobotCol = -1;
+  let durationCol = -1;
+  for (let i = 0; i < row5.length; i++) {
+    const header = String(row5[i] || "").toUpperCase().trim();
+    if (header.includes("BOBOT") && bobotCol === -1) bobotCol = i;
+    if ((header.includes("DURASI") || header.includes("DURATION")) && durationCol === -1) durationCol = i;
+  }
+
+  // Scan row 6 (idx 5) for MULAI and SELESAI headers
+  const row6 = rawData[5] || [];
   let mulaiCol = -1;
   let selesaiCol = -1;
-  let durationCol = -1;
-  let weeklyStartCol = -1;
-
-  for (let i = 0; i < row5.length; i++) {
-    const header = String(row5[i] || "").toUpperCase().trim();
-    if (header.includes("BOBOT") && bobotCol === -1) {
-      bobotCol = i;
-    }
-    if ((header.includes("MULAI") || header.includes("START")) && mulaiCol === -1) {
-      mulaiCol = i;
-    }
-    if ((header.includes("SELESAI") || header.includes("SELESAI") || header.includes("END")) && selesaiCol === -1) {
-      selesaiCol = i;
-    }
-    if ((header.includes("DURASI") || header.includes("DURATION")) && durationCol === -1) {
-      durationCol = i;
-    }
+  for (let i = 0; i < row6.length; i++) {
+    const header = String(row6[i] || "").toUpperCase().trim();
+    if ((header.includes("MULAI") || header.includes("START")) && mulaiCol === -1) mulaiCol = i;
+    if ((header.includes("SELESAI") || header.includes("END")) && selesaiCol === -1) selesaiCol = i;
   }
 
-  // Find where weekly columns start (after TIME SCHEDULE or RE-SCHEDULE headers)
-  let foundScheduleHeader = false;
-  for (let i = 0; i < row5.length; i++) {
-    const header = String(row5[i] || "").toUpperCase().trim();
-    if (header.includes("TIME SCHEDULE") || header.includes("RE-SCHEDULE")) {
-      foundScheduleHeader = true;
-      continue;
-    }
-    if (foundScheduleHeader && row6[i] !== null && row6[i] !== undefined && row6[i] !== "") {
-      // Check if this looks like a date (serial number)
-      const val = Number(row6[i]);
-      if (!isNaN(val) && val > 0) {
-        weeklyStartCol = i;
-        break;
-      }
-    }
-  }
+  // Fallback to known positions if header scan fails
+  // PASEBAN file: BOBOT=7, MULAI=8, SELESAI=9, DURASI=10
+  if (bobotCol < 0) bobotCol = 7;
+  if (mulaiCol < 0) mulaiCol = 8;
+  if (selesaiCol < 0) selesaiCol = 9;
+  if (durationCol < 0) durationCol = 10;
 
-  // Parse weekly information
+  // Week dates are in row 8 (idx 7), formatted as "DD/MM/YY" strings
+  // First date column = idx 12 (W1)
+  const weekDateRow = rawData[7] || [];
+  const WEEKLY_START = 12; // First weekly date column (W1)
+
+  // Parse weekly dates
+  const DATE_REGEX = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/;
   const weeks: { label: string; startDate: string; endDate: string }[] = [];
   const weekDates: Date[] = [];
 
-  if (weeklyStartCol >= 0) {
-    for (let i = weeklyStartCol; i < row6.length; i++) {
-      const serial = Number(row6[i]);
-      if (isNaN(serial) || serial <= 0) break;
+  const row7Labels = rawData[6] || [];
 
-      const date = excelSerialToDate(serial);
-      if (isNaN(date.getTime())) break;
+  for (let i = WEEKLY_START; i < weekDateRow.length; i++) {
+    const rawVal = weekDateRow[i];
+    if (rawVal === null || rawVal === undefined) break;
 
-      // Get label from row 7
-      const label = row7[i] ? String(row7[i]).trim() : `W${i - weeklyStartCol + 1}`;
+    const dateStr = String(rawVal).trim();
+    const match = dateStr.match(DATE_REGEX);
+    if (!match) break;
 
-      // Calculate week end (7 days later, or until next date)
-      let endDate: Date;
-      if (i + 1 < row6.length) {
-        const nextSerial = Number(row6[i + 1]);
-        if (!isNaN(nextSerial) && nextSerial > 0) {
-          endDate = excelSerialToDate(nextSerial - 1);
-        } else {
-          endDate = new Date(date.getTime() + 6 * 24 * 60 * 60 * 1000);
-        }
+    let yr = parseInt(match[3]);
+    if (yr < 100) yr += yr > 50 ? 1900 : 2000;
+    const date = new Date(yr, parseInt(match[2]) - 1, parseInt(match[1]));
+    if (isNaN(date.getTime())) break;
+
+    const label = row7Labels[i] ? String(row7Labels[i]).trim() : `W${i - WEEKLY_START + 1}`;
+    const labelStr = label.startsWith("W") ? label.toUpperCase() : `W${label}`;
+
+    // Week end: next date - 1 day
+    let endDate: Date;
+    let nextVal = weekDateRow[i + 1];
+    if (nextVal !== null && nextVal !== undefined) {
+      const nextStr = String(nextVal).trim();
+      const nextMatch = nextStr.match(DATE_REGEX);
+      if (nextMatch) {
+        let nyr = parseInt(nextMatch[3]);
+        if (nyr < 100) nyr += nyr > 50 ? 1900 : 2000;
+        endDate = new Date(nyr, parseInt(nextMatch[2]) - 1, parseInt(nextMatch[1]));
+        endDate.setDate(endDate.getDate() - 1);
       } else {
         endDate = new Date(date.getTime() + 6 * 24 * 60 * 60 * 1000);
       }
-
-      weeks.push({
-        label: label.startsWith("W") ? label.toUpperCase() : `W${label}`,
-        startDate: formatDate(date),
-        endDate: formatDate(endDate)
-      });
-      weekDates.push(date);
+    } else {
+      endDate = new Date(date.getTime() + 6 * 24 * 60 * 60 * 1000);
     }
+
+    weeks.push({ label: labelStr, startDate: formatDate(date), endDate: formatDate(endDate) });
+    weekDates.push(date);
   }
 
   return {
@@ -439,14 +443,21 @@ function parseColumnInfo(rawData: unknown[][]): {
     mulaiCol,
     selesaiCol,
     durationCol,
-    weeklyStartCol,
+    weeklyStartCol: WEEKLY_START,
     weeks,
     weekDates
   };
 }
 
 /**
- * Parse work items from rows 10+
+ * Parse work items from rows 10+ (0-indexed: 10)
+ *
+ * ACTUAL file structure (cellDates:true + raw:false):
+ *   - BOBOT cell: string "X.XX%" (e.g. "0.36%") or null
+ *   - MULAI/SELESAI cells: string "DD/MM/YY" (e.g. "10/10/25")
+ *   - DURASI cell: integer string or number (e.g. "14" or 14)
+ *   - Weekly weights: string "X.XX%" or null
+ *   - Data starts at row index 10 (Row 11, 1-indexed)
  */
 function parseWorkItems(
   rawData: unknown[][],
@@ -459,32 +470,71 @@ function parseWorkItems(
   let sectionOrder = 0;
   let totalBobot = 0;
 
-  // Column indices (using standard layout, fallback to common positions)
   const NO_COL = 0;
   const DESC_COL = 1;
-  const BOBOT_COL = columnInfo.bobotCol >= 0 ? columnInfo.bobotCol : 2;
-  const MULAI_COL = columnInfo.mulaiCol >= 0 ? columnInfo.mulaiCol : 3;
-  const SELESAI_COL = columnInfo.selesaiCol >= 0 ? columnInfo.selesaiCol : 4;
-  const DURASI_COL = columnInfo.durationCol >= 0 ? columnInfo.durationCol : 5;
-  const WEEKLY_START = columnInfo.weeklyStartCol >= 0 ? columnInfo.weeklyStartCol : 7;
+  const BOBOT_COL = columnInfo.bobotCol >= 0 ? columnInfo.bobotCol : 7;
+  const MULAI_COL = columnInfo.mulaiCol >= 0 ? columnInfo.mulaiCol : 8;
+  const SELESAI_COL = columnInfo.selesaiCol >= 0 ? columnInfo.selesaiCol : 9;
+  const DURASI_COL = columnInfo.durationCol >= 0 ? columnInfo.durationCol : 10;
+  const WEEKLY_START = columnInfo.weeklyStartCol >= 0 ? columnInfo.weeklyStartCol : 13;
 
-  const startDate = new Date(scheduleStart);
+  // Parse schedule start using LOCAL time (Jakarta UTC+7)
+  const startDate = new Date(scheduleStart + "T00:00:00");
+  const startDateMs = startDate.getTime();
 
-  // Start from row 9 (index 9) - work items section
-  for (let rowIdx = 9; rowIdx < rawData.length; rowIdx++) {
+  // Parse DD/MM/YY date string to Date (local time)
+  const DATE_REGEX = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/;
+  function parseDMY(v: unknown): Date | null {
+    if (!v) return null;
+    const s = String(v).trim();
+    const m = s.match(DATE_REGEX);
+    if (!m) return null;
+    let yr = parseInt(m[3]);
+    if (yr < 100) yr += yr > 50 ? 1900 : 2000;
+    const d = new Date(yr, parseInt(m[2]) - 1, parseInt(m[1]));
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  // Parse bobot: "X.XX%" string -> number (keep as decimal fraction, e.g. 0.36)
+  // Or if raw number: treat as fraction (e.g. 0.0036 from raw Excel)
+  function parseBobot(v: unknown): number {
+    if (v === null || v === undefined || v === "") return 0;
+    const s = String(v).trim();
+    const withoutPct = s.replace("%", "").replace(",", ".");
+    const num = parseFloat(withoutPct);
+    if (isNaN(num)) return 0;
+    // If value > 1, assume it's a percentage string like "0.36" or "36"
+    // If value <= 1, it might already be a decimal (raw Excel fraction)
+    if (num > 1) return Math.round(num * 100) / 100; // percentage string
+    return Math.round(num * 10000) / 100; // convert fraction to percent
+  }
+
+  // Roman numeral list for section detection
+  const romanNumerals = ["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII"];
+
+  // Start from row index 10 (Row 11, 1-indexed)
+  for (let rowIdx = 10; rowIdx < rawData.length; rowIdx++) {
     const row = rawData[rowIdx];
     if (!row || isEmptyRow(row)) continue;
 
     const no = String(row[NO_COL] || "").trim();
     const description = String(row[DESC_COL] || "").trim();
 
-    // Check if this is a section header
-    const sectionInfo = parseSectionHeader(no) || parseSectionHeader(description);
-    if (sectionInfo) {
-      // Start new section
+    // Skip subsection parent headers:
+    // "Pekerjaan balok" has bobot=0 and a number prefix, but its sub-items
+    // (e.g. 3.1, 3.2) come in the next rows with bobot data
+    const bobotRaw = row[BOBOT_COL];
+    const isSubHeader = no !== "" && /^\d+$/.test(no) && description.includes("balok") && parseBobot(bobotRaw) === 0;
+    if (isSubHeader) continue;
+
+    // Roman numeral section header — NO col has Roman numeral, description has work name
+    if (romanNumerals.includes(no.toUpperCase())) {
+      if (description.toUpperCase().includes("TOTAL")) continue;
+      // Build section name: "II" + " PEKERJAAN FONDASI" -> "II. PEKERJAAN FONDASI"
+      const sectionName = description ? no + ". " + description : no;
       currentSection = {
         order: sectionOrder++,
-        name: sectionInfo.name,
+        name: sectionName,
         items: []
       };
       sections.push(currentSection);
@@ -492,80 +542,65 @@ function parseWorkItems(
       continue;
     }
 
-    // Skip empty rows or rows without a valid NO
-    if (!no || no === "" || no === "-" || description === "") {
+    // Sub-section header: single letter + LANTAI (e.g. "A" + "LANTAI 1")
+    if (/^[A-Z]$/.test(no) && description.toUpperCase().includes("LANTAI")) {
+      if (currentSection) currentSection.name += " / " + no + ". " + description;
       continue;
     }
 
-    // Parse bobot (weight)
-    let bobot = 0;
-    const bobotRaw = row[BOBOT_COL];
-    if (bobotRaw !== null && bobotRaw !== undefined && bobotRaw !== "") {
-      bobot = parseFloat(String(bobotRaw).replace(",", ".")) || 0;
-    }
+    // Skip rows without meaningful data
+    if (!no || no === "" || no === "-" || description === "") continue;
 
-    // Parse dates
+    // Parse bobot
+    const bobot = parseBobot(bobotRaw);
+
+    // Parse dates (DD/MM/YY strings)
     let mulai: Date | null = null;
     let selesai: Date | null = null;
-
     const mulaiRaw = row[MULAI_COL];
-    if (mulaiRaw !== null && mulaiRaw !== undefined && mulaiRaw !== "") {
-      const mulaiSerial = parseFloat(String(mulaiRaw));
-      if (!isNaN(mulaiSerial) && mulaiSerial > 0) {
-        mulai = excelSerialToDate(mulaiSerial);
-      }
-    }
-
     const selesaiRaw = row[SELESAI_COL];
+
+    if (mulaiRaw !== null && mulaiRaw !== undefined && mulaiRaw !== "") {
+      mulai = parseDMY(mulaiRaw);
+    }
     if (selesaiRaw !== null && selesaiRaw !== undefined && selesaiRaw !== "") {
-      const selesaiSerial = parseFloat(String(selesaiRaw));
-      if (!isNaN(selesaiSerial) && selesaiSerial > 0) {
-        selesai = excelSerialToDate(selesaiSerial);
-      }
+      selesai = parseDMY(selesaiRaw);
     }
 
     // Parse duration
     let durationDays = 0;
     const durasiRaw = row[DURASI_COL];
     if (durasiRaw !== null && durasiRaw !== undefined && durasiRaw !== "") {
-      durationDays = parseInt(String(durasiRaw), 10) || 0;
+      durationDays = typeof durasiRaw === "number"
+        ? Math.round(durasiRaw)
+        : parseInt(String(durasiRaw).replace(",", "").trim(), 10) || 0;
     }
 
-    // Calculate start offset from schedule start
+    // Calculate start offset from schedule start (using local time)
     let startOffsetDays = 0;
     if (mulai && !isNaN(mulai.getTime())) {
-      const diffMs = mulai.getTime() - startDate.getTime();
-      startOffsetDays = Math.max(0, Math.floor(diffMs / (24 * 60 * 60 * 1000)));
+      startOffsetDays = Math.max(0, Math.floor((mulai.getTime() - startDateMs) / (24 * 60 * 60 * 1000)));
     }
 
-    // Parse weekly weights
+    // Parse weekly weights (string "X.XX%" -> number)
     const weeklyWeights: { week: number; weight: number }[] = [];
     for (let colIdx = WEEKLY_START; colIdx < row.length; colIdx++) {
       const weightRaw = row[colIdx];
       if (weightRaw !== null && weightRaw !== undefined && weightRaw !== "") {
-        const weight = parseFloat(String(weightRaw).replace(",", ".")) || 0;
-        if (weight > 0) {
-          weeklyWeights.push({
-            week: colIdx - WEEKLY_START + 1,
-            weight
-          });
+        const w = parseBobot(weightRaw);
+        if (w > 0) {
+          weeklyWeights.push({ week: colIdx - WEEKLY_START + 1, weight: w });
         }
       }
     }
 
-    // Use weekly weights sum if bobot is not set, otherwise use the bobot column value
-    const calculatedBobot = bobot > 0 ? bobot :
-      weeklyWeights.reduce((sum, w) => sum + w.weight, 0);
+    // Use bobot column value if present, otherwise sum weekly weights
+    const calculatedBobot = bobot > 0 ? bobot : weeklyWeights.reduce((sum, w) => sum + w.weight, 0);
 
     totalBobot += calculatedBobot;
 
-    // Add item to current section or create a default section
     if (!currentSection) {
-      currentSection = {
-        order: sectionOrder++,
-        name: "General",
-        items: []
-      };
+      currentSection = { order: sectionOrder++, name: "General", items: [] };
       sections.push(currentSection);
     }
 
@@ -581,108 +616,6 @@ function parseWorkItems(
     });
 
     itemOrder++;
-  }
-
-  // If no sections were found, try to parse from the beginning
-  if (sections.length === 0) {
-    currentSection = {
-      order: 0,
-      name: "Ungrouped Items",
-      items: []
-    };
-    sections.push(currentSection);
-
-    for (let rowIdx = 9; rowIdx < rawData.length; rowIdx++) {
-      const row = rawData[rowIdx];
-      if (!row || isEmptyRow(row)) continue;
-
-      const no = String(row[0] || "").trim();
-      const description = String(row[1] || "").trim();
-
-      if (!no || no === "" || no === "-" || description === "") {
-        continue;
-      }
-
-      // Check for section header
-      const sectionInfo = parseSectionHeader(no) || parseSectionHeader(description);
-      if (sectionInfo) {
-        currentSection = {
-          order: sectionOrder++,
-          name: sectionInfo.name,
-          items: []
-        };
-        sections.push(currentSection);
-        continue;
-      }
-
-      // Parse item data
-      let bobot = 0;
-      const bobotRaw = row[BOBOT_COL];
-      if (bobotRaw !== null && bobotRaw !== undefined && bobotRaw !== "") {
-        bobot = parseFloat(String(bobotRaw).replace(",", ".")) || 0;
-      }
-
-      let mulai: Date | null = null;
-      let selesai: Date | null = null;
-      let durationDays = 0;
-
-      const mulaiRaw = row[MULAI_COL];
-      if (mulaiRaw !== null && mulaiRaw !== undefined && mulaiRaw !== "") {
-        const mulaiSerial = parseFloat(String(mulaiRaw));
-        if (!isNaN(mulaiSerial) && mulaiSerial > 0) {
-          mulai = excelSerialToDate(mulaiSerial);
-        }
-      }
-
-      const selesaiRaw = row[SELESAI_COL];
-      if (selesaiRaw !== null && selesaiRaw !== undefined && selesaiRaw !== "") {
-        const selesaiSerial = parseFloat(String(selesaiRaw));
-        if (!isNaN(selesaiSerial) && selesaiSerial > 0) {
-          selesai = excelSerialToDate(selesaiSerial);
-        }
-      }
-
-      const durasiRaw = row[DURASI_COL];
-      if (durasiRaw !== null && durasiRaw !== undefined && durasiRaw !== "") {
-        durationDays = parseInt(String(durasiRaw), 10) || 0;
-      }
-
-      let startOffsetDays = 0;
-      if (mulai && !isNaN(mulai.getTime())) {
-        const diffMs = mulai.getTime() - startDate.getTime();
-        startOffsetDays = Math.max(0, Math.floor(diffMs / (24 * 60 * 60 * 1000)));
-      }
-
-      const weeklyWeights: { week: number; weight: number }[] = [];
-      for (let colIdx = WEEKLY_START; colIdx < row.length; colIdx++) {
-        const weightRaw = row[colIdx];
-        if (weightRaw !== null && weightRaw !== undefined && weightRaw !== "") {
-          const weight = parseFloat(String(weightRaw).replace(",", ".")) || 0;
-          if (weight > 0) {
-            weeklyWeights.push({
-              week: colIdx - WEEKLY_START + 1,
-              weight
-            });
-          }
-        }
-      }
-
-      const calculatedBobot = bobot > 0 ? bobot :
-        weeklyWeights.reduce((sum, w) => sum + w.weight, 0);
-
-      totalBobot += calculatedBobot;
-
-      currentSection.items.push({
-        no,
-        description,
-        bobot: calculatedBobot,
-        mulai: mulai && !isNaN(mulai.getTime()) ? formatDate(mulai) : null,
-        selesai: selesai && !isNaN(selesai.getTime()) ? formatDate(selesai) : null,
-        durationDays,
-        startOffsetDays,
-        weeklyWeights
-      });
-    }
   }
 
   return { sections, totalBobot };

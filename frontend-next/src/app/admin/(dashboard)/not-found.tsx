@@ -17,7 +17,7 @@ export default function AdminNotFound() {
 
         <Link
           href="/admin"
-          className="mt-6 inline-flex items-center gap-2 rounded-2xl border border-cyan-300/35 bg-cyan-300/10 px-4 py-2 text-sm font-semibold text-cyan-100 hover:bg-cyan-300/20"
+          className="mt-6 inline-flex items-center gap-2 rounded-2xl border border-desert-400/35 bg-desert-400/10 px-4 py-2 text-sm font-semibold text-desert-200 hover:bg-desert-400/20"
         >
           <LayoutDashboard size={15} /> Kembali ke Dashboard
         </Link>

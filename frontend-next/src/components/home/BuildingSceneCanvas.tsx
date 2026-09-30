@@ -4,18 +4,10 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
 /**
- * Model struktur 3D untuk latar hero dan bagian "Interactive Blueprint".
- *
- * Beberapa hal yang dijaga di sini karena komponen ini dipasang lebih dari
- * satu kali pada satu halaman:
- * - render loop berhenti saat elemen keluar viewport atau tab disembunyikan,
- * - semua geometry/material dilepas saat unmount supaya tidak bocor,
- * - kalau WebGL tidak tersedia, komponen berhenti diam-diam dan menyisakan
- *   lapisan gradien statis di belakangnya, bukan melempar error;
- * - `prefers-reduced-motion` menghentikan animasi, model tetap tergambar satu
- *   frame.
+ * SANATA Brand: 3D Building Model
+ * Using Desert (#C9AD82) accent color
  */
-export function BuildingSceneCanvas({ accent = "#67e8f9" }: { accent?: string }) {
+export function BuildingSceneCanvas({ accent = "#C9AD82" }: { accent?: string }) {
   const mountRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -44,12 +36,13 @@ export function BuildingSceneCanvas({ accent = "#67e8f9" }: { accent?: string })
     mount.appendChild(renderer.domElement);
 
     const accentColor = new THREE.Color(accent);
-    scene.fog = new THREE.FogExp2("#020817", 0.08);
+    // SANATA Brand: Desert background
+    scene.fog = new THREE.FogExp2("#0C1012", 0.08);
 
-    const ambient = new THREE.AmbientLight("#dbeafe", 0.8);
+    const ambient = new THREE.AmbientLight("#9AA9AD", 0.8);
     const keyLight = new THREE.PointLight(accentColor, 10, 25, 2);
     keyLight.position.set(3, 6, 4);
-    const fillLight = new THREE.PointLight("#f59e0b", 4, 20, 2);
+    const fillLight = new THREE.PointLight("#B89A6F", 4, 20, 2);
     fillLight.position.set(-4, 3, 2);
     scene.add(ambient, keyLight, fillLight);
 
@@ -66,7 +59,7 @@ export function BuildingSceneCanvas({ accent = "#67e8f9" }: { accent?: string })
     const platformGeometry = track(new THREE.CylinderGeometry(3.6, 4.2, 0.35, 48));
     const platformMaterial = track(
       new THREE.MeshPhysicalMaterial({
-        color: "#0f172a",
+        color: "#0C1012",
         metalness: 0.9,
         roughness: 0.25,
         clearcoat: 0.6,
@@ -106,7 +99,7 @@ export function BuildingSceneCanvas({ accent = "#67e8f9" }: { accent?: string })
 
     const bridge = new THREE.Mesh(
       track(new THREE.BoxGeometry(2.8, 0.12, 0.3)),
-      track(new THREE.MeshStandardMaterial({ color: "#7dd3fc", metalness: 0.85, roughness: 0.22 }))
+      track(new THREE.MeshStandardMaterial({ color: "#C9AD82", metalness: 0.85, roughness: 0.22 }))
     );
     bridge.position.set(0, 0.9, 0);
     bridge.rotation.z = 0.18;
@@ -207,7 +200,8 @@ export function BuildingSceneCanvas({ accent = "#67e8f9" }: { accent?: string })
   return (
     <div
       aria-hidden="true"
-      className="relative h-full w-full bg-[radial-gradient(circle_at_center,_rgba(103,232,249,0.16),_transparent_62%)]"
+      // SANATA Brand: Desert radial gradient
+      className="relative h-full w-full bg-[radial-gradient(circle_at_center,_rgba(201,173,130,0.12),_transparent_62%)]"
     >
       <div ref={mountRef} className="absolute inset-0" />
     </div>

@@ -15,7 +15,7 @@ export default function Icon() {
           justifyContent: "center",
           background: "#0c1829",
           borderRadius: 12,
-          border: "1px solid rgba(56, 189, 248, 0.3)",
+          border: "1px solid rgba(201, 173, 130, 0.3)",
         }}
       >
         {/* Building icon */}
@@ -29,7 +29,7 @@ export default function Icon() {
         >
           <defs>
             <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#38bdf8" />
+              <stop offset="0%" stopColor="#C9AD82" />
               <stop offset="100%" stopColor="#06b6d4" />
             </linearGradient>
           </defs>

@@ -183,9 +183,9 @@ export default function NewCampaignPage() {
               <div
                 className={`flex h-10 w-10 items-center justify-center rounded-full border-2 font-semibold transition ${
                   currentStep > step.num
-                    ? "border-cyan-400 bg-cyan-400/20 text-cyan-400"
+                    ? "border-desert-400 bg-desert-400/20 text-desert-400"
                     : currentStep === step.num
-                    ? "border-cyan-400 bg-cyan-400/20 text-cyan-400"
+                    ? "border-desert-400 bg-desert-400/20 text-desert-400"
                     : "border-white/20 bg-white/5 text-slate-400"
                 }`}
               >
@@ -202,7 +202,7 @@ export default function NewCampaignPage() {
             {i < steps.length - 1 && (
               <div
                 className={`mx-4 h-px w-16 ${
-                  currentStep > step.num ? "bg-cyan-400" : "bg-white/10"
+                  currentStep > step.num ? "bg-desert-400" : "bg-white/10"
                 }`}
               />
             )}
@@ -222,7 +222,7 @@ export default function NewCampaignPage() {
                   onClick={() => setSelectedChannel(channel.id)}
                   className={`flex items-start gap-4 rounded-xl border p-5 text-left transition ${
                     selectedChannel === channel.id
-                      ? `${channel.bgColor} ring-2 ring-cyan-400/50`
+                      ? `${channel.bgColor} ring-2 ring-desert-400/50`
                       : "border-white/10 bg-white/[0.03] hover:border-white/20"
                   }`}
                 >
@@ -235,7 +235,7 @@ export default function NewCampaignPage() {
                   </div>
                   {selectedChannel === channel.id && (
                     <div className="ml-auto">
-                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-cyan-400 text-black">
+                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-desert-400 text-black">
                         <Check size={14} />
                       </div>
                     </div>
@@ -256,7 +256,7 @@ export default function NewCampaignPage() {
                   onClick={() => setSelectedAudience(option.id)}
                   className={`flex w-full items-center justify-between rounded-xl border p-4 transition ${
                     selectedAudience === option.id
-                      ? "border-cyan-400/50 bg-cyan-400/10"
+                      ? "border-desert-400/50 bg-desert-400/10"
                       : "border-white/10 bg-white/[0.03] hover:border-white/20"
                   }`}
                 >
@@ -270,13 +270,13 @@ export default function NewCampaignPage() {
                     </div>
                   </div>
                   {selectedAudience === option.id && (
-                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-cyan-400 text-black">
+                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-desert-400 text-black">
                       <Check size={14} />
                     </div>
                   )}
                 </button>
               ))}
-              <button className="flex w-full items-center justify-between rounded-xl border border-dashed border-white/20 p-4 text-slate-400 hover:border-cyan-300/30 hover:text-cyan-300">
+              <button className="flex w-full items-center justify-between rounded-xl border border-dashed border-white/20 p-4 text-slate-400 hover:border-desert-400/30 hover:text-desert-400">
                 <div className="flex items-center gap-3">
                   <Filter size={20} />
                   <span>Filter Kontak Spesifik</span>
@@ -312,7 +312,7 @@ export default function NewCampaignPage() {
                     onClick={() => applyTemplate(template.id)}
                     className={`rounded-lg border px-3 py-1.5 text-sm transition ${
                       selectedTemplate === template.id
-                        ? "border-cyan-400/50 bg-cyan-400/10 text-cyan-300"
+                        ? "border-desert-400/50 bg-desert-400/10 text-desert-400"
                         : "border-white/10 bg-white/5 text-slate-400 hover:border-white/20 hover:text-white"
                     }`}
                   >
@@ -342,7 +342,7 @@ export default function NewCampaignPage() {
                 <label className="text-sm font-medium text-slate-300">Isi Pesan</label>
                 <button
                   onClick={() => setShowPreview(true)}
-                  className="flex items-center gap-1 text-sm text-cyan-400 hover:text-cyan-300"
+                  className="flex items-center gap-1 text-sm text-desert-400 hover:text-desert-400"
                 >
                   <Eye size={14} />
                   Preview
@@ -364,11 +364,11 @@ export default function NewCampaignPage() {
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-300">Lampirkan Media</label>
               <div className="flex flex-wrap gap-3">
-                <button className="flex items-center gap-2 rounded-xl border border-dashed border-white/20 px-4 py-3 text-slate-400 hover:border-cyan-300/30 hover:text-cyan-300">
+                <button className="flex items-center gap-2 rounded-xl border border-dashed border-white/20 px-4 py-3 text-slate-400 hover:border-desert-400/30 hover:text-desert-400">
                   <Image size={18} />
                   Upload Gambar
                 </button>
-                <button className="flex items-center gap-2 rounded-xl border border-dashed border-white/20 px-4 py-3 text-slate-400 hover:border-cyan-300/30 hover:text-cyan-300">
+                <button className="flex items-center gap-2 rounded-xl border border-dashed border-white/20 px-4 py-3 text-slate-400 hover:border-desert-400/30 hover:text-desert-400">
                   <FileText size={18} />
                   Upload PDF
                 </button>
@@ -408,11 +408,11 @@ export default function NewCampaignPage() {
                   onClick={() => setScheduleType("now")}
                   className={`flex flex-1 items-center justify-center gap-3 rounded-xl border p-5 transition ${
                     scheduleType === "now"
-                      ? "border-cyan-400/50 bg-cyan-400/10"
+                      ? "border-desert-400/50 bg-desert-400/10"
                       : "border-white/10 bg-white/[0.03] hover:border-white/20"
                   }`}
                 >
-                  <Send size={20} className={scheduleType === "now" ? "text-cyan-400" : "text-slate-400"} />
+                  <Send size={20} className={scheduleType === "now" ? "text-desert-400" : "text-slate-400"} />
                   <div className="text-left">
                     <p className="font-semibold text-white">Kirim Sekarang</p>
                     <p className="text-sm text-slate-400">Pesan akan langsung dikirim</p>
@@ -422,11 +422,11 @@ export default function NewCampaignPage() {
                   onClick={() => setScheduleType("schedule")}
                   className={`flex flex-1 items-center justify-center gap-3 rounded-xl border p-5 transition ${
                     scheduleType === "schedule"
-                      ? "border-cyan-400/50 bg-cyan-400/10"
+                      ? "border-desert-400/50 bg-desert-400/10"
                       : "border-white/10 bg-white/[0.03] hover:border-white/20"
                   }`}
                 >
-                  <Calendar size={20} className={scheduleType === "schedule" ? "text-cyan-400" : "text-slate-400"} />
+                  <Calendar size={20} className={scheduleType === "schedule" ? "text-desert-400" : "text-slate-400"} />
                   <div className="text-left">
                     <p className="font-semibold text-white">Jadwalkan</p>
                     <p className="text-sm text-slate-400">Pilih tanggal dan waktu</p>
@@ -543,9 +543,9 @@ export default function NewCampaignPage() {
               </div>
 
               {/* Final Actions */}
-              <div className="flex items-center justify-between rounded-xl border border-cyan-400/20 bg-cyan-400/10 p-4">
+              <div className="flex items-center justify-between rounded-xl border border-desert-400/20 bg-desert-400/10 p-4">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-400/20 text-cyan-400">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-desert-400/20 text-desert-400">
                     <Send size={18} />
                   </div>
                   <div>

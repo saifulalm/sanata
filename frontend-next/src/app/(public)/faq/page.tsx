@@ -47,12 +47,12 @@ export default async function FaqPage() {
           <div className="space-y-3">
             {faqs.map((f, i) => (
               <RevealOnScroll key={`${f.question}-${i}`} delay={i * 0.05}>
-                <details className="group rounded-[1.6rem] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl transition open:border-cyan-300/35">
+                <details className="group rounded-[1.6rem] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl transition open:border-desert-400/35">
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display font-semibold text-white">
                     {f.question}
-                    <ChevronDown size={18} className="shrink-0 text-cyan-300 transition-transform group-open:rotate-180" />
+                    <ChevronDown size={18} className="shrink-0 text-desert-400 transition-transform group-open:rotate-180" />
                   </summary>
-                  <p className="mt-3 text-sm leading-7 text-slate-400">{f.answer}</p>
+                  <p className="mt-3 text-sm leading-7 text-charcoal-300">{f.answer}</p>
                 </details>
               </RevealOnScroll>
             ))}

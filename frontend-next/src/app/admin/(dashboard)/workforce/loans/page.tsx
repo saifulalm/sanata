@@ -18,7 +18,7 @@ async function LoanStats() {
       <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-4">
         <Card className="p-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-desert-400/10 text-desert-400">
               <Handshake size={20} />
             </div>
             <div>

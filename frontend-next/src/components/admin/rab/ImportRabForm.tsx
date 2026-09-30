@@ -4,6 +4,17 @@ import { useState, useRef, useCallback } from "react";
 import { Upload, FileSpreadsheet, Check, AlertCircle, X, Download, ArrowRight } from "lucide-react";
 import { formatRupiah } from "@/lib/format";
 
+const ACCESS_COOKIE = "admin_access";
+
+/**
+ * Get access token from cookie (client-side)
+ */
+function getAccessTokenFromCookie() {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(new RegExp(ACCESS_COOKIE + "=([^;]+)"));
+  return match ? match[1] : null;
+}
+
 interface ImportItem {
   description: string;
   unit: string;
@@ -86,8 +97,14 @@ export function ImportRabForm({ onSuccess, onCancel }: ImportFormProps) {
       const formDataFile = new FormData();
       formDataFile.append("file", file);
 
+      const token = getAccessTokenFromCookie();
+      const headers: Record<string, string> = {};
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
       const res = await fetch("/api/rab/import-preview", {
         method: "POST",
+        credentials: "include",
+        headers,
         body: formDataFile,
       });
 
@@ -110,7 +127,14 @@ export function ImportRabForm({ onSuccess, onCancel }: ImportFormProps) {
   // Download template
   const downloadTemplate = async () => {
     try {
-      const res = await fetch("/api/rab/import-template");
+      const token = getAccessTokenFromCookie();
+      const headers: Record<string, string> = {};
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
+      const res = await fetch("/api/rab/import-template", {
+        credentials: "include",
+        headers,
+      });
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -134,9 +158,14 @@ export function ImportRabForm({ onSuccess, onCancel }: ImportFormProps) {
     setError(null);
 
     try {
+      const token = getAccessTokenFromCookie();
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
       const res = await fetch("/api/rab/import-confirm", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        headers,
         body: JSON.stringify({
           number: formData.number || `RAB-${Date.now()}`,
           title: formData.title,
@@ -196,7 +225,7 @@ export function ImportRabForm({ onSuccess, onCancel }: ImportFormProps) {
           {/* Template Download */}
           <div className="flex items-center justify-between p-4 rounded-xl bg-slate-800/50 border border-slate-700">
             <div className="flex items-center gap-3">
-              <FileSpreadsheet className="text-cyan-400" size={24} />
+              <FileSpreadsheet className="text-desert-400" size={24} />
               <div>
                 <p className="text-sm font-medium text-white">Download Template Excel</p>
                 <p className="text-xs text-slate-400">Gunakan template ini untuk format yang benar</p>
@@ -204,7 +233,7 @@ export function ImportRabForm({ onSuccess, onCancel }: ImportFormProps) {
             </div>
             <button
               onClick={downloadTemplate}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 transition"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-desert-400/10 text-desert-400 hover:bg-desert-400/20 transition"
             >
               <Download size={16} />
               Download Template
@@ -216,7 +245,7 @@ export function ImportRabForm({ onSuccess, onCancel }: ImportFormProps) {
             className={`flex flex-col items-center justify-center gap-4 p-12 rounded-2xl border-2 border-dashed cursor-pointer transition-all ${
               isLoading
                 ? "border-slate-600 bg-slate-800/30"
-                : "border-cyan-500/30 bg-cyan-500/5 hover:bg-cyan-500/10 hover:border-cyan-500/50"
+                : "border-desert-400/30 bg-desert-400/5 hover:bg-desert-400/10 hover:border-desert-400/50"
             }`}
           >
             <input
@@ -229,12 +258,12 @@ export function ImportRabForm({ onSuccess, onCancel }: ImportFormProps) {
             />
             {isLoading ? (
               <>
-                <div className="animate-spin rounded-full h-12 w-12 border-2 border-cyan-500 border-t-transparent" />
+                <div className="animate-spin rounded-full h-12 w-12 border-2 border-desert-400 border-t-transparent" />
                 <p className="text-sm text-slate-400">Memproses file...</p>
               </>
             ) : (
               <>
-                <Upload className="text-cyan-400" size={32} />
+                <Upload className="text-desert-400" size={32} />
                 <div className="text-center">
                   <p className="text-sm font-medium text-white">Klik atau drag file Excel ke sini</p>
                   <p className="text-xs text-slate-400 mt-1">.xlsx atau .xls, maks 10MB</p>
@@ -327,7 +356,7 @@ export function ImportRabForm({ onSuccess, onCancel }: ImportFormProps) {
                         <td className="px-3 py-2 text-right text-slate-300 tabular-nums">
                           {formatRupiah(item.unitPrice)}
                         </td>
-                        <td className="px-3 py-2 text-right text-cyan-400 tabular-nums font-medium">
+                        <td className="px-3 py-2 text-right text-desert-400 tabular-nums font-medium">
                           {formatRupiah(item.amount)}
                         </td>
                         <td className="px-3 py-2 text-right text-yellow-400 tabular-nums">
@@ -355,7 +384,7 @@ export function ImportRabForm({ onSuccess, onCancel }: ImportFormProps) {
                 value={formData.number || ""}
                 onChange={(e) => setFormData({ ...formData, number: e.target.value })}
                 placeholder="RAB-2026-XXX"
-                className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-cyan-500 focus:outline-none"
+                className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-desert-400 focus:outline-none"
               />
             </FormField>
             <FormField label="Nama Proyek *">
@@ -364,7 +393,7 @@ export function ImportRabForm({ onSuccess, onCancel }: ImportFormProps) {
                 value={formData.title || ""}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 placeholder="Nama proyek"
-                className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-cyan-500 focus:outline-none"
+                className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-desert-400 focus:outline-none"
               />
             </FormField>
             <FormField label="Nama Klien">
@@ -373,7 +402,7 @@ export function ImportRabForm({ onSuccess, onCancel }: ImportFormProps) {
                 value={formData.clientName || ""}
                 onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
                 placeholder="Nama klien/pemilik proyek"
-                className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-cyan-500 focus:outline-none"
+                className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-desert-400 focus:outline-none"
               />
             </FormField>
             <FormField label="Lokasi">
@@ -382,7 +411,7 @@ export function ImportRabForm({ onSuccess, onCancel }: ImportFormProps) {
                 value={formData.location || ""}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                 placeholder="Alamat lokasi proyek"
-                className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-cyan-500 focus:outline-none"
+                className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-desert-400 focus:outline-none"
               />
             </FormField>
             <FormField label="Tanggal Mulai *">
@@ -390,7 +419,7 @@ export function ImportRabForm({ onSuccess, onCancel }: ImportFormProps) {
                 type="date"
                 value={formData.scheduleStart || ""}
                 onChange={(e) => setFormData({ ...formData, scheduleStart: e.target.value })}
-                className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-sm text-white focus:border-cyan-500 focus:outline-none"
+                className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-sm text-white focus:border-desert-400 focus:outline-none"
               />
             </FormField>
           </div>
@@ -406,7 +435,7 @@ export function ImportRabForm({ onSuccess, onCancel }: ImportFormProps) {
             <button
               onClick={confirmImport}
               disabled={isLoading || !formData.title || !formData.scheduleStart || (preview && !preview.valid)}
-              className="flex items-center gap-2 px-6 py-2 rounded-lg bg-cyan-500 text-slate-900 font-medium hover:bg-cyan-400 disabled:opacity-50 disabled:cursor-not-allowed transition"
+              className="flex items-center gap-2 px-6 py-2 rounded-lg bg-desert-400 text-slate-900 font-medium hover:bg-desert-400 disabled:opacity-50 disabled:cursor-not-allowed transition"
             >
               {isLoading ? (
                 <>
@@ -438,7 +467,7 @@ export function ImportRabForm({ onSuccess, onCancel }: ImportFormProps) {
           </div>
           <button
             onClick={() => window.location.href = "/admin/rab"}
-            className="flex items-center gap-2 px-6 py-2 rounded-lg bg-cyan-500 text-slate-900 font-medium hover:bg-cyan-400 transition"
+            className="flex items-center gap-2 px-6 py-2 rounded-lg bg-desert-400 text-slate-900 font-medium hover:bg-desert-400 transition"
           >
             Lihat Daftar RAB
             <ArrowRight size={16} />

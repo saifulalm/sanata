@@ -102,8 +102,9 @@ const typeColors: Record<string, { bg: string; icon: string }> = {
   PHOTO: { bg: "bg-gradient-to-br from-pink-400 to-rose-500", icon: "text-white" },
   billing: { bg: "bg-gradient-to-br from-amber-400 to-orange-500", icon: "text-white" },
   BILLING: { bg: "bg-gradient-to-br from-amber-400 to-orange-500", icon: "text-white" },
-  message: { bg: "bg-gradient-to-br from-cyan-400 to-teal-500", icon: "text-white" },
-  MESSAGE: { bg: "bg-gradient-to-br from-cyan-400 to-teal-500", icon: "text-white" },
+  /* SANATA Brand: Desert message gradient */
+  message: { bg: "bg-gradient-to-br from-desert-400 to-desert-600", icon: "text-white" },
+  MESSAGE: { bg: "bg-gradient-to-br from-desert-400 to-desert-600", icon: "text-white" },
   milestone: { bg: "bg-gradient-to-br from-indigo-400 to-purple-500", icon: "text-white" },
   MILESTONE: { bg: "bg-gradient-to-br from-indigo-400 to-purple-500", icon: "text-white" },
   default: { bg: "bg-gradient-to-br from-slate-400 to-slate-500", icon: "text-white" },

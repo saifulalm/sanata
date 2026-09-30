@@ -112,23 +112,28 @@ export function ExplodedFloorSection({
           : "Menunggu pekerjaan berikutnya";
 
   return (
-    <section id="exploded-view" className="relative border-y border-white/5 bg-[#050e19] py-24">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,_rgba(56,189,248,0.12),_transparent_45%)]" />
+    /* SANATA Brand: Desert Charcoal section */
+    <section id="exploded-view" className="relative border-y border-white/5 bg-[#0C1012] py-24">
+      {/* SANATA Brand: Desert radial gradient */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,_rgba(201,173,130,0.1),_transparent_45%)]" />
 
       <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-cyan-300/25 bg-white/5 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-100">
-            <Layers size={14} className="text-cyan-300" />
+          {/* SANATA Brand: Desert eyebrow */}
+          <div className="inline-flex items-center gap-2 rounded-full border border-desert-400/25 bg-white/5 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-desert-200">
+            <Layers size={14} className="text-desert-400" />
             {eyebrow}
           </div>
           <h2 className="mt-5 text-3xl font-semibold uppercase tracking-[0.06em] text-white sm:text-4xl">{title}</h2>
-          <p className="mt-4 text-sm leading-7 text-slate-300 sm:text-base">{description}</p>
+          <p className="mt-4 text-sm leading-7 text-charcoal-200 sm:text-base">{description}</p>
         </div>
 
         <div className="mt-12 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
           {/* --- Kanvas + kendali ------------------------------------------- */}
-          <div className="rounded-[1.8rem] border border-white/10 bg-slate-950/70 p-4 shadow-[0_40px_120px_rgba(2,12,27,0.45)]">
-            <div className="relative h-[26rem] overflow-hidden rounded-[1.4rem] bg-[radial-gradient(circle_at_center,_rgba(103,232,249,0.14),_transparent_65%)] sm:h-[32rem]">
+          {/* SANATA Brand: Desert Charcoal container */}
+          <div className="rounded-[1.8rem] border border-white/10 bg-[#0C1012]/70 p-4 shadow-[0_40px_120px_rgba(0,0,0,0.4)]">
+            {/* SANATA Brand: Desert radial */}
+            <div className="relative h-[26rem] overflow-hidden rounded-[1.4rem] bg-[radial-gradient(circle_at_center,_rgba(201,173,130,0.1),_transparent_65%)] sm:h-[32rem]">
               <ExplodedBuildingView
                 floors={floors}
                 explode={timelineMode ? 0 : explode / 100}
@@ -139,14 +144,15 @@ export function ExplodedFloorSection({
               />
 
               {timelineMode && (
-                <div className="pointer-events-none absolute left-4 top-4 rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-2.5 backdrop-blur">
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400">
+                /* SANATA Brand: Desert Charcoal panel */
+                <div className="pointer-events-none absolute left-4 top-4 rounded-2xl border border-white/10 bg-[#0C1012]/70 px-4 py-2.5 backdrop-blur">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-charcoal-400">
                     Minggu {week} / {totalWeeks}
                   </p>
                   <p className="text-xl font-semibold tabular-nums text-white">
                     {(overallProgress * 100).toFixed(0)}%
                   </p>
-                  <p className="max-w-[14rem] truncate text-[11px] text-cyan-200">{timelineCaption}</p>
+                  <p className="max-w-[14rem] truncate text-[11px] text-desert-200">{timelineCaption}</p>
                 </div>
               )}
             </div>
@@ -158,11 +164,12 @@ export function ExplodedFloorSection({
                   type="button"
                   onClick={() => setMode(value)}
                   aria-pressed={mode === value}
+                  /* SANATA Brand: Desert accent buttons */
                   className={clsx(
-                    "rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300",
+                    "rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-desert-400",
                     mode === value
-                      ? "border-cyan-300/45 bg-cyan-300/10 text-cyan-100"
-                      : "border-white/12 text-slate-400 hover:border-cyan-300/25 hover:text-white"
+                      ? "border-desert-400/45 bg-desert-400/10 text-desert-200"
+                      : "border-white/12 text-charcoal-400 hover:border-desert-400/25 hover:text-white"
                   )}
                 >
                   {value === "exploded" ? "Exploded" : "Garis Waktu 4D"}
@@ -176,10 +183,11 @@ export function ExplodedFloorSection({
                   <>
                     <label
                       htmlFor={`${sliderId}-week`}
-                      className="mb-1.5 flex items-center justify-between text-[11px] uppercase tracking-[0.2em] text-slate-400"
+                      className="mb-1.5 flex items-center justify-between text-[11px] uppercase tracking-[0.2em] text-charcoal-400"
                     >
                       <span>Minggu Pelaksanaan</span>
-                      <span className="tabular-nums text-cyan-200">
+                      {/* SANATA Brand: Desert text */}
+                      <span className="tabular-nums text-desert-200">
                         {week} / {totalWeeks}
                       </span>
                     </label>
@@ -193,17 +201,18 @@ export function ExplodedFloorSection({
                         setPlaying(false);
                         setWeek(Number(e.target.value));
                       }}
-                      className="w-full accent-cyan-400"
+                      className="w-full accent-desert-400"
                     />
                   </>
                 ) : (
                   <>
                     <label
                       htmlFor={sliderId}
-                      className="mb-1.5 flex items-center justify-between text-[11px] uppercase tracking-[0.2em] text-slate-400"
+                      className="mb-1.5 flex items-center justify-between text-[11px] uppercase tracking-[0.2em] text-charcoal-400"
                     >
                       <span>Pemisah Lantai</span>
-                      <span className="tabular-nums text-cyan-200">{explode}%</span>
+                      {/* SANATA Brand: Desert text */}
+                      <span className="tabular-nums text-desert-200">{explode}%</span>
                     </label>
                     <input
                       id={sliderId}
@@ -212,13 +221,14 @@ export function ExplodedFloorSection({
                       max={100}
                       value={explode}
                       onChange={(e) => setExplode(Number(e.target.value))}
-                      className="w-full accent-cyan-400"
+                      className="w-full accent-desert-400"
                     />
                   </>
                 )}
               </div>
 
               {timelineMode && (
+                /* SANATA Brand: Desert CTA */
                 <button
                   type="button"
                   onClick={() => {
@@ -228,20 +238,21 @@ export function ExplodedFloorSection({
                   aria-pressed={playing}
                   disabled={reduceMotion || totalWeeks === 0}
                   title={reduceMotion ? "Dinonaktifkan karena sistem meminta gerakan seminimal mungkin" : undefined}
-                  className="flex items-center gap-2 rounded-full border border-cyan-300/35 bg-cyan-300/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100 transition hover:bg-cyan-300/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex items-center gap-2 rounded-full border border-desert-400/35 bg-desert-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-desert-200 transition hover:bg-desert-400/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-desert-400 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {playing ? <Pause size={14} /> : <Play size={14} />}
                   {playing ? "Jeda" : week >= totalWeeks ? "Ulang" : "Putar Waktu"}
                 </button>
               )}
 
+              {/* SANATA Brand: Desert hover on border */}
               <button
                 type="button"
                 onClick={() => setAutoRotate((v) => !v)}
                 aria-pressed={rotating}
                 disabled={reduceMotion}
                 title={reduceMotion ? "Dinonaktifkan karena sistem meminta gerakan seminimal mungkin" : undefined}
-                className="flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-200 transition hover:border-cyan-300/40 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300 disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-charcoal-200 transition hover:border-desert-400/40 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-desert-400 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {rotating ? <Pause size={14} /> : <Play size={14} />}
                 {reduceMotion ? "Gerakan Dikurangi" : rotating ? "Hentikan Putaran" : "Putar Model"}
@@ -255,7 +266,7 @@ export function ExplodedFloorSection({
                   setWeek(0);
                   setPlaying(false);
                 }}
-                className="flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-200 transition hover:border-cyan-300/40 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
+                className="flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-charcoal-200 transition hover:border-desert-400/40 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-desert-400"
               >
                 <RotateCcw size={14} /> Atur Ulang
               </button>
@@ -285,11 +296,12 @@ export function ExplodedFloorSection({
                       type="button"
                       onClick={() => setSelectedId(active ? null : floor.id)}
                       aria-pressed={active}
+                      /* SANATA Brand: Desert active state */
                       className={clsx(
-                        "flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300",
+                        "flex w-full items-center gap-3 rounded-2xl border px-4 py-3 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-desert-400",
                         active
-                          ? "border-cyan-300/45 bg-cyan-300/10"
-                          : "border-white/10 bg-slate-950/60 hover:border-cyan-300/25"
+                          ? "border-desert-400/45 bg-desert-400/10"
+                          : "border-white/10 bg-[#0C1012]/60 hover:border-desert-400/25"
                       )}
                     >
                       <span
@@ -299,7 +311,8 @@ export function ExplodedFloorSection({
                       />
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-sm font-semibold text-white">{floor.title}</span>
-                        <span className="block text-xs text-slate-400">
+                        {/* SANATA Brand: Charcoal text */}
+                        <span className="block text-xs text-charcoal-400">
                           {timelineMode
                             ? `Minggu ${floor.startWeek}–${floor.startWeek + floor.durationWeeks} · ${floor.durationWeeks} minggu`
                             : `${floor.subtitle ? `${floor.subtitle} · ` : ""}${floor.heightM} m · ${floor.widthM}×${floor.depthM} m`}
@@ -326,11 +339,13 @@ export function ExplodedFloorSection({
             </ul>
 
             {selected && (
-              <div className="rounded-2xl border border-cyan-300/25 bg-slate-950/80 p-5">
+              /* SANATA Brand: Desert panel */
+              <div className="rounded-2xl border border-desert-400/25 bg-[#0C1012]/80 p-5">
                 <p className="text-sm font-semibold uppercase tracking-[0.12em] text-white">{selected.title}</p>
-                {selected.subtitle && <p className="mt-1 text-xs text-cyan-200">{selected.subtitle}</p>}
+                {/* SANATA Brand: Desert text */}
+                {selected.subtitle && <p className="mt-1 text-xs text-desert-200">{selected.subtitle}</p>}
                 {selected.imageUrl && (
-                  <span className="relative mt-3 block h-40 overflow-hidden rounded-xl bg-slate-900">
+                  <span className="relative mt-3 block h-40 overflow-hidden rounded-xl bg-[#0C1012]">
                     <Image
                       src={selected.imageUrl}
                       alt={`Denah ${selected.title}`}
@@ -340,11 +355,13 @@ export function ExplodedFloorSection({
                     />
                   </span>
                 )}
-                {selected.body && <p className="mt-3 text-sm leading-6 text-slate-300">{selected.body}</p>}
+                {/* SANATA Brand: Charcoal text */}
+                {selected.body && <p className="mt-3 text-sm leading-6 text-charcoal-200">{selected.body}</p>}
                 {selected.href && (
+                  /* SANATA Brand: Desert CTA */
                   <Link
                     href={selected.href}
-                    className="mt-4 inline-flex items-center gap-2 rounded-full border border-cyan-300/35 bg-cyan-300/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100 transition hover:bg-cyan-300/20"
+                    className="mt-4 inline-flex items-center gap-2 rounded-full border border-desert-400/35 bg-desert-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-desert-200 transition hover:bg-desert-400/20"
                   >
                     Selengkapnya <ArrowRight size={14} />
                   </Link>
@@ -377,8 +394,9 @@ function usePrefersReducedMotion(): boolean {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-slate-950/60 px-3 py-3 text-center">
-      <p className="text-[10px] uppercase tracking-[0.16em] text-slate-400">{label}</p>
+    /* SANATA Brand: Desert Charcoal stat */
+    <div className="rounded-2xl border border-white/10 bg-[#0C1012]/60 px-3 py-3 text-center">
+      <p className="text-[10px] uppercase tracking-[0.16em] text-charcoal-400">{label}</p>
       <p className="mt-1 text-lg font-semibold text-white">{value}</p>
     </div>
   );

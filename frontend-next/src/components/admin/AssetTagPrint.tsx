@@ -230,7 +230,7 @@ export function AssetTagPrint({ tool, toolUrl, compact = false }: AssetTagPrintP
       <div className="mt-3 flex gap-2">
         <button
           onClick={handlePrint}
-          className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-400 transition-colors hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400"
+          className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-400 transition-colors hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
         >
           <Printer size={14} /> Print Label
         </button>

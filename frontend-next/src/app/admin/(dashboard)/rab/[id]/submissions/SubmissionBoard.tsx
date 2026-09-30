@@ -120,6 +120,7 @@ export function SubmissionBoard({
       ) : (
         <Panel padded={false}>
           <TableWrap>
+            <table className="w-full min-w-[700px] text-sm">
             <thead>
               <tr>
                 <Th>Nomor</Th>
@@ -226,6 +227,7 @@ export function SubmissionBoard({
                 );
               })}
             </tbody>
+            </table>
           </TableWrap>
         </Panel>
       )}
@@ -280,6 +282,7 @@ function SubmissionDetail({
 
       {submission.items.length > 0 && (
         <TableWrap>
+          <table className="w-full min-w-[700px] text-sm">
           <thead>
             <tr>
               <Th>Uraian</Th>
@@ -302,6 +305,7 @@ function SubmissionDetail({
               </Tr>
             ))}
           </tbody>
+          </table>
         </TableWrap>
       )}
 

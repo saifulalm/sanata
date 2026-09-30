@@ -7,10 +7,11 @@ import { submitInquiry, type ContactFormState } from "@/app/(public)/contact/act
 
 const initialState: ContactFormState = { status: "idle" };
 
+/* SANATA Brand: Desert Accent Form */
 const fieldClass =
-  "w-full rounded-2xl border border-cyan-300/15 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-300/15";
+  "w-full rounded-2xl border border-desert-400/15 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-charcoal-500 focus:border-desert-400 focus:outline-none focus:ring-2 focus:ring-desert-400/15";
 
-const labelClass = "mb-1.5 block text-xs font-medium uppercase tracking-[0.14em] text-slate-400";
+const labelClass = "mb-1.5 block text-xs font-medium uppercase tracking-[0.14em] text-charcoal-400";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -18,7 +19,8 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="w-full rounded-full border border-cyan-300/35 bg-cyan-300/10 px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-cyan-100 transition-colors hover:bg-cyan-300/20 disabled:opacity-60"
+      /* SANATA Brand: Desert CTA */
+      className="w-full rounded-full border border-desert-400/35 bg-desert-400/10 px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-desert-200 transition-colors hover:bg-desert-400/20 disabled:opacity-60"
     >
       {pending ? "Mengirim..." : "Kirim Permintaan Penawaran"}
     </button>

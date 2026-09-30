@@ -76,7 +76,7 @@ export function ProjectTabs({ rabId }: { rabId: string }) {
             className={clsx(
               "flex shrink-0 items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.12em] transition",
               isActive
-                ? "border border-cyan-300/25 bg-cyan-300/12 text-cyan-100"
+                ? "border border-desert-400/25 bg-desert-400/12 text-desert-200"
                 : "border border-transparent text-slate-400 hover:bg-white/[0.05] hover:text-white"
             )}
           >

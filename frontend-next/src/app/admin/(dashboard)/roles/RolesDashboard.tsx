@@ -88,7 +88,7 @@ function SignatoryForm({
     <div className="rounded-2xl border border-white/10 bg-white/[0.035] backdrop-blur-xl">
       <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
         <div className="flex items-center gap-3">
-          <div className={`flex h-8 w-8 items-center justify-center rounded-xl ${isEdit ? "bg-amber-500/10 text-amber-400" : "bg-cyan-500/10 text-cyan-400"}`}>
+          <div className={`flex h-8 w-8 items-center justify-center rounded-xl ${isEdit ? "bg-amber-500/10 text-amber-400" : "bg-desert-400/10 text-desert-400"}`}>
             {isEdit ? <Pencil size={15} /> : <Plus size={15} />}
           </div>
           <div>
@@ -144,7 +144,7 @@ function SignatoryForm({
             <button type="button" onClick={onClose} className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-medium text-slate-400 transition-all hover:border-white/18 hover:bg-white/[0.07] hover:text-slate-200">
               Batal
             </button>
-            <button type="submit" className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-5 py-2 text-sm font-semibold text-cyan-300 transition-all hover:border-cyan-400/60 hover:bg-cyan-400/20">
+            <button type="submit" className="inline-flex items-center gap-2 rounded-full border border-desert-400/30 bg-desert-400/10 px-5 py-2 text-sm font-semibold text-desert-400 transition-all hover:border-desert-400/60 hover:bg-desert-400/20">
               <Plus size={14} /> {signatory ? "Simpan Perubahan" : "Tambah Penanda Tangan"}
             </button>
           </div>
@@ -234,16 +234,16 @@ function SignatoriesTab({
       <Toolbar>
         <div className="relative flex-1 min-w-[200px]">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-          <input type="search" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Cari nama atau jabatan..." className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2 pl-9 pr-3.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10 transition-all" />
+          <input type="search" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Cari nama atau jabatan..." className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2 pl-9 pr-3.5 text-sm text-white placeholder:text-slate-500 focus:border-desert-400/40 focus:outline-none focus:ring-2 focus:ring-desert-400/10 transition-all" />
         </div>
         <div className="ml-auto flex flex-wrap gap-1">
           {(["", "active", "inactive"] as const).map((f) => (
-            <button key={f} onClick={() => setFilter(f)} className={`inline-flex items-center rounded-xl border px-3 py-1.5 text-xs font-medium transition-all ${filter === f ? "border-cyan-400/30 bg-cyan-400/10 text-cyan-300" : "border-white/10 bg-white/[0.04] text-slate-400 hover:border-white/18 hover:bg-white/[0.06] hover:text-slate-200"}`}>
+            <button key={f} onClick={() => setFilter(f)} className={`inline-flex items-center rounded-xl border px-3 py-1.5 text-xs font-medium transition-all ${filter === f ? "border-desert-400/30 bg-desert-400/10 text-desert-400" : "border-white/10 bg-white/[0.04] text-slate-400 hover:border-white/18 hover:bg-white/[0.06] hover:text-slate-200"}`}>
               {f === "" ? "Semua" : f === "active" ? "Aktif" : "Nonaktif"}
             </button>
           ))}
         </div>
-        <button onClick={() => { setEditing(null); setCreating(true); }} className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3.5 py-2 text-xs font-medium text-cyan-300 transition-all hover:border-cyan-400/60 hover:bg-cyan-400/20">
+        <button onClick={() => { setEditing(null); setCreating(true); }} className="inline-flex items-center gap-2 rounded-full border border-desert-400/30 bg-desert-400/10 px-3.5 py-2 text-xs font-medium text-desert-400 transition-all hover:border-desert-400/60 hover:bg-desert-400/20">
           <Plus size={13} /> Tambah
         </button>
       </Toolbar>
@@ -270,6 +270,7 @@ function SignatoriesTab({
       ) : (
         <Panel padded={false}>
           <TableWrap>
+            <table className="w-full min-w-[700px] text-sm">
             <thead>
               <tr>
                 <Th>Nama</Th>
@@ -307,6 +308,7 @@ function SignatoriesTab({
                 </tr>
               ))}
             </tbody>
+            </table>
           </TableWrap>
         </Panel>
       )}
@@ -409,13 +411,13 @@ function WorkforceTab({ initialRoles }: { initialRoles: WorkforceRole[] }) {
       <Toolbar>
         <div className="relative flex-1 min-w-[200px]">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-          <input type="search" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Cari jabatan..." className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2 pl-9 pr-3.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10 transition-all" />
+          <input type="search" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Cari jabatan..." className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2 pl-9 pr-3.5 text-sm text-white placeholder:text-slate-500 focus:border-desert-400/40 focus:outline-none focus:ring-2 focus:ring-desert-400/10 transition-all" />
         </div>
       </Toolbar>
 
       {/* Info Banner */}
-      <div className="flex items-start gap-3 rounded-xl border border-cyan-400/10 bg-cyan-500/5 px-4 py-3">
-        <ShieldCheck size={14} className="mt-0.5 shrink-0 text-cyan-400" />
+      <div className="flex items-start gap-3 rounded-xl border border-desert-400/10 bg-desert-400/5 px-4 py-3">
+        <ShieldCheck size={14} className="mt-0.5 shrink-0 text-desert-400" />
         <p className="text-xs text-slate-400">
           <strong className="text-slate-300">Role tanda tangan</strong> dipakai di surat dan dokumen resmi.{" "}
           <strong className="text-slate-300">Role lapangan</strong> dipilih saat mencatat laporan harian. Toggle aktif/nonaktif untuk menampilkan di dropdown.
@@ -432,6 +434,7 @@ function WorkforceTab({ initialRoles }: { initialRoles: WorkforceRole[] }) {
       ) : (
         <Panel padded={false}>
           <TableWrap>
+            <table className="w-full min-w-[700px] text-sm">
             <thead>
               <tr>
                 <Th>Nama Peran</Th>
@@ -445,6 +448,7 @@ function WorkforceTab({ initialRoles }: { initialRoles: WorkforceRole[] }) {
                 <RoleRow key={role.id} role={role} />
               ))}
             </tbody>
+            </table>
           </TableWrap>
         </Panel>
       )}
@@ -489,7 +493,7 @@ export function RolesDashboard({
           onClick={() => setTab("signatories")}
           className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-all ${
             tab === "signatories"
-              ? "bg-cyan-500/15 text-cyan-300 border border-cyan-400/20"
+              ? "bg-desert-400/15 text-desert-400 border border-desert-400/20"
               : "text-slate-400 hover:text-slate-200"
           }`}
         >
@@ -499,7 +503,7 @@ export function RolesDashboard({
           onClick={() => setTab("workforce")}
           className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-all ${
             tab === "workforce"
-              ? "bg-cyan-500/15 text-cyan-300 border border-cyan-400/20"
+              ? "bg-desert-400/15 text-desert-400 border border-desert-400/20"
               : "text-slate-400 hover:text-slate-200"
           }`}
         >

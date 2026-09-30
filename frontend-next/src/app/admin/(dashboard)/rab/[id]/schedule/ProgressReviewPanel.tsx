@@ -74,7 +74,7 @@ export function ProgressReviewPanel({
                     <span className="text-sm font-normal text-slate-500">· {entry.sectionName}</span>
                   </p>
                   <p className="mt-0.5 text-xs text-slate-500">
-                    {entry.date} · <span className="font-semibold text-cyan-300">{Number(entry.percent).toFixed(0)}%</span>
+                    {entry.date} · <span className="font-semibold text-desert-400">{Number(entry.percent).toFixed(0)}%</span>
                     {entry.createdByName ? ` · dicatat ${entry.createdByName}` : ""}
                     {entry.approvedByName && entry.status !== "PENDING" ? ` · diperiksa ${entry.approvedByName}` : ""}
                   </p>

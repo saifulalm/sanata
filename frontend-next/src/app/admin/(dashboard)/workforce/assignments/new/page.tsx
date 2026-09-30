@@ -111,7 +111,7 @@ export default function NewAssignmentPage() {
       <div className="flex items-center gap-4">
         <Link
           href="/admin/workforce/assignments"
-          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400"
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
         >
           <ArrowLeft size={20} />
         </Link>
@@ -207,7 +207,7 @@ export default function NewAssignmentPage() {
                       }}
                       className={`w-full rounded-lg p-2 text-left text-sm transition ${
                         selectedResponsible === worker.id
-                          ? "border border-cyan-400/40 bg-cyan-500/10"
+                          ? "border border-desert-400/40 bg-desert-400/10"
                           : "border border-transparent hover:bg-white/5"
                       }`}
                     >
@@ -232,7 +232,7 @@ export default function NewAssignmentPage() {
                   onClick={() => setSelectedMandor("")}
                   className={`w-full rounded-lg p-2 text-left text-sm transition ${
                     selectedMandor === ""
-                      ? "border border-cyan-400/40 bg-cyan-500/10"
+                      ? "border border-desert-400/40 bg-desert-400/10"
                       : "border border-transparent hover:bg-white/5"
                   }`}
                 >
@@ -245,7 +245,7 @@ export default function NewAssignmentPage() {
                     onClick={() => setSelectedMandor(mandor.id)}
                     className={`w-full rounded-lg p-2 text-left text-sm transition ${
                       selectedMandor === mandor.id
-                        ? "border border-cyan-400/40 bg-cyan-500/10"
+                        ? "border border-desert-400/40 bg-desert-400/10"
                         : "border border-transparent hover:bg-white/5"
                     }`}
                   >

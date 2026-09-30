@@ -25,7 +25,7 @@ import { inputClass } from "@/components/admin/ui";
 const initialState: RabActionState = { status: "idle" };
 
 const cellInputClass =
-  "w-full rounded-xl border border-white/10 bg-white/[0.04] px-2 py-1.5 text-sm text-white placeholder:text-slate-600 focus:border-cyan-300/40 focus:outline-none";
+  "w-full rounded-xl border border-white/10 bg-white/[0.04] px-2 py-1.5 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none";
 
 interface DraftItem {
   key: string;
@@ -67,7 +67,7 @@ function SaveButton({ label }: { label: string }) {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-5 py-2 text-sm font-semibold text-cyan-300 transition-all hover:border-cyan-400/60 hover:bg-cyan-400/20 disabled:opacity-60"
+      className="rounded-full border border-desert-400/30 bg-desert-400/10 px-5 py-2 text-sm font-semibold text-desert-400 transition-all hover:border-desert-400/60 hover:bg-desert-400/20 disabled:opacity-60"
     >
       {pending ? "Menyimpan..." : label}
     </button>
@@ -200,7 +200,7 @@ export function RabEditor({ rab, ahspOptions }: { rab: Rab | null; ahspOptions: 
 
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <Link href="/admin/rab" className="mb-1 flex items-center gap-1.5 text-xs text-slate-400 hover:text-cyan-400">
+          <Link href="/admin/rab" className="mb-1 flex items-center gap-1.5 text-xs text-slate-400 hover:text-desert-400">
             <ArrowLeft size={14} /> Kembali ke daftar RAB
           </Link>
           <h1 className="text-2xl font-semibold text-white">{rab ? rab.number : "RAB Baru"}</h1>
@@ -231,7 +231,7 @@ export function RabEditor({ rab, ahspOptions }: { rab: Rab | null; ahspOptions: 
               </Link>
               <Link
                 href={`/admin/quotations/new?rabId=${rab.id}`}
-                className="flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-300 hover:border-cyan-400/60 hover:bg-cyan-400/20 transition"
+                className="flex items-center gap-2 rounded-full border border-desert-400/30 bg-desert-400/10 px-4 py-2 text-sm font-medium text-desert-400 hover:border-desert-400/60 hover:bg-desert-400/20 transition"
               >
                 <FileSignature size={15} /> Buat Penawaran
               </Link>
@@ -297,9 +297,9 @@ export function RabEditor({ rab, ahspOptions }: { rab: Rab | null; ahspOptions: 
               <input
                 value={section.name}
                 onChange={(e) => renameSection(section.key, e.target.value)}
-                className="flex-1 rounded-md border border-transparent bg-transparent px-2 py-1 text-sm font-semibold text-white placeholder:text-slate-600 hover:border-white/10 focus:border-cyan-300/40 focus:bg-white/[0.04] focus:outline-none"
+                className="flex-1 rounded-md border border-transparent bg-transparent px-2 py-1 text-sm font-semibold text-white placeholder:text-slate-600 hover:border-white/10 focus:border-desert-400/40 focus:bg-white/[0.04] focus:outline-none"
               />
-              <span className="whitespace-nowrap text-sm font-semibold tabular-nums text-cyan-300">
+              <span className="whitespace-nowrap text-sm font-semibold tabular-nums text-desert-400">
                 Rp {formatRupiah(totals.sectionTotals[sectionIndex] ?? 0)}
               </span>
               <button
@@ -370,7 +370,7 @@ export function RabEditor({ rab, ahspOptions }: { rab: Rab | null; ahspOptions: 
                           className={`${cellInputClass} text-right tabular-nums`}
                         />
                       </td>
-                      <td className="px-3 py-2 text-right font-medium tabular-nums text-cyan-300">
+                      <td className="px-3 py-2 text-right font-medium tabular-nums text-desert-400">
                         {formatRupiah(Number(item.volume || 0) * Number(item.unitPrice || 0))}
                       </td>
                       <td className="px-3 py-2">
@@ -392,7 +392,7 @@ export function RabEditor({ rab, ahspOptions }: { rab: Rab | null; ahspOptions: 
               <button
                 type="button"
                 onClick={() => addItem(section.key)}
-                className="flex items-center gap-1.5 text-xs font-medium text-cyan-400 hover:text-cyan-300"
+                className="flex items-center gap-1.5 text-xs font-medium text-desert-400 hover:text-desert-400"
               >
                 <Plus size={14} /> Tambah Item Pekerjaan
               </button>
@@ -403,7 +403,7 @@ export function RabEditor({ rab, ahspOptions }: { rab: Rab | null; ahspOptions: 
         <button
           type="button"
           onClick={addSection}
-          className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-white/10 py-3 text-sm font-medium text-slate-500 hover:border-cyan-400/30 hover:text-cyan-400"
+          className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-white/10 py-3 text-sm font-medium text-slate-500 hover:border-desert-400/30 hover:text-desert-400"
         >
           <Plus size={16} /> Tambah Bagian Pekerjaan
         </button>
@@ -433,7 +433,7 @@ export function RabEditor({ rab, ahspOptions }: { rab: Rab | null; ahspOptions: 
         </div>
         <div className="flex justify-between border-t border-white/5 pt-2 text-base font-semibold text-white">
           <span>Total</span>
-          <span className="tabular-nums text-cyan-300">Rp {formatRupiah(totals.total, true)}</span>
+          <span className="tabular-nums text-desert-400">Rp {formatRupiah(totals.total, true)}</span>
         </div>
       </div>
     </form>

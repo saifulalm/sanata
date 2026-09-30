@@ -65,7 +65,7 @@ export function EnhancedHeader() {
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
           isScrolled
-            ? "border-b border-white/10 bg-[#06111f]/95 backdrop-blur-2xl"
+            ? "border-b border-white/10 bg-[#1A1F22]/95 backdrop-blur-2xl"
             : "bg-transparent"
         )}
       >
@@ -80,7 +80,7 @@ export function EnhancedHeader() {
                 <Link
                   key={item.label}
                   href={item.href ?? "#"}
-                  className="rounded-xl px-4 py-2 text-sm font-medium uppercase tracking-[0.12em] text-slate-300 transition hover:bg-white/5 hover:text-white"
+                  className="rounded-xl px-4 py-2 text-sm font-medium uppercase tracking-[0.12em] text-charcoal-200 transition hover:bg-white/5 hover:text-white"
                 >
                   {item.label}
                 </Link>
@@ -90,7 +90,7 @@ export function EnhancedHeader() {
               <div className="relative">
                 <button
                   onClick={() => setOpenDropdown(openDropdown === "more" ? null : "more")}
-                  className="flex items-center gap-1 rounded-xl px-4 py-2 text-sm font-medium uppercase tracking-[0.12em] text-slate-300 transition hover:bg-white/5 hover:text-white"
+                  className="flex items-center gap-1 rounded-xl px-4 py-2 text-sm font-medium uppercase tracking-[0.12em] text-charcoal-200 transition hover:bg-white/5 hover:text-white"
                 >
                   Lainnya <ChevronDown size={14} />
                 </button>
@@ -101,13 +101,13 @@ export function EnhancedHeader() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
-                      className="absolute left-1/2 top-full mt-2 w-48 -translate-x-1/2 rounded-2xl border border-white/10 bg-[#0a1626] p-2 shadow-xl backdrop-blur-xl"
+                      className="absolute left-1/2 top-full mt-2 w-48 -translate-x-1/2 rounded-2xl border border-white/10 bg-[#12181B] p-2 shadow-xl backdrop-blur-xl"
                     >
                       {blogNav.map((item) => (
                         <Link
                           key={item.label}
                           href={item.href ?? "#"}
-                          className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-slate-300 transition hover:bg-white/5 hover:text-white"
+                          className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-charcoal-200 transition hover:bg-white/5 hover:text-white"
                         >
                           {item.label}
                         </Link>
@@ -121,22 +121,22 @@ export function EnhancedHeader() {
             {/* Right actions */}
             <div className="flex items-center gap-2">
               {/* Search */}
-              <button className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 transition hover:bg-white/10 hover:text-white">
+              <button className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-charcoal-200 transition hover:bg-white/10 hover:text-white">
                 <Search size={18} />
               </button>
 
               {/* Theme toggle */}
               <button
                 onClick={toggleTheme}
-                className="hidden h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 transition hover:bg-white/10 hover:text-white lg:flex"
+                className="hidden h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-charcoal-200 transition hover:bg-white/10 hover:text-white lg:flex"
               >
                 {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
               </button>
 
-              {/* CTA Button */}
+              {/* CTA Button - SANATA Brand: Desert accent */}
               <Link
                 href="/contact"
-                className="hidden items-center gap-2 rounded-full border border-cyan-300/40 bg-cyan-300/15 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-cyan-100 transition hover:bg-cyan-300/25 lg:flex"
+                className="hidden items-center gap-2 rounded-full border border-desert-400/40 bg-desert-400/15 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-desert-200 transition hover:bg-desert-400/25 lg:flex"
               >
                 Konsultasi Gratis
               </Link>
@@ -169,7 +169,7 @@ export function EnhancedHeader() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="fixed bottom-0 right-0 top-0 z-50 w-80 overflow-y-auto border-l border-white/10 bg-[#06111f] p-6 lg:hidden"
+              className="fixed bottom-0 right-0 top-0 z-50 w-80 overflow-y-auto border-l border-white/10 bg-[#1A1F22] p-6 lg:hidden"
             >
               <div className="mb-6 flex items-center justify-between">
                 <Logo variant="icon" />
@@ -187,14 +187,14 @@ export function EnhancedHeader() {
                     key={item.label}
                     href={item.href ?? "#"}
                     onClick={() => setMobileOpen(false)}
-                    className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium uppercase tracking-[0.12em] text-slate-300 transition hover:bg-white/5 hover:text-white"
+                    className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium uppercase tracking-[0.12em] text-charcoal-200 transition hover:bg-white/5 hover:text-white"
                   >
                     {item.label}
                   </Link>
                 ))}
 
                 <div className="border-t border-white/10 pt-4">
-                  <p className="mb-2 px-4 text-[10px] uppercase tracking-[0.2em] text-slate-500">
+                  <p className="mb-2 px-4 text-[10px] uppercase tracking-[0.2em] text-charcoal-500">
                     Lainnya
                   </p>
                   {blogNav.map((item) => (
@@ -202,7 +202,7 @@ export function EnhancedHeader() {
                       key={item.label}
                       href={item.href ?? "#"}
                       onClick={() => setMobileOpen(false)}
-                      className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium uppercase tracking-[0.12em] text-slate-300 transition hover:bg-white/5 hover:text-white"
+                      className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium uppercase tracking-[0.12em] text-charcoal-200 transition hover:bg-white/5 hover:text-white"
                     >
                       {item.label}
                     </Link>
@@ -211,16 +211,17 @@ export function EnhancedHeader() {
               </nav>
 
               <div className="mt-8 space-y-3">
+                {/* SANATA Brand: Desert CTA */}
                 <Link
                   href="/contact"
                   onClick={() => setMobileOpen(false)}
-                  className="flex w-full items-center justify-center gap-2 rounded-full border border-cyan-300/40 bg-cyan-300/15 px-5 py-3 text-sm font-semibold uppercase tracking-[0.16em] text-cyan-100"
+                  className="flex w-full items-center justify-center gap-2 rounded-full border border-desert-400/40 bg-desert-400/15 px-5 py-3 text-sm font-semibold uppercase tracking-[0.16em] text-desert-200"
                 >
                   Konsultasi Gratis
                 </Link>
                 <button
                   onClick={toggleTheme}
-                  className="flex w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium uppercase tracking-[0.12em] text-slate-300"
+                  className="flex w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium uppercase tracking-[0.12em] text-charcoal-200"
                 >
                   {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
                   {theme === "dark" ? "Mode Terang" : "Mode Gelap"}
@@ -229,16 +230,17 @@ export function EnhancedHeader() {
 
               {/* Contact info */}
               <div className="mt-8 border-t border-white/10 pt-6">
-                <p className="mb-3 px-4 text-[10px] uppercase tracking-[0.2em] text-slate-500">
+                <p className="mb-3 px-4 text-[10px] uppercase tracking-[0.2em] text-charcoal-500">
                   Hubungi Kami
                 </p>
                 <div className="space-y-3 px-4">
-                  <a href="tel:+622112345678" className="flex items-center gap-3 text-sm text-slate-300">
-                    <Phone size={16} className="text-cyan-400" />
+                  {/* SANATA Brand: Desert icon */}
+                  <a href="tel:+622112345678" className="flex items-center gap-3 text-sm text-charcoal-200">
+                    <Phone size={16} className="text-desert-400" />
                     +62 21 1234 5678
                   </a>
-                  <a href="mailto:info@sanata.co.id" className="flex items-center gap-3 text-sm text-slate-300">
-                    <MessageSquare size={16} className="text-cyan-400" />
+                  <a href="mailto:info@sanata.co.id" className="flex items-center gap-3 text-sm text-charcoal-200">
+                    <MessageSquare size={16} className="text-desert-400" />
                     info@sanata.co.id
                   </a>
                 </div>

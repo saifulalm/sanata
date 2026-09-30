@@ -81,6 +81,7 @@ export function PeriodicReportBoard({
       ) : (
         <Panel padded={false}>
           <TableWrap>
+            <table className="w-full min-w-[700px] text-sm">
             <thead>
               <tr>
                 <Th>Periode</Th>
@@ -150,6 +151,7 @@ export function PeriodicReportBoard({
                 );
               })}
             </tbody>
+            </table>
           </TableWrap>
         </Panel>
       )}

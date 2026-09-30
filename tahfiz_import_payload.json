@@ -1,0 +1,1166 @@
+{
+  "rab": {
+    "number": "TAHFIZ-2025-001",
+    "title": "RUMAH Qur'an Az'Zakir",
+    "clientName": "PT. Cipta Karya Serasi",
+    "location": "Cibinong, Bogor",
+    "projectDate": "2024-01-01",
+    "scheduleStart": "2024-07-24",
+    "restDays": [
+      0
+    ],
+    "notes": "Imported from 1_RAB_FINAL_v3-Rumah Tahfiz.xlsx | 109 items | Rp 1.382.340.950,43"
+  },
+  "sections": [
+    {
+      "order": 0,
+      "name": "I. PEKERJAAN PERSIAPAN",
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Uitzet / Bowplank :",
+          "unit": "m1",
+          "volume": 128,
+          "unitPrice": 23000,
+          "amount": 2944000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Pembersihan",
+          "unit": "m2",
+          "volume": 854,
+          "unitPrice": 2300,
+          "amount": 1964200,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "3. Instalasi Air Bersih, Sumur Bor",
+          "unit": "m",
+          "volume": 30,
+          "unitPrice": 325832.95,
+          "amount": 9774988.5,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "4. Instalasi Listrik",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 2875000,
+          "amount": 2875000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "5. Mobilisasi dan Remobilisasi",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 7500000,
+          "amount": 7500000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "6. MCK",
+          "unit": "unit",
+          "volume": 3,
+          "unitPrice": 172882.95,
+          "amount": 518648.85,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 6,
+          "description": "7. K3 Tools",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 10000000,
+          "amount": 10000000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 7,
+          "description": "8. Keamanan",
+          "unit": "ls",
+          "volume": 8,
+          "unitPrice": 1000000,
+          "amount": 8000000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 8,
+          "description": "9. Direksi Keet, Bedeng tenaga dan gudang material",
+          "unit": "m2",
+          "volume": 30,
+          "unitPrice": 300000,
+          "amount": 9000000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "order": 1,
+      "name": "II. PEKERJAAN TANAH + PONDASI",
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Galian Tanah : PC-01 (0,6x0,6)",
+          "unit": "m3",
+          "volume": 5.4,
+          "unitPrice": 84500,
+          "amount": 456300,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Galian Tanah : PC-02 (0,8x0,8)",
+          "unit": "m3",
+          "volume": 5.760000000000001,
+          "unitPrice": 84500,
+          "amount": 486720,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "4. Pasir Urug : PC-01 (Tebal 5 cm)",
+          "unit": "m3",
+          "volume": 0.8999999999999999,
+          "unitPrice": 62900,
+          "amount": 56610,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "5. Pasir Urug : PC-02 (Tebal 5 cm)",
+          "unit": "m3",
+          "volume": 0.9600000000000002,
+          "unitPrice": 62900,
+          "amount": 60384,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "7. Lantai Kerja : PC-01 (Tebal 5 cm)",
+          "unit": "m2",
+          "volume": 18,
+          "unitPrice": 49200,
+          "amount": 885600,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "8. Lantai Kerja : PC-02 (Tebal 5 cm)",
+          "unit": "m2",
+          "volume": 19.200000000000003,
+          "unitPrice": 49200,
+          "amount": 944640,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 6,
+          "description": "10. Galian Tie Footplate F2",
+          "unit": "m3",
+          "volume": 1.836,
+          "unitPrice": 65000,
+          "amount": 119340,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 7,
+          "description": "11. Pasir Urug F2 (Tebal 5 cm)",
+          "unit": "m3",
+          "volume": 3.06,
+          "unitPrice": 62900,
+          "amount": 192474,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 8,
+          "description": "12. Lantai Kerja F2 (Tebal 5 cm)",
+          "unit": "m3",
+          "volume": 3.06,
+          "unitPrice": 49200,
+          "amount": 150552,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 9,
+          "description": "13. Galian Tie Beam 2",
+          "unit": "m3",
+          "volume": 18.013000000000005,
+          "unitPrice": 65000,
+          "amount": 1170845,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 10,
+          "description": "14. Galian Tie Beam 3",
+          "unit": "m3",
+          "volume": 9.769375000000002,
+          "unitPrice": 65000,
+          "amount": 635009.38,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 11,
+          "description": "15. Galian Tie Beam 4",
+          "unit": "m3",
+          "volume": 5.573879999999999,
+          "unitPrice": 65000,
+          "amount": 362302.2,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 12,
+          "description": "16. Urugan Tanah Kembali",
+          "unit": "m3",
+          "volume": 11.16,
+          "unitPrice": 35000,
+          "amount": 390600,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 13,
+          "description": "16. Pekerjaan Beton Bore Pile BP-01 - K175",
+          "unit": "m3",
+          "volume": 7.6301999999999985,
+          "unitPrice": 1015000,
+          "amount": 7744653,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 14,
+          "description": "17. Pekerjaan Beton Bore Pile BP-02 - K175",
+          "unit": "m3",
+          "volume": 5.275200000000001,
+          "unitPrice": 1015000,
+          "amount": 5354328,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 15,
+          "description": "18. Pekerjaan Pembesian Bore Pile BP-01",
+          "unit": "kg",
+          "volume": 877.61,
+          "unitPrice": 11240,
+          "amount": 9864336.4,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 16,
+          "description": "19. Pekerjaan Pembesian Bore Pile BP-02",
+          "unit": "kg",
+          "volume": 1411.64,
+          "unitPrice": 11240,
+          "amount": 15866833.6,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 17,
+          "description": "20. Pekerjaan Beton Pile Cap : PC-01",
+          "unit": "m3",
+          "volume": 5.3999999999999995,
+          "unitPrice": 1015000,
+          "amount": 5481000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 18,
+          "description": "21. Pekerjaan Beton Pile Cap : PC-02",
+          "unit": "m3",
+          "volume": 7.488000000000001,
+          "unitPrice": 1015000,
+          "amount": 7600320,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 19,
+          "description": "22. Pekerjaan Pembesian Pile Cap : PC-01",
+          "unit": "kg",
+          "volume": 588.6,
+          "unitPrice": 11240,
+          "amount": 6615864,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 20,
+          "description": "23. Pekerjaan Pembesian Pile Cap : PC-02",
+          "unit": "kg",
+          "volume": 900.25,
+          "unitPrice": 11240,
+          "amount": 10118810,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 21,
+          "description": "24. Pekerjaan Bekisting Pile Cap : PC-01",
+          "unit": "m2",
+          "volume": 39.6,
+          "unitPrice": 142000,
+          "amount": 5623200,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 22,
+          "description": "25. Pekerjaan Bekisting Pile Cap : PC-02",
+          "unit": "m2",
+          "volume": 62.400000000000006,
+          "unitPrice": 142000,
+          "amount": 8860800,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 23,
+          "description": "26. Pekerjaan Pembesian Wiremesh M10",
+          "unit": "m2",
+          "volume": 326.21,
+          "unitPrice": 73000,
+          "amount": 23813330,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 24,
+          "description": "27. Pekerjaan Pengecoran beton Lantai K-175",
+          "unit": "m3",
+          "volume": 39.145199999999996,
+          "unitPrice": 1015000,
+          "amount": 39732378,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 25,
+          "description": "28. Pekerjaan Beton Tie Beam 2",
+          "unit": "m3",
+          "volume": 14.4104,
+          "unitPrice": 1015000,
+          "amount": 14626556,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 26,
+          "description": "29. Pekerjaan Beton Tie Beam 3",
+          "unit": "m3",
+          "volume": 7.993124999999999,
+          "unitPrice": 370000,
+          "amount": 2957456.25,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 27,
+          "description": "30. Pekerjaan Beton Tie Beam 4",
+          "unit": "m3",
+          "volume": 3.7159199999999997,
+          "unitPrice": 1015000,
+          "amount": 3771658.8,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 28,
+          "description": "31. Pekerjaan Pembesian Tie Beam 2",
+          "unit": "kg",
+          "volume": 1525.64,
+          "unitPrice": 11240,
+          "amount": 17148193.6,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 29,
+          "description": "32. Pekerjaan Pembesian Tie Beam 3",
+          "unit": "kg",
+          "volume": 641.2800000000001,
+          "unitPrice": 11240,
+          "amount": 7207987.2,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 30,
+          "description": "33. Pekerjaan Pembesian Tie Beam 4",
+          "unit": "kg",
+          "volume": 624.35,
+          "unitPrice": 11240,
+          "amount": 7017694,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 31,
+          "description": "34. Pekerjaan Bekisting Tie Beam 2",
+          "unit": "m2",
+          "volume": 144.10400000000004,
+          "unitPrice": 142000,
+          "amount": 20462768,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 32,
+          "description": "35. Pekerjaan Bekisting Tie Beam 3",
+          "unit": "m2",
+          "volume": 63.94499999999999,
+          "unitPrice": 142000,
+          "amount": 9080190,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 33,
+          "description": "36. Pekerjaan Bekisting Tie Beam 4",
+          "unit": "m2",
+          "volume": 57.168000000000006,
+          "unitPrice": 142000,
+          "amount": 8117856,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 34,
+          "description": "37. Pekerjaan Pembesian Footplate F1",
+          "unit": "kg",
+          "volume": 770.4,
+          "unitPrice": 11240,
+          "amount": 8659296,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 35,
+          "description": "38. Pekerjaan Bekisting Footplate 'F1",
+          "unit": "m2",
+          "volume": 22.68,
+          "unitPrice": 142000,
+          "amount": 3220560,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 36,
+          "description": "39. Pekerjaan Beton Footplate F1",
+          "unit": "m3",
+          "volume": 2.268,
+          "unitPrice": 1015000,
+          "amount": 2302020,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 37,
+          "description": "38. SUB TOTAL",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 257159465.43,
+          "amount": 257159465.43,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "name": "III. PEKERJAAN BETON",
+      "items": [
+        {
+          "order": 0,
+          "description": "40. Pekerjaan Pembesian Kolom K3",
+          "unit": "kg",
+          "volume": 1062.5,
+          "unitPrice": 11240,
+          "amount": 11942500,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "41. Pekerjaan Bekisting Kolom K3",
+          "unit": "m2",
+          "volume": 144.48,
+          "unitPrice": 142000,
+          "amount": 20516160,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "42. Pekerjaan  Beton Kolom K3",
+          "unit": "m3",
+          "volume": 6.552,
+          "unitPrice": 1240500,
+          "amount": 8127756,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "43. Pekerjaan Pembesian Kolom K3a",
+          "unit": "kg",
+          "volume": 387.5,
+          "unitPrice": 11240,
+          "amount": 4355500,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "44. Pekerjaan Bekisting Kolom K3a",
+          "unit": "m2",
+          "volume": 69.6,
+          "unitPrice": 142000,
+          "amount": 9883200,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "45. Pekerjaan  Beton Kolom K3a",
+          "unit": "m3",
+          "volume": 3.5100000000000002,
+          "unitPrice": 1240500,
+          "amount": 4354155,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 6,
+          "description": "46. Pekerjaan Pembesian Balok B1",
+          "unit": "kg",
+          "volume": 595.508,
+          "unitPrice": 11240,
+          "amount": 6693509.92,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 7,
+          "description": "47. Pekerjaan Bekisting Balok B1",
+          "unit": "m2",
+          "volume": 58.52000000000002,
+          "unitPrice": 142000,
+          "amount": 8309840,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 8,
+          "description": "48. Pekerjaan Beton Balok B1",
+          "unit": "m3",
+          "volume": 4.787999999999999,
+          "unitPrice": 1015000,
+          "amount": 4859820,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 9,
+          "description": "49. Pekerjaan Pembesian Balok B2",
+          "unit": "kg",
+          "volume": 740.268,
+          "unitPrice": 11240,
+          "amount": 8320612.32,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 10,
+          "description": "50. Pekerjaan Bekisting Balok B2",
+          "unit": "m2",
+          "volume": 33.516,
+          "unitPrice": 142000,
+          "amount": 4759272,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 11,
+          "description": "51. Pekerjaan  Beton Balok B2",
+          "unit": "m3",
+          "volume": 1.7289999999999992,
+          "unitPrice": 1015000,
+          "amount": 1754935,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 12,
+          "description": "52. Pekerjaan Pembesian Balok B3",
+          "unit": "kg",
+          "volume": 814.69,
+          "unitPrice": 11240,
+          "amount": 9157115.6,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 13,
+          "description": "53. Pekerjaan Bekisting Balok B3",
+          "unit": "m2",
+          "volume": 69.97500000000001,
+          "unitPrice": 142000,
+          "amount": 9936450,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 14,
+          "description": "54. Pekerjaan  Beton Balok B3",
+          "unit": "m3",
+          "volume": 4.198499999999998,
+          "unitPrice": 1015000,
+          "amount": 4261477.5,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 15,
+          "description": "55. Pekerjaan Pembesian RB1",
+          "unit": "kg",
+          "volume": 146.74412938267616,
+          "unitPrice": 11240,
+          "amount": 1649404.01,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 16,
+          "description": "56. Pekerjaan Bekisting RB1",
+          "unit": "m2",
+          "volume": 8.984000000000002,
+          "unitPrice": 142000,
+          "amount": 1275728,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 17,
+          "description": "57. Pekerjaan Beton RB1",
+          "unit": "m3",
+          "volume": 0.3369000000000001,
+          "unitPrice": 1015000,
+          "amount": 341953.5,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 18,
+          "description": "58. Pekerjaan Pembesian Dak Atap",
+          "unit": "kg",
+          "volume": 1057.02,
+          "unitPrice": 11240,
+          "amount": 11880904.8,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 19,
+          "description": "59. Pekerjaan Bekisting Dak Atap",
+          "unit": "m2",
+          "volume": 183.997,
+          "unitPrice": 142000,
+          "amount": 26127574,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 20,
+          "description": "60. Pekerjaan Beton Dak Atap",
+          "unit": "m3",
+          "volume": 22.079639999999998,
+          "unitPrice": 1240500,
+          "amount": 27389793.42,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "order": 3,
+      "name": "IV. PEKERJAAN STRUKTUR BAJA",
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Pekerjaan kolom baja : WF-250.125 .6.9mm",
+          "unit": "kg",
+          "volume": 1065,
+          "unitPrice": 32000,
+          "amount": 34080000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Pekerjaan balok baja :  WF-250.125.6.9mm",
+          "unit": "kg",
+          "volume": 2340,
+          "unitPrice": 32000,
+          "amount": 74880000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "3. Pekerjaan Atap Gording WF-200.100.5,5.8mm",
+          "unit": "kg",
+          "volume": 742.4,
+          "unitPrice": 32000,
+          "amount": 23756800,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "4. Pekerjaan Atap Gording WF-150.75.5.7mm",
+          "unit": "kg",
+          "volume": 1184.4,
+          "unitPrice": 32000,
+          "amount": 37900800,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "5. Pekerjaan Beton Komposit Kolom WF",
+          "unit": "m3",
+          "volume": 1.65625,
+          "unitPrice": 1240500,
+          "amount": 2054578.13,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "order": 4,
+      "name": "V. PEKERJAAN PASANGAN DINDING, LANTAI, PLESTERAN DAN ACIAN",
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Pek. Pasangan dinding  hebel",
+          "unit": "m2",
+          "volume": 497,
+          "unitPrice": 75670,
+          "amount": 37607990,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Pek. Plesteran dinding",
+          "unit": "m2",
+          "volume": 994,
+          "unitPrice": 39918,
+          "amount": 39678492,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "3. Pek. Acian",
+          "unit": "m2",
+          "volume": 994,
+          "unitPrice": 25000,
+          "amount": 24850000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "3. Openingan",
+          "unit": "m1",
+          "volume": 314.55,
+          "unitPrice": 54018,
+          "amount": 16991361.9,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "4. Pek. Pasangan Dinding Trasram",
+          "unit": "m2",
+          "volume": 138.73,
+          "unitPrice": 123344,
+          "amount": 17111513.12,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "5. Parapet",
+          "unit": "m2",
+          "volume": 200,
+          "unitPrice": 75670,
+          "amount": 15134000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 6,
+          "description": "6. Pekerjaan Plasteran Parapet",
+          "unit": "m2",
+          "volume": 200,
+          "unitPrice": 39918,
+          "amount": 7983600,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 7,
+          "description": "7. Beton Dinding Wudhu",
+          "unit": "m3",
+          "volume": 2,
+          "unitPrice": 850000,
+          "amount": 1700000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 8,
+          "description": "8. Pembesian Dinding Beton Wudhu",
+          "unit": "kg",
+          "volume": 162.8,
+          "unitPrice": 11000,
+          "amount": 1790800,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 9,
+          "description": "9. Beton Lapangan",
+          "unit": "m3",
+          "volume": 8,
+          "unitPrice": 850000,
+          "amount": 6800000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 10,
+          "description": "10. Wire Mesh Beton Lapangan",
+          "unit": "m2",
+          "volume": 80,
+          "unitPrice": 44000,
+          "amount": 3520000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "order": 5,
+      "name": "VI. PEKERJAAN M & E",
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Instalasi Lampu",
+          "unit": "ttk",
+          "volume": 48,
+          "unitPrice": 97000,
+          "amount": 4656000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Instalasi Stop Kontak",
+          "unit": "ttk",
+          "volume": 15,
+          "unitPrice": 97000,
+          "amount": 1455000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "3. Instalasi Stop Kontak AC",
+          "unit": "ttk",
+          "volume": 11,
+          "unitPrice": 97000,
+          "amount": 1067000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "4. Instalasi Saklar",
+          "unit": "bh",
+          "volume": 26,
+          "unitPrice": 97000,
+          "amount": 2522000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "order": 6,
+      "name": "VII. PEKERJAAN SANITAIR",
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Pek. Pasang instalasi air kotor 4'' AW",
+          "unit": "m1",
+          "volume": 126,
+          "unitPrice": 135882,
+          "amount": 17121132,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Pek. Pasang instalasi air kotor 3'' AW",
+          "unit": "m1",
+          "volume": 108.5,
+          "unitPrice": 105518,
+          "amount": 11448703,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "3. Pek. Pasang instalasi air bersih 1'' AW",
+          "unit": "m1",
+          "volume": 133.3,
+          "unitPrice": 39800,
+          "amount": 5305340,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "4. Pek. Pasang instalasi air bersih 3/4'' AW",
+          "unit": "m1",
+          "volume": 66.65,
+          "unitPrice": 29800,
+          "amount": 1986170,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "5. Pek. Pasang instalasi air bersih 1/2'' AW",
+          "unit": "m1",
+          "volume": 11.25,
+          "unitPrice": 23300,
+          "amount": 262125,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "order": 7,
+      "name": "VIII. PEKERJAAN ATAP",
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Pekerjaan WF",
+          "unit": "kg",
+          "volume": 2195.2,
+          "unitPrice": 24840,
+          "amount": 54528768,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Atap Bitumen",
+          "unit": "m2",
+          "volume": 277.45,
+          "unitPrice": 143000,
+          "amount": 39675350,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "3. Bubungan Atap",
+          "unit": "m1",
+          "volume": 17.9,
+          "unitPrice": 135700,
+          "amount": 2429030,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "4. Talang zincalume",
+          "unit": "m1",
+          "volume": 35.8,
+          "unitPrice": 95000,
+          "amount": 3401000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "5. List Plank Kalsiplank + Talang zincalume",
+          "unit": "m1",
+          "volume": 31,
+          "unitPrice": 72000,
+          "amount": 2232000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "6. Atap Onduline",
+          "unit": "m2",
+          "volume": 17.63,
+          "unitPrice": 146600,
+          "amount": 2584558,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 6,
+          "description": "7. Rangka Atap Onduline",
+          "unit": "m2",
+          "volume": 17.63,
+          "unitPrice": 175000,
+          "amount": 3085250,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "order": 8,
+      "name": "IX. PEKERJAAN CARPORT",
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Beton carport",
+          "unit": "m3",
+          "volume": 1,
+          "unitPrice": 8848160,
+          "amount": 8848160,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Wiremesh car port",
+          "unit": "m2",
+          "volume": 12,
+          "unitPrice": 950000,
+          "amount": 11400000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "order": 9,
+      "name": "X. PEKERJAAN LAIN-LAIN",
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Knocking PAM",
+          "unit": "ls",
+          "volume": 5,
+          "unitPrice": 2500000,
+          "amount": 12500000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. CBR Test (Lapangan)",
+          "unit": "ls",
+          "volume": 6,
+          "unitPrice": 3250000,
+          "amount": 19500000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "3. Urugan Field",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 60000000,
+          "amount": 60000000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "4. As Built & Shopdrawing",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 15000000,
+          "amount": 15000000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "5. weekly Report",
+          "unit": "ls",
+          "volume": 31,
+          "unitPrice": 60000,
+          "amount": 1860000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "6. Invoice Document",
+          "unit": "ls",
+          "volume": 7,
+          "unitPrice": 60000,
+          "amount": 420000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 6,
+          "description": "7. Monthly Report",
+          "unit": "ls",
+          "volume": 7,
+          "unitPrice": 60000,
+          "amount": 420000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    }
+  ]
+}

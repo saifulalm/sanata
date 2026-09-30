@@ -106,7 +106,7 @@ export default function EditExecutionPage({ params }: Props) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-cyan-500 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-desert-400 border-t-transparent" />
       </div>
     );
   }
@@ -119,12 +119,12 @@ export default function EditExecutionPage({ params }: Props) {
       <div className="flex items-center gap-4">
         <Link
           href={`/admin/workforce/executions/${data.id}`}
-          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400"
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
         >
           <ArrowLeft size={20} />
         </Link>
         <div>
-          <p className="font-mono text-sm text-cyan-400">{data.logCode}</p>
+          <p className="font-mono text-sm text-desert-400">{data.logCode}</p>
           <h1 className="text-xl font-bold text-white">Edit Execution</h1>
         </div>
       </div>
@@ -134,9 +134,9 @@ export default function EditExecutionPage({ params }: Props) {
           {/* Main Form */}
           <div className="space-y-6 lg:col-span-2">
             {/* Info Card */}
-            <Card className="border-cyan-400/20 bg-gradient-to-br from-cyan-500/5 to-transparent">
+            <Card className="border-desert-400/20 bg-gradient-to-br from-desert-400/5 to-transparent">
               <div className="flex items-center gap-3 mb-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-desert-400/10 text-desert-400">
                   <Package size={20} />
                 </div>
                 <div>
@@ -167,7 +167,7 @@ export default function EditExecutionPage({ params }: Props) {
             {/* Deskripsi */}
             <Card>
               <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-cyan-500/20 text-xs font-bold text-cyan-400">1</span>
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-desert-400/20 text-xs font-bold text-desert-400">1</span>
                 Deskripsi Pekerjaan
               </h3>
               <textarea
@@ -175,14 +175,14 @@ export default function EditExecutionPage({ params }: Props) {
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
                 rows={4}
                 placeholder="Jelaskan pekerjaan yang dilakukan..."
-                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none resize-none"
+                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none resize-none"
               />
             </Card>
 
             {/* Progress */}
             <Card>
               <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-cyan-500/20 text-xs font-bold text-cyan-400">2</span>
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-desert-400/20 text-xs font-bold text-desert-400">2</span>
                 Progress Pelaksanaan
               </h3>
               <div className="space-y-4">
@@ -194,13 +194,13 @@ export default function EditExecutionPage({ params }: Props) {
                     step="5"
                     value={form.progressPct}
                     onChange={(e) => setForm({ ...form, progressPct: parseInt(e.target.value) })}
-                    className="flex-1 h-2 bg-white/10 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-cyan-500 [&::-webkit-slider-thumb]:cursor-pointer"
+                    className="flex-1 h-2 bg-white/10 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-desert-400 [&::-webkit-slider-thumb]:cursor-pointer"
                   />
-                  <span className="w-16 text-center font-mono text-xl font-bold text-cyan-400">{form.progressPct}%</span>
+                  <span className="w-16 text-center font-mono text-xl font-bold text-desert-400">{form.progressPct}%</span>
                 </div>
                 <div className="h-3 w-full overflow-hidden rounded-full bg-white/10">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-emerald-500 transition-all duration-500"
+                    className="h-full rounded-full bg-gradient-to-r from-desert-400 to-emerald-500 transition-all duration-500"
                     style={{ width: `${form.progressPct}%` }}
                   />
                 </div>
@@ -210,7 +210,7 @@ export default function EditExecutionPage({ params }: Props) {
             {/* Lokasi dengan Search */}
             <Card>
               <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-cyan-500/20 text-xs font-bold text-cyan-400">3</span>
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-desert-400/20 text-xs font-bold text-desert-400">3</span>
                 Lokasi Pelaksanaan
               </h3>
               <GpsInput
@@ -241,7 +241,7 @@ export default function EditExecutionPage({ params }: Props) {
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-500">Kode</span>
-                  <span className="font-mono text-cyan-400">{data.logCode}</span>
+                  <span className="font-mono text-desert-400">{data.logCode}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-500">Worker</span>

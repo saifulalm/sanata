@@ -101,7 +101,7 @@ export function ScheduleEditor({ schedule }: { schedule: RabSchedule }) {
             )
           }
           disabled={isPending}
-          className="flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-300 hover:border-cyan-400/60 hover:bg-cyan-400/20 disabled:opacity-60 transition"
+          className="flex items-center gap-2 rounded-full border border-desert-400/30 bg-desert-400/10 px-4 py-2 text-sm font-semibold text-desert-400 hover:border-desert-400/60 hover:bg-desert-400/20 disabled:opacity-60 transition"
         >
           <Save size={15} /> {isPending ? "Menyimpan..." : "Simpan Jadwal"}
         </button>
@@ -147,7 +147,7 @@ export function ScheduleEditor({ schedule }: { schedule: RabSchedule }) {
                   aria-pressed={active}
                   className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition ${
                     active
-                      ? "border-cyan-400/30 bg-cyan-400/10 text-cyan-300"
+                      ? "border-desert-400/30 bg-desert-400/10 text-desert-400"
                       : "border-white/10 text-slate-500 hover:bg-white/5"
                   }`}
                 >
@@ -169,7 +169,7 @@ export function ScheduleEditor({ schedule }: { schedule: RabSchedule }) {
             <button
               type="button"
               onClick={() => setHolidays((c) => [...c, { date: start || todayIso(), name: "" }])}
-              className="flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-2.5 py-1 text-xs font-medium text-cyan-300 hover:border-cyan-400/60 hover:bg-cyan-400/20 transition"
+              className="flex items-center gap-1.5 rounded-full border border-desert-400/30 bg-desert-400/10 px-2.5 py-1 text-xs font-medium text-desert-400 hover:border-desert-400/60 hover:bg-desert-400/20 transition"
             >
               <Plus size={13} /> Tambah
             </button>
@@ -244,7 +244,7 @@ export function ScheduleEditor({ schedule }: { schedule: RabSchedule }) {
                   <td className="px-4 py-3 text-right tabular-nums text-slate-400">
                     Rp {formatRupiah(item.amount)}
                   </td>
-                  <td className="px-4 py-3 text-right tabular-nums font-medium text-cyan-300">
+                  <td className="px-4 py-3 text-right tabular-nums font-medium text-desert-400">
                     {Number(item.weightPct).toFixed(2)}%
                   </td>
                   <td className="px-4 py-3">
@@ -275,7 +275,7 @@ export function ScheduleEditor({ schedule }: { schedule: RabSchedule }) {
                     )}
                   </td>
                   <td className="px-4 py-3 text-right tabular-nums">
-                    <span className="font-medium text-cyan-300">{Number(item.progressPct).toFixed(0)}%</span>
+                    <span className="font-medium text-desert-400">{Number(item.progressPct).toFixed(0)}%</span>
                     {item.lastProgressDate && (
                       <p className="text-xs text-slate-500">{item.lastProgressDate}</p>
                     )}
@@ -352,7 +352,7 @@ function ProgressInput({
           type="button"
           disabled={disabled}
           onClick={submit}
-          className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-2.5 py-1.5 text-xs font-medium text-cyan-300 hover:border-cyan-400/60 hover:bg-cyan-400/20 disabled:opacity-50 transition"
+          className="rounded-full border border-desert-400/30 bg-desert-400/10 px-2.5 py-1.5 text-xs font-medium text-desert-400 hover:border-desert-400/60 hover:bg-desert-400/20 disabled:opacity-50 transition"
         >
           Catat
         </button>
@@ -360,7 +360,7 @@ function ProgressInput({
           type="button"
           onClick={() => setExpanded((v) => !v)}
           aria-expanded={expanded}
-          className="rounded-lg px-1.5 py-1.5 text-xs text-slate-500 hover:text-cyan-400"
+          className="rounded-lg px-1.5 py-1.5 text-xs text-slate-500 hover:text-desert-400"
         >
           {expanded ? "Tutup" : photos.length > 0 ? `Bukti (${photos.length})` : "+ Bukti"}
         </button>

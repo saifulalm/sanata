@@ -155,8 +155,8 @@ export default function ContactsPage() {
 
       {/* Bulk Actions */}
       {selectedContacts.length > 0 && (
-        <div className="flex items-center gap-3 rounded-xl border border-cyan-300/20 bg-cyan-300/10 p-3">
-          <span className="text-sm text-cyan-200">{selectedContacts.length} kontak dipilih</span>
+        <div className="flex items-center gap-3 rounded-xl border border-desert-400/20 bg-desert-400/10 p-3">
+          <span className="text-sm text-desert-200">{selectedContacts.length} kontak dipilih</span>
           <button onClick={() => setShowTagModal(true)} className={btn("secondary", "sm")}>
             <Tag size={14} />
             Beri Tag
@@ -275,7 +275,7 @@ export default function ContactsPage() {
                         <div className="flex items-center gap-1">
                           <button
                             onClick={() => openContactDetail(contact)}
-                            className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-cyan-300"
+                            className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-desert-400"
                           >
                             <Eye size={16} />
                           </button>
@@ -314,7 +314,7 @@ export default function ContactsPage() {
                     onClick={() => setCurrentPage(page)}
                     className={`h-8 w-8 rounded-lg text-sm ${
                       currentPage === page
-                        ? "bg-cyan-300/20 text-cyan-300"
+                        ? "bg-desert-400/20 text-desert-400"
                         : "text-slate-400 hover:bg-white/5 hover:text-white"
                     }`}
                   >
@@ -371,7 +371,7 @@ export default function ContactsPage() {
                   <Upload size={32} className="mx-auto mb-3 text-slate-400" />
                   <p className="text-sm text-slate-300">Seret file CSV ke sini</p>
                   <p className="mt-1 text-xs text-slate-500">atau klik untuk memilih file</p>
-                  <button className="mt-4 rounded-lg bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300">
+                  <button className="mt-4 rounded-lg bg-desert-400/10 px-4 py-2 text-sm text-desert-400">
                     Pilih File
                   </button>
                 </div>
@@ -408,7 +408,7 @@ export default function ContactsPage() {
             </div>
             <div className="space-y-4">
               <div className="flex items-center gap-4">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-cyan-400/20 text-cyan-400">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-desert-400/20 text-desert-400">
                   <User size={24} />
                 </div>
                 <div>

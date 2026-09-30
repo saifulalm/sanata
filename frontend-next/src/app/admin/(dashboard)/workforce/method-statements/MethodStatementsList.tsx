@@ -100,14 +100,14 @@ export function MethodStatementsList({ initialData, initialMeta }: MethodStateme
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleFilter()}
             placeholder="Cari method code atau work item..."
-            className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
+            className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:border-desert-400/40 focus:outline-none focus:ring-2 focus:ring-desert-400/10"
           />
         </div>
 
         <select
           value={wbsFilter}
           onChange={(e) => { setWbsFilter(e.target.value as WbsStage | ""); handleFilter(); }}
-          className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+          className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
         >
           <option value="">Semua WBS Stage</option>
           {Object.entries(WBS_STAGES).map(([key, { label }]) => (
@@ -122,7 +122,7 @@ export function MethodStatementsList({ initialData, initialMeta }: MethodStateme
 
         <Link
           href="/admin/workforce/method-statements/new"
-          className="inline-flex items-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2.5 text-sm font-medium text-cyan-300 transition-all hover:bg-cyan-400/20"
+          className="inline-flex items-center gap-2 rounded-xl border border-desert-400/30 bg-desert-400/10 px-4 py-2.5 text-sm font-medium text-desert-400 transition-all hover:bg-desert-400/20"
         >
           <Plus size={16} />
           Method Statement
@@ -138,7 +138,7 @@ export function MethodStatementsList({ initialData, initialMeta }: MethodStateme
           action={
             <Link
               href="/admin/workforce/method-statements/new"
-              className="inline-flex items-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-300"
+              className="inline-flex items-center gap-2 rounded-xl border border-desert-400/30 bg-desert-400/10 px-4 py-2 text-sm font-medium text-desert-400"
             >
               <Plus size={16} />
               Method Statement
@@ -164,7 +164,7 @@ export function MethodStatementsList({ initialData, initialMeta }: MethodStateme
                   {data.map((item) => (
                     <tr key={item.id} className="border-b border-white/5 hover:bg-white/[0.02]">
                       <td className="px-4 py-3">
-                        <span className="font-mono text-sm text-cyan-400">{item.methodCode}</span>
+                        <span className="font-mono text-sm text-desert-400">{item.methodCode}</span>
                       </td>
                       <td className="px-4 py-3">
                         <Badge tone="info">{getWbsLabel(item.wbsStage)}</Badge>
@@ -186,7 +186,7 @@ export function MethodStatementsList({ initialData, initialMeta }: MethodStateme
                         <div className="flex items-center justify-end gap-1">
                           <Link
                             href={`/admin/workforce/method-statements/${item.id}`}
-                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-400 transition-all hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400"
+                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-400 transition-all hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
                             title="Detail"
                           >
                             <Eye size={14} />

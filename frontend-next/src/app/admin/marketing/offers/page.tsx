@@ -181,7 +181,7 @@ export default function OffersPage() {
         </div>
         <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-400/30 bg-cyan-400/10 text-cyan-400">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-desert-400/30 bg-desert-400/10 text-desert-400">
               <Eye size={18} />
             </div>
             <div>
@@ -238,10 +238,10 @@ export default function OffersPage() {
           {filteredOffers.map((offer) => (
             <div
               key={offer.id}
-              className="group rounded-2xl border border-white/10 bg-white/[0.035] overflow-hidden transition hover:border-cyan-300/30"
+              className="group rounded-2xl border border-white/10 bg-white/[0.035] overflow-hidden transition hover:border-desert-400/30"
             >
               {/* Image Placeholder */}
-              <div className="relative h-40 bg-gradient-to-br from-cyan-400/20 to-purple-400/20 flex items-center justify-center">
+              <div className="relative h-40 bg-gradient-to-br from-desert-400/20 to-purple-400/20 flex items-center justify-center">
                 <Image size={40} className="text-white/20" />
                 <div className="absolute right-3 top-3">
                   {getStatusBadge(offer.status)}
@@ -270,7 +270,7 @@ export default function OffersPage() {
                   <div className="flex items-center gap-1 opacity-0 transition group-hover:opacity-100">
                     <button
                       onClick={() => openOfferDetail(offer)}
-                      className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-cyan-300"
+                      className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-desert-400"
                     >
                       <Eye size={14} />
                     </button>
@@ -394,7 +394,7 @@ export default function OffersPage() {
                 <p className="text-xs text-slate-400">Views</p>
               </div>
               <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3 text-center">
-                <p className="text-2xl font-semibold text-cyan-400">{selectedOffer.clicks}</p>
+                <p className="text-2xl font-semibold text-desert-400">{selectedOffer.clicks}</p>
                 <p className="text-xs text-slate-400">Clicks</p>
               </div>
               <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3 text-center">

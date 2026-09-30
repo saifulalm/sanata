@@ -121,7 +121,7 @@ export default function NewToolPage() {
       <div className="flex items-center gap-4">
         <Link
           href="/admin/workforce/tools"
-          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400"
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
         >
           <ArrowLeft size={20} />
         </Link>
@@ -280,7 +280,7 @@ export default function NewToolPage() {
                 id="needsMaintenance"
                 checked={form.needsMaintenance}
                 onChange={(e) => handleChange("needsMaintenance", e.target.checked)}
-                className="h-4 w-4 rounded border-white/20 bg-white/5 text-cyan-500 focus:ring-cyan-500"
+                className="h-4 w-4 rounded border-white/20 bg-white/5 text-desert-400 focus:ring-desert-400"
               />
               <label htmlFor="needsMaintenance" className="text-sm text-white">
                 Butuh maintenance rutin

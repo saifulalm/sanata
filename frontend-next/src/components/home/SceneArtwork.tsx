@@ -1,22 +1,21 @@
 /**
- * Ilustrasi scene hero — SVG murni, tanpa permintaan jaringan.
+ * SANATA Brand-Aligned Scene Artwork
  *
- * Sebelumnya gambar hero diambil dari endpoint text-to-image pihak ketiga.
- * Endpoint itu selalu membalas 302 ke satu berkas placeholder yang sama,
- * sehingga ketiga slide tampil identik, dan situs produksi jadi bergantung
- * pada layanan yang tidak kita kendalikan. Ilustrasi di bawah dirender lokal
- * sehingga deterministik, ringan, dan tetap on-brand.
+ * Colors follow the SANATA Brand Guidelines:
+ * - Primary: Desert Charcoal #20282C
+ * - Accent: Desert #C9AD82
  *
- * Admin tetap bisa menimpa tiap scene dengan foto asli lewat kolom
- * "Override Gambar" pada koleksi `home_hero_scenes`.
+ * Previously used cyan/blue accents which violated brand guidelines.
  */
 
 export type SceneVariant = "tower" | "transit" | "subsea";
 
+// Brand-aligned color palette using Desert (#C9AD82) as primary accent
 const PALETTES: Record<SceneVariant, { sky: [string, string]; accent: string; glow: string; ground: string }> = {
-  tower: { sky: ["#0a1b30", "#04101c"], accent: "#67e8f9", glow: "#38bdf8", ground: "#071426" },
-  transit: { sky: ["#0b1733", "#050f1f"], accent: "#93c5fd", glow: "#6366f1", ground: "#060f22" },
-  subsea: { sky: ["#07202c", "#03121c"], accent: "#fbbf24", glow: "#22d3ee", ground: "#04121b" },
+  // Desert Charcoal theme - professional construction aesthetic
+  tower: { sky: ["#1A1F22", "#12181B"], accent: "#C9AD82", glow: "#D4B98C", ground: "#0C1012" },
+  transit: { sky: ["#1A1F22", "#12181B"], accent: "#B89A6F", glow: "#C9AD82", ground: "#0C1012" },
+  subsea: { sky: ["#1A1F22", "#12181B"], accent: "#9A7D54", glow: "#B89A6F", ground: "#0C1012" },
 };
 
 /** Tinggi menara per varian — angka tetap supaya render server & klien identik. */
@@ -141,16 +140,14 @@ export function isSceneVariant(value: unknown): value is SceneVariant {
 }
 
 /**
- * Token aksen dari CMS dipetakan ke kelas gradien yang ditulis utuh.
- *
- * Kelasnya sengaja tidak dirakit dari potongan string: Tailwind memindai kode
- * secara statis, jadi kelas yang dibentuk saat runtime tidak akan ikut ter-build.
+ * SANATA Brand-aligned accent classes
+ * Using Desert (#C9AD82) instead of cyan/blue colors
  */
 export const SCENE_ACCENT_CLASSES = {
-  cyan: "from-cyan-400/45 via-sky-500/20 to-transparent",
-  indigo: "from-blue-400/35 via-indigo-500/20 to-transparent",
-  amber: "from-amber-300/25 via-cyan-500/15 to-transparent",
-  emerald: "from-emerald-400/35 via-teal-500/20 to-transparent",
+  desert: "from-desert-400/45 via-desert-500/20 to-transparent",
+  sand: "from-desert-300/35 via-desert-400/20 to-transparent",
+  amber: "from-desert-200/25 via-desert-300/15 to-transparent",
+  bronze: "from-desert-500/35 via-desert-600/20 to-transparent",
 } as const;
 
 export type SceneAccent = keyof typeof SCENE_ACCENT_CLASSES;

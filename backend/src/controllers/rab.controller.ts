@@ -74,7 +74,9 @@ export const updateSchedule = asyncHandler(async (req: Request, res: Response) =
 
 export const addProgress = asyncHandler(async (req: Request, res: Response) => {
   const input = progressSchema.parse(req.body);
-  const data = await scheduleService.recordProgress(req.params.itemId, input, req.user!.sub, req.user!.role);
+  // Only ADMIN/EDITOR/USER can record progress, CLIENT cannot
+  const role = req.user!.role === "CLIENT" ? "USER" as const : req.user!.role;
+  const data = await scheduleService.recordProgress(req.params.itemId, input, req.user!.sub, role);
   await recordAudit({
     userId: req.user!.sub,
     action: "UPDATE",

@@ -35,7 +35,7 @@ export default async function TermsPage() {
           {sections.map((s) => (
             <GlassPanel key={s.title} className="p-7">
               <h2 className="font-display text-xl font-semibold text-white">{s.title}</h2>
-              <p className="mt-3 leading-8 text-slate-300">{s.body}</p>
+              <p className="mt-3 leading-8 text-charcoal-200">{s.body}</p>
             </GlassPanel>
           ))}
         </Container>

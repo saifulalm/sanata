@@ -34,7 +34,7 @@ export default function AdminError({ error, reset }: { error: Error & { digest?:
         <div className="mt-6 flex justify-center gap-2">
           <button
             onClick={reset}
-                  className="flex items-center gap-2 rounded-2xl border border-cyan-300/35 bg-cyan-300/10 px-4 py-2 text-sm font-semibold text-cyan-100 hover:bg-cyan-300/20"
+                  className="flex items-center gap-2 rounded-2xl border border-desert-400/35 bg-desert-400/10 px-4 py-2 text-sm font-semibold text-desert-200 hover:bg-desert-400/20"
           >
             <RotateCw size={15} /> Coba Lagi
           </button>

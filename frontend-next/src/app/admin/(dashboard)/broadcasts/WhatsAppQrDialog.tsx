@@ -227,7 +227,7 @@ export function WhatsAppQrDialog({
                 required
                 autoFocus
                 placeholder="contoh: WA Marketing 1"
-                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
               />
             </label>
 
@@ -239,7 +239,7 @@ export function WhatsAppQrDialog({
                 name="senderIdentity"
                 inputMode="numeric"
                 placeholder="6281234567890"
-                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
               />
             </label>
 
@@ -266,7 +266,7 @@ export function WhatsAppQrDialog({
                     <input
                       name="gatewayUrl"
                       placeholder="dibiarkan kosong = pakai setelan server"
-                      className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+                      className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
                     />
                   </label>
                   <label className="block">
@@ -275,7 +275,7 @@ export function WhatsAppQrDialog({
                     </span>
                     <input
                       name="apiKey"
-                      className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+                      className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
                     />
                   </label>
                 </div>
@@ -322,7 +322,7 @@ export function WhatsAppQrDialog({
                 </div>
               ) : (
                 <div className="flex h-[260px] flex-col items-center justify-center gap-3 rounded-[1.5rem] border border-dashed border-white/12 bg-white/[0.03] px-6 text-center text-xs text-slate-400">
-                  <Loader2 size={22} className="animate-spin text-cyan-200" />
+                  <Loader2 size={22} className="animate-spin text-desert-200" />
                   Menunggu QR dari gateway...
                 </div>
               )}
@@ -349,7 +349,7 @@ export function WhatsAppQrDialog({
               <ol className="space-y-2.5">
                 {STEP_HINTS.map((hint, index) => (
                   <li key={hint} className="flex gap-3 text-sm text-slate-300">
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-cyan-300/25 bg-cyan-300/10 text-[11px] font-semibold text-cyan-100">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-desert-400/25 bg-desert-400/10 text-[11px] font-semibold text-desert-200">
                       {index + 1}
                     </span>
                     {hint}
@@ -376,13 +376,13 @@ export function WhatsAppQrDialog({
                       onChange={(event) => setPairingPhone(event.target.value)}
                       inputMode="numeric"
                       placeholder="6281234567890"
-                      className="min-w-[180px] flex-1 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+                      className="min-w-[180px] flex-1 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
                     />
                     <button
                       type="button"
                       disabled={isPending}
                       onClick={handlePairingCode}
-                      className="rounded-full border border-cyan-300/30 bg-cyan-300/10 px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-cyan-100 disabled:opacity-60"
+                      className="rounded-full border border-desert-400/30 bg-desert-400/10 px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-desert-200 disabled:opacity-60"
                     >
                       Minta kode
                     </button>
@@ -391,7 +391,7 @@ export function WhatsAppQrDialog({
               </div>
 
               <div className="flex items-center gap-2 text-xs text-slate-500">
-                <Loader2 size={13} className="animate-spin text-cyan-200" />
+                <Loader2 size={13} className="animate-spin text-desert-200" />
                 Memantau status setiap {POLL_MS / 1000} detik · status sekarang:{" "}
                 <span className="text-slate-300">{session?.state.replaceAll("_", " ") ?? "MEMUAT"}</span>
               </div>

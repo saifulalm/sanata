@@ -113,7 +113,7 @@ function PhotoUpload({
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={uploading}
-          className="flex h-32 w-full items-center justify-center rounded-lg border-2 border-dashed border-white/20 bg-white/5 text-slate-500 transition-colors hover:border-cyan-400/40 hover:text-cyan-400"
+          className="flex h-32 w-full items-center justify-center rounded-lg border-2 border-dashed border-white/20 bg-white/5 text-slate-500 transition-colors hover:border-desert-400/40 hover:text-desert-400"
         >
           {uploading ? (
             <Loader2 size={20} className="animate-spin" />
@@ -345,7 +345,7 @@ export default function ToolLoanPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-cyan-400" />
+        <Loader2 className="h-8 w-8 animate-spin text-desert-400" />
       </div>
     );
   }
@@ -370,7 +370,7 @@ export default function ToolLoanPage() {
       <div className="flex items-center gap-4">
         <Link
           href="/admin/workforce/tools"
-          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400"
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
         >
           <ArrowLeft size={20} />
         </Link>
@@ -384,7 +384,7 @@ export default function ToolLoanPage() {
       {/* Tool Info Card */}
       <div className="grid gap-4 md:grid-cols-3">
         <Card className="flex items-center gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-desert-400/10 text-desert-400">
             <Package size={24} />
           </div>
           <div>
@@ -461,7 +461,7 @@ export default function ToolLoanPage() {
         <Card>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-desert-400/10 text-desert-400">
                 <ArrowRightLeft size={24} />
               </div>
               <div>
@@ -603,12 +603,12 @@ export default function ToolLoanPage() {
                     onClick={() => setSelectedWorker(worker.id)}
                     className={`w-full rounded-lg p-3 text-left transition-all ${
                       selectedWorker === worker.id
-                        ? "border border-cyan-400/40 bg-cyan-500/10"
+                        ? "border border-desert-400/40 bg-desert-400/10"
                         : "border border-transparent bg-white/[0.03] hover:border-white/10"
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-cyan-500/10 text-cyan-400">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-desert-400/10 text-desert-400">
                         <User size={14} />
                       </div>
                       <div>
@@ -638,7 +638,7 @@ export default function ToolLoanPage() {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Tambahkan catatan jika diperlukan..."
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
+              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-desert-400/40 focus:outline-none"
               rows={3}
             />
           </div>

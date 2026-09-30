@@ -69,7 +69,7 @@ export default async function CareerPage() {
                     <b.icon size={22} />
                   </IconTile>
                   <p className="mt-5 font-display text-lg font-semibold text-white">{b.title}</p>
-                  <p className="mt-2 text-sm leading-7 text-slate-400">{b.desc}</p>
+                  <p className="mt-2 text-sm leading-7 text-charcoal-300">{b.desc}</p>
                 </GlassPanel>
               </RevealOnScroll>
             ))}
@@ -77,7 +77,7 @@ export default async function CareerPage() {
         </Container>
       </section>
 
-      <section className="border-y border-white/10 bg-slate-950/60 py-20">
+      <section className="border-y border-white/10 bg-charcoal-800/60 py-20">
         <Container>
           <SectionHeading eyebrow="Lowongan" title="Posisi yang Tersedia" />
           <div className="mt-10 space-y-4">
@@ -86,7 +86,7 @@ export default async function CareerPage() {
                 <GlassPanel className="flex flex-col gap-3 p-6 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <p className="font-display text-lg font-semibold text-white">{p.title}</p>
-                    <div className="mt-1.5 flex flex-wrap gap-4 text-xs uppercase tracking-[0.14em] text-slate-400">
+                    <div className="mt-1.5 flex flex-wrap gap-4 text-xs uppercase tracking-[0.14em] text-charcoal-300">
                       <span className="flex items-center gap-1.5">
                         <MapPin size={13} /> {p.location}
                       </span>

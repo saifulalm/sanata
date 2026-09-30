@@ -63,14 +63,14 @@ const ACTIVITY_ICONS: Record<ActivityType, { icon: LucideIcon; color: string }> 
   content_updated: { icon: Edit, color: "text-blue-400 bg-blue-500/10 border-blue-400/20" },
   content_deleted: { icon: Trash2, color: "text-red-400 bg-red-500/10 border-red-400/20" },
   product_created: { icon: Plus, color: "text-purple-400 bg-purple-500/10 border-purple-400/20" },
-  product_updated: { icon: Edit, color: "text-cyan-400 bg-cyan-500/10 border-cyan-400/20" },
+  product_updated: { icon: Edit, color: "text-desert-400 bg-desert-500/10 border-desert-400/20" },
   inquiry_received: { icon: MessageSquare, color: "text-amber-400 bg-amber-500/10 border-amber-400/20" },
   inquiry_updated: { icon: MessageSquare, color: "text-amber-400 bg-amber-500/10 border-amber-400/20" },
   user_login: { icon: User, color: "text-slate-400 bg-slate-500/10 border-slate-400/20" },
   user_created: { icon: Plus, color: "text-green-400 bg-green-500/10 border-green-400/20" },
   settings_changed: { icon: Settings, color: "text-indigo-400 bg-indigo-500/10 border-indigo-400/20" },
-  rab_created: { icon: FileText, color: "text-cyan-400 bg-cyan-500/10 border-cyan-400/20" },
-  rab_updated: { icon: Edit, color: "text-cyan-400 bg-cyan-500/10 border-cyan-400/20" },
+  rab_created: { icon: FileText, color: "text-desert-400 bg-desert-500/10 border-desert-400/20" },
+  rab_updated: { icon: Edit, color: "text-desert-400 bg-desert-500/10 border-desert-400/20" },
   quotation_sent: { icon: Send, color: "text-teal-400 bg-teal-500/10 border-teal-400/20" },
 };
 
@@ -133,7 +133,7 @@ export function ActivityTimeline({
           >
             {/* Timeline connector */}
             {!isLast && (
-              <div className="absolute left-3.5 top-10 h-full w-px bg-gradient-to-b from-cyan-400/30 to-transparent" />
+              <div className="absolute left-3.5 top-10 h-full w-px bg-gradient-to-b from-desert-400/30 to-transparent" />
             )}
 
             {/* Icon */}
@@ -167,7 +167,7 @@ export function ActivityTimeline({
       {allActivities.length > maxItems && (
         <button
           onClick={() => setExpanded(!expanded)}
-          className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] py-2.5 text-xs text-slate-400 transition hover:border-cyan-300/20 hover:text-cyan-200"
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] py-2.5 text-xs text-slate-400 transition hover:border-desert-300/20 hover:text-desert-200"
         >
           {expanded ? (
             <>
@@ -225,10 +225,10 @@ export function NotificationPanel({
       {/* Header */}
       <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
         <div className="flex items-center gap-2">
-          <Bell size={16} className="text-cyan-300" />
+          <Bell size={16} className="text-desert-300" />
           <h3 className="font-semibold text-white">Notifikasi</h3>
           {unreadCount > 0 && (
-            <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-cyan-500/20 px-1.5 text-[10px] font-bold text-cyan-200">
+            <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-desert-500/20 px-1.5 text-[10px] font-bold text-desert-200">
               {unreadCount}
             </span>
           )}
@@ -236,7 +236,7 @@ export function NotificationPanel({
         {unreadCount > 0 && onMarkAllAsRead && (
           <button
             onClick={onMarkAllAsRead}
-            className="text-xs text-cyan-400 transition hover:text-cyan-200"
+            className="text-xs text-desert-400 transition hover:text-desert-200"
           >
             Tandai semua dibaca
           </button>
@@ -263,7 +263,7 @@ export function NotificationPanel({
               >
                 {/* Unread indicator */}
                 {!notification.read && (
-                  <div className="absolute left-1 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-cyan-400" />
+                  <div className="absolute left-1 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-desert-400" />
                 )}
 
                 {/* Icon */}
@@ -286,7 +286,7 @@ export function NotificationPanel({
                     {notification.actionUrl && (
                       <a
                         href={notification.actionUrl}
-                        className="text-[10px] font-medium text-cyan-400 hover:text-cyan-200"
+                        className="text-[10px] font-medium text-desert-400 hover:text-desert-200"
                       >
                         {notification.actionLabel ?? "Lihat"}
                       </a>
@@ -382,13 +382,13 @@ export function QuickActions({
           const Icon = "icon" in action
             ? action.icon
             : (ICON_MAP[action.iconName] ?? FileText);
-          const colorClass = action.color ?? "text-cyan-300 bg-cyan-300/10 border-cyan-300/20";
+          const colorClass = action.color ?? "text-desert-300 bg-desert-400/10 border-desert-400/20";
 
           return (
             <a
               key={action.id}
               href={action.href}
-              className="group flex flex-col items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] p-4 text-center transition hover:border-cyan-300/30 hover:bg-white/[0.06]"
+              className="group flex flex-col items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] p-4 text-center transition hover:border-desert-300/30 hover:bg-white/[0.06]"
             >
               <div className={`flex h-10 w-10 items-center justify-center rounded-xl border ${colorClass}`}>
                 <Icon size={18} />

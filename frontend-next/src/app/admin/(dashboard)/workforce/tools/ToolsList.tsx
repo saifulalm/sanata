@@ -189,7 +189,7 @@ export function ToolsList({ initialTools, initialCategories }: ToolsListProps) {
         <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
           <input
-            className="w-full rounded-xl border border-white/10 bg-white/5 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
+            className="w-full rounded-xl border border-white/10 bg-white/5 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:border-desert-400/40 focus:outline-none"
             placeholder="Cari alat, kode, merek, model..."
             type="search"
             value={search}
@@ -203,7 +203,7 @@ export function ToolsList({ initialTools, initialCategories }: ToolsListProps) {
         >
           <Filter size={16} /> Filter
           {hasActiveFilters && (
-            <span className="ml-1 rounded-full bg-cyan-500/20 px-1.5 py-0.5 text-xs">!</span>
+            <span className="ml-1 rounded-full bg-desert-400/20 px-1.5 py-0.5 text-xs">!</span>
           )}
         </Button>
 
@@ -220,7 +220,7 @@ export function ToolsList({ initialTools, initialCategories }: ToolsListProps) {
             {hasActiveFilters && (
               <button
                 onClick={clearFilters}
-                className="flex items-center gap-1 text-xs text-slate-500 hover:text-cyan-400"
+                className="flex items-center gap-1 text-xs text-slate-500 hover:text-desert-400"
               >
                 <X size={12} /> Clear
               </button>
@@ -285,7 +285,7 @@ export function ToolsList({ initialTools, initialCategories }: ToolsListProps) {
         {hasActiveFilters && (
           <div className="flex items-center gap-2">
             <span>|</span>
-            <span className="text-cyan-400">Filter aktif</span>
+            <span className="text-desert-400">Filter aktif</span>
           </div>
         )}
       </div>
@@ -360,7 +360,7 @@ export function ToolsList({ initialTools, initialCategories }: ToolsListProps) {
 
               {/* Content */}
               <div className="p-4">
-                <p className="font-mono text-xs text-cyan-400">{tool.toolCode}</p>
+                <p className="font-mono text-xs text-desert-400">{tool.toolCode}</p>
                 <h3 className="mt-1 font-medium text-white line-clamp-1">{tool.name}</h3>
                 <p className="mt-1 text-xs text-slate-500">
                   {CATEGORY_LABELS[tool.category] || tool.category}
@@ -377,7 +377,7 @@ export function ToolsList({ initialTools, initialCategories }: ToolsListProps) {
                 {/* Actions */}
                 <div className="mt-4 flex gap-2">
                   <button
-                    className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-400 transition-colors hover:border-cyan-400/30 hover:text-cyan-400"
+                    className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-400 transition-colors hover:border-desert-400/30 hover:text-desert-400"
                     onClick={() => {
                       setCondOpen(tool);
                       setCond(tool.currentCondition);
@@ -386,7 +386,7 @@ export function ToolsList({ initialTools, initialCategories }: ToolsListProps) {
                     Update
                   </button>
                   <Link
-                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-400 transition-colors hover:border-cyan-400/30 hover:text-cyan-400"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-400 transition-colors hover:border-desert-400/30 hover:text-desert-400"
                     href={`/admin/workforce/tools/${tool.id}`}
                   >
                     <Eye size={14} />
@@ -526,7 +526,7 @@ export function ToolsList({ initialTools, initialCategories }: ToolsListProps) {
                 onClick={() => setCond(c)}
                 className={`rounded-xl border p-3 text-left transition-all ${
                   cond === c
-                    ? "border-cyan-400/50 bg-cyan-500/10"
+                    ? "border-desert-400/50 bg-desert-400/10"
                     : "border-white/10 bg-white/5 hover:border-white/18"
                 }`}
               >

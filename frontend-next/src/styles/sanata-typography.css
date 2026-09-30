@@ -1,0 +1,421 @@
+/**
+ * SANATA TYPOGRAPHY SYSTEM
+ * Version: 1.0.0
+ * Based on Avenir typeface — Professional construction brand
+ * 
+ * Font loading: DM Sans via Bunny Fonts (open-source Avenir-inspired)
+ * Weights: 300(Light), 400(Book/Roman), 500(Medium), 700(Heavy), 900(Black)
+ */
+
+/* ═══════════════════════════════════════════════════════════
+   1. BASE TYPE CLASSES
+   ═══════════════════════════════════════════════════════════ */
+
+/* Base font application */
+html {
+  font-family: var(--sanata-font-body);
+  font-weight: var(--sanata-weight-book);
+  font-size: 16px;
+  line-height: var(--sanata-leading-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--sanata-font-body);
+  font-weight: var(--sanata-weight-book);
+  color: var(--sanata-text-primary);
+  background-color: var(--sanata-bg-primary);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   2. HEADING SYSTEM (H1–H6)
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── H1: Hero titles — Avenir Black ── */
+h1,
+.h1 {
+  font-family: var(--sanata-font-heading);
+  font-weight: var(--sanata-weight-black);
+  font-size: var(--sanata-text-5xl);
+  line-height: var(--sanata-leading-tight);
+  letter-spacing: var(--sanata-tracking-tight);
+  color: var(--sanata-text-primary);
+  margin: 0;
+  text-wrap: balance;
+}
+
+/* ── H2: Section titles — Avenir Black ── */
+h2,
+.h2 {
+  font-family: var(--sanata-font-heading);
+  font-weight: var(--sanata-weight-black);
+  font-size: var(--sanata-text-4xl);
+  line-height: var(--sanata-leading-tight);
+  letter-spacing: var(--sanata-tracking-tight);
+  color: var(--sanata-text-primary);
+  margin: 0;
+  text-wrap: balance;
+}
+
+/* ── H3: Subsection titles — Avenir Heavy ── */
+h3,
+.h3 {
+  font-family: var(--sanata-font-heading);
+  font-weight: var(--sanata-weight-heavy);
+  font-size: var(--sanata-text-3xl);
+  line-height: var(--sanata-leading-snug);
+  letter-spacing: var(--sanata-tracking-tight);
+  color: var(--sanata-text-primary);
+  margin: 0;
+  text-wrap: balance;
+}
+
+/* ── H4: Card/Feature titles — Avenir Heavy ── */
+h4,
+.h4 {
+  font-family: var(--sanata-font-heading);
+  font-weight: var(--sanata-weight-heavy);
+  font-size: var(--sanata-text-2xl);
+  line-height: var(--sanata-leading-snug);
+  letter-spacing: var(--sanata-tracking-normal);
+  color: var(--sanata-text-primary);
+  margin: 0;
+}
+
+/* ── H5: Small headings — Avenir Medium ── */
+h5,
+.h5 {
+  font-family: var(--sanata-font-heading);
+  font-weight: var(--sanata-weight-medium);
+  font-size: var(--sanata-text-xl);
+  line-height: var(--sanata-leading-snug);
+  letter-spacing: var(--sanata-tracking-normal);
+  color: var(--sanata-text-primary);
+  margin: 0;
+}
+
+/* ── H6: Label-style headings — Avenir Medium ── */
+h6,
+.h6 {
+  font-family: var(--sanata-font-heading);
+  font-weight: var(--sanata-weight-medium);
+  font-size: var(--sanata-text-lg);
+  line-height: var(--sanata-leading-normal);
+  letter-spacing: var(--sanata-tracking-wide);
+  color: var(--sanata-text-secondary);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   3. SUBHEADLINE & LEAD TEXT
+   ═══════════════════════════════════════════════════════════ */
+
+.subheadline {
+  font-family: var(--sanata-font-heading);
+  font-weight: var(--sanata-weight-heavy);
+  font-size: var(--sanata-text-xl);
+  line-height: var(--sanata-leading-snug);
+  letter-spacing: var(--sanata-tracking-normal);
+  color: var(--sanata-text-accent);
+  margin: 0;
+}
+
+.lead {
+  font-family: var(--sanata-font-body);
+  font-weight: var(--sanata-weight-book);
+  font-size: var(--sanata-text-lg);
+  line-height: var(--sanata-leading-relaxed);
+  color: var(--sanata-text-secondary);
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   4. BODY TEXT STYLES
+   ═══════════════════════════════════════════════════════════ */
+
+/* Body default */
+.body {
+  font-family: var(--sanata-font-body);
+  font-weight: var(--sanata-weight-roman);
+  font-size: var(--sanata-text-base);
+  line-height: var(--sanata-leading-relaxed);
+  color: var(--sanata-text-secondary);
+  margin: 0;
+}
+
+/* Body small */
+.body-sm {
+  font-family: var(--sanata-font-body);
+  font-weight: var(--sanata-weight-book);
+  font-size: var(--sanata-text-sm);
+  line-height: var(--sanata-leading-normal);
+  color: var(--sanata-text-secondary);
+  margin: 0;
+}
+
+/* Body large */
+.body-lg {
+  font-family: var(--sanata-font-body);
+  font-weight: var(--sanata-weight-book);
+  font-size: var(--sanata-text-lg);
+  line-height: var(--sanata-leading-relaxed);
+  color: var(--sanata-text-secondary);
+  margin: 0;
+}
+
+/* Paragraph spacing */
+p {
+  margin: 0 0 var(--sanata-space-4);
+}
+p:last-child {
+  margin-bottom: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   5. CAPTION, LABEL, OVERLINE
+   ═══════════════════════════════════════════════════════════ */
+
+/* Overline — uppercase tracking label above headings */
+.overline {
+  font-family: var(--sanata-font-body);
+  font-weight: var(--sanata-weight-medium);
+  font-size: var(--sanata-text-xs);
+  line-height: var(--sanata-leading-normal);
+  letter-spacing: var(--sanata-tracking-widest);
+  text-transform: uppercase;
+  color: var(--sanata-text-accent);
+  margin: 0;
+}
+
+/* Caption — small descriptive text */
+.caption {
+  font-family: var(--sanata-font-body);
+  font-weight: var(--sanata-weight-book);
+  font-size: var(--sanata-text-sm);
+  line-height: var(--sanata-leading-normal);
+  letter-spacing: var(--sanata-tracking-normal);
+  color: var(--sanata-text-muted);
+  margin: 0;
+}
+
+/* Label — interactive element labels */
+.label {
+  font-family: var(--sanata-font-body);
+  font-weight: var(--sanata-weight-medium);
+  font-size: var(--sanata-text-sm);
+  line-height: var(--sanata-leading-normal);
+  letter-spacing: var(--sanata-tracking-wide);
+  color: var(--sanata-text-primary);
+  margin: 0;
+}
+
+/* Small label / badge */
+.badge-text {
+  font-family: var(--sanata-font-body);
+  font-weight: var(--sanata-weight-medium);
+  font-size: var(--sanata-text-xs);
+  line-height: var(--sanata-leading-none);
+  letter-spacing: var(--sanata-tracking-wider);
+  text-transform: uppercase;
+  color: var(--sanata-text-accent);
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   6. DISPLAY & HERO TEXT
+   ═══════════════════════════════════════════════════════════ */
+
+/* Massive display text for hero sections */
+.display {
+  font-family: var(--sanata-font-heading);
+  font-weight: var(--sanata-weight-black);
+  font-size: var(--sanata-text-6xl);
+  line-height: 1;
+  letter-spacing: var(--sanata-tracking-tighter);
+  color: var(--sanata-text-primary);
+  margin: 0;
+  text-wrap: balance;
+}
+
+.display-lg {
+  font-family: var(--sanata-font-heading);
+  font-weight: var(--sanata-weight-black);
+  font-size: clamp(3.5rem, 2.5rem + 8vw, 8rem);
+  line-height: 0.95;
+  letter-spacing: var(--sanata-tracking-tighter);
+  color: var(--sanata-text-primary);
+  margin: 0;
+  text-wrap: balance;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   7. BRAND NAME & TAGLINE
+   ═══════════════════════════════════════════════════════════ */
+
+.brand-name {
+  font-family: var(--sanata-font-heading);
+  font-weight: var(--sanata-weight-black);
+  font-size: var(--sanata-text-2xl);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--sanata-text-primary);
+}
+
+.tagline {
+  font-family: var(--sanata-font-body);
+  font-weight: var(--sanata-weight-light);
+  font-size: var(--sanata-text-sm);
+  letter-spacing: var(--sanata-tracking-widest);
+  text-transform: uppercase;
+  color: var(--sanata-text-accent);
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   8. TEXT COLOR ASSIGNMENTS
+   ═══════════════════════════════════════════════════════════ */
+
+/* Light section overrides (warm background) */
+.light-section {
+  color: var(--sanata-charcoal-700);
+}
+.light-section h1,
+.light-section h2,
+.light-section h3,
+.light-section h4,
+.light-section h5 {
+  color: var(--sanata-charcoal-800);
+}
+.light-section h6,
+.light-section .body,
+.light-section .body-sm {
+  color: var(--sanata-charcoal-500);
+}
+.light-section .overline,
+.light-section .subheadline {
+  color: var(--sanata-desert-600);
+}
+
+/* Accent section overrides */
+.accent-section {
+  color: var(--sanata-charcoal-700);
+}
+.accent-section h1,
+.accent-section h2,
+.accent-section h3,
+.accent-section h4 {
+  color: var(--sanata-charcoal-900);
+}
+.accent-section .body,
+.accent-section .body-sm {
+  color: var(--sanata-charcoal-600);
+}
+.accent-section .overline {
+  color: var(--sanata-desert-800);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   9. LINK STYLES
+   ═══════════════════════════════════════════════════════════ */
+
+a {
+  color: var(--sanata-desert-400);
+  text-decoration: var(--sanata-decoration-none);
+  transition: var(--sanata-transition-colors);
+}
+
+a:hover {
+  color: var(--sanata-desert-300);
+  text-decoration: var(--sanata-decoration-underline);
+}
+
+a:active {
+  color: var(--sanata-desert-500);
+}
+
+.light-section a {
+  color: var(--sanata-desert-600);
+}
+.light-section a:hover {
+  color: var(--sanata-desert-500);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   10. RESPONSIVE TYPE HELPERS
+   ═══════════════════════════════════════════════════════════ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  h1, .h1 { font-size: var(--sanata-text-4xl); }
+  h2, .h2 { font-size: var(--sanata-text-3xl); }
+  h3, .h3 { font-size: var(--sanata-text-2xl); }
+  .display { font-size: var(--sanata-text-5xl); }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  h1, .h1 { font-size: var(--sanata-text-3xl); }
+  h2, .h2 { font-size: var(--sanata-text-2xl); }
+  h3, .h3 { font-size: var(--sanata-text-xl); }
+  h4, .h4 { font-size: var(--sanata-text-lg); }
+  .display { font-size: var(--sanata-text-4xl); }
+  .display-lg { font-size: var(--sanata-text-5xl); }
+  .lead { font-size: var(--sanata-text-base); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   11. MONOSPACE / CODE
+   ═══════════════════════════════════════════════════════════ */
+
+code,
+samp,
+kbd {
+  font-family: var(--sanata-font-mono);
+  font-size: 0.875em;
+  font-weight: var(--sanata-weight-book);
+  color: var(--sanata-desert-300);
+  background-color: var(--sanata-charcoal-alpha-50);
+  padding: 0.1em 0.4em;
+  border-radius: var(--sanata-radius-sm);
+  letter-spacing: 0;
+}
+
+pre {
+  font-family: var(--sanata-font-mono);
+  font-size: var(--sanata-text-sm);
+  line-height: var(--sanata-leading-relaxed);
+  color: var(--sanata-text-secondary);
+  background-color: var(--sanata-charcoal-800);
+  border: 1px solid var(--sanata-border-default);
+  border-radius: var(--sanata-radius-md);
+  padding: var(--sanata-space-4);
+  overflow-x: auto;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   12. UTILITY CLASSES
+   ═══════════════════════════════════════════════════════════ */
+
+.text-primary   { color: var(--sanata-text-primary); }
+.text-secondary { color: var(--sanata-text-secondary); }
+.text-muted     { color: var(--sanata-text-muted); }
+.text-accent    { color: var(--sanata-text-accent); }
+.text-inverse   { color: var(--sanata-text-inverse); }
+.text-on-accent { color: var(--sanata-text-on-accent); }
+.text-success   { color: var(--sanata-success); }
+.text-warning   { color: var(--sanata-warning); }
+.text-error     { color: var(--sanata-error); }
+.text-info      { color: var(--sanata-info); }
+
+.uppercase   { text-transform: uppercase; }
+.lowercase   { text-transform: lowercase; }
+.capitalize  { text-transform: capitalize; }
+.italic      { font-style: italic; }
+.font-light  { font-weight: var(--sanata-weight-light); }
+.font-book   { font-weight: var(--sanata-weight-book); }
+.font-medium { font-weight: var(--sanata-weight-medium); }
+.font-heavy  { font-weight: var(--sanata-weight-heavy); }
+.font-black  { font-weight: var(--sanata-weight-black); }

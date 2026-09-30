@@ -342,6 +342,16 @@ export const SITE_SETTING_DEFAULTS: {
   { key: "site.company_name", value: "SANATA GROUP", group: "Umum", label: "Nama Perusahaan", type: "text", order: 1 },
   { key: "site.tagline", value: "Your Building Partner.", group: "Umum", label: "Tagline Perusahaan", type: "text", order: 2 },
   { key: "site.since_year", value: "2010", group: "Umum", label: "Tahun Berdiri", type: "text", order: 3 },
+  // --- Brand Settings ---
+  { key: "brand.logo_url", value: "/logo.svg", group: "Brand", label: "Logo URL (Horizontal)", type: "text", order: 1 },
+  { key: "brand.logo_icon_url", value: "/logo-icon.svg", group: "Brand", label: "Logo Icon URL (Square)", type: "text", order: 2 },
+  { key: "brand.favicon_url", value: "/favicon.svg", group: "Brand", label: "Favicon URL", type: "text", order: 3 },
+  { key: "brand.primary_color", value: "#C9AD82", group: "Brand", label: "Primary Color (Desert)", type: "text", order: 4 },
+  { key: "brand.secondary_color", value: "#20282C", group: "Brand", label: "Secondary Color (Charcoal)", type: "text", order: 5 },
+  { key: "brand.font_display", value: "Avenir", group: "Brand", label: "Display Font Family", type: "text", order: 6 },
+  { key: "brand.font_weight_headline", value: "800", group: "Brand", label: "Headline Font Weight", type: "text", order: 7 },
+  { key: "brand.font_weight_subheadline", value: "600", group: "Brand", label: "Sub-headline Font Weight", type: "text", order: 8 },
+  { key: "brand.font_weight_body", value: "400", group: "Brand", label: "Body Font Weight", type: "text", order: 9 },
   // --- SEO global: dipakai root layout, sitemap, robots, dan JSON-LD ---
   { key: "seo.site_url", value: "https://sanata.id", group: "SEO", label: "URL Kanonik Situs (tanpa slash akhir)", type: "text", order: 1 },
   { key: "seo.default_title", value: "SANATA GROUP — Your Building Partner. Konstruksi Terstruktur & Interior.", group: "SEO", label: "Judul Beranda / Default", type: "text", order: 2 },
@@ -414,6 +424,10 @@ export const SITE_SETTING_DEFAULTS: {
   { key: "contact.whatsapp_assistant", value: "true", group: "Kontak", label: "Aktifkan Asisten Jawab Otomatis dari FAQ (true/false)", type: "text", order: 19 },
   { key: "contact.whatsapp_assistant_intro", value: "Ketik pertanyaan Anda — saya coba jawab dari daftar pertanyaan umum lebih dulu.", group: "Kontak", label: "Ajakan Asisten", type: "textarea", order: 20 },
   { key: "contact.whatsapp_assistant_miss", value: "Saya belum punya jawaban untuk itu. Lanjutkan ke tim kami lewat WhatsApp, ya.", group: "Kontak", label: "Pesan Saat Asisten Tidak Tahu", type: "textarea", order: 21 },
+
+  // --- Blueprint AI Chat Widget ---
+  { key: "blueprint_chat_enabled", value: "true", group: "Kontak", label: "Aktifkan Blueprint Chat AI (true/false)", type: "text", order: 22 },
+  { key: "blueprint_chat_accent_color", value: "#67e8f9", group: "Kontak", label: "Warna Aksen Blueprint Chat (hex color)", type: "text", order: 23 },
       { key: "privacy.hero.eyebrow", value: "Legal", group: "Halaman Legal", label: "Eyebrow Hero Privasi", type: "text", order: 1 },
       { key: "privacy.hero.title", value: "Kebijakan Privasi", group: "Halaman Legal", label: "Judul Hero Privasi", type: "text", order: 2 },
       { key: "privacy.hero.description", value: "Terakhir diperbarui: 1 Agustus 2026", group: "Halaman Legal", label: "Deskripsi Hero Privasi", type: "text", order: 3 },

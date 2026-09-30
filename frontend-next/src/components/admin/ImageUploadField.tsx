@@ -61,7 +61,7 @@ export function ImageUploadField({
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={isPending}
-                className="flex w-full items-center justify-center gap-2 rounded-[1.25rem] border border-dashed border-cyan-300/20 bg-white/[0.03] px-4 py-6 text-sm text-slate-400 hover:border-cyan-300/35 hover:text-cyan-100 disabled:opacity-60"
+                className="flex w-full items-center justify-center gap-2 rounded-[1.25rem] border border-dashed border-desert-400/20 bg-white/[0.03] px-4 py-6 text-sm text-slate-400 hover:border-desert-400/35 hover:text-desert-200 disabled:opacity-60"
         >
           {isPending ? (
             <>

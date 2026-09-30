@@ -8,6 +8,7 @@ const PUBLIC_ADMIN_ROUTES = [
 
 // Routes that need authentication
 const PROTECTED_ADMIN_ROUTES = [
+  "/admin",
   "/admin/dashboard",
   "/admin/ahsp",
   "/admin/audit-log",
@@ -17,6 +18,7 @@ const PROTECTED_ADMIN_ROUTES = [
   "/admin/daily-reports",
   "/admin/inquiries",
   "/admin/media",
+  "/admin/marketing",
   "/admin/price-items",
   "/admin/products",
   "/admin/quotations",
@@ -31,6 +33,9 @@ const PROTECTED_ADMIN_ROUTES = [
   "/admin/users",
   "/admin/workforce",
 ];
+
+// Cookie name - MUST match adminAuth.ts
+const ACCESS_COOKIE = "admin_access";
 
 // Client portal routes - handled client-side in layout.tsx
 // DO NOT add middleware auth for /client/* routes
@@ -55,17 +60,28 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Check for admin access token
-  const adminToken = request.cookies.get("access_token")?.value;
+  // Check for admin access token - MUST use "admin_access" not "access_token"
+  const accessToken = request.cookies.get(ACCESS_COOKIE)?.value;
 
-  // If no token, redirect to login
-  if (!adminToken) {
-    const loginUrl = new URL("/admin/login", request.url);
-    loginUrl.searchParams.set("next", pathname);
-    return NextResponse.redirect(loginUrl);
+  // Validate JWT structure
+  if (accessToken && accessToken.includes(".")) {
+    const parts = accessToken.split(".");
+    if (parts.length === 3) {
+      try {
+        const payload = JSON.parse(Buffer.from(parts[1], "base64").toString());
+        if (payload.exp && payload.exp * 1000 > Date.now()) {
+          return NextResponse.next(); // Valid token - allow access
+        }
+      } catch {
+        // Invalid token structure
+      }
+    }
   }
 
-  return NextResponse.next();
+  // No valid token - redirect to login
+  const loginUrl = new URL("/admin/login", request.url);
+  loginUrl.searchParams.set("next", pathname);
+  return NextResponse.redirect(loginUrl);
 }
 
 export const config = {

@@ -145,12 +145,14 @@ function AnimatedCounter({
 
 export function StatsSection({ stats = defaultStats }: { stats?: StatItem[] }) {
   return (
-    <section className="relative border-y border-white/10 bg-slate-950/60 py-20">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(56,189,248,0.08),_transparent_60%)]" />
+    <section className="relative border-y border-white/10 bg-[#12181B] py-20">
+      {/* SANATA Brand: Desert radial gradient */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(201,173,130,0.08),_transparent_60%)]" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12 text-center">
-          <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">Track Record</p>
+          {/* SANATA Brand: Desert accent */}
+          <p className="text-xs uppercase tracking-[0.28em] text-desert-400">Track Record</p>
           <h2 className="mt-3 text-3xl font-semibold uppercase tracking-[0.08em] text-white sm:text-4xl">
             Angka Yang Berbicara
           </h2>
@@ -166,13 +168,14 @@ export function StatsSection({ stats = defaultStats }: { stats?: StatItem[] }) {
               >
                 <div className="absolute -inset-4 rounded-[2rem] border border-white/5 bg-white/[0.02] opacity-0 transition group-hover:opacity-100" />
                 <div className="relative">
-                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-cyan-300/20 bg-cyan-300/10">
-                    <Icon size={24} className="text-cyan-300" />
+                  {/* SANATA Brand: Desert icon background */}
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-desert-400/20 bg-desert-400/10">
+                    <Icon size={24} className="text-desert-400" />
                   </div>
                   <p className="text-5xl font-bold tracking-tight text-white">
                     <AnimatedCounter value={stat.value} suffix={stat.suffix} />
                   </p>
-                  <p className="mt-2 text-sm uppercase tracking-[0.2em] text-slate-400">
+                  <p className="mt-2 text-sm uppercase tracking-[0.2em] text-charcoal-300">
                     {stat.label}
                   </p>
                 </div>
@@ -193,11 +196,13 @@ export function TestimonialsSection({ testimonials = defaultTestimonials }: { te
 
   return (
     <section className="relative py-24">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,_rgba(239,135,69,0.08),_transparent_50%)]" />
+      {/* SANATA Brand: Desert radial gradient */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,_rgba(201,173,130,0.08),_transparent_50%)]" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12 text-center">
-          <p className="text-xs uppercase tracking-[0.28em] text-amber-300">Testimoni</p>
+          {/* SANATA Brand: Desert accent */}
+          <p className="text-xs uppercase tracking-[0.28em] text-desert-400">Testimoni</p>
           <h2 className="mt-3 text-3xl font-semibold uppercase tracking-[0.08em] text-white sm:text-4xl">
             Kata Mereka Yang Sudah Merasakannya
           </h2>
@@ -205,10 +210,10 @@ export function TestimonialsSection({ testimonials = defaultTestimonials }: { te
 
         <div className="mx-auto max-w-4xl">
           <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] p-8 backdrop-blur-xl">
-            {/* Quote icon */}
+            {/* Quote icon - SANATA Brand: Desert accent */}
             <Quote
               size={48}
-              className="absolute left-6 top-6 text-cyan-300/20"
+              className="absolute left-6 top-6 text-desert-400/20"
             />
 
             <div className="min-h-[280px]">
@@ -225,7 +230,7 @@ export function TestimonialsSection({ testimonials = defaultTestimonials }: { te
                 >
                   {/* Content */}
                   <div className="pt-8">
-                    <p className="text-lg leading-relaxed text-slate-200">
+                    <p className="text-lg leading-relaxed text-charcoal-100">
                       "{testimonial.content}"
                     </p>
                   </div>
@@ -233,22 +238,23 @@ export function TestimonialsSection({ testimonials = defaultTestimonials }: { te
                   {/* Author & Rating */}
                   <div className="mt-8 flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-full border border-cyan-300/30 bg-cyan-300/10 text-lg font-bold text-cyan-200">
+                      {/* SANATA Brand: Desert avatar */}
+                      <div className="flex h-14 w-14 items-center justify-center rounded-full border border-desert-400/30 bg-desert-400/10 text-lg font-bold text-desert-200">
                         {testimonial.name.charAt(0)}
                       </div>
                       <div>
                         <p className="font-semibold text-white">{testimonial.name}</p>
-                        <p className="text-sm text-slate-400">{testimonial.role}</p>
+                        <p className="text-sm text-charcoal-300">{testimonial.role}</p>
                       </div>
                     </div>
 
-                    {/* Rating */}
+                    {/* Rating - SANATA Brand: Desert stars */}
                     <div className="flex gap-1">
                       {Array.from({ length: 5 }).map((_, i) => (
                         <Star
                           key={i}
                           size={16}
-                          className={i < testimonial.rating ? "fill-amber-400 text-amber-400" : "text-slate-600"}
+                          className={i < testimonial.rating ? "fill-desert-400 text-desert-400" : "text-charcoal-700"}
                         />
                       ))}
                     </div>
@@ -272,7 +278,7 @@ export function TestimonialsSection({ testimonials = defaultTestimonials }: { te
                     onClick={() => setActiveIndex(index)}
                     className={`h-2 rounded-full transition-all ${
                       index === activeIndex
-                        ? "w-8 bg-cyan-400"
+                        ? "w-8 bg-desert-400"
                         : "w-2 bg-white/20 hover:bg-white/40"
                     }`}
                   />
@@ -296,12 +302,14 @@ export function FAQSection({ faqs = defaultFAQs }: { faqs?: FAQItem[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="relative border-y border-white/10 bg-slate-950/60 py-24">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.06),_transparent_50%)]" />
+    <section className="relative border-y border-white/10 bg-[#12181B] py-24">
+      {/* SANATA Brand: Desert radial gradient */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(201,173,130,0.06),_transparent_50%)]" />
 
       <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12 text-center">
-          <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">FAQ</p>
+          {/* SANATA Brand: Desert accent */}
+          <p className="text-xs uppercase tracking-[0.28em] text-desert-400">FAQ</p>
           <h2 className="mt-3 text-3xl font-semibold uppercase tracking-[0.08em] text-white sm:text-4xl">
             Pertanyaan Umum
           </h2>
@@ -331,7 +339,7 @@ export function FAQSection({ faqs = defaultFAQs }: { faqs?: FAQItem[] }) {
                   openIndex === index ? "max-h-96" : "max-h-0"
                 }`}
               >
-                <p className="px-5 pb-5 text-slate-300">{faq.answer}</p>
+                <p className="px-5 pb-5 text-charcoal-200">{faq.answer}</p>
               </div>
             </div>
           ))}
@@ -359,18 +367,21 @@ export function NewsletterSection() {
 
   return (
     <section className="relative py-24">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(56,189,248,0.1),_transparent_70%)]" />
+      {/* SANATA Brand: Desert radial gradient */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(201,173,130,0.1),_transparent_70%)]" />
 
       <div className="relative mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
-        <div className="overflow-hidden rounded-[2rem] border border-cyan-300/20 bg-white/[0.04] p-8 text-center backdrop-blur-xl">
-          <div className="absolute -inset-px rounded-[2rem] bg-gradient-to-br from-cyan-400/10 via-transparent to-amber-400/10" />
+        <div className="overflow-hidden rounded-[2rem] border border-desert-400/20 bg-white/[0.04] p-8 text-center backdrop-blur-xl">
+          {/* SANATA Brand: Desert gradient border */}
+          <div className="absolute -inset-px rounded-[2rem] bg-gradient-to-br from-desert-400/10 via-transparent to-desert-400/10" />
 
           <div className="relative">
-            <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">Newsletter</p>
+            {/* SANATA Brand: Desert accent */}
+            <p className="text-xs uppercase tracking-[0.28em] text-desert-400">Newsletter</p>
             <h2 className="mt-3 text-2xl font-semibold uppercase tracking-[0.08em] text-white sm:text-3xl">
               Tetap Terhubung Dengan Kami
             </h2>
-            <p className="mt-4 max-w-lg mx-auto text-sm text-slate-400">
+            <p className="mt-4 mx-auto max-w-lg text-sm text-charcoal-300">
               Dapatkan update terbaru tentang proyek, teknologi konstruksi, dan insight industri langsung ke email Anda.
             </p>
 
@@ -381,13 +392,13 @@ export function NewsletterSection() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Masukkan alamat email Anda"
-                  className="flex-1 rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-white placeholder:text-slate-500 focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
+                  className="flex-1 rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-white placeholder:text-charcoal-500 focus:border-desert-400/50 focus:outline-none focus:ring-2 focus:ring-desert-400/20"
                   required
                 />
                 <button
                   type="submit"
                   disabled={status === "loading"}
-                  className="rounded-xl border border-cyan-300/40 bg-cyan-300/15 px-6 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-cyan-100 transition hover:bg-cyan-300/25 disabled:opacity-50"
+                  className="rounded-xl border border-desert-400/40 bg-desert-400/15 px-6 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-desert-200 transition hover:bg-desert-400/25 disabled:opacity-50"
                 >
                   {status === "loading" ? "Mengirim..." : status === "success" ? "Terdaftar!" : "Berlangganan"}
                 </button>
@@ -395,13 +406,13 @@ export function NewsletterSection() {
             </form>
 
             {status === "success" && (
-              <p className="mt-4 flex items-center justify-center gap-2 text-sm text-emerald-400">
+              <p className="mt-4 flex items-center justify-center gap-2 text-sm text-desert-400">
                 <CheckCircle size={16} />
                 Terima kasih! Anda telah berlangganan newsletter kami.
               </p>
             )}
 
-            <p className="mt-4 text-xs text-slate-500">
+            <p className="mt-4 text-xs text-charcoal-500">
               Kami menghormati privasi Anda. Unsubscribe kapan saja.
             </p>
           </div>
@@ -414,20 +425,24 @@ export function NewsletterSection() {
 export function CTASection() {
   return (
     <section className="relative py-24">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(239,135,69,0.12),_transparent_60%)]" />
+      {/* SANATA Brand: Desert radial gradient */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(201,173,130,0.12),_transparent_60%)]" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="overflow-hidden rounded-[2rem] border border-amber-300/20 bg-gradient-to-br from-amber-500/10 via-slate-950/90 to-cyan-500/10 p-12 text-center backdrop-blur-xl">
+        {/* SANATA Brand: Desert gradient background */}
+        <div className="overflow-hidden rounded-[2rem] border border-desert-400/30 bg-gradient-to-br from-desert-600/15 via-[#12181B]/90 to-desert-500/10 p-12 text-center backdrop-blur-xl">
+          {/* SANATA Brand: Professional construction voice */}
           <h2 className="text-3xl font-semibold uppercase tracking-[0.08em] text-white sm:text-5xl">
-            Siap Membangun Masa Depan?
+            Your Building Partner
           </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300">
-            Hubungi kami hari ini untuk konsultasi gratis dan mulai wujudkan proyek impian Anda dengan teknologi konstruksi termutakhir.
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-charcoal-200">
+            Hubungi kami hari ini untuk konsultasi gratis dan mulai wujudkan proyek impian Anda dengan pendekatan profesional yang berpusat pada kebutuhan Anda.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+            {/* SANATA Brand: Desert CTA */}
             <a
               href="/contact"
-              className="inline-flex items-center gap-2 rounded-full border border-amber-300/50 bg-amber-300/15 px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-amber-100 shadow-[0_0_30px_rgba(251,191,36,0.2)] transition hover:-translate-y-0.5 hover:bg-amber-300/25"
+              className="inline-flex items-center gap-2 rounded-full border border-desert-400/50 bg-desert-400/15 px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-desert-200 shadow-[0_0_30px_rgba(201,173,130,0.15)] transition hover:-translate-y-0.5 hover:bg-desert-400/25"
             >
               Hubungi Kami <ChevronRight size={16} />
             </a>

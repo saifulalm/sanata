@@ -113,7 +113,7 @@ function PhotoUpload({
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={uploading}
-          className="flex h-32 w-full items-center justify-center rounded-lg border-2 border-dashed border-white/20 bg-white/5 text-slate-500 transition-colors hover:border-cyan-400/40 hover:text-cyan-400"
+          className="flex h-32 w-full items-center justify-center rounded-lg border-2 border-dashed border-white/20 bg-white/5 text-slate-500 transition-colors hover:border-desert-400/40 hover:text-desert-400"
         >
           {uploading ? (
             <Loader2 size={20} className="animate-spin" />
@@ -298,7 +298,7 @@ export function LoansList({
         <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
           <input
-            className="w-full rounded-xl border border-white/10 bg-white/5 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
+            className="w-full rounded-xl border border-white/10 bg-white/5 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:border-desert-400/40 focus:outline-none"
             placeholder="Cari kode, alat, atau pekerja..."
             type="search"
             value={search}
@@ -319,13 +319,13 @@ export function LoansList({
               onClick={() => handleStatusFilter(value)}
               className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition ${
                 statusFilter === value
-                  ? "bg-cyan-500/15 text-cyan-300"
+                  ? "bg-desert-400/15 text-desert-400"
                   : "text-slate-400 hover:text-white"
               }`}
             >
               {label}
               <span className={`rounded-full px-1.5 py-0.5 text-[10px] ${
-                statusFilter === value ? "bg-cyan-500/20" : "bg-white/10"
+                statusFilter === value ? "bg-desert-400/20" : "bg-white/10"
               }`}>
                 {count}
               </span>
@@ -372,7 +372,7 @@ export function LoansList({
                       </div>
                       <div>
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-mono text-sm text-cyan-400">{loan.loanCode}</span>
+                          <span className="font-mono text-sm text-desert-400">{loan.loanCode}</span>
                           <Badge tone={s.tone}>{s.label}</Badge>
                           {isOverdue && <Badge tone="danger">Terlambat {days} hari</Badge>}
                         </div>
@@ -438,7 +438,7 @@ export function LoansList({
                       )}
                       <Link
                         href={`/admin/workforce/tools/${loan.toolId}/loan`}
-                        className="text-xs text-slate-500 hover:text-cyan-400"
+                        className="text-xs text-slate-500 hover:text-desert-400"
                       >
                         Lihat Detail →
                       </Link>
@@ -498,7 +498,7 @@ export function LoansList({
 
           {loadingOptions ? (
             <div className="flex items-center justify-center py-8">
-              <Loader2 className="h-6 w-6 animate-spin text-cyan-400" />
+              <Loader2 className="h-6 w-6 animate-spin text-desert-400" />
             </div>
           ) : (
             <>
@@ -524,7 +524,7 @@ export function LoansList({
                         onClick={() => setSelectedTool(tool.id)}
                         className={`w-full rounded-lg p-2 text-left text-sm transition ${
                           selectedTool === tool.id
-                            ? "border border-cyan-400/40 bg-cyan-500/10"
+                            ? "border border-desert-400/40 bg-desert-400/10"
                             : "border border-transparent hover:bg-white/5"
                         }`}
                       >
@@ -558,7 +558,7 @@ export function LoansList({
                         onClick={() => setSelectedWorker(worker.id)}
                         className={`w-full rounded-lg p-2 text-left text-sm transition ${
                           selectedWorker === worker.id
-                            ? "border border-cyan-400/40 bg-cyan-500/10"
+                            ? "border border-desert-400/40 bg-desert-400/10"
                             : "border border-transparent hover:bg-white/5"
                         }`}
                       >
@@ -626,7 +626,7 @@ export function LoansList({
                   key={c}
                   onClick={() => setRetCond(c)}
                   className={`rounded-xl border p-3 text-left ${
-                    retCond === c ? "border-cyan-400/50 bg-cyan-500/10" : "border-white/10 bg-white/5 hover:border-white/18"
+                    retCond === c ? "border-desert-400/50 bg-desert-400/10" : "border-white/10 bg-white/5 hover:border-white/18"
                   }`}
                 >
                   <p className={`text-sm font-medium ${

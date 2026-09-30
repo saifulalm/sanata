@@ -606,6 +606,7 @@ model Client {
 
   // Relations
   refreshTokens ClientRefreshToken[]
+  passwordResetTokens ClientPasswordResetToken[]
   projects     ClientProjectAccess[]
   notifications ClientNotification[]
 
@@ -624,6 +625,21 @@ model ClientRefreshToken {
   createdAt DateTime @default(now())
 
   @@index([clientId])
+}
+
+/// Client password reset tokens for "forgot password" flow
+model ClientPasswordResetToken {
+  id         String   @id @default(cuid())
+  token     String   @unique
+  tokenHash String   @unique
+  clientId  String
+  client    Client  @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([clientId])
+  @@index([tokenHash])
 }
 
 /// Link between clients and their accessible projects

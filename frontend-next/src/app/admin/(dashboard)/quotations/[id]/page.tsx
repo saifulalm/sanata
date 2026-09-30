@@ -40,7 +40,7 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
     <div className="space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <Link href="/admin/quotations" className="mb-1 flex items-center gap-1.5 text-xs text-slate-400 hover:text-cyan-400">
+          <Link href="/admin/quotations" className="mb-1 flex items-center gap-1.5 text-xs text-slate-400 hover:text-desert-400">
             <ArrowLeft size={14} /> Kembali ke daftar penawaran
           </Link>
           <div className="flex flex-wrap items-center gap-2">
@@ -70,13 +70,13 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
       <div className="grid gap-4 rounded-2xl border border-white/10 bg-white/[0.035] backdrop-blur-xl p-5 sm:grid-cols-4">
         <div>
           <p className="text-xs uppercase tracking-wide text-slate-400">Nilai Penawaran</p>
-          <p className="mt-1 text-xl font-semibold tabular-nums text-cyan-300">Rp {formatRupiah(quotation.total)}</p>
+          <p className="mt-1 text-xl font-semibold tabular-nums text-desert-400">Rp {formatRupiah(quotation.total)}</p>
         </div>
         <div>
           <p className="text-xs uppercase tracking-wide text-slate-400">Sumber RAB</p>
           <p className="mt-1 text-sm text-slate-200">
             {quotation.rab ? (
-              <Link href={`/admin/rab/${quotation.rab.id}`} className="font-mono text-cyan-400 hover:text-cyan-300">
+              <Link href={`/admin/rab/${quotation.rab.id}`} className="font-mono text-desert-400 hover:text-desert-400">
                 {quotation.rab.number}
               </Link>
             ) : (

@@ -192,7 +192,7 @@ export function BaselinePanel({
                       <td className="px-4 py-2.5 text-right tabular-nums">
                         {Number(b.plannedPct).toFixed(1)}%
                       </td>
-                      <td className="px-4 py-2.5 text-right tabular-nums text-cyan-300">
+                      <td className="px-4 py-2.5 text-right tabular-nums text-desert-400">
                         {b.cumulativePlanned.toLocaleString("id-ID")}
                       </td>
                       <td className="px-4 py-2.5 text-right tabular-nums">{plannedPct}%</td>

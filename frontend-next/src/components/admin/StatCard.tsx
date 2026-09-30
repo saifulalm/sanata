@@ -85,19 +85,19 @@ export function StatCard({
   // Tentukan warna aksen
   const getAccentColors = () => {
     if (accentColor) return accentColor;
-    if (danger) return "cyan";
+    if (danger) return "desert";
     if (success) return "emerald";
     if (attention) return "amber";
-    return "cyan";
+    return "desert";
   };
 
   const accent = getAccentColors();
 
   const accentClasses: Record<string, { border: string; bg: string; text: string }> = {
-    cyan: {
-      border: "border-cyan-300/20",
-      bg: "bg-cyan-300/10",
-      text: "text-cyan-200",
+    desert: {
+      border: "border-desert-400/20",
+      bg: "bg-desert-400/10",
+      text: "text-desert-200",
     },
     amber: {
       border: "border-amber-400/20",
@@ -116,7 +116,7 @@ export function StatCard({
     },
   };
 
-  const colors = accentClasses[accent] || accentClasses.cyan;
+  const colors = accentClasses[accent] || accentClasses.desert;
 
   const body = (
     <div
@@ -128,7 +128,7 @@ export function StatCard({
           : success
           ? "border-emerald-400/20 bg-emerald-500/10"
           : "border-white/10 bg-white/[0.04]"
-      } ${href ? "hover:border-cyan-300/30 hover:shadow-[0_0_40px_rgba(56,189,248,0.1)] cursor-pointer" : ""}`}
+      } ${href ? "hover:border-desert-400/30 hover:shadow-[0_0_40px_rgba(201,173,130,0.1)] cursor-pointer" : ""}`}
     >
       {/* Background glow effect */}
       {attention && (
@@ -168,7 +168,7 @@ export function StatCard({
               ? "bg-red-500/15"
               : success
               ? "bg-emerald-500/15"
-              : "bg-cyan-300/10"
+              : "bg-desert-400/10"
           }`}
         >
           <div className={colors.text}>{icon}</div>
@@ -242,16 +242,16 @@ export function MiniStat({
   label,
   value,
   icon,
-  accentColor = "cyan",
+  accentColor = "desert",
 }: {
   label: string;
   value: string | number;
   icon: LucideIcon;
-  accentColor?: "cyan" | "amber" | "emerald" | "red";
+  accentColor?: "desert" | "amber" | "emerald" | "red";
 }) {
   const Icon = icon;
   const colors = {
-    cyan: "text-cyan-300 bg-cyan-300/10 border-cyan-300/20",
+    desert: "text-desert-300 bg-desert-400/10 border-desert-400/20",
     amber: "text-amber-300 bg-amber-300/10 border-amber-300/20",
     emerald: "text-emerald-300 bg-emerald-300/10 border-emerald-300/20",
     red: "text-red-300 bg-red-300/10 border-red-300/20",

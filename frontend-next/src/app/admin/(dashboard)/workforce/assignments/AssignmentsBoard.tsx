@@ -115,14 +115,14 @@ export function AssignmentsBoard({ initialAssignments, initialMeta }: Assignment
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Cari kode assignment atau work item..."
-            className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
+            className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:border-desert-400/40 focus:outline-none focus:ring-2 focus:ring-desert-400/10"
           />
         </div>
 
         <select
           value={statusFilter}
           onChange={(e) => { setStatusFilter(e.target.value as AssignmentStatus | ""); handleFilter(); }}
-          className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+          className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
         >
           <option value="">Semua Status</option>
           <option value="PENDING">Pending</option>
@@ -133,7 +133,7 @@ export function AssignmentsBoard({ initialAssignments, initialMeta }: Assignment
 
         <Link
           href="/admin/workforce/assignments/new"
-          className="inline-flex items-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2.5 text-sm font-medium text-cyan-300 transition-all hover:bg-cyan-400/20"
+          className="inline-flex items-center gap-2 rounded-xl border border-desert-400/30 bg-desert-400/10 px-4 py-2.5 text-sm font-medium text-desert-400 transition-all hover:bg-desert-400/20"
         >
           <Plus size={16} />
           Buat Assignment
@@ -149,7 +149,7 @@ export function AssignmentsBoard({ initialAssignments, initialMeta }: Assignment
           action={
             <Link
               href="/admin/workforce/assignments/new"
-              className="inline-flex items-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-300"
+              className="inline-flex items-center gap-2 rounded-xl border border-desert-400/30 bg-desert-400/10 px-4 py-2 text-sm font-medium text-desert-400"
             >
               <Plus size={16} />
               Buat Assignment
@@ -182,7 +182,7 @@ export function AssignmentsBoard({ initialAssignments, initialMeta }: Assignment
                     return (
                       <tr key={assignment.id} className="border-b border-white/5 hover:bg-white/[0.02]">
                         <td className="px-4 py-3">
-                          <span className="font-mono text-sm text-cyan-400">{assignment.assignmentCode}</span>
+                          <span className="font-mono text-sm text-desert-400">{assignment.assignmentCode}</span>
                         </td>
                         <td className="px-4 py-3">
                           <p className="text-sm text-white max-w-xs truncate">{assignment.workItem}</p>
@@ -218,7 +218,7 @@ export function AssignmentsBoard({ initialAssignments, initialMeta }: Assignment
                           <div className="flex items-center gap-2">
                             <div className="h-2 w-16 overflow-hidden rounded-full bg-white/10">
                               <div
-                                className="h-full bg-cyan-500 transition-all"
+                                className="h-full bg-desert-400 transition-all"
                                 style={{ width: `${assignment.progressPct}%` }}
                               />
                             </div>
@@ -241,7 +241,7 @@ export function AssignmentsBoard({ initialAssignments, initialMeta }: Assignment
                           <div className="flex items-center justify-end gap-1">
                             <Link
                               href={`/admin/workforce/assignments/${assignment.id}`}
-                              className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-400 transition-all hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400"
+                              className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-400 transition-all hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
                               title="Detail"
                             >
                               <Eye size={14} />
@@ -300,7 +300,7 @@ export function AssignmentsBoard({ initialAssignments, initialMeta }: Assignment
               onClick={() => statusDialog && setStatusDialog({ ...statusDialog, newStatus: s })}
               className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm transition-all ${
                 statusDialog?.newStatus === s
-                  ? "border-cyan-400/40 bg-cyan-500/10 text-cyan-300"
+                  ? "border-desert-400/40 bg-desert-400/10 text-desert-400"
                   : "border-white/10 bg-white/[0.04] text-slate-400 hover:border-white/18"
               }`}
             >

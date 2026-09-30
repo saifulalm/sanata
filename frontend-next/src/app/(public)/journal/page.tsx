@@ -87,9 +87,9 @@ export default async function JournalPage({
                 <RevealOnScroll key={a.id} delay={(i % 3) * 0.06}>
                   <Link
                     href={`/journal/${a.slug}`}
-                    className="group flex h-full flex-col overflow-hidden rounded-[1.8rem] border border-white/10 bg-white/[0.04] backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-cyan-300/35"
+                    className="group flex h-full flex-col overflow-hidden rounded-[1.8rem] border border-white/10 bg-white/[0.04] backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-desert-400/35"
                   >
-                    <div className="relative flex h-44 items-center justify-center overflow-hidden border-b border-white/10 bg-slate-950/70 text-cyan-300/60">
+                    <div className="relative flex h-44 items-center justify-center overflow-hidden border-b border-white/10 bg-charcoal-800/70 text-desert-400/60">
                       {a.coverImage ? (
                         <Image
                           src={a.coverImage}
@@ -104,10 +104,10 @@ export default async function JournalPage({
                     </div>
                     <div className="flex flex-1 flex-col p-6">
                       {a.category && (
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-cyan-300">{a.category.name}</p>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-desert-400">{a.category.name}</p>
                       )}
                       <p className="mt-2 font-display text-lg font-semibold text-white">{a.title}</p>
-                      <p className="mt-2 line-clamp-2 flex-1 text-sm leading-6 text-slate-400">{a.excerpt}</p>
+                      <p className="mt-2 line-clamp-2 flex-1 text-sm leading-6 text-charcoal-300">{a.excerpt}</p>
                       <p className="mt-4 text-xs uppercase tracking-[0.16em] text-slate-500">
                         {new Date(a.publishedAt ?? a.createdAt).toLocaleDateString("id-ID", { year: "numeric", month: "long", day: "numeric" })}
                       </p>

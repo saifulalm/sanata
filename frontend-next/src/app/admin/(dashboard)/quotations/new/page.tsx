@@ -33,17 +33,17 @@ export default async function NewQuotationPage({
   return (
     <div className="space-y-6">
       <div>
-        <Link href={`/admin/rab/${source.rab.id}`} className="mb-1 flex items-center gap-1.5 text-xs text-slate-400 hover:text-cyan-400">
+        <Link href={`/admin/rab/${source.rab.id}`} className="mb-1 flex items-center gap-1.5 text-xs text-slate-400 hover:text-desert-400">
           <ArrowLeft size={14} /> Kembali ke RAB
         </Link>
         <h1 className="text-2xl font-semibold text-white">Surat Penawaran Baru</h1>
         <p className="text-sm text-slate-400">
-          Dibuat dari <span className="font-mono text-cyan-400">{source.rab.number}</span> — {source.rab.title}
+          Dibuat dari <span className="font-mono text-desert-400">{source.rab.number}</span> — {source.rab.title}
         </p>
       </div>
 
-      <div className="rounded-xl border border-cyan-400/20 bg-cyan-500/8 px-4 py-3 text-sm text-cyan-200">
-        Nilai penawaran <strong className="text-cyan-100">Rp {formatRupiah(source.rab.total)}</strong> akan dikunci saat surat dibuat.
+      <div className="rounded-xl border border-desert-400/20 bg-desert-400/8 px-4 py-3 text-sm text-desert-200">
+        Nilai penawaran <strong className="text-desert-200">Rp {formatRupiah(source.rab.total)}</strong> akan dikunci saat surat dibuat.
         Perubahan RAB setelah ini tidak akan mengubah surat.
       </div>
 

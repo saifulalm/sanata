@@ -1,5 +1,7 @@
 import { Router } from "express";
 import authRoutes from "@/routes/auth.routes";
+import aiRoutes from "@/routes/ai.routes";
+import seoAiRoutes from "@/routes/seo-ai.routes";
 import categoryRoutes from "@/routes/category.routes";
 import contentRoutes from "@/routes/content.routes";
 import productRoutes from "@/routes/product.routes";
@@ -28,6 +30,8 @@ import marketingRoutes from "@/routes/marketing.routes";
 const router = Router();
 
 router.use("/auth", authRoutes);
+router.use("/ai", aiRoutes);
+router.use("/ai/seo", seoAiRoutes);
 router.use("/categories", categoryRoutes);
 router.use("/contents", contentRoutes);
 router.use("/products", productRoutes);

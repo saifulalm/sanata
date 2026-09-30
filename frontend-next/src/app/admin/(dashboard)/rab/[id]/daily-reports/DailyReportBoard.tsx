@@ -91,7 +91,7 @@ export function DailyReportBoard({
         <button
           type="button"
           onClick={() => { setEditing(null); setCreating(true); }}
-          className="flex items-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-300 transition-all hover:border-cyan-400/60 hover:bg-cyan-400/20"
+          className="flex items-center gap-2 rounded-xl border border-desert-400/30 bg-desert-400/10 px-4 py-2 text-sm font-medium text-desert-400 transition-all hover:border-desert-400/60 hover:bg-desert-400/20"
         >
           <Plus size={15} /> Laporan Baru
         </button>
@@ -128,7 +128,7 @@ export function DailyReportBoard({
           <button
             type="button"
             onClick={() => setCreating(true)}
-            className="mt-5 flex items-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-300 transition-all hover:bg-cyan-400/20"
+            className="mt-5 flex items-center gap-2 rounded-xl border border-desert-400/30 bg-desert-400/10 px-4 py-2 text-sm font-medium text-desert-400 transition-all hover:bg-desert-400/20"
           >
             <Plus size={14} /> Tambah Laporan Pertama
           </button>
@@ -195,7 +195,7 @@ export function DailyReportBoard({
                       target="_blank"
                       rel="noreferrer"
                       title={`Cetak ${formatDate(report.date)}`}
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-400 transition-all hover:border-cyan-400/30 hover:bg-cyan-400/10 hover:text-cyan-300"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-400 transition-all hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
                     >
                       <Printer size={14} />
                     </a>
@@ -228,7 +228,7 @@ export function DailyReportBoard({
                       <dd className="space-y-2">
                         {report.workActivities.map((wa, idx) => (
                           <div key={idx} className="rounded-lg border border-white/10 bg-white/[0.03] p-2.5">
-                            <p className="mb-1 text-xs font-medium text-cyan-400">{wa.building}</p>
+                            <p className="mb-1 text-xs font-medium text-desert-400">{wa.building}</p>
                             <ol className="list-decimal list-inside space-y-0.5 pl-3 text-xs text-slate-300">
                               {wa.activities.map((act, actIdx) => (
                                 <li key={actIdx}>{act}</li>
@@ -324,7 +324,7 @@ function Field({ label, value, tone }: { label: string; value: string; tone?: "w
   return (
     <div>
       <dt className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">{label}</dt>
-      <dd className={`whitespace-pre-line text-sm leading-relaxed ${tone === "warning" ? "text-amber-300" : tone === "info" ? "text-cyan-300" : "text-slate-300"}`}>
+      <dd className={`whitespace-pre-line text-sm leading-relaxed ${tone === "warning" ? "text-amber-300" : tone === "info" ? "text-desert-400" : "text-slate-300"}`}>
         {value}
       </dd>
     </div>

@@ -91,7 +91,7 @@ export default function NewExecutionPage() {
       <div className="flex items-center gap-4">
         <Link
           href="/admin/workforce/executions"
-          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400"
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
         >
           <ArrowLeft size={20} />
         </Link>
@@ -118,7 +118,7 @@ export default function NewExecutionPage() {
                     setForm((prev) => ({ ...prev, assignmentId: e.target.value }));
                     if (errors.assignmentId) setErrors((prev) => ({ ...prev, assignmentId: "" }));
                   }}
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
                 >
                   <option value="">Pilih Assignment</option>
                   {assignments.map((a) => (
@@ -143,7 +143,7 @@ export default function NewExecutionPage() {
                     setForm((prev) => ({ ...prev, workerId: e.target.value }));
                     if (errors.workerId) setErrors((prev) => ({ ...prev, workerId: "" }));
                   }}
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
                 >
                   <option value="">Pilih Worker</option>
                   {workers.map((w) => (
@@ -164,7 +164,7 @@ export default function NewExecutionPage() {
                     type="date"
                     value={form.logDate}
                     onChange={(e) => setForm((prev) => ({ ...prev, logDate: e.target.value }))}
-                    className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+                    className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -175,7 +175,7 @@ export default function NewExecutionPage() {
                     max="100"
                     value={form.progressPct}
                     onChange={(e) => setForm((prev) => ({ ...prev, progressPct: parseInt(e.target.value) || 0 }))}
-                    className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+                    className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
                   />
                 </div>
               </div>
@@ -192,7 +192,7 @@ export default function NewExecutionPage() {
                   onChange={(e) => setForm((prev) => ({ ...prev, description: e.target.value }))}
                   rows={4}
                   placeholder="Jelaskan pekerjaan yang dilakukan hari ini..."
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none resize-none"
+                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none resize-none"
                 />
               </div>
             </div>
@@ -242,11 +242,11 @@ export default function NewExecutionPage() {
               <div className="flex-1">
                 <div className="mb-2 flex items-center justify-between">
                   <span className="text-sm text-slate-500">Kemajuan</span>
-                  <span className="text-lg font-bold text-cyan-400">{form.progressPct}%</span>
+                  <span className="text-lg font-bold text-desert-400">{form.progressPct}%</span>
                 </div>
                 <div className="h-3 w-full overflow-hidden rounded-full bg-white/10">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-emerald-500 transition-all"
+                    className="h-full rounded-full bg-gradient-to-r from-desert-400 to-emerald-500 transition-all"
                     style={{ width: `${form.progressPct}%` }}
                   />
                 </div>

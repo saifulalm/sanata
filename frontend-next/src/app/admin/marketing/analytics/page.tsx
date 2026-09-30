@@ -112,7 +112,7 @@ export default function AnalyticsPage() {
             onClick={() => setSelectedChannel(channel.id)}
             className={`flex items-center gap-2 rounded-xl border px-4 py-2 text-sm transition ${
               selectedChannel === channel.id
-                ? "border-cyan-400/50 bg-cyan-400/10 text-cyan-300"
+                ? "border-desert-400/50 bg-desert-400/10 text-desert-400"
                 : "border-white/10 bg-white/5 text-slate-400 hover:border-white/20 hover:text-white"
             }`}
           >
@@ -136,7 +136,7 @@ export default function AnalyticsPage() {
             <Eye size={16} />
             Open Rate
           </div>
-          <p className="text-2xl font-semibold text-cyan-400">{avgOpenRate}%</p>
+          <p className="text-2xl font-semibold text-desert-400">{avgOpenRate}%</p>
           <div className="mt-1 flex items-center gap-1 text-xs text-emerald-400">
             <TrendingUp size={12} />
             +5.2% vs periode sebelumnya
@@ -181,7 +181,7 @@ export default function AnalyticsPage() {
               <div key={i} className="flex flex-1 flex-col items-center gap-2">
                 <div className="flex w-full items-end justify-center gap-1" style={{ height: "250px" }}>
                   <div
-                    className="w-6 rounded-t-md bg-cyan-400/60 transition-all hover:bg-cyan-400"
+                    className="w-6 rounded-t-md bg-desert-400/60 transition-all hover:bg-desert-400"
                     style={{ height: `${(data.sent / 1700) * 100}%` }}
                     title={`Sent: ${data.sent}`}
                   />
@@ -203,7 +203,7 @@ export default function AnalyticsPage() {
         </div>
         <div className="mt-4 flex items-center justify-center gap-6">
           <div className="flex items-center gap-2">
-            <div className="h-3 w-3 rounded bg-cyan-400/60" />
+            <div className="h-3 w-3 rounded bg-desert-400/60" />
             <span className="text-xs text-slate-400">Terkirim</span>
           </div>
           <div className="flex items-center gap-2">
@@ -256,7 +256,7 @@ export default function AnalyticsPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right text-slate-400">{campaign.sent.toLocaleString()}</td>
-                  <td className="px-4 py-3 text-right text-cyan-300">{campaign.openRate}%</td>
+                  <td className="px-4 py-3 text-right text-desert-400">{campaign.openRate}%</td>
                   <td className="px-4 py-3 text-right text-amber-300">{campaign.ctr}%</td>
                   <td className="px-4 py-3 text-right text-emerald-400">{campaign.conversions}</td>
                 </tr>
@@ -285,10 +285,10 @@ export default function AnalyticsPage() {
                   <div>
                     <div className="mb-1 flex justify-between text-xs">
                       <span className="text-slate-500">Open Rate</span>
-                      <span className="text-cyan-300">{ch.openRate}%</span>
+                      <span className="text-desert-400">{ch.openRate}%</span>
                     </div>
                     <div className="h-2 rounded-full bg-white/5">
-                      <div className="h-2 rounded-full bg-cyan-400" style={{ width: `${ch.openRate}%` }} />
+                      <div className="h-2 rounded-full bg-desert-400" style={{ width: `${ch.openRate}%` }} />
                     </div>
                   </div>
                   <div>
@@ -356,9 +356,9 @@ export default function AnalyticsPage() {
               </div>
             </div>
 
-            <div className="rounded-xl border border-cyan-400/20 bg-cyan-400/10 p-4 text-center">
+            <div className="rounded-xl border border-desert-400/20 bg-desert-400/10 p-4 text-center">
               <p className="text-sm text-slate-400">ROI</p>
-              <p className="mt-1 text-3xl font-bold text-cyan-400">
+              <p className="mt-1 text-3xl font-bold text-desert-400">
                 {((totalConverted * 150000 - 700000) / 700000 * 100).toFixed(0)}%
               </p>
             </div>

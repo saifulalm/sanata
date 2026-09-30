@@ -91,35 +91,22 @@ export function verifyAccessToken(token: string): AccessTokenPayload {
     throw new JsonWebTokenError("Invalid token format");
   }
 
-  console.log("[JWT] Decoded header:", JSON.stringify(decoded.header));
-  console.log("[JWT] Decoded payload:", JSON.stringify(decoded.payload));
-  console.log("[JWT] Access secret first 10 chars:", env.jwt.accessSecret.substring(0, 10));
-  console.log("[JWT] Access secret length:", env.jwt.accessSecret.length);
-
   // Check expiration before verification
   if (isTokenExpired(token)) {
-    console.log("[JWT] VERIFY FAILED: Token is expired");
     throw new TokenExpiredError("jwt expired", new Date());
   }
 
+  // Restrict to single algorithm to prevent algorithm confusion attacks
   const verifyOptions: VerifyOptions = {
-    algorithms: ["HS256", "HS384", "HS512"],
+    algorithms: ["HS256"],
   };
 
   try {
     const result = jwt.verify(token, env.jwt.accessSecret, verifyOptions) as AccessTokenPayload;
-    console.log("[JWT] VERIFY SUCCESS");
     return result;
   } catch (err) {
-    if (err instanceof TokenExpiredError) {
-      console.log("[JWT] VERIFY FAILED: Token expired at", err.expiredAt);
-      throw err;
-    }
-    if (err instanceof JsonWebTokenError) {
-      console.log("[JWT] VERIFY FAILED:", err.message);
-      throw err;
-    }
-    console.log("[JWT] VERIFY FAILED: Unknown error:", err);
+    if (err instanceof TokenExpiredError) throw err;
+    if (err instanceof JsonWebTokenError) throw err;
     throw err;
   }
 }

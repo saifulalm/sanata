@@ -19,7 +19,7 @@ import {
 } from "../../actions";
 
 const fieldClass =
-  "w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:border-cyan-400/50 focus:bg-white/[0.06] focus:outline-none focus:ring-2 focus:ring-cyan-400/20 transition-all";
+  "w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:border-desert-400/50 focus:bg-white/[0.06] focus:outline-none focus:ring-2 focus:ring-desert-400/20 transition-all";
 const labelClass = "mb-1.5 block text-xs font-medium text-slate-400";
 
 const STATUS_STYLE: Record<BillingStatus, { tone: string; dot: string }> = {
@@ -113,8 +113,8 @@ export function BillingBoard({
       {canIssue && (
         <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-5">
           <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-cyan-500/10">
-              <Plus size={15} className="text-cyan-400" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-desert-400/10">
+              <Plus size={15} className="text-desert-400" />
             </div>
             <div>
               <h2 className="text-sm font-semibold text-slate-100">Termin Baru</h2>
@@ -184,7 +184,7 @@ export function BillingBoard({
               type="button"
               onClick={create}
               disabled={isPending || !preview}
-              className="flex items-center gap-2 rounded-xl bg-cyan-500 px-4 py-2 text-sm font-semibold text-slate-900 transition-all hover:bg-cyan-400 disabled:opacity-50"
+              className="flex items-center gap-2 rounded-xl bg-desert-400 px-4 py-2 text-sm font-semibold text-slate-900 transition-all hover:bg-desert-400 disabled:opacity-50"
             >
               <Plus size={14} /> Terbitkan Termin
             </button>
@@ -369,10 +369,10 @@ function Totals({
         {rows.map(([label, value, strong]) => (
           <tr
             key={label}
-            className={strong ? "bg-cyan-500/5 text-slate-100" : "text-slate-400"}
+            className={strong ? "bg-desert-400/5 text-slate-100" : "text-slate-400"}
           >
             <td className={`px-4 py-2.5 ${strong ? "font-semibold text-slate-200" : ""}`}>{label}</td>
-            <td className={`px-4 py-2.5 text-right tabular-nums ${strong ? "font-semibold text-cyan-300" : "text-slate-300"}`}>
+            <td className={`px-4 py-2.5 text-right tabular-nums ${strong ? "font-semibold text-desert-400" : "text-slate-300"}`}>
               {value.startsWith("-") ? `-Rp ${formatRupiah(value.slice(1))}` : `Rp ${formatRupiah(value)}`}
             </td>
           </tr>

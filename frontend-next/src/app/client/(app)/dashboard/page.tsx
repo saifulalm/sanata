@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import Link from "next/link";
 import {
   getMe,
   getProjects,
   getRecentDocuments,
+  getDashboardStats,
   formatCurrency,
   formatDate,
   getStatusBadge,
@@ -22,8 +23,8 @@ import {
   FileText,
   CheckCircle2,
   Clock,
-  Loader2,
   RefreshCw,
+  ArrowRight,
   ArrowUpRight,
   ArrowDownRight,
   Users,
@@ -32,18 +33,24 @@ import {
   Zap,
   Activity,
   Briefcase,
-  Home,
   FolderOpen,
   Download,
   Eye,
-  TrendingDown,
+  ArrowUp,
+  ArrowDown,
   BarChart3,
   PieChart,
   Image,
-  ArrowUp,
-  ArrowDown,
+  Plus,
+  Loader2,
+  AlertCircle,
 } from "lucide-react";
 import clsx from "clsx";
+import {
+  ClientStatsCard,
+  CompletionChart,
+  ProgressChart,
+} from "@/app/client/components";
 
 // ============================================================================
 // Types
@@ -62,6 +69,25 @@ interface TrendData {
   value: number;
   direction: "up" | "down" | "neutral";
   percentage: number;
+}
+
+// ============================================================================
+// Utility Functions
+// ============================================================================
+
+function getDaysRemaining(endDate?: string): number | null {
+  if (!endDate) return null;
+  const end = new Date(endDate);
+  const now = new Date();
+  const diff = Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+  return diff > 0 ? diff : 0;
+}
+
+function getProgressBg(percent: number): string {
+  if (percent >= 90) return "bg-gradient-to-r from-emerald-500 to-green-500";
+  if (percent >= 50) return "bg-gradient-to-r from-blue-500 to-indigo-500";
+  if (percent >= 25) return "bg-gradient-to-r from-amber-500 to-orange-500";
+  return "bg-gradient-to-r from-slate-400 to-slate-500";
 }
 
 // ============================================================================
@@ -90,120 +116,115 @@ function ClientLogo({ className = "w-10 h-10" }: { className?: string }) {
 }
 
 // ============================================================================
-// Completion Chart Component
+// Activity Item Component
 // ============================================================================
 
-function CompletionChart({ projects }: { projects: ProjectAccess[] }) {
-  const completionData = useMemo(() => {
-    const completed = projects.filter(p => p.project.progress >= 100 || p.project.status === "COMPLETED").length;
-    const inProgress = projects.filter(p => p.project.progress > 0 && p.project.progress < 100).length;
-    const notStarted = projects.filter(p => p.project.progress === 0).length;
-    const total = projects.length || 1;
-    return {
-      completed,
-      inProgress,
-      notStarted,
-      completedPercent: Math.round((completed / total) * 100),
-      inProgressPercent: Math.round((inProgress / total) * 100),
-      notStartedPercent: Math.round((notStarted / total) * 100),
-    };
-  }, [projects]);
+interface ActivityItemProps {
+  icon: typeof Activity;
+  title: string;
+  description: string;
+  time: string;
+  color: string;
+}
 
+function ActivityItem({ icon: Icon, title, description, time, color }: ActivityItemProps) {
   return (
-    <div className="rounded-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 p-6 transition-all hover:shadow-lg">
-      <div className="flex items-center gap-4 mb-6">
-        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center shadow-lg">
-          <PieChart className="w-6 h-6 text-white" />
-        </div>
-        <div>
-          <h3 className="font-bold text-lg text-slate-900 dark:text-white">Tingkat Penyelesaian</h3>
-          <p className="text-sm text-slate-500 dark:text-slate-400">Ringkasan semua proyek</p>
-        </div>
+    <div className="flex gap-4">
+      <div className={clsx("w-10 h-10 rounded-xl flex items-center justify-center shrink-0", color)}>
+        <Icon className="w-5 h-5" />
       </div>
-
-      {/* Donut Chart */}
-      <div className="flex items-center justify-center py-6">
-        <div className="relative w-48 h-48">
-          <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
-            {/* Background circle */}
-            <circle cx="18" cy="18" r="14" fill="none" stroke="currentColor" strokeWidth="3" className="text-slate-100 dark:text-slate-700" />
-            {/* Completed */}
-            {completionData.completedPercent > 0 && (
-              <circle
-                cx="18"
-                cy="18"
-                r="14"
-                fill="none"
-                stroke="#10b981"
-                strokeWidth="3"
-                strokeDasharray={`${completionData.completedPercent} ${100 - completionData.completedPercent}`}
-                strokeDashoffset="0"
-                className="transition-all duration-500"
-              />
-            )}
-            {/* In Progress */}
-            {completionData.inProgressPercent > 0 && (
-              <circle
-                cx="18"
-                cy="18"
-                r="14"
-                fill="none"
-                stroke="#3b82f6"
-                strokeWidth="3"
-                strokeDasharray={`${completionData.inProgressPercent} ${100 - completionData.inProgressPercent}`}
-                strokeDashoffset={`-${completionData.completedPercent}`}
-                className="transition-all duration-500"
-              />
-            )}
-            {/* Not Started */}
-            {completionData.notStartedPercent > 0 && (
-              <circle
-                cx="18"
-                cy="18"
-                r="14"
-                fill="none"
-                stroke="#94a3b8"
-                strokeWidth="3"
-                strokeDasharray={`${completionData.notStartedPercent} ${100 - completionData.notStartedPercent}`}
-                strokeDashoffset={`-${completionData.completedPercent + completionData.inProgressPercent}`}
-                className="transition-all duration-500"
-              />
-            )}
-          </svg>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center">
-              <p className="text-3xl font-bold text-slate-900 dark:text-white">{completionData.completedPercent}%</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Selesai</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Legend */}
-      <div className="grid grid-cols-3 gap-4 mt-4">
-        <div className="text-center">
-          <div className="flex items-center justify-center gap-2 mb-1">
-            <span className="w-3 h-3 rounded-full bg-emerald-500" />
-            <span className="text-sm font-semibold text-slate-900 dark:text-white">{completionData.completed}</span>
-          </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400">Selesai</p>
-        </div>
-        <div className="text-center">
-          <div className="flex items-center justify-center gap-2 mb-1">
-            <span className="w-3 h-3 rounded-full bg-blue-500" />
-            <span className="text-sm font-semibold text-slate-900 dark:text-white">{completionData.inProgress}</span>
-          </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400">Berjalan</p>
-        </div>
-        <div className="text-center">
-          <div className="flex items-center justify-center gap-2 mb-1">
-            <span className="w-3 h-3 rounded-full bg-slate-400" />
-            <span className="text-sm font-semibold text-slate-900 dark:text-white">{completionData.notStarted}</span>
-          </div>
-          <p className="text-xs text-slate-500 dark:text-slate-400">Belum</p>
-        </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-slate-900 dark:text-white">{title}</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{description}</p>
+        <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">{time}</p>
       </div>
     </div>
+  );
+}
+
+// ============================================================================
+// Project Card Component
+// ============================================================================
+
+interface ProjectCardProps {
+  access: ProjectAccess;
+  index: number;
+}
+
+function ProjectCard({ access, index }: ProjectCardProps) {
+  const { project } = access;
+  const badge = getStatusBadge(project.status);
+  const progressColor = getProgressBg(project.progress);
+  const daysLeft = getDaysRemaining(project.scheduleEnd);
+
+  return (
+    <Link
+      href={`/client/project/${project.id}`}
+      className="group block rounded-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:border-blue-200/50 dark:hover:border-blue-700/50 hover:-translate-y-1"
+      style={{ animationDelay: `${index * 100}ms` }}
+    >
+      {/* Header */}
+      <div className="flex items-start justify-between gap-4 mb-4">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
+            <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2.5 py-1 rounded-lg">
+              {project.number}
+            </span>
+            <span className={clsx("text-xs font-medium px-2.5 py-1 rounded-lg", badge.bg, badge.text)}>
+              {badge.label}
+            </span>
+          </div>
+          <h3 className="font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+            {project.title}
+          </h3>
+          {project.location && (
+            <div className="flex items-center gap-1.5 mt-2 text-sm text-slate-500 dark:text-slate-400">
+              <MapPin className="w-3.5 h-3.5" />
+              <span className="truncate">{project.location}</span>
+            </div>
+          )}
+        </div>
+        <div className="p-2 rounded-xl bg-slate-100/80 dark:bg-slate-700/50 group-hover:bg-blue-50 dark:group-hover:bg-blue-500/10 transition-colors">
+          <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
+        </div>
+      </div>
+
+      {/* Progress */}
+      <div className="mb-4">
+        <div className="flex items-center justify-between text-sm mb-2">
+          <span className="text-slate-500 dark:text-slate-400">Progress</span>
+          <span className="font-bold text-slate-900 dark:text-white">{project.progress}%</span>
+        </div>
+        <div className="h-2.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+          <div
+            className={clsx("h-full rounded-full transition-all duration-500", progressColor)}
+            style={{ width: `${project.progress}%` }}
+          />
+        </div>
+      </div>
+
+      {/* Meta */}
+      <div className="flex items-center justify-between text-sm">
+        <div className="flex items-center gap-4">
+          {daysLeft !== null && (
+            <div className={clsx(
+              "flex items-center gap-1.5",
+              daysLeft <= 7 ? "text-amber-600" : "text-slate-500 dark:text-slate-400"
+            )}>
+              <Clock className="w-3.5 h-3.5" />
+              <span>{daysLeft === 0 ? "Hari ini" : `${daysLeft} hari`}</span>
+            </div>
+          )}
+          <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
+            <CheckCircle2 className="w-3.5 h-3.5" />
+            <span>{project.completedItems}/{project.totalItems}</span>
+          </div>
+        </div>
+        <span className="font-semibold text-slate-900 dark:text-white">
+          {formatCurrency(project.total, true)}
+        </span>
+      </div>
+    </Link>
   );
 }
 
@@ -293,217 +314,6 @@ function RecentDocumentsPreview({ documents }: { documents: RecentDocument[] }) 
 }
 
 // ============================================================================
-// Trend Indicator Component
-// ============================================================================
-
-function TrendIndicator({ trend, label }: { trend: TrendData; label: string }) {
-  const isPositive = trend.direction === "up";
-  const isNeutral = trend.direction === "neutral";
-
-  return (
-    <div className="flex items-center gap-2">
-      <div className={clsx(
-        "flex items-center gap-1 text-sm font-semibold",
-        isNeutral ? "text-slate-500" : isPositive ? "text-emerald-600" : "text-red-500"
-      )}>
-        {isNeutral ? (
-          <TrendingUp className="w-4 h-4" />
-        ) : isPositive ? (
-          <ArrowUp className="w-4 h-4" />
-        ) : (
-          <ArrowDown className="w-4 h-4" />
-        )}
-        <span>{Math.abs(trend.percentage)}%</span>
-      </div>
-      <span className="text-sm text-slate-500">{label}</span>
-    </div>
-  );
-}
-
-// ============================================================================
-// Stat Card Component
-// ============================================================================
-
-interface StatCardProps {
-  title: string;
-  value: string | number;
-  subtitle?: string;
-  icon: typeof Building2;
-  trend?: TrendData;
-  gradient?: string;
-  iconColor?: string;
-  showTrend?: boolean;
-}
-
-function StatCard({ title, value, subtitle, icon: Icon, trend, gradient, iconColor = "from-blue-500 to-indigo-500", showTrend = true }: StatCardProps) {
-  return (
-    <div className="relative overflow-hidden rounded-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 p-6 transition-all hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-1">
-      {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/5 to-indigo-500/5 rounded-full -translate-y-1/2 translate-x-1/2" />
-
-      <div className="relative">
-        <div className="flex items-start justify-between">
-          <div>
-            <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{title}</p>
-            <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-white tracking-tight">{value}</p>
-            {subtitle && (
-              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{subtitle}</p>
-            )}
-          </div>
-          <div className={clsx(
-            "w-14 h-14 rounded-2xl bg-gradient-to-br shadow-lg flex items-center justify-center",
-            iconColor
-          )}>
-            <Icon className="w-7 h-7 text-white" />
-          </div>
-        </div>
-
-        {trend && showTrend && (
-          <div className="mt-4">
-            <TrendIndicator trend={trend} label="dari bulan lalu" />
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-// ============================================================================
-// Project Card Component
-// ============================================================================
-
-interface ProjectCardProps {
-  access: ProjectAccess;
-  index: number;
-}
-
-function ProjectCard({ access, index }: ProjectCardProps) {
-  const { project } = access;
-  const badge = getStatusBadge(project.status);
-  const progressColor = getProgressBg(project.progress);
-  const daysLeft = getDaysRemaining(project.scheduleEnd);
-
-  return (
-    <Link
-      href={`/client/project/${project.id}`}
-      className="group block rounded-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:border-blue-200/50 dark:hover:border-blue-700/50 hover:-translate-y-1"
-      style={{ animationDelay: `${index * 100}ms` }}
-    >
-      {/* Header */}
-      <div className="flex items-start justify-between gap-4 mb-4">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2.5 py-1 rounded-lg">
-              {project.number}
-            </span>
-            <span className={clsx("text-xs font-medium px-2.5 py-1 rounded-lg", badge.bg, badge.text)}>
-              {badge.label}
-            </span>
-          </div>
-          <h3 className="font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
-            {project.title}
-          </h3>
-          {project.location && (
-            <div className="flex items-center gap-1.5 mt-2 text-sm text-slate-500 dark:text-slate-400">
-              <MapPin className="w-3.5 h-3.5" />
-              <span className="truncate">{project.location}</span>
-            </div>
-          )}
-        </div>
-        <div className="p-2 rounded-xl bg-slate-100/80 dark:bg-slate-700/50 group-hover:bg-blue-50 dark:group-hover:bg-blue-500/10 transition-colors">
-          <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
-        </div>
-      </div>
-
-      {/* Progress */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between text-sm mb-2">
-          <span className="text-slate-500 dark:text-slate-400">Progress</span>
-          <span className="font-bold text-slate-900 dark:text-white">{project.progress}%</span>
-        </div>
-        <div className="h-2.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-          <div
-            className={clsx("h-full rounded-full transition-all duration-500", progressColor)}
-            style={{ width: `${project.progress}%` }}
-          />
-        </div>
-      </div>
-
-      {/* Meta */}
-      <div className="flex items-center justify-between text-sm">
-        <div className="flex items-center gap-4">
-          {daysLeft !== null && (
-            <div className={clsx(
-              "flex items-center gap-1.5",
-              daysLeft <= 7 ? "text-amber-600" : "text-slate-500 dark:text-slate-400"
-            )}>
-              <Clock className="w-3.5 h-3.5" />
-              <span>{daysLeft === 0 ? "Hari ini" : `${daysLeft} hari`}</span>
-            </div>
-          )}
-          <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>{project.completedItems}/{project.totalItems}</span>
-          </div>
-        </div>
-        <span className="font-semibold text-slate-900 dark:text-white">
-          {formatCurrency(project.total, true)}
-        </span>
-      </div>
-    </Link>
-  );
-}
-
-// ============================================================================
-// Activity Item Component
-// ============================================================================
-
-interface ActivityItemProps {
-  icon: typeof Activity;
-  title: string;
-  description: string;
-  time: string;
-  color: string;
-}
-
-function ActivityItem({ icon: Icon, title, description, time, color }: ActivityItemProps) {
-  return (
-    <div className="flex gap-4">
-      <div className={clsx(
-        "w-10 h-10 rounded-xl flex items-center justify-center shrink-0",
-        color
-      )}>
-        <Icon className="w-5 h-5" />
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-slate-900 dark:text-white">{title}</p>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{description}</p>
-        <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">{time}</p>
-      </div>
-    </div>
-  );
-}
-
-// ============================================================================
-// Utility Functions
-// ============================================================================
-
-function getDaysRemaining(endDate?: string): number | null {
-  if (!endDate) return null;
-  const end = new Date(endDate);
-  const now = new Date();
-  const diff = Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-  return diff > 0 ? diff : 0;
-}
-
-function getProgressBg(percent: number): string {
-  if (percent >= 90) return "bg-gradient-to-r from-emerald-500 to-green-500";
-  if (percent >= 50) return "bg-gradient-to-r from-blue-500 to-indigo-500";
-  if (percent >= 25) return "bg-gradient-to-r from-amber-500 to-orange-500";
-  return "bg-gradient-to-r from-slate-400 to-slate-500";
-}
-
-// ============================================================================
 // Main Dashboard Component
 // ============================================================================
 
@@ -513,19 +323,22 @@ export default function ClientDashboard() {
   const [user, setUser] = useState<Client | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [dashboardStats, setDashboardStats] = useState<any>(null);
 
   async function loadData() {
     setLoading(true);
     setError(null);
     try {
-      const [userData, projectData, docsData] = await Promise.all([
+      const [userData, projectData, docsData, statsData] = await Promise.all([
         getMe().catch(() => null),
         getProjects().catch(() => []),
         getRecentDocuments(5).catch(() => []),
+        getDashboardStats().catch(() => null),
       ]);
       setUser(userData);
       setProjects(projectData);
       setRecentDocs(docsData);
+      setDashboardStats(statsData);
     } catch {
       setError("Gagal memuat data");
     } finally {
@@ -562,13 +375,22 @@ export default function ClientDashboard() {
     { icon: Users, title: "Tim Baru", description: "2 anggota tim ditambahkan ke proyek", time: "2 hari lalu", color: "bg-amber-100 text-amber-600" },
   ];
 
-  // Mock trends (in real app, this would come from backend)
+  // Mock trends
   const mockTrends: Record<string, TrendData> = {
     projects: { value: 12, direction: "up", percentage: 12 },
     active: { value: 8, direction: "up", percentage: 8 },
     completed: { value: 4, direction: "up", percentage: 20 },
     budget: { value: 5, direction: "up", percentage: 5 },
   };
+
+  // Get greeting
+  const getGreeting = useCallback(() => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Selamat Pagi";
+    if (hour < 15) return "Selamat Siang";
+    if (hour < 18) return "Selamat Sore";
+    return "Selamat Malam";
+  }, []);
 
   if (loading) {
     return (
@@ -600,7 +422,7 @@ export default function ClientDashboard() {
     return (
       <div className="flex flex-col items-center justify-center py-20">
         <div className="w-20 h-20 rounded-2xl bg-red-100 dark:bg-red-500/10 flex items-center justify-center mb-6">
-          <RefreshCw className="w-10 h-10 text-red-500" />
+          <AlertCircle className="w-10 h-10 text-red-500" />
         </div>
         <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">Terjadi Kesalahan</h3>
         <p className="text-slate-500 dark:text-slate-400 mb-6">{error}</p>
@@ -615,14 +437,21 @@ export default function ClientDashboard() {
     );
   }
 
-  // Get greeting based on time of day
-  function getGreeting(): string {
-    const hour = new Date().getHours();
-    if (hour < 12) return "Selamat Pagi";
-    if (hour < 15) return "Selamat Siang";
-    if (hour < 18) return "Selamat Sore";
-    return "Selamat Malam";
-  }
+  // Use dashboard stats from API or fallback to calculated stats
+  const completionData = dashboardStats?.completionData || {
+    completed: stats.completedProjects,
+    inProgress: stats.activeProjects,
+    notStarted: stats.totalProjects > 0 ? Math.max(0, stats.totalProjects - stats.completedProjects - stats.activeProjects) : 0,
+  };
+
+  const monthlyProgress = dashboardStats?.monthlyProgress || [
+    { month: "Jan", planned: 20, actual: 18 },
+    { month: "Feb", planned: 35, actual: 32 },
+    { month: "Mar", planned: 50, actual: 48 },
+    { month: "Apr", planned: 65, actual: 58 },
+    { month: "Mei", planned: 80, actual: 72 },
+    { month: "Jun", planned: 95, actual: 85 },
+  ];
 
   return (
     <div className="space-y-8">
@@ -637,7 +466,7 @@ export default function ClientDashboard() {
         <div className="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <Home className="w-5 h-5 text-blue-200" />
+              <Building2 className="w-5 h-5 text-blue-200" />
               <span className="text-blue-200 text-sm font-medium">Dashboard</span>
             </div>
             <h1 className="text-3xl font-bold mb-2">{getGreeting()}, {user?.name?.split(" ")[0] || "Klien"}! 👋</h1>
@@ -659,38 +488,80 @@ export default function ClientDashboard() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard
-          title="Total Proyek"
+        <ClientStatsCard
+          label="Total Proyek"
           value={stats.totalProjects}
-          subtitle="proyek aktif"
+          description="proyek aktif"
           icon={Building2}
-          trend={mockTrends.projects}
-          iconColor="from-blue-500 to-indigo-500"
+          trend="up"
+          trendValue={`+${mockTrends.projects.percentage}%`}
+          iconBg="bg-blue-100"
+          iconColor="text-blue-600"
         />
-        <StatCard
-          title="Sedang Berjalan"
+        <ClientStatsCard
+          label="Sedang Berjalan"
           value={stats.activeProjects}
-          subtitle="proyek dalam progress"
+          description="proyek dalam progress"
           icon={Activity}
-          trend={mockTrends.active}
-          iconColor="from-amber-500 to-orange-500"
+          trend="up"
+          trendValue={`+${mockTrends.active.percentage}%`}
+          iconBg="bg-amber-100"
+          iconColor="text-amber-600"
         />
-        <StatCard
-          title="Telah Selesai"
+        <ClientStatsCard
+          label="Telah Selesai"
           value={stats.completedProjects}
-          subtitle="proyek completed"
+          description="proyek completed"
           icon={CheckCircle2}
-          trend={mockTrends.completed}
-          iconColor="from-emerald-500 to-green-500"
+          trend="up"
+          trendValue={`+${mockTrends.completed.percentage}%`}
+          iconBg="bg-emerald-100"
+          iconColor="text-emerald-600"
         />
-        <StatCard
-          title="Rata-rata Progress"
+        <ClientStatsCard
+          label="Rata-rata Progress"
           value={`${stats.avgProgress}%`}
-          subtitle="progress keseluruhan"
+          description="progress keseluruhan"
           icon={TrendingUp}
-          iconColor="from-purple-500 to-pink-500"
           showTrend={false}
+          iconBg="bg-purple-100"
+          iconColor="text-purple-600"
         />
+      </div>
+
+      {/* Charts Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Completion Chart */}
+        <div className="rounded-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 p-6 transition-all hover:shadow-lg">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center shadow-lg">
+              <PieChart className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h3 className="font-bold text-lg text-slate-900 dark:text-white">Tingkat Penyelesaian</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Ringkasan semua proyek</p>
+            </div>
+          </div>
+          <CompletionChart
+            completed={completionData.completed}
+            inProgress={completionData.inProgress}
+            notStarted={completionData.notStarted}
+          />
+        </div>
+
+        {/* Progress Chart */}
+        <div className="rounded-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 p-6 transition-all hover:shadow-lg">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center shadow-lg">
+              <TrendingUp className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h3 className="font-bold text-lg text-slate-900 dark:text-white">Progress Bulanan</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Rencana vs Aktual</p>
+            </div>
+          </div>
+          <ProgressChart data={monthlyProgress} />
+        </div>
       </div>
 
       {/* Main Content Grid */}
@@ -729,9 +600,6 @@ export default function ClientDashboard() {
 
         {/* Right Sidebar */}
         <div className="space-y-6">
-          {/* Completion Chart */}
-          <CompletionChart projects={projects} />
-
           {/* Activity Feed */}
           <div className="rounded-2xl bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 p-5">
             <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Aktivitas Terbaru</h2>

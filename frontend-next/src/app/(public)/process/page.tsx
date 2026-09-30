@@ -140,11 +140,11 @@ export default async function ProcessPage() {
       <section className="py-24">
         <Container>
           <div className="mb-16 text-center">
-            <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">Project Delivery Process</p>
+            <p className="text-xs uppercase tracking-[0.28em] text-desert-400">Project Delivery Process</p>
             <h2 className="mt-4 text-3xl font-semibold text-white sm:text-4xl">
               Delapan Tahap Menuju Proyek Sukses
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-slate-300">
+            <p className="mx-auto mt-4 max-w-2xl text-charcoal-200">
               Setiap proyek kami jalani dengan metodologi yang telah teruji, memastikan kualitas dan transparansi di setiap tahap.
             </p>
           </div>
@@ -152,7 +152,7 @@ export default async function ProcessPage() {
           {/* Process Steps */}
           <div className="relative">
             {/* Timeline line */}
-            <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-cyan-300/20 hidden lg:block" />
+            <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-desert-400/20 hidden lg:block" />
 
             <div className="space-y-8 lg:space-y-0">
               {processSteps.map((step, index) => {
@@ -168,8 +168,8 @@ export default async function ProcessPage() {
                   >
                     {/* Timeline dot */}
                     <div className="absolute left-1/2 top-8 hidden lg:block -translate-x-1/2">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-cyan-300 bg-slate-950">
-                        <span className="text-xs font-bold text-cyan-300">{step.phase}</span>
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-desert-400 bg-charcoal-800">
+                        <span className="text-xs font-bold text-desert-400">{step.phase}</span>
                       </div>
                     </div>
 
@@ -182,11 +182,11 @@ export default async function ProcessPage() {
                       <div className={`flex items-start gap-4 lg:block ${
                         isEven ? 'lg:flex-row-reverse' : ''
                       }`}>
-                        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-cyan-300/20 bg-cyan-300/10">
-                          <Icon size={24} className="text-cyan-300" />
+                        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-desert-400/20 bg-desert-400/10">
+                          <Icon size={24} className="text-desert-400" />
                         </div>
                         <div className={isEven ? 'lg:text-right' : ''}>
-                          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-cyan-300">
+                          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-desert-400">
                             Tahap {step.phase}
                           </p>
                           <h3 className="mt-1 text-xl font-semibold text-white">
@@ -195,14 +195,14 @@ export default async function ProcessPage() {
                           <p className="text-xs uppercase tracking-[0.18em] text-slate-500">
                             {step.subtitle}
                           </p>
-                          <p className="mt-3 text-sm leading-relaxed text-slate-400">
+                          <p className="mt-3 text-sm leading-relaxed text-charcoal-300">
                             {step.description}
                           </p>
                           {step.duration && (
                             <p className={`mt-3 text-xs text-slate-500 ${
                               isEven ? 'lg:text-right' : ''
                             }`}>
-                              <span className="text-cyan-400">Durasi:</span> {step.duration}
+                              <span className="text-desert-400">Durasi:</span> {step.duration}
                             </p>
                           )}
                         </div>
@@ -220,14 +220,14 @@ export default async function ProcessPage() {
       </section>
 
       {/* Value Included Section */}
-      <section className="border-y border-white/10 bg-slate-950/60 py-24">
+      <section className="border-y border-white/10 bg-charcoal-800/60 py-24">
         <Container>
           <div className="mb-12 text-center">
             <p className="text-xs uppercase tracking-[0.28em] text-amber-300">Nilai Tambah</p>
             <h2 className="mt-4 text-3xl font-semibold text-white sm:text-4xl">
               Yang Termasuk dalam Setiap Proyek
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-slate-300">
+            <p className="mx-auto mt-4 max-w-2xl text-charcoal-200">
               Layanan komprehensif yang memastikan hasil akhir berkualitas tinggi dan tahan lama.
             </p>
           </div>
@@ -241,7 +241,7 @@ export default async function ProcessPage() {
                 <h3 className="mt-3 text-lg font-semibold text-white">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-sm text-slate-400">
+                <p className="mt-2 text-sm text-charcoal-300">
                   {item.description}
                 </p>
               </GlassPanel>
@@ -255,51 +255,51 @@ export default async function ProcessPage() {
         <Container>
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
             <div>
-              <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">Mengapa Memilih Kami</p>
+              <p className="text-xs uppercase tracking-[0.28em] text-desert-400">Mengapa Memilih Kami</p>
               <h2 className="mt-4 text-3xl font-semibold text-white sm:text-4xl">
                 Pendekatan yang Membedakan Kami
               </h2>
               <div className="mt-8 space-y-6">
                 <div className="flex gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-300/20 bg-cyan-300/10">
-                    <CheckCircle2 size={18} className="text-cyan-300" />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-desert-400/20 bg-desert-400/10">
+                    <CheckCircle2 size={18} className="text-desert-400" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-white">Transparansi Penuh</h4>
-                    <p className="mt-1 text-sm text-slate-400">
+                    <p className="mt-1 text-sm text-charcoal-300">
                       Quotation detail dengan breakdown lingkup kerja dan material yang jelas. Tidak ada proses tersembunyi.
                     </p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-300/20 bg-cyan-300/10">
-                    <CheckCircle2 size={18} className="text-cyan-300" />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-desert-400/20 bg-desert-400/10">
+                    <CheckCircle2 size={18} className="text-desert-400" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-white">Pendidikan Klien</h4>
-                    <p className="mt-1 text-sm text-slate-400">
+                    <p className="mt-1 text-sm text-charcoal-300">
                       Kami memandu klien langkah demi langkah agar memahami keputusan teknis dan alasan di baliknya.
                     </p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-300/20 bg-cyan-300/10">
-                    <CheckCircle2 size={18} className="text-cyan-300" />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-desert-400/20 bg-desert-400/10">
+                    <CheckCircle2 size={18} className="text-desert-400" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-white">Kualitas Berbasis Engineering</h4>
-                    <p className="mt-1 text-sm text-slate-400">
+                    <p className="mt-1 text-sm text-charcoal-300">
                       Implementasi SOP ketat berdasarkan standar SNI/ASTM dengan fokus pada durabilitas jangka panjang.
                     </p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-cyan-300/20 bg-cyan-300/10">
-                    <CheckCircle2 size={18} className="text-cyan-300" />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-desert-400/20 bg-desert-400/10">
+                    <CheckCircle2 size={18} className="text-desert-400" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-white">Engagement Fleksibel</h4>
-                    <p className="mt-1 text-sm text-slate-400">
+                    <p className="mt-1 text-sm text-charcoal-300">
                       Partial work (struktur saja, interior saja) hingga full project (0-100%). Kolaborasi adaptif sesuai kebutuhan.
                     </p>
                   </div>
@@ -311,13 +311,13 @@ export default async function ProcessPage() {
               <h3 className="text-xl font-semibold text-white">
                 Siap Memulai Proyek Anda?
               </h3>
-              <p className="mt-3 text-slate-400">
+              <p className="mt-3 text-charcoal-300">
                 Hubungi kami untuk konsultasi gratis dan diskusi tentang kebutuhan konstruksi Anda.
               </p>
               <div className="mt-6 space-y-4">
                 <Link
                   href="/contact"
-                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-cyan-300/40 bg-cyan-300/15 px-6 py-3.5 text-sm font-semibold text-cyan-100 transition hover:bg-cyan-300/25"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-desert-400/40 bg-desert-400/15 px-6 py-3.5 text-sm font-semibold text-desert-200 transition hover:bg-desert-400/25"
                 >
                   Hubungi Kami Sekarang
                 </Link>

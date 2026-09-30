@@ -133,6 +133,7 @@ export function LetterBoard({ data, signatories, canIssue }: { data: LetterBoard
       ) : (
         <Panel padded={false}>
           <TableWrap>
+            <table className="w-full min-w-[700px] text-sm">
             <thead>
               <tr>
                 <Th>Nomor</Th>
@@ -242,6 +243,7 @@ export function LetterBoard({ data, signatories, canIssue }: { data: LetterBoard
                 </Tr>
               ))}
             </tbody>
+            </table>
           </TableWrap>
         </Panel>
       )}

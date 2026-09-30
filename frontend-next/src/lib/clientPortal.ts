@@ -104,17 +104,42 @@ export interface Notification { id: string; type: string; title: string; message
 export interface ApiError { ok: false; status: number; message: string; errors?: Record<string, string[]>; }
 
 // Token helpers
+interface TokenData {
+  token: string;
+  expiresAt: number; // Unix timestamp
+}
+
 export function getAccessToken(): string | null {
   if (typeof window === "undefined") return null;
   return localStorage.getItem("client_access");
 }
 
-export function isAuthenticated(): boolean {
-  return !!getAccessToken();
+export function getAccessTokenData(): TokenData | null {
+  if (typeof window === "undefined") return null;
+  const token = localStorage.getItem("client_access");
+  const expiresAt = localStorage.getItem("client_access_expires");
+  if (!token) return null;
+  return { token, expiresAt: expiresAt ? parseInt(expiresAt) : 0 };
 }
 
-export function setAccessToken(token: string) {
+export function isAuthenticated(): boolean {
+  const data = getAccessTokenData();
+  if (!data) return false;
+  // Check if token is not expired (with 60s buffer)
+  return data.expiresAt > Date.now() / 1000 - 60;
+}
+
+export function setAccessToken(token: string, expiresIn = 3600) {
   if (typeof window !== "undefined") {
+    // Decode JWT to get expiry (simple base64 decode)
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const expiresAt = payload.exp || (Date.now() / 1000 + expiresIn);
+      localStorage.setItem("client_access_expires", String(expiresAt));
+    } catch {
+      // Fallback: set expires to now + default
+      localStorage.setItem("client_access_expires", String(Date.now() / 1000 + expiresIn));
+    }
     localStorage.setItem("client_access", token);
   }
 }
@@ -122,6 +147,28 @@ export function setAccessToken(token: string) {
 export function clearAccessToken() {
   if (typeof window !== "undefined") {
     localStorage.removeItem("client_access");
+    localStorage.removeItem("client_access_expires");
+    localStorage.removeItem("client_remember_email");
+  }
+}
+
+// Token refresh
+async function refreshAccessToken(): Promise<boolean> {
+  try {
+    const res = await fetch(`${API_BASE}/client/refresh`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!res.ok) return false;
+    const data = await res.json();
+    if (data.success && data.data?.accessToken) {
+      setAccessToken(data.data.accessToken);
+      return true;
+    }
+    return false;
+  } catch {
+    return false;
   }
 }
 
@@ -137,7 +184,7 @@ async function fetchJson<T>(url: string, options: RequestInit = {}): Promise<T> 
   return data;
 }
 
-async function authFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
+async function authFetch<T>(path: string, options: RequestInit = {}, retryOn401 = true): Promise<T> {
   const token = getAccessToken();
   const res = await fetch(`${API_BASE}${path}`, {
     ...options,
@@ -149,6 +196,22 @@ async function authFetch<T>(path: string, options: RequestInit = {}): Promise<T>
     },
     credentials: "include",
   } as RequestInit);
+
+  // Handle 401 - try token refresh once
+  if (res.status === 401 && retryOn401) {
+    const refreshed = await refreshAccessToken();
+    if (refreshed) {
+      // Retry the request with new token
+      return authFetch<T>(path, options, false);
+    }
+    // Refresh failed - clear token and redirect to login
+    clearAccessToken();
+    if (typeof window !== "undefined") {
+      window.location.href = "/client/login";
+    }
+    throw { ok: false, status: 401, message: "Sesi berakhir. Silakan login kembali." };
+  }
+
   const data = await res.json();
   if (!res.ok) throw { ok: false, status: res.status, message: data.message || "Request failed" };
   return data;
@@ -188,6 +251,27 @@ export async function logout(): Promise<void> {
   clearAccessToken();
 }
 
+// Password Reset
+export async function requestPasswordReset(email: string): Promise<{ success: boolean; message: string }> {
+  try {
+    const res = await fetchJson<{ success: boolean; message: string }>(`${API_BASE}/client/password/reset/request`, {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+    return res;
+  } catch (e: any) { return { success: false, message: e.message || "Request failed" }; }
+}
+
+export async function confirmPasswordReset(token: string, password: string): Promise<{ success: boolean; message: string }> {
+  try {
+    const res = await fetchJson<{ success: boolean; message: string }>(`${API_BASE}/client/password/reset/confirm`, {
+      method: "POST",
+      body: JSON.stringify({ token, password }),
+    });
+    return res;
+  } catch (e: any) { return { success: false, message: e.message || "Request failed" }; }
+}
+
 // Profile
 export async function getMe(): Promise<Client | null> {
   try { const res = await authFetch<{ success: boolean; data: Client }>("/client/me"); return res.success ? res.data : null; } catch { return null; }
@@ -219,6 +303,26 @@ export async function getDailyReports(id: string, options?: { limit?: number; of
     const res = await authFetch<{ success: boolean; data: { reports: DailyReport[]; total: number } }>(`/client/projects/${id}/daily-reports?${params}`);
     return res.success ? res.data : { reports: [], total: 0 };
   } catch { return { reports: [], total: 0 }; }
+}
+
+// S-Curve Section Data (per-section breakdown)
+export async function getSCurveSections(rabId: string): Promise<{
+  project?: { id: string; number: string; title: string };
+  sections?: Array<{
+    sectionId: string;
+    sectionName: string;
+    color: string;
+    totalWeight: number;
+    currentProgress: number;
+    plannedCurve: Array<{ date: string; cumulativePlanned: number }>;
+    actualCurve: Array<{ date: string; cumulativeActual: number }>;
+  }>;
+  combined?: Array<{ date: string; planned: number; actual: number }>;
+} | null> {
+  try {
+    const res = await authFetch<{ success: boolean; data: any }>(`/client/projects/${rabId}/s-curve/sections`);
+    return res.success ? res.data : null;
+  } catch { return null; }
 }
 
 // QC
@@ -374,6 +478,46 @@ export interface SecuritySettings {
 // ============================================================================
 // Enhanced API Functions
 // ============================================================================
+
+// Get dashboard stats (all projects summary)
+export async function getDashboardStats(): Promise<{
+  stats: {
+    totalProjects: number;
+    activeProjects: number;
+    completedProjects: number;
+    avgProgress: number;
+    totalBudget: number;
+  };
+  trends: Record<string, { direction: string; percentage: number }>;
+  projectStats: Array<{
+    id: string;
+    title: string;
+    number: string;
+    status: string;
+    progress: number;
+    totalBudget: number;
+    completedBillings: number;
+    totalBillings: number;
+  }>;
+  completionData: { completed: number; inProgress: number; notStarted: number };
+  monthlyProgress: Array<{ month: string; planned: number; actual: number }>;
+}> {
+  try {
+    const res = await authFetch<{
+      success: boolean;
+      data: {
+        stats: { totalProjects: number; activeProjects: number; completedProjects: number; avgProgress: number; totalBudget: number };
+        trends: Record<string, { direction: string; percentage: number }>;
+        projectStats: Array<{ id: string; title: string; number: string; status: string; progress: number; totalBudget: number; completedBillings: number; totalBillings: number }>;
+        completionData: { completed: number; inProgress: number; notStarted: number };
+        monthlyProgress: Array<{ month: string; planned: number; actual: number }>;
+      };
+    }>("/client/stats");
+    return res.success ? res.data : getMockDashboardStats();
+  } catch {
+    return getMockDashboardStats();
+  }
+}
 
 // Get recent documents across all projects
 export async function getRecentDocuments(limit = 5): Promise<RecentDocument[]> {
@@ -593,5 +737,38 @@ function getDefaultNotificationPreferences(): NotificationPreference[] {
   ];
 }
 
+// Mock dashboard stats
+function getMockDashboardStats() {
+  return {
+    stats: {
+      totalProjects: 3,
+      activeProjects: 2,
+      completedProjects: 1,
+      avgProgress: 65,
+      totalBudget: 1500000000,
+    },
+    trends: {
+      projects: { direction: "up", percentage: 12 },
+      active: { direction: "up", percentage: 8 },
+      completed: { direction: "up", percentage: 20 },
+      budget: { direction: "up", percentage: 5 },
+    },
+    projectStats: [
+      { id: "p1", title: "Rukan会所", number: "RAB-001", status: "IN_PROGRESS", progress: 75, totalBudget: 500000000, completedBillings: 2, totalBillings: 5 },
+      { id: "p2", title: "Villa Mewah", number: "RAB-002", status: "IN_PROGRESS", progress: 45, totalBudget: 750000000, completedBillings: 1, totalBillings: 4 },
+      { id: "p3", title: "Apartemen Hills", number: "RAB-003", status: "COMPLETED", progress: 100, totalBudget: 250000000, completedBillings: 3, totalBillings: 3 },
+    ],
+    completionData: { completed: 1, inProgress: 2, notStarted: 0 },
+    monthlyProgress: [
+      { month: "Jan", planned: 20, actual: 18 },
+      { month: "Feb", planned: 35, actual: 32 },
+      { month: "Mar", planned: 50, actual: 48 },
+      { month: "Apr", planned: 65, actual: 58 },
+      { month: "Mei", planned: 80, actual: 72 },
+      { month: "Jun", planned: 95, actual: 85 },
+    ],
+  };
+}
+
 // Export default preferences
-export { getDefaultNotificationPreferences, getMockRecentDocuments, getMockTeamData, getMockMilestones, getMockSCurveData, getMockPhotos };
+export { getDefaultNotificationPreferences, getMockRecentDocuments, getMockTeamData, getMockMilestones, getMockSCurveData, getMockPhotos, getMockDashboardStats };

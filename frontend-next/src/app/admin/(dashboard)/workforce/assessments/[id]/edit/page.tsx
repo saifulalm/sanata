@@ -34,7 +34,7 @@ export default async function EditAssessmentPage({ params }: Props) {
         <div className="flex items-center gap-4">
           <Link
             href="/admin/workforce/assessments"
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
           >
             <ArrowLeft size={20} />
           </Link>
@@ -55,7 +55,7 @@ export default async function EditAssessmentPage({ params }: Props) {
             <select
               name="workerId"
               defaultValue={assessment.workerId}
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
             >
               <option value="">Pilih Worker</option>
               {workers.map((w) => (
@@ -72,7 +72,7 @@ export default async function EditAssessmentPage({ params }: Props) {
               type="date"
               name="assessmentDate"
               defaultValue={assessment.assessmentDate.split("T")[0]}
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
             />
           </div>
 
@@ -84,7 +84,7 @@ export default async function EditAssessmentPage({ params }: Props) {
               min="0"
               max="100"
               defaultValue={assessment.technicalScore ?? ""}
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
             />
           </div>
 
@@ -96,7 +96,7 @@ export default async function EditAssessmentPage({ params }: Props) {
               min="0"
               max="100"
               defaultValue={assessment.interviewScore ?? ""}
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
             />
           </div>
 
@@ -108,7 +108,7 @@ export default async function EditAssessmentPage({ params }: Props) {
               min="0"
               max="100"
               defaultValue={assessment.teamworkScore ?? ""}
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
             />
           </div>
 
@@ -120,7 +120,7 @@ export default async function EditAssessmentPage({ params }: Props) {
               min="0"
               max="100"
               defaultValue={assessment.safetyScore ?? ""}
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
             />
           </div>
 
@@ -130,7 +130,7 @@ export default async function EditAssessmentPage({ params }: Props) {
               type="text"
               name="interviewer"
               defaultValue={assessment.interviewer ?? ""}
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
             />
           </div>
 
@@ -140,7 +140,7 @@ export default async function EditAssessmentPage({ params }: Props) {
               type="text"
               name="recommendation"
               defaultValue={assessment.recommendation ?? ""}
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
             />
           </div>
         </div>
@@ -151,7 +151,7 @@ export default async function EditAssessmentPage({ params }: Props) {
             name="notes"
             rows={3}
             defaultValue={assessment.notes ?? ""}
-            className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none resize-none"
+            className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none resize-none"
           />
         </div>
 

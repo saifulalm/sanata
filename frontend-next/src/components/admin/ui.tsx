@@ -18,10 +18,10 @@ export const PANEL_SURFACE =
   "rounded-2xl border border-white/10 bg-white/[0.035] backdrop-blur-xl shadow-[0_18px_50px_rgba(2,6,23,0.28)]";
 
 export const inputClass =
-  "w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 transition focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10";
+  "w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 transition focus:border-desert-400/40 focus:outline-none focus:ring-2 focus:ring-desert-400/10";
 
 export const selectClass =
-  "w-full rounded-xl border border-white/10 bg-[#0a1626] px-3.5 py-2.5 text-sm text-white transition focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10";
+  "w-full rounded-xl border border-white/10 bg-[#0a1626] px-3.5 py-2.5 text-sm text-white transition focus:border-desert-400/40 focus:outline-none focus:ring-2 focus:ring-desert-400/10";
 
 export const textareaClass = `${inputClass} min-h-[96px] leading-relaxed`;
 
@@ -30,7 +30,7 @@ type ButtonSize = "sm" | "md";
 
 const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
   primary:
-    "border-cyan-300/30 bg-cyan-300/12 text-cyan-100 hover:bg-cyan-300/20 hover:border-cyan-300/45",
+    "border-desert-400/30 bg-desert-400/12 text-desert-200 hover:bg-desert-400/20 hover:border-desert-400/45",
   secondary: "border-white/12 bg-white/[0.05] text-slate-100 hover:bg-white/[0.09]",
   ghost: "border-transparent bg-transparent text-slate-400 hover:bg-white/[0.05] hover:text-white",
   danger: "border-red-400/25 bg-red-500/10 text-red-200 hover:bg-red-500/18",
@@ -53,7 +53,7 @@ const BADGE_TONES: Record<BadgeTone, string> = {
   success: "border-emerald-400/25 bg-emerald-500/12 text-emerald-200",
   warning: "border-amber-400/25 bg-amber-500/12 text-amber-200",
   danger: "border-red-400/25 bg-red-500/12 text-red-200",
-  info: "border-cyan-300/25 bg-cyan-300/12 text-cyan-100",
+  info: "border-desert-400/25 bg-desert-400/12 text-desert-200",
 };
 
 export function Badge({
@@ -89,7 +89,7 @@ export function PageHeader({
     <div className="flex flex-wrap items-end justify-between gap-4">
       <div className="min-w-0">
         {eyebrow && (
-          <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.24em] text-cyan-200/70">
+          <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.24em] text-desert-200/70">
             {eyebrow}
           </p>
         )}
@@ -172,11 +172,15 @@ export function EmptyState({
   );
 }
 
-/** Tabel selalu bisa digulir sendiri agar halaman tidak ikut melebar. */
+/**
+ * Wrapper for tables that provides horizontal scroll.
+ * Uses a div wrapper to allow horizontal scrolling on small screens.
+ * Children should include the full table element.
+ */
 export function TableWrap({ children }: { children: ReactNode }) {
   return (
-    <div className="group relative overflow-x-auto">
-      <table className="w-full min-w-[640px] text-sm">{children}</table>
+    <div className="group relative overflow-x-auto rounded-xl border border-white/10">
+      {children}
       <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-slate-900/70 to-transparent opacity-0 transition-opacity group-hover:opacity-100 sm:hidden" />
     </div>
   );

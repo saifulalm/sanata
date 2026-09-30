@@ -37,7 +37,7 @@ export default async function AssessmentDetailPage({ params }: Props) {
       <div className="flex items-center gap-4">
         <Link
           href="/admin/workforce/assessments"
-          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400"
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
         >
           <ArrowLeft size={20} />
         </Link>
@@ -50,7 +50,7 @@ export default async function AssessmentDetailPage({ params }: Props) {
 
       <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
         <div className="flex items-center gap-4 mb-6">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-desert-400/10 text-desert-400">
             <ClipboardCheck size={24} />
           </div>
           <div className="flex-1">

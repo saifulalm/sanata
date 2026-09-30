@@ -43,7 +43,7 @@ export function StatusActions({ id, status }: { id: string; status: QuotationSta
         const variantClass = variant === "danger"
           ? "border-red-400/25 bg-red-500/10 text-red-200 hover:bg-red-500/18"
           : variant === "cyan"
-          ? "border-cyan-400/30 bg-cyan-400/10 text-cyan-300 hover:bg-cyan-400/20"
+          ? "border-desert-400/30 bg-desert-400/10 text-desert-400 hover:bg-desert-400/20"
           : "border-white/12 bg-white/[0.05] text-slate-100 hover:bg-white/[0.09]";
 
         return (

@@ -59,7 +59,7 @@ export default async function ClientsPage() {
                     <s.icon size={22} />
                   </IconTile>
                   <p className="mt-5 font-display text-lg font-semibold text-white">{s.title}</p>
-                  <p className="mt-2 text-sm leading-7 text-slate-400">{s.desc}</p>
+                  <p className="mt-2 text-sm leading-7 text-charcoal-300">{s.desc}</p>
                 </GlassPanel>
               </RevealOnScroll>
             ))}
@@ -67,14 +67,14 @@ export default async function ClientsPage() {
         </Container>
       </section>
 
-      <section className="border-y border-white/10 bg-slate-950/60 py-20">
+      <section className="border-y border-white/10 bg-charcoal-800/60 py-20">
         <Container>
           <SectionHeading eyebrow="Mitra" title="Dipercaya oleh Mitra Kami" align="center" className="mx-auto" />
           <RevealOnScroll delay={0.1} className="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-6">
             {partnerTiles.map((tile) => (
               <div
                 key={tile.key}
-                className="flex h-16 items-center justify-center rounded-[1rem] border border-dashed border-white/12 bg-white/[0.03] px-2 text-center text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400"
+                className="flex h-16 items-center justify-center rounded-[1rem] border border-dashed border-white/12 bg-white/[0.03] px-2 text-center text-[11px] font-semibold uppercase tracking-[0.16em] text-charcoal-300"
               >
                 {tile.label}
               </div>

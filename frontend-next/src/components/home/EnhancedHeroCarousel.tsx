@@ -12,7 +12,7 @@ interface EnhancedHeroCarouselProps {
   intervalMs?: number;
 }
 
-// Floating particle
+// Floating particle - SANATA Brand: Desert accent
 function Particle({
   x,
   y,
@@ -28,7 +28,7 @@ function Particle({
 }) {
   return (
     <motion.div
-      className="absolute rounded-full bg-cyan-400/30"
+      className="absolute rounded-full bg-desert-400/30"
       style={{
         left: `${x}%`,
         top: `${y}%`,
@@ -50,14 +50,14 @@ function Particle({
   );
 }
 
-// Animated building bars
+// Animated building bars - SANATA Brand: Desert accent
 function BuildingBars() {
   return (
     <div className="absolute inset-0 flex items-end justify-center gap-3 px-8">
       {[65, 95, 120, 85, 140, 100, 75, 110, 90, 130, 80, 105].map((height, index) => (
         <motion.div
           key={index}
-          className="w-6 rounded-t-lg border border-cyan-300/20 bg-gradient-to-b from-cyan-200/20 via-cyan-300/15 to-cyan-500/30"
+          className="w-6 rounded-t-lg border border-desert-400/20 bg-gradient-to-b from-desert-200/20 via-desert-300/15 to-desert-500/30"
           initial={{ height: 0 }}
           animate={{ height: `${height}px` }}
           transition={{
@@ -71,13 +71,13 @@ function BuildingBars() {
   );
 }
 
-// Animated circuit lines
+// Animated circuit lines - SANATA Brand: Desert accent
 function CircuitLines() {
   return (
     <svg className="absolute inset-0 h-full w-full opacity-20">
       <motion.path
         d="M0,50 Q100,20 200,50 T400,50 T600,50"
-        stroke="rgba(56,189,248,0.4)"
+        stroke="rgba(201,173,130,0.4)"
         strokeWidth="1"
         fill="none"
         initial={{ pathLength: 0, opacity: 0 }}
@@ -86,7 +86,7 @@ function CircuitLines() {
       />
       <motion.path
         d="M0,150 Q150,120 300,150 T600,150"
-        stroke="rgba(56,189,248,0.3)"
+        stroke="rgba(201,173,130,0.3)"
         strokeWidth="1"
         fill="none"
         initial={{ pathLength: 0, opacity: 0 }}
@@ -95,7 +95,7 @@ function CircuitLines() {
       />
       <motion.path
         d="M0,250 Q80,220 160,250 T320,250 T480,250"
-        stroke="rgba(56,189,248,0.2)"
+        stroke="rgba(201,173,130,0.2)"
         strokeWidth="1"
         fill="none"
         initial={{ pathLength: 0, opacity: 0 }}
@@ -153,7 +153,8 @@ export function EnhancedHeroCarousel({
   return (
     <div
       ref={containerRef}
-      className="relative h-[480px] overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950/80"
+      /* SANATA Brand: Desert Charcoal container */
+      className="relative h-[480px] overflow-hidden rounded-[2rem] border border-white/10 bg-[#0C1012]/80"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -182,13 +183,13 @@ export function EnhancedHeroCarousel({
           transition={{ duration: 0.5 }}
           className="absolute inset-0 flex flex-col justify-end p-6"
         >
-          {/* Label */}
+          {/* Label - SANATA Brand: Desert accent */}
           <div className="absolute left-5 top-5 flex items-center gap-2">
             <span className="flex h-2 w-2 items-center justify-center">
-              <span className="absolute h-2 w-2 animate-ping rounded-full bg-cyan-400 opacity-75" />
-              <span className="relative h-2 w-2 rounded-full bg-cyan-400" />
+              <span className="absolute h-2 w-2 animate-ping rounded-full bg-desert-400 opacity-75" />
+              <span className="relative h-2 w-2 rounded-full bg-desert-400" />
             </span>
-            <span className="rounded-full border border-cyan-300/30 bg-cyan-300/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-cyan-200 backdrop-blur-xl">
+            <span className="rounded-full border border-desert-400/30 bg-desert-400/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-desert-200 backdrop-blur-xl">
               {label}
             </span>
           </div>
@@ -197,8 +198,8 @@ export function EnhancedHeroCarousel({
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="relative h-64 w-full">
               <BuildingBars />
-              {/* Reflection */}
-              <div className="absolute -bottom-4 left-0 right-0 h-16 rounded-b-full bg-gradient-to-t from-cyan-400/10 to-transparent blur-xl" />
+              {/* Reflection - SANATA Brand: Desert accent */}
+              <div className="absolute -bottom-4 left-0 right-0 h-16 rounded-b-full bg-gradient-to-t from-desert-400/10 to-transparent blur-xl" />
             </div>
           </div>
 
@@ -207,13 +208,14 @@ export function EnhancedHeroCarousel({
             <h3 className="text-xl font-semibold uppercase tracking-[0.1em] text-white">
               {scene.title}
             </h3>
-            <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-300">
+            {/* SANATA Brand: Charcoal text */}
+            <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-charcoal-200">
               {scene.subtitle}
             </p>
             {scene.href && (
               <Link
                 href={scene.href}
-                className="mt-4 inline-flex items-center gap-2 rounded-full border border-cyan-300/40 bg-cyan-300/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-cyan-100 transition hover:bg-cyan-300/20"
+                className="mt-4 inline-flex items-center gap-2 rounded-full border border-desert-400/40 bg-desert-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-desert-200 transition hover:bg-desert-400/20"
               >
                 Explore <ArrowRight size={14} />
               </Link>
@@ -237,7 +239,7 @@ export function EnhancedHeroCarousel({
               onClick={() => setCurrent(index)}
               className={`h-2 rounded-full transition-all ${
                 index === current
-                  ? "w-6 bg-cyan-400"
+                  ? "w-6 bg-desert-400"
                   : "w-2 bg-white/30 hover:bg-white/50"
               }`}
             />
@@ -261,9 +263,9 @@ export function EnhancedHeroCarousel({
         </button>
       </div>
 
-      {/* Progress bar */}
+      {/* Progress bar - SANATA Brand: Desert accent */}
       <motion.div
-        className="absolute bottom-0 left-0 h-0.5 bg-cyan-400"
+        className="absolute bottom-0 left-0 h-0.5 bg-desert-400"
         initial={{ width: "0%" }}
         animate={{ width: "100%" }}
         key={`progress-${current}`}

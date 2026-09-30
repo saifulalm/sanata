@@ -143,7 +143,7 @@ const quickActions = [
     label: "Buat Kampanye",
     icon: <Plus size={18} />,
     href: "/admin/marketing/campaigns/new",
-    color: "text-cyan-300 bg-cyan-300/10 border-cyan-300/20",
+    color: "text-desert-400 bg-desert-400/10 border-desert-400/20",
   },
   {
     id: "2",
@@ -230,7 +230,7 @@ export default function MarketingDashboardPage() {
           <Link
             key={i}
             href={stat.href || "#"}
-            className="group rounded-2xl border border-white/10 bg-white/[0.035] p-5 backdrop-blur-xl transition hover:border-cyan-300/20 hover:bg-white/[0.05]"
+            className="group rounded-2xl border border-white/10 bg-white/[0.035] p-5 backdrop-blur-xl transition hover:border-desert-400/20 hover:bg-white/[0.05]"
           >
             <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.05] text-slate-400">
               {stat.icon}
@@ -282,7 +282,7 @@ export default function MarketingDashboardPage() {
           actions={
             <Link
               href="/admin/marketing/campaigns"
-              className="flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-200"
+              className="flex items-center gap-1 text-xs text-desert-400 hover:text-desert-200"
             >
               Lihat Semua <ArrowRight size={12} />
             </Link>
@@ -323,7 +323,7 @@ export default function MarketingDashboardPage() {
                     <Td>
                       <Link
                         href={`/admin/marketing/campaigns/${campaign.id}`}
-                        className="font-medium text-cyan-200 hover:text-cyan-100"
+                        className="font-medium text-desert-200 hover:text-desert-200"
                       >
                         {campaign.name}
                       </Link>
@@ -380,11 +380,11 @@ export default function MarketingDashboardPage() {
                   <div>
                     <div className="mb-1 flex justify-between text-xs">
                       <span className="text-slate-500">Tingkat Buka</span>
-                      <span className="text-cyan-300">{channel.openRate}%</span>
+                      <span className="text-desert-400">{channel.openRate}%</span>
                     </div>
                     <div className="h-2 rounded-full bg-white/5">
                       <div
-                        className="h-2 rounded-full bg-gradient-to-r from-cyan-400 to-cyan-300"
+                        className="h-2 rounded-full bg-gradient-to-r from-desert-400 to-desert-400"
                         style={{ width: `${channel.openRate}%` }}
                       />
                     </div>
@@ -401,7 +401,7 @@ export default function MarketingDashboardPage() {
           </div>
           <Link
             href="/admin/marketing/analytics"
-            className="mt-4 flex items-center justify-center gap-2 rounded-xl border border-dashed border-white/12 p-3 text-sm text-slate-400 hover:border-cyan-300/30 hover:text-cyan-300"
+            className="mt-4 flex items-center justify-center gap-2 rounded-xl border border-dashed border-white/12 p-3 text-sm text-slate-400 hover:border-desert-400/30 hover:text-desert-400"
           >
             <PieChart size={16} />
             Lihat Analisis Lengkap
@@ -417,7 +417,7 @@ export default function MarketingDashboardPage() {
               <div key={i} className="flex flex-1 flex-col items-center gap-2">
                 <div className="flex w-full items-end justify-center gap-1" style={{ height: "180px" }}>
                   <div
-                    className="w-6 rounded-t-md bg-cyan-400/60 transition-all hover:bg-cyan-400"
+                    className="w-6 rounded-t-md bg-desert-400/60 transition-all hover:bg-desert-400"
                     style={{ height: `${(day.sent / 220) * 100}%` }}
                     title={`Terkirim: ${day.sent}`}
                   />
@@ -439,7 +439,7 @@ export default function MarketingDashboardPage() {
         </div>
         <div className="mt-4 flex items-center justify-center gap-6">
           <div className="flex items-center gap-2">
-            <div className="h-3 w-3 rounded bg-cyan-400/60" />
+            <div className="h-3 w-3 rounded bg-desert-400/60" />
             <span className="text-xs text-slate-400">Terkirim</span>
           </div>
           <div className="flex items-center gap-2">

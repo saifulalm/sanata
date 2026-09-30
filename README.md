@@ -16,12 +16,21 @@ sanata/
 ```
 
 `frontend-next/src/app/(public)/*` is the public marketing site (Header/Footer chrome).
+Homepage (`/`) currently redirects to the Under Construction page. All other public routes
+(`/about`, `/services`, `/projects`, `/contact`, etc.) remain fully accessible with normal
+Header/Footer/WhatsApp chrome. See **Maintenance Mode** section below for how to revert.
+
+`frontend-next/src/app/under-construction/page.tsx` is a standalone full-page design
+(Charcoal `#20282C` + Desert `#C9AD82`, blueprint grid background, animated crane SVG,
+contact cards with real CMS data, WhatsApp CTA). It is NOT wrapped by the public layout's
+EnhancedHeader + EnhancedFooter — those are conditionally skipped via URL detection in
+`src/app/(public)/layout.tsx`.
 
 `frontend-next/src/app/admin/*` is the admin panel: `admin/login` is unauthenticated,
-everything under `admin/(dashboard)/*` is protected by `src/proxy.ts` (session-cookie gate
-with automatic token refresh) and a matching `requireAdminRole()`/`getAdminSession()` check
-inside every Server Component and Server Action — defense in depth, since proxy alone doesn't
-guarantee coverage for Server Function calls.
+everything under `admin/(dashboard)/*` is protected by Next.js middleware
+(`middleware.ts`) which validates the `admin_access` httpOnly cookie (JWT).
+A matching `requireAdminRole()`/`getAdminSession()` check inside every Server Component
+and Server Action provides defense-in-depth — auth does not depend on middleware alone.
 
 `frontend-next/src/app/client/*` is the **Client Portal** — a separate authenticated area
 for construction project clients to monitor their projects. Routes under `/client/login` and
@@ -29,6 +38,9 @@ for construction project clients to monitor their projects. Routes under `/clien
 `layout.tsx` which checks for a valid token in localStorage before rendering.
 
 ## Stack
+
+> **Maintenance Mode**: The public homepage (`/`) is currently showing the Under Construction page.
+> See the **Maintenance Mode** section at the bottom of this README for details and how to revert.
 
 - **Backend**: Node.js, Express, TypeScript, Prisma ORM, PostgreSQL, JWT (access + refresh) auth, Zod validation, Multer uploads, Nodemailer, Winston logging, Helmet/CORS/rate-limiting.
 - **Frontend** (`frontend-next`): Next.js 16 (App Router, Turbopack), React 19.2, TypeScript, Tailwind CSS v4, Framer Motion, Recharts, TipTap, Lucide icons.
@@ -1310,3 +1322,214 @@ equivalent built-in tools were used instead throughout.
 ```bash
 node startDatabase.js setup
 ```
+
+---
+
+## Maintenance Mode
+
+Website saat ini menampilkan halaman **Under Construction** sebagai route utama (`/`). Semua route
+public lain (`/about`, `/services`, `/projects`, `/contact`, dll.) tetap accessible normal.
+
+### Route Structure
+
+```
+HOME /                    → Redirect ke /under-construction (halaman Under Construction)
+HOME /under-construction → Halaman Under Construction (standalone, tanpa Header/Footer)
+
+PUBLIC LAINNYA          → FuturisticHomePage + EnhancedHeader + EnhancedFooter + WhatsAppFloat
+  /about, /clients, /contact, /faq, /gallery, /journal,
+  /journal/[slug], /privacy, /process, /projects, /projects/[slug],
+  /services, /services/[slug], /terms, /testimonials
+
+ADMIN                   → Protected by middleware (needs auth cookie)
+  /admin/login           → Login (public)
+  /admin                → Dashboard (needs auth)
+  /admin/products, /admin/contents, /admin/site-content, /admin/media,
+  /admin/rab, /admin/workforce, /admin/daily-reports, /admin/ahsp,
+  /admin/inquiries, /admin/broadcasts, /admin/categories, /admin/price-items,
+  /admin/quotations, /admin/roles, /admin/users, /admin/security,
+  /admin/settings, /admin/signatories, /admin/submissions, /admin/audit-log,
+  /admin/scraper
+
+CLIENT PORTAL            → Auth handled client-side (localStorage)
+  /client/login, /client/register
+  /client, /client/projects, /client/project/[id],
+  /client/notifications, /client/settings
+```
+
+### Menonaktifkan Maintenance Mode
+
+Kembalikan `src/app/(public)/page.tsx` ke versi aslinya (FuturisticHomePage):
+
+```bash
+git checkout HEAD~1 -- frontend-next/src/app/\(public\)/page.tsx
+```
+
+Atau edit manual:
+
+```tsx
+// src/app/(public)/page.tsx
+import { FuturisticHomePage } from "@/components/home/FuturisticHomePage";
+import { getFeaturedProjects, getLatestArticles } from "@/lib/api";
+import { getSeoConfig, organizationJsonLd, localBusinessJsonLd } from "@/lib/seo";
+import { getSiteContent, setting } from "@/lib/siteContent";
+
+export default async function HomePage() {
+  const [projects, articles, content, seo] = await Promise.all([
+    getFeaturedProjects().catch(() => []),
+    getLatestArticles().catch(() => []),
+    getSiteContent(),
+    getSeoConfig(),
+  ]);
+
+  const jsonLd = organizationJsonLd({ phone: setting(content,"contact.phone"), email: setting(content,"contact.email"), address: setting(content,"contact.address"), whatsapp: setting(content,"contact.whatsapp") }, seo);
+  const localBusinessJson = localBusinessJsonLd(seo, { phone: setting(content,"contact.phone"), email: setting(content,"contact.email"), address: setting(content,"contact.address"), whatsapp: setting(content,"contact.whatsapp") });
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJson) }} />
+      <FuturisticHomePage projects={projects} articles={articles} content={content} />
+    </>
+  );
+}
+```
+
+### Toggle via Environment Flag (Opsional)
+
+Untuk kontrol via environment variable, set di `frontend-next/.env.local`:
+
+```env
+NEXT_PUBLIC_MAINTENANCE_MODE=true
+```
+
+Ini mengaktifkan maintenance mode tanpa perlu ubah kode. Nilai `false` atau dihapus = mode normal.
+
+---
+
+## Database Schema
+
+Database PostgreSQL berisi **55 tabel** yang dikelompokkan ke dalam domain berikut:
+
+### Core Auth & Users
+| Table | Description |
+|-------|-------------|
+| `User` | Akun admin/editor/user dengan role (ADMIN/EDITOR/USER), TOTP 2FA |
+| `RefreshToken` | JWT refresh token dengan expiry dan revoke |
+| `WorkforceRole` | Master daftar jabatan proyek (tukang batu, tukang kayu, dll.) |
+| `Signatory` | Penanda tangan resmi untuk surat penawaran dan surat proyek |
+
+### CMS / Site Content
+| Table | Description |
+|-------|-------------|
+| `SiteSetting` | Key-value settings (contact, SEO, WhatsApp, dll.) |
+| `SiteCollectionItem` | Items dari koleksi berulang (services, testimonials, FAQ, dll.) |
+
+### Public Content
+| Table | Description |
+|-------|-------------|
+| `Category` | Kategori konten dan produk |
+| `Content` | Artikel/jurnal dengan SEO fields, meta, canonical URL |
+| `Product` | Layanan dan portofolio proyek |
+| `Media` | Berkas yang diunggah via media library |
+| `Inquiry` | Pesan masuk dari form kontak |
+| `AuditLog` | Riwayat perubahan setiap entitas |
+
+### Estimasi Biaya Konstruksi (Harga Satuan → AHSP → RAB)
+| Table | Description |
+|-------|-------------|
+| `PriceItem` | Harga Satuan Dasar (upah, bahan, alat) |
+| `Ahsp` | Analisa Harga Satuan Pekerjaan (koefisien per item) |
+| `AhspComponent` | Komponen koefisien per AHSP |
+| `Rab` | Rencana Anggaran Biaya dengan breakdown PPN/diskon |
+| `RabSection` | Kelompok pekerjaan dalam RAB |
+| `RabItem` | Baris item dalam RAB (bisa dari AHSP) |
+| `RabHoliday` | Hari libur khusus proyek |
+| `RabScheduleBaseline` | Baseline jadwal untuk replan comparison |
+| `RabProgress` | Realisasi opname per item per tanggal (kumulatif) |
+| `RabProgressPhoto` | Foto bukti opname |
+
+### Tagihan & Penawaran
+| Table | Description |
+|-------|-------------|
+| `Quotation` | Surat Penawaran Harga (nilai dibekukan saat buat) |
+| `ProgressBilling` | Termin tagihan berbasis progres (nilai dibekukan saat terbit) |
+| `DocumentCounter` | Pencatat nomor urut dokumen (SPK, INV, KW, dll.) |
+
+### Dokumen Proyek
+| Table | Description |
+|-------|-------------|
+| `ProjectSubmission` | Pengajuan (alat, bahan, waktu) dengan alur persetujuan |
+| `ProjectSubmissionItem` | Rincian item pengajuan |
+| `LogbookEntry` | Buku kejadian lapangan (kategori: instruction, client visit, dll.) |
+| `SiteMemo` | Surat masuk/keluar dengan thread reply |
+| `ProjectLetter` | Dokumen resmi: SPK, Invoice, Kwitansi, BAPP, BAST |
+
+### Laporan Harian
+| Table | Description |
+|-------|-------------|
+| `DailyReport` | Laporan harian lapangan (cuaca, tenaga kerja, kegiatan) |
+| `DailyReportWorkforce` | Entri tenaga kerja per laporan harian |
+| `DailyReportPhoto` | Foto laporan harian dengan caption dan lokasi |
+
+### SANTRA — Workforce, QC & Logistics
+| Table | Description |
+|-------|-------------|
+| `Worker` | Database tenaga kerja dengan skill matrix |
+| `WorkerAssessment` | Penilaian skill dan kompetensi tenaga kerja |
+| `JobAssignment` | Penugasan berbasis WBS dengan method statement |
+| `ExecutionLog` | Dokumentasi harian pekerjaan dengan foto dan GPS |
+| `ExecutionPhoto` | Foto dokumentasi execution log |
+| `QcRecord` | QC inspection dengan WBS stage, method statement, hold point |
+| `QcPhoto` | Foto QC inspection |
+| `QcApprovalLog` | Log persetujuan multi-level QC |
+| `LessonLearned` | Lesson learned dari QC untuk perbaikan berkelanjutan |
+| `MethodStatement` | Template method statement dengan acceptance criteria |
+| `QcTemplate` | Template checklist QC per stage WBS |
+| `KpiRecord` | KPI per tenaga kerja per periode |
+| `MasterTool` | Database alat dengan maintenance tracking |
+| `ToolPhoto` | Foto alat |
+| `ToolMaintenance` | Log maintenance alat |
+| `ToolLoan` | Tracking peminjaman alat |
+| `ToolActivity` | Log aktivitas alat (history lengkap) |
+| `SantraCounter` | Pencatat nomor urut untuk semua kode SANTRA |
+
+### Broadcast & Multi-Channel
+| Table | Description |
+|-------|-------------|
+| `BroadcastContact` | Database kontak broadcast dengan consent |
+| `BroadcastChannelConnection` | Akun pengirim per channel (Email, Telegram, WhatsApp, dll.) |
+| `BroadcastCampaign` | Campaign broadcast dengan audience filter |
+| `BroadcastDelivery` | Status pengiriman per recipient |
+
+### Client Portal
+| Table | Description |
+|-------|-------------|
+| `Client` | Akun klien untuk monitoring proyek |
+| `ClientRefreshToken` | Refresh token client portal |
+| `ClientPasswordResetToken` | Token reset password client |
+| `ClientProjectAccess` | Akses proyek per klien (VIEW/COMMENT/APPROVE) |
+| `ClientNotification` | Notifikasi untuk klien |
+
+### Marketing System
+| Table | Description |
+|-------|-------------|
+| `MarketingContact` | Database kontak marketing dengan lead scoring |
+| `MarketingTemplate` | Template pesan untuk campaign |
+| `MarketingCampaign` | Campaign marketing multi-channel |
+| `CampaignRecipient` | Tracking recipient per campaign |
+| `BroadcastList` | Grup kontak untuk broadcast |
+| `Offer` | Promosi dan penawaran dengan kode diskon |
+
+### Key Design Decisions (Database)
+
+| Decision | Rationale |
+|----------|-----------|
+| Decimal precision | Semua uang dihitung dengan `Prisma.Decimal`; frontend menerima string untuk menjaga presisi |
+| Nilai dibekukan saat terbit | Penawaran, termin, dan invoice menyimpan snapshot — edit sumber tidak mengubah angka yang sudah keluar |
+| Hari kerja vs kalender | Jadwal memakai working days; holiday list per-proyek karena libur berbeda tiap kota |
+| Kumulatif, bukan incremental | Opname dan laporan harian menyimpan nilai kumulatif — sesuai cara pengawas melapor |
+| WBS 18 stage | 18 tahap QC dari Santara Digital QC Flow PDF |
+| Satu tabel surat proyek | SPK/Invoice/Kwitansi/BAPP/BAST berbagi kolom identik; perbedaannya di field `type` dan `body` JSON |
+| Shared `SiteCollectionItem` | Satu tabel untuk semua koleksi berulang — koleksi baru = entry registry, bukan tabel baru |
+| Counter per (series, year) | Nomor dokumen tidak bergantung pada timestamp — race condition aman di level DB |

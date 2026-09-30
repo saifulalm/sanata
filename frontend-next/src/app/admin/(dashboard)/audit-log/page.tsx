@@ -66,7 +66,7 @@ export default async function AdminAuditLogPage({
             className={clsx(
               "inline-flex items-center rounded-xl border px-3 py-1.5 text-xs font-medium transition-all",
               !params.entity
-                ? "border-cyan-400/30 bg-cyan-400/10 text-cyan-300"
+                ? "border-desert-400/30 bg-desert-400/10 text-desert-400"
                 : "border-white/10 bg-white/[0.04] text-slate-400 hover:border-white/18 hover:bg-white/[0.07]"
             )}
           >
@@ -79,7 +79,7 @@ export default async function AdminAuditLogPage({
               className={clsx(
                 "inline-flex items-center rounded-xl border px-3 py-1.5 text-xs font-medium transition-all",
                 params.entity === e
-                  ? "border-cyan-400/30 bg-cyan-400/10 text-cyan-300"
+                  ? "border-desert-400/30 bg-desert-400/10 text-desert-400"
                   : "border-white/10 bg-white/[0.04] text-slate-400 hover:border-white/18 hover:bg-white/[0.07]"
               )}
             >
@@ -98,6 +98,7 @@ export default async function AdminAuditLogPage({
           />
         ) : (
           <TableWrap>
+            <table className="w-full min-w-[700px] text-sm">
             <thead>
               <tr>
                 <Th>Aksi</Th>
@@ -127,6 +128,7 @@ export default async function AdminAuditLogPage({
                 );
               })}
             </tbody>
+            </table>
           </TableWrap>
         )}
       </Panel>

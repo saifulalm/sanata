@@ -17,7 +17,7 @@ const WORK_HOURS = [
 ];
 
 const fieldClass =
-  "w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:border-cyan-400/50 focus:bg-white/[0.06] focus:outline-none focus:ring-2 focus:ring-cyan-400/20 transition-all";
+  "w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:border-desert-400/50 focus:bg-white/[0.06] focus:outline-none focus:ring-2 focus:ring-desert-400/20 transition-all";
 const labelClass = "mb-1.5 block text-xs font-medium text-slate-400";
 
 interface WorkforceRow {
@@ -168,7 +168,7 @@ export function DailyReportForm({
       {/* ── Panel Header ─────────────────────────── */}
       <div className="flex items-center justify-between border-b border-white/[0.07] px-5 py-4">
         <div className="flex items-center gap-3">
-          <div className={`flex h-8 w-8 items-center justify-center rounded-xl ${isEdit ? "bg-amber-500/10 text-amber-400" : "bg-cyan-500/10 text-cyan-400"}`}>
+          <div className={`flex h-8 w-8 items-center justify-center rounded-xl ${isEdit ? "bg-amber-500/10 text-amber-400" : "bg-desert-400/10 text-desert-400"}`}>
             <CloudRain size={15} />
           </div>
           <div>
@@ -236,7 +236,7 @@ export function DailyReportForm({
         {/* ── Hourly Weather Log ─────────────────────────── */}
         <div>
           <div className="mb-3 flex items-center gap-2">
-            <Clock size={14} className="text-cyan-400" />
+            <Clock size={14} className="text-desert-400" />
             <span className="text-xs font-medium text-slate-400">Log Cuaca Per Jam (08:00 - 03:00)</span>
           </div>
           <div className="rounded-xl border border-white/10 bg-white/[0.02] p-3">
@@ -250,7 +250,7 @@ export function DailyReportForm({
                     <select
                       value={selectedWeather}
                       onChange={(e) => updateWeatherLog(hour, (e.target.value || null) as Weather | null)}
-                      className="w-full rounded-lg border border-white/10 bg-white/[0.04] px-1.5 py-1 text-[10px] text-slate-300 focus:border-cyan-400/50 focus:outline-none"
+                      className="w-full rounded-lg border border-white/10 bg-white/[0.04] px-1.5 py-1 text-[10px] text-slate-300 focus:border-desert-400/50 focus:outline-none"
                     >
                       <option value="">—</option>
                       {WEATHERS.map((w) => (
@@ -278,7 +278,7 @@ export function DailyReportForm({
             <button
               type="button"
               onClick={() => setWorkforce((c) => [...c, { role: "", count: "1" }])}
-              className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs font-medium text-slate-400 transition-all hover:border-cyan-400/30 hover:bg-cyan-400/10 hover:text-cyan-300"
+              className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs font-medium text-slate-400 transition-all hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
             >
               <UserPlus size={12} /> Tambah Baris
             </button>
@@ -339,13 +339,13 @@ export function DailyReportForm({
         <div>
           <div className="mb-2 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Building2 size={14} className="text-cyan-400" />
+              <Building2 size={14} className="text-desert-400" />
               <span className="text-xs font-medium text-slate-400">Aktivitas Pekerjaan per Bangunan</span>
             </div>
             <button
               type="button"
               onClick={() => setWorkActivities((c) => [...c, { building: "", activities: [""] }])}
-              className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs font-medium text-slate-400 transition-all hover:border-cyan-400/30 hover:bg-cyan-400/10 hover:text-cyan-300"
+              className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs font-medium text-slate-400 transition-all hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
             >
               <Plus size={12} /> Tambah Bangunan
             </button>
@@ -360,7 +360,7 @@ export function DailyReportForm({
                     value={wa.building}
                     onChange={(e) => updateBuildingActivity(buildingIndex, "building", e.target.value)}
                     placeholder="Nama Bangunan (contoh: Bangunan Utama, Rumah 1)"
-                    className="flex-1 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 text-sm text-slate-200 placeholder-slate-600 focus:border-cyan-400/50 focus:outline-none"
+                    className="flex-1 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 text-sm text-slate-200 placeholder-slate-600 focus:border-desert-400/50 focus:outline-none"
                   />
                   {workActivities.length > 1 && (
                     <button
@@ -385,7 +385,7 @@ export function DailyReportForm({
                           updateBuildingActivity(buildingIndex, "activities", newActivities);
                         }}
                         placeholder={`Pekerjaan ${activityIndex + 1}`}
-                        className="flex-1 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 text-sm text-slate-200 placeholder-slate-600 focus:border-cyan-400/50 focus:outline-none"
+                        className="flex-1 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 text-sm text-slate-200 placeholder-slate-600 focus:border-desert-400/50 focus:outline-none"
                       />
                       {wa.activities.length > 1 && (
                         <button
@@ -402,7 +402,7 @@ export function DailyReportForm({
                 <button
                   type="button"
                   onClick={() => addActivityToBuilding(buildingIndex)}
-                  className="mt-2 flex items-center gap-1 rounded-lg border border-dashed border-white/10 px-2.5 py-1 text-xs text-slate-500 transition-all hover:border-cyan-400/30 hover:text-cyan-400"
+                  className="mt-2 flex items-center gap-1 rounded-lg border border-dashed border-white/10 px-2.5 py-1 text-xs text-slate-500 transition-all hover:border-desert-400/30 hover:text-desert-400"
                 >
                   <Plus size={10} /> Tambah Pekerjaan
                 </button>
@@ -468,7 +468,7 @@ export function DailyReportForm({
               type="button"
               onClick={submit}
               disabled={isPending}
-              className="flex items-center gap-2 rounded-xl bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-900 transition-all hover:bg-cyan-400 disabled:opacity-50"
+              className="flex items-center gap-2 rounded-xl bg-desert-400 px-5 py-2.5 text-sm font-semibold text-slate-900 transition-all hover:bg-desert-400 disabled:opacity-50"
             >
               {isPending ? (
                 <>

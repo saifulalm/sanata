@@ -35,14 +35,14 @@ interface StatCardProps {
 
 function StatCard({ title, value, subtitle, icon, accent = "cyan" }: StatCardProps) {
   const accentColors = {
-    cyan: "from-cyan-500/10 to-cyan-500/5 border-cyan-500/20",
+    cyan: "from-desert-400/10 to-desert-400/5 border-desert-400/20",
     emerald: "from-emerald-500/10 to-emerald-500/5 border-emerald-500/20",
     amber: "from-amber-500/10 to-amber-500/5 border-amber-500/20",
     rose: "from-rose-500/10 to-rose-500/5 border-rose-500/20",
   };
 
   const iconColors = {
-    cyan: "text-cyan-400 bg-cyan-500/10",
+    cyan: "text-desert-400 bg-desert-400/10",
     emerald: "text-emerald-400 bg-emerald-500/10",
     amber: "text-amber-400 bg-amber-500/10",
     rose: "text-rose-400 bg-rose-500/10",
@@ -72,7 +72,7 @@ interface MenuCardProps {
 
 function MenuCard({ title, description, href, icon, accent = "cyan" }: MenuCardProps) {
   const accentBorder = {
-    cyan: "hover:border-cyan-500/40",
+    cyan: "hover:border-desert-400/40",
     emerald: "hover:border-emerald-500/40",
     amber: "hover:border-amber-500/40",
     rose: "hover:border-rose-500/40",
@@ -85,18 +85,18 @@ function MenuCard({ title, description, href, icon, accent = "cyan" }: MenuCardP
     >
       <div className="p-6">
         <div className={`mb-4 inline-flex rounded-xl p-3 ${
-          accent === "cyan" ? "bg-cyan-500/10 text-cyan-400" :
+          accent === "cyan" ? "bg-desert-400/10 text-desert-400" :
           accent === "emerald" ? "bg-emerald-500/10 text-emerald-400" :
           accent === "amber" ? "bg-amber-500/10 text-amber-400" :
           "bg-rose-500/10 text-rose-400"
         }`}>
           {icon}
         </div>
-        <h3 className="text-lg font-semibold text-white group-hover:text-cyan-300">{title}</h3>
+        <h3 className="text-lg font-semibold text-white group-hover:text-desert-400">{title}</h3>
         <p className="mt-1 text-sm text-slate-400">{description}</p>
       </div>
       <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100">
-        <ArrowRight size={20} className="text-cyan-400" />
+        <ArrowRight size={20} className="text-desert-400" />
       </div>
     </Link>
   );
@@ -186,10 +186,10 @@ export default async function WorkforceDashboard() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="relative overflow-hidden rounded-2xl border border-cyan-500/20 bg-gradient-to-r from-cyan-500/10 via-transparent to-transparent p-8">
+      <div className="relative overflow-hidden rounded-2xl border border-desert-400/20 bg-gradient-to-r from-desert-400/10 via-transparent to-transparent p-8">
         <div className="relative z-10">
-          <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs font-medium text-cyan-400">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-cyan-400" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-desert-400/20 bg-desert-400/10 px-3 py-1 text-xs font-medium text-desert-400">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-desert-400" />
             SANTRA - Digital Workforce
           </div>
           <h1 className="mt-4 text-3xl font-bold text-white">Manajemen Tenaga Kerja</h1>
@@ -198,8 +198,8 @@ export default async function WorkforceDashboard() {
             penugasan pekerjaan, quality control, dan performance tracking.
           </p>
         </div>
-        <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-cyan-500/10 blur-3xl" />
-        <div className="absolute -bottom-8 -right-8 h-24 w-24 rounded-full bg-cyan-500/5 blur-2xl" />
+        <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-desert-400/10 blur-3xl" />
+        <div className="absolute -bottom-8 -right-8 h-24 w-24 rounded-full bg-desert-400/5 blur-2xl" />
       </div>
 
       {/* Quick Stats */}
@@ -238,7 +238,7 @@ export default async function WorkforceDashboard() {
       <div className="grid gap-3 sm:grid-cols-4">
         <Link
           href="/admin/workforce/workers/new"
-          className="inline-flex items-center justify-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-4 py-3 text-sm font-medium text-cyan-300 transition-all hover:bg-cyan-500/20"
+          className="inline-flex items-center justify-center gap-2 rounded-xl border border-desert-400/30 bg-desert-400/10 px-4 py-3 text-sm font-medium text-desert-400 transition-all hover:bg-desert-400/20"
         >
           <Users size={16} />
           Tambah Worker
@@ -274,10 +274,10 @@ export default async function WorkforceDashboard() {
       </div>
 
       {/* Info Banner */}
-      <div className="rounded-2xl border border-cyan-500/10 bg-gradient-to-r from-cyan-500/5 to-transparent p-6">
+      <div className="rounded-2xl border border-desert-400/10 bg-gradient-to-r from-desert-400/5 to-transparent p-6">
         <div className="flex items-start gap-4">
-          <div className="rounded-xl bg-cyan-500/10 p-3">
-            <AlertCircle size={20} className="text-cyan-400" />
+          <div className="rounded-xl bg-desert-400/10 p-3">
+            <AlertCircle size={20} className="text-desert-400" />
           </div>
           <div>
             <h3 className="font-semibold text-white">Integrasi Data SANTRA</h3>
@@ -287,7 +287,7 @@ export default async function WorkforceDashboard() {
               dan setiap KPI dihitung otomatis dari data QC dan execution.
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
-              <span className="inline-flex items-center gap-1 rounded-full bg-cyan-500/10 px-2 py-1 text-xs text-cyan-400">
+              <span className="inline-flex items-center gap-1 rounded-full bg-desert-400/10 px-2 py-1 text-xs text-desert-400">
                 <CheckCircle size={10} /> Worker → Assignment
               </span>
               <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-1 text-xs text-emerald-400">

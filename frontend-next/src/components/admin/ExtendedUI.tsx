@@ -19,7 +19,7 @@ type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 type ButtonSize = "sm" | "md" | "lg";
 
 const VARIANTS: Record<ButtonVariant, string> = {
-  primary: "border-cyan-300/30 bg-cyan-300/12 text-cyan-100 hover:bg-cyan-300/20 hover:border-cyan-300/45",
+  primary: "border-desert-400/30 bg-desert-400/12 text-desert-200 hover:bg-desert-400/20 hover:border-desert-400/45",
   secondary: "border-white/12 bg-white/[0.05] text-slate-100 hover:bg-white/[0.09]",
   ghost: "border-transparent bg-transparent text-slate-400 hover:bg-white/[0.05] hover:text-white",
   danger: "border-red-400/25 bg-red-500/10 text-red-200 hover:bg-red-500/18",
@@ -113,7 +113,7 @@ export function Input({ label, error, className, ...props }: InputProps) {
       )}
       <input
         className={cn(
-          "w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 transition focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10",
+          "w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 transition focus:border-desert-400/40 focus:outline-none focus:ring-2 focus:ring-desert-400/10",
           error && "border-rose-500/40",
           className
         )}
@@ -141,7 +141,7 @@ export function Select({ label, error, options, className, ...props }: SelectPro
       )}
       <select
         className={cn(
-          "w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white transition focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10",
+          "w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white transition focus:border-desert-400/40 focus:outline-none focus:ring-2 focus:ring-desert-400/10",
           error && "border-rose-500/40",
           className
         )}
@@ -174,7 +174,7 @@ export function Textarea({ label, error, className, ...props }: TextareaProps) {
       )}
       <textarea
         className={cn(
-          "w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-slate-500 transition focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10",
+          "w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-slate-500 transition focus:border-desert-400/40 focus:outline-none focus:ring-2 focus:ring-desert-400/10",
           error && "border-rose-500/40",
           className
         )}
@@ -241,7 +241,7 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
           className={cn(
             "rounded-lg border px-3 py-2 text-sm transition",
             p === page
-              ? "border-cyan-400/30 bg-cyan-400/10 text-cyan-300"
+              ? "border-desert-400/30 bg-desert-400/10 text-desert-300"
               : "border-white/10 bg-white/[0.04] text-slate-400 hover:border-white/18 hover:bg-white/[0.07]"
           )}
         >
@@ -282,7 +282,7 @@ export function Tabs({ tabs, activeTab, onTabChange }: TabsProps) {
           className={cn(
             "inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition",
             activeTab === tab.id
-              ? "bg-cyan-500/15 text-cyan-300 border border-cyan-400/20"
+              ? "bg-desert-500/15 text-desert-300 border border-desert-400/20"
               : "text-slate-400 hover:text-slate-200"
           )}
         >

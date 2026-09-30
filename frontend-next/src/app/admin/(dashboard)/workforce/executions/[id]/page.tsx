@@ -55,12 +55,12 @@ export default async function ExecutionDetailPage({ params }: Props) {
         <div className="flex items-center gap-4">
           <Link
             href="/admin/workforce/executions"
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
           >
             <ArrowLeft size={20} />
           </Link>
           <div>
-            <p className="font-mono text-sm text-cyan-400">{execution.logCode}</p>
+            <p className="font-mono text-sm text-desert-400">{execution.logCode}</p>
             <h1 className="text-xl font-bold text-white">Execution Log</h1>
           </div>
         </div>
@@ -135,7 +135,7 @@ export default async function ExecutionDetailPage({ params }: Props) {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-slate-500">Kode</span>
-                  <span className="font-mono text-sm text-cyan-400">{execution.assignment.assignmentCode}</span>
+                  <span className="font-mono text-sm text-desert-400">{execution.assignment.assignmentCode}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-slate-500">Pekerjaan</span>
@@ -156,7 +156,7 @@ export default async function ExecutionDetailPage({ params }: Props) {
             </h3>
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-desert-400/10 text-desert-400">
                   <Calendar size={18} />
                 </div>
                 <div>
@@ -189,7 +189,7 @@ export default async function ExecutionDetailPage({ params }: Props) {
               <div>
                 <p className="font-medium text-white">{execution.worker.name}</p>
                 <p className="text-xs text-slate-500">{execution.worker.role}</p>
-                <p className="text-xs text-cyan-400">{execution.worker.workerCode}</p>
+                <p className="text-xs text-desert-400">{execution.worker.workerCode}</p>
               </div>
             </div>
           </Card>
@@ -222,11 +222,11 @@ export default async function ExecutionDetailPage({ params }: Props) {
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-slate-500">Kemajuan</span>
-                    <span className="text-xl font-bold text-cyan-400">{execution.progressPct}%</span>
+                    <span className="text-xl font-bold text-desert-400">{execution.progressPct}%</span>
                   </div>
                   <div className="h-3 w-full overflow-hidden rounded-full bg-white/10">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-emerald-500"
+                      className="h-full rounded-full bg-gradient-to-r from-desert-400 to-emerald-500"
                       style={{ width: `${execution.progressPct}%` }}
                     />
                   </div>

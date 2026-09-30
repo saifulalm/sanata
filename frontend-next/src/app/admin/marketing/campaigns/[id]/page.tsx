@@ -115,7 +115,7 @@ function getStatusIcon(status: string) {
     case "delivered":
       return <CheckCircle size={14} className="text-emerald-400" />;
     case "opened":
-      return <Eye size={14} className="text-cyan-400" />;
+      return <Eye size={14} className="text-desert-400" />;
     case "clicked":
       return <MousePointer size={14} className="text-amber-400" />;
     case "converted":
@@ -211,7 +211,7 @@ export default function CampaignDetailPage() {
             <Eye size={16} />
             Dibuka
           </div>
-          <div className="text-2xl font-semibold text-cyan-400">{stats.opened.toLocaleString()}</div>
+          <div className="text-2xl font-semibold text-desert-400">{stats.opened.toLocaleString()}</div>
           <div className="mt-1 text-xs text-slate-500">{openRate}% open rate</div>
         </div>
         <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
@@ -238,7 +238,7 @@ export default function CampaignDetailPage() {
           onClick={() => setActiveTab("report")}
           className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${
             activeTab === "report"
-              ? "bg-cyan-300/20 text-cyan-300"
+              ? "bg-desert-400/20 text-desert-400"
               : "text-slate-400 hover:text-white"
           }`}
         >
@@ -249,7 +249,7 @@ export default function CampaignDetailPage() {
           onClick={() => setActiveTab("preview")}
           className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${
             activeTab === "preview"
-              ? "bg-cyan-300/20 text-cyan-300"
+              ? "bg-desert-400/20 text-desert-400"
               : "text-slate-400 hover:text-white"
           }`}
         >
@@ -260,7 +260,7 @@ export default function CampaignDetailPage() {
           onClick={() => setActiveTab("chart")}
           className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${
             activeTab === "chart"
-              ? "bg-cyan-300/20 text-cyan-300"
+              ? "bg-desert-400/20 text-desert-400"
               : "text-slate-400 hover:text-white"
           }`}
         >
@@ -344,7 +344,7 @@ export default function CampaignDetailPage() {
                 <span className="text-white">{stats.delivered}</span> terkirim
               </span>
               <span className="text-slate-400">
-                <span className="text-cyan-300">{stats.opened}</span> dibuka
+                <span className="text-desert-400">{stats.opened}</span> dibuka
               </span>
               <span className="text-slate-400">
                 <span className="text-amber-300">{stats.clicked}</span> diklik
@@ -453,7 +453,7 @@ export default function CampaignDetailPage() {
                 <div key={i} className="flex flex-1 flex-col items-center gap-2">
                   <div className="flex w-full items-end justify-center gap-1" style={{ height: "280px" }}>
                     <div
-                      className="w-8 rounded-t-md bg-cyan-400/60 transition-all hover:bg-cyan-400"
+                      className="w-8 rounded-t-md bg-desert-400/60 transition-all hover:bg-desert-400"
                       style={{ height: `${(data.sent / 800) * 100}%` }}
                       title={`Terkirim: ${data.sent}`}
                     />
@@ -475,7 +475,7 @@ export default function CampaignDetailPage() {
           </div>
           <div className="mt-6 flex items-center justify-center gap-6">
             <div className="flex items-center gap-2">
-              <div className="h-3 w-3 rounded bg-cyan-400/60" />
+              <div className="h-3 w-3 rounded bg-desert-400/60" />
               <span className="text-xs text-slate-400">Terkirim</span>
             </div>
             <div className="flex items-center gap-2">
@@ -492,7 +492,7 @@ export default function CampaignDetailPage() {
           <div className="mt-6 grid gap-4 sm:grid-cols-3">
             <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 text-center">
               <p className="text-sm text-slate-400">Waktu Rata-rata Pembukaan</p>
-              <p className="mt-2 text-2xl font-semibold text-cyan-300">4.2 menit</p>
+              <p className="mt-2 text-2xl font-semibold text-desert-400">4.2 menit</p>
             </div>
             <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 text-center">
               <p className="text-sm text-slate-400">Waktu Rata-rata Klik</p>

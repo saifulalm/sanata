@@ -90,7 +90,7 @@ export function RabList({
             </Link>
             <Link
               href="/admin/rab/new"
-              className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-xs font-semibold text-cyan-300 transition-all hover:border-cyan-400/60 hover:bg-cyan-400/20"
+              className="inline-flex items-center gap-2 rounded-full border border-desert-400/30 bg-desert-400/10 px-4 py-2 text-xs font-semibold text-desert-400 transition-all hover:border-desert-400/60 hover:bg-desert-400/20"
             >
               <Plus size={14} /> RAB Baru
             </Link>
@@ -112,13 +112,13 @@ export function RabList({
             name="search"
             defaultValue={search}
             placeholder="Cari nomor, judul, atau pemilik..."
-            className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2 pl-9 pr-3.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10 transition-all"
+            className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2 pl-9 pr-3.5 text-sm text-white placeholder:text-slate-500 focus:border-desert-400/40 focus:outline-none focus:ring-2 focus:ring-desert-400/10 transition-all"
           />
         </form>
         <div className="ml-auto flex flex-wrap gap-1">
           <button
             onClick={() => setParam("status", "")}
-            className={`rounded-xl border px-3 py-1.5 text-xs font-medium transition-all ${!status ? "border-cyan-400/30 bg-cyan-400/10 text-cyan-300" : "border-white/10 bg-white/[0.04] text-slate-400 hover:border-white/18 hover:bg-white/[0.07]"}`}
+            className={`rounded-xl border px-3 py-1.5 text-xs font-medium transition-all ${!status ? "border-desert-400/30 bg-desert-400/10 text-desert-400" : "border-white/10 bg-white/[0.04] text-slate-400 hover:border-white/18 hover:bg-white/[0.07]"}`}
           >
             Semua
           </button>
@@ -126,7 +126,7 @@ export function RabList({
             <button
               key={s}
               onClick={() => setParam("status", s)}
-              className={`rounded-xl border px-3 py-1.5 text-xs font-medium transition-all ${status === s ? "border-cyan-400/30 bg-cyan-400/10 text-cyan-300" : "border-white/10 bg-white/[0.04] text-slate-400 hover:border-white/18 hover:bg-white/[0.07]"}`}
+              className={`rounded-xl border px-3 py-1.5 text-xs font-medium transition-all ${status === s ? "border-desert-400/30 bg-desert-400/10 text-desert-400" : "border-white/10 bg-white/[0.04] text-slate-400 hover:border-white/18 hover:bg-white/[0.07]"}`}
             >
               {RAB_STATUS_LABEL[s]}
             </button>
@@ -149,73 +149,75 @@ export function RabList({
           />
         ) : (
           <TableWrap>
-            <thead>
-              <tr>
-                <Th>Nomor</Th>
-                <Th>Pekerjaan</Th>
-                <Th>Pemilik</Th>
-                <Th>Status</Th>
-                <Th className="text-right">Nilai</Th>
-                <Th>Dibuat</Th>
-                <Th className="text-right">Aksi</Th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((rab) => {
-                const sm = STATUS_META[rab.status] ?? { tone: "neutral" as const };
-                return (
-                  <tr key={rab.id} className="transition-colors hover:bg-white/[0.02]">
-                    <Td>
-                      <code className="text-xs font-mono text-slate-500">{rab.number}</code>
-                    </Td>
-                    <Td>
-                      <Link href={`/admin/rab/${rab.id}`} className="text-sm font-medium text-slate-200 hover:text-cyan-300">
-                        {rab.title}
-                      </Link>
-                      {rab.location && <p className="mt-0.5 text-xs text-slate-500">{rab.location}</p>}
-                    </Td>
-                    <Td>
-                      <span className="text-sm text-slate-400">{rab.clientName ?? "—"}</span>
-                    </Td>
-                    <Td>
-                      <Badge tone={sm.tone}>{RAB_STATUS_LABEL[rab.status]}</Badge>
-                    </Td>
-                    <Td className="text-right">
-                      <span className="text-sm font-semibold text-slate-100 tabular-nums">
-                        Rp {formatRupiah(rab.total)}
-                      </span>
-                    </Td>
-                    <Td>
-                      <div className="flex flex-col">
-                        <span className="text-xs text-slate-400">{formatDate(rab.createdAt)}</span>
-                        <span className="text-[11px] text-slate-600">{rab.createdBy.name}</span>
-                      </div>
-                    </Td>
-                    <Td className="text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        <Link
-                          href={`/admin/print/rab/${rab.id}`}
-                          target="_blank"
-                          className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-400 transition-all hover:border-white/18 hover:bg-white/[0.07] hover:text-slate-200"
-                          title="Lihat dokumen"
-                        >
-                          <FileText size={13} />
+            <table className="w-full">
+              <thead>
+                <tr>
+                  <Th>Nomor</Th>
+                  <Th>Pekerjaan</Th>
+                  <Th>Pemilik</Th>
+                  <Th>Status</Th>
+                  <Th className="text-right">Nilai</Th>
+                  <Th>Dibuat</Th>
+                  <Th className="text-right">Aksi</Th>
+                </tr>
+              </thead>
+              <tbody>
+                {items.map((rab) => {
+                  const sm = STATUS_META[rab.status] ?? { tone: "neutral" as const };
+                  return (
+                    <tr key={rab.id} className="transition-colors hover:bg-white/[0.02]">
+                      <Td>
+                        <code className="text-xs font-mono text-slate-500">{rab.number}</code>
+                      </Td>
+                      <Td>
+                        <Link href={`/admin/rab/${rab.id}`} className="text-sm font-medium text-slate-200 hover:text-desert-400">
+                          {rab.title}
                         </Link>
-                        {isAdmin && (
-                          <button
-                            onClick={() => handleDelete(rab)}
-                            disabled={isPending}
-                            className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-400 transition-all hover:border-red-400/30 hover:bg-red-500/10 hover:text-red-400 disabled:opacity-40"
+                        {rab.location && <p className="mt-0.5 text-xs text-slate-500">{rab.location}</p>}
+                      </Td>
+                      <Td>
+                        <span className="text-sm text-slate-400">{rab.clientName ?? "—"}</span>
+                      </Td>
+                      <Td>
+                        <Badge tone={sm.tone}>{RAB_STATUS_LABEL[rab.status]}</Badge>
+                      </Td>
+                      <Td className="text-right">
+                        <span className="text-sm font-semibold text-slate-100 tabular-nums">
+                          Rp {formatRupiah(rab.total)}
+                        </span>
+                      </Td>
+                      <Td>
+                        <div className="flex flex-col">
+                          <span className="text-xs text-slate-400">{formatDate(rab.createdAt)}</span>
+                          <span className="text-[11px] text-slate-600">{rab.createdBy.name}</span>
+                        </div>
+                      </Td>
+                      <Td className="text-right">
+                        <div className="flex items-center justify-end gap-1">
+                          <Link
+                            href={`/admin/print/rab/${rab.id}`}
+                            target="_blank"
+                            className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-400 transition-all hover:border-white/18 hover:bg-white/[0.07] hover:text-slate-200"
+                            title="Lihat dokumen"
                           >
-                            <Trash2 size={13} />
-                          </button>
-                        )}
-                      </div>
-                    </Td>
-                  </tr>
-                );
-              })}
-            </tbody>
+                            <FileText size={13} />
+                          </Link>
+                          {isAdmin && (
+                            <button
+                              onClick={() => handleDelete(rab)}
+                              disabled={isPending}
+                              className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-400 transition-all hover:border-red-400/30 hover:bg-red-500/10 hover:text-red-400 disabled:opacity-40"
+                            >
+                              <Trash2 size={13} />
+                            </button>
+                          )}
+                        </div>
+                      </Td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </TableWrap>
         )}
       </Panel>

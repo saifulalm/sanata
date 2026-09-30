@@ -224,7 +224,7 @@ export function WorkerForm({ worker, isEdit = false }: WorkerFormProps) {
                     <select
                       value={form.role}
                       onChange={(e) => setField("role", e.target.value)}
-                      className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-white focus:border-cyan-400/40 focus:outline-none"
+                      className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-white focus:border-desert-400/40 focus:outline-none"
                     >
                       <option value="">Pilih Role</option>
                       {ROLES.map((r) => (
@@ -303,7 +303,7 @@ export function WorkerForm({ worker, isEdit = false }: WorkerFormProps) {
                     <select
                       value={form.grade}
                       onChange={(e) => setField("grade", e.target.value)}
-                      className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-white focus:border-cyan-400/40 focus:outline-none"
+                      className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-white focus:border-desert-400/40 focus:outline-none"
                     >
                       <option value="">Pilih Grade</option>
                       {GRADE_OPTIONS.map((g) => (
@@ -319,7 +319,7 @@ export function WorkerForm({ worker, isEdit = false }: WorkerFormProps) {
                     <select
                       value={form.status}
                       onChange={(e) => setField("status", e.target.value)}
-                      className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-white focus:border-cyan-400/40 focus:outline-none"
+                      className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-white focus:border-desert-400/40 focus:outline-none"
                     >
                       {STATUS_OPTIONS.map((s) => (
                         <option key={s.value} value={s.value}>
@@ -360,7 +360,7 @@ export function WorkerForm({ worker, isEdit = false }: WorkerFormProps) {
                       value={form.facePhotoUrl}
                       onChange={(e) => setField("facePhotoUrl", e.target.value)}
                       placeholder="URL foto wajah"
-                      className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
+                      className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-desert-400/40 focus:outline-none"
                     />
                   </div>
                   {form.facePhotoUrl && (
@@ -382,7 +382,7 @@ export function WorkerForm({ worker, isEdit = false }: WorkerFormProps) {
                     value={form.ktpPhotoUrl}
                     onChange={(e) => setField("ktpPhotoUrl", e.target.value)}
                     placeholder="URL foto KTP"
-                    className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
+                    className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-desert-400/40 focus:outline-none"
                   />
                   {form.ktpPhotoUrl && (
                     <div className="mt-2 overflow-hidden rounded-lg border border-white/10">
@@ -403,7 +403,7 @@ export function WorkerForm({ worker, isEdit = false }: WorkerFormProps) {
               <Card>
                 <h3 className="mb-4 text-lg font-semibold text-white">Preview</h3>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-cyan-500/10 text-cyan-400">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-desert-400/10 text-desert-400">
                     {form.facePhotoUrl ? (
                       <img src={form.facePhotoUrl} alt="" className="h-full w-full rounded-full object-cover" />
                     ) : (

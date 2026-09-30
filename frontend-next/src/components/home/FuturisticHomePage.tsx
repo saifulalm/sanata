@@ -35,19 +35,19 @@ const defaultHeroScenes = [
     title: "Modular Skyscraper",
     subtitle: "Perakitan berbantuan drone dengan panel fasad adaptif.",
     href: "/projects",
-    accentClass: "from-cyan-400/45 via-sky-500/20 to-transparent",
+    accentClass: "from-desert-400/45 via-desert-500/20 to-transparent",
   },
   {
     title: "Integrated Transit Hub",
     subtitle: "Sistem konstruksi tanpa jeda untuk infrastruktur mobilitas generasi baru.",
     href: "/services",
-    accentClass: "from-blue-400/35 via-indigo-500/20 to-transparent",
+    accentClass: "from-desert-300/35 via-desert-400/20 to-transparent",
   },
   {
     title: "Coastal Urban Grid",
     subtitle: "Rekayasa hunian pesisir yang siap menghadapi beban lingkungan ekstrem.",
     href: "/about",
-    accentClass: "from-amber-300/25 via-cyan-500/15 to-transparent",
+    accentClass: "from-desert-200/25 via-desert-300/15 to-transparent",
   },
 ] as const;
 
@@ -193,67 +193,75 @@ export function FuturisticHomePage({
   const cmsFAQs = normalizeFAQs(collection(content, "faq"));
 
   return (
-    <div className="overflow-hidden bg-[#06111f] text-white">
+    <div className="overflow-hidden bg-[#1A1F22] text-white">
+      {/* SANATA Brand: Hero Section */}
       <section id="homepage" className="relative isolate min-h-screen overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(76,201,240,0.22),_transparent_34%),radial-gradient(circle_at_78%_18%,_rgba(205,127,50,0.18),_transparent_24%),linear-gradient(180deg,_#081120_0%,_#06111f_52%,_#04101b_100%)]" />
+        {/* SANATA Brand: Desert Charcoal background with Desert radial */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(201,173,130,0.15),_transparent_34%),radial-gradient(circle_at_78%_18%,_rgba(201,173,130,0.1),_transparent_24%),linear-gradient(180deg,_#1A1F22_0%,_#12181B_52%,_#1A1F22_100%)]" />
         <div
           className="absolute inset-0 opacity-25"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(116,184,255,0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(116,184,255,0.18) 1px, transparent 1px)",
+              "linear-gradient(rgba(201,173,130,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(201,173,130,0.12) 1px, transparent 1px)",
             backgroundSize: "80px 80px",
           }}
         />
-        <div className="absolute inset-x-0 top-28 h-px bg-gradient-to-r from-transparent via-cyan-300/60 to-transparent" />
-        <div className="absolute left-1/2 top-36 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full bg-cyan-400/10 blur-3xl" />
+        {/* SANATA Brand: Desert accent line */}
+        <div className="absolute inset-x-0 top-28 h-px bg-gradient-to-r from-transparent via-desert-400/60 to-transparent" />
+        <div className="absolute left-1/2 top-36 h-[34rem] w-[34rem] -translate-x-1/2 rounded-full bg-desert-400/10 blur-3xl" />
 
         <div className="relative mx-auto grid min-h-screen w-full max-w-7xl items-center gap-16 px-4 pb-16 pt-32 sm:px-6 lg:grid-cols-[1.02fr_0.98fr] lg:px-8">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-300/25 bg-white/5 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-100 shadow-[0_0_40px_rgba(56,189,248,0.12)] backdrop-blur-xl">
-              <Orbit size={14} className="text-cyan-300" />
-              Futurisme Arsitektur Lanjutan
+            {/* SANATA Brand: Professional eyebrow */}
+            <div className="inline-flex items-center gap-2 rounded-full border border-desert-400/25 bg-white/5 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-desert-200 shadow-[0_0_40px_rgba(201,173,130,0.1)] backdrop-blur-xl">
+              <Orbit size={14} className="text-desert-400" />
+              Your Building Partner
             </div>
+            {/* SANATA Brand: Professional construction headline */}
             <h1 className="mt-6 max-w-4xl text-3xl font-semibold uppercase leading-none tracking-[0.08em] text-white xs:text-4xl sm:text-5xl lg:text-7xl">
-              WELCOME TO THE
-              <span className="mt-2 block bg-gradient-to-r from-white via-cyan-200 to-blue-400 bg-clip-text text-transparent">
-                FUTURE OF CONSTRUCTION
+              PROFESSIONAL
+              <span className="mt-2 block bg-gradient-to-r from-white via-desert-200 to-desert-400 bg-clip-text text-transparent">
+                CONSTRUCTION EXCELLENCE
               </span>
             </h1>
-            <p className="mt-5 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
-              {companyName.toUpperCase()} menghadirkan pengalaman konstruksi generasi baru melalui sistem desain,
-              rekayasa, dan eksekusi yang terasa seperti blueprint 4D interaktif.
+            <p className="mt-5 max-w-2xl text-base leading-8 text-charcoal-200 sm:text-lg">
+              {companyName.toUpperCase()} menghadirkan pengalaman konstruksi profesional melalui sistem desain,
+              rekayasa, dan eksekusi yang berpusat pada kebutuhan dan kebahagiaan klien.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
+              {/* SANATA Brand: Desert CTA */}
               <Link
                 href="#about-us"
-                className="inline-flex items-center gap-2 rounded-full border border-cyan-300/50 bg-cyan-300/10 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-cyan-100 shadow-[0_0_25px_rgba(56,189,248,0.2)] transition hover:-translate-y-0.5 hover:bg-cyan-300/20"
+                className="inline-flex items-center gap-2 rounded-full border border-desert-400/50 bg-desert-400/10 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-desert-200 shadow-[0_0_25px_rgba(201,173,130,0.15)] transition hover:-translate-y-0.5 hover:bg-desert-400/20"
               >
                 Learn More <ArrowRight size={16} />
               </Link>
-              <div className="rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm uppercase tracking-[0.18em] text-slate-300 backdrop-blur-xl">
+              <div className="rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm uppercase tracking-[0.18em] text-charcoal-200 backdrop-blur-xl">
                 {tagline}
               </div>
             </div>
 
             <div className="mt-10 grid gap-4 sm:grid-cols-3">
               {[
-                { label: "Autonomous Build Ops", value: "24/7" },
-                { label: "Digital Twin Ready", value: "4D" },
-                { label: "Material Intelligence", value: "AI+" },
+                { label: "Years Experience", value: sinceYear + "+" },
+                { label: "Projects Completed", value: "120+" },
+                { label: "Happy Clients", value: "98%" },
               ].map((item) => (
                 <div
                   key={item.label}
                   className="rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-xl"
                 >
-                  <p className="text-2xl font-semibold tracking-[0.16em] text-white">{item.value}</p>
-                  <p className="mt-2 text-xs uppercase tracking-[0.2em] text-slate-400">{item.label}</p>
+                  {/* SANATA Brand: Desert value text */}
+                  <p className="text-2xl font-semibold tracking-[0.16em] text-desert-400">{item.value}</p>
+                  <p className="mt-2 text-xs uppercase tracking-[0.2em] text-charcoal-300">{item.label}</p>
                 </div>
               ))}
             </div>
           </div>
 
           <div className="relative lg:pl-6">
-            <div className="absolute -inset-8 rounded-[2rem] bg-cyan-400/10 blur-3xl" />
+            {/* SANATA Brand: Desert glow */}
+            <div className="absolute -inset-8 rounded-[2rem] bg-desert-400/10 blur-3xl" />
             <EnhancedHeroCarousel
               scenes={heroScenes}
               label={heroCarouselLabel}
@@ -278,54 +286,62 @@ export function FuturisticHomePage({
         />
       )}
 
-      <section id="about-us" className="relative border-t border-white/10 bg-[linear-gradient(180deg,_rgba(6,17,31,0.96),_rgba(6,17,31,0.88))] py-24">
+      {/* SANATA Brand: About Section */}
+      <section id="about-us" className="relative border-t border-white/10 bg-[linear-gradient(180deg,rgba(26,31,34,0.96),rgba(26,31,34,0.88))] py-24">
         <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
           <div className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 backdrop-blur-xl">
-            <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">SANATA Your Building Partner</p>
+            {/* SANATA Brand: Professional about */}
+            <p className="text-xs uppercase tracking-[0.28em] text-desert-400">SANATA Your Building Partner</p>
             <h2 className="mt-4 text-3xl font-semibold uppercase tracking-[0.08em] text-white sm:text-4xl">
               INNOVATING SINCE {sinceYear}
             </h2>
-            <p className="mt-4 max-w-xl text-sm leading-7 text-slate-300 sm:text-base">
-              Blueprint tidak lagi statis. Kami mengubah ide menjadi ruang yang tumbuh, merespons data, dan tampil seperti
-              prototipe masa depan yang siap dibangun.
+            <p className="mt-4 max-w-xl text-sm leading-7 text-charcoal-200 sm:text-base">
+              {/* SANATA Brand: Professional construction voice */}
+              Kami membangun ruang yang tidak hanya kokoh secara struktural, tetapi juga bermakna bagi setiap penghuninya.
+              Dengan pendekatan yang berpusat pada kebutuhan klien, kami menghadirkan hasil yang bertahan lama.
             </p>
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              {/* SANATA Brand: Desert icon accents */}
               {[
-                { icon: Cpu, label: "Digital Twin", value: "Real-time coordination" },
-                { icon: Orbit, label: "4D Sequencing", value: "Time-aware build simulation" },
-                { icon: Blocks, label: "Material Logic", value: "Carbon-smart assembly" },
-                { icon: BadgeCheck, label: "Precision Delivery", value: "Design to field continuity" },
+                { icon: Cpu, label: "Technical Excellence", value: "Precision engineering" },
+                { icon: Orbit, label: "Project Management", value: "Disciplined execution" },
+                { icon: Blocks, label: "Design Coordination", value: "Integrated approach" },
+                { icon: BadgeCheck, label: "Quality Assured", value: "SNI/ASTM standards" },
               ].map((item) => (
-                <div key={item.label} className="rounded-[1.4rem] border border-white/10 bg-slate-950/60 p-4">
-                  <item.icon size={18} className="text-cyan-300" />
+                <div key={item.label} className="rounded-[1.4rem] border border-white/10 bg-[#0C1012]/60 p-4">
+                  <item.icon size={18} className="text-desert-400" />
                   <p className="mt-3 text-sm font-semibold uppercase tracking-[0.16em] text-white">{item.label}</p>
-                  <p className="mt-1 text-sm text-slate-400">{item.value}</p>
+                  <p className="mt-1 text-sm text-charcoal-300">{item.value}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="relative rounded-[2rem] border border-cyan-300/15 bg-slate-950/70 p-7 shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
-            <div className="absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.16),_transparent_32%)]" />
+          {/* SANATA Brand: Professional blueprint panel */}
+          <div className="relative rounded-[2rem] border border-desert-400/15 bg-[#0C1012]/70 p-7 shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+            {/* SANATA Brand: Desert radial */}
+            <div className="absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_top,_rgba(201,173,130,0.12),_transparent_32%)]" />
             <div className="relative">
-              <div className="flex items-center justify-between text-xs uppercase tracking-[0.24em] text-slate-400">
-                <span>Interactive Blueprint</span>
-                <span>WebGL Structural Model</span>
+              <div className="flex items-center justify-between text-xs uppercase tracking-[0.24em] text-charcoal-300">
+                <span>Professional Approach</span>
+                <span>Quality Framework</span>
               </div>
               <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_1.05fr]">
                 <div className="space-y-4">
                   <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.04] p-4">
-                    <p className="text-sm uppercase tracking-[0.18em] text-cyan-200">Framework Layer</p>
-                    <p className="mt-2 text-sm text-slate-300">Carbon-fiber composite frame with responsive facade logic.</p>
+                    {/* SANATA Brand: Desert text */}
+                    <p className="text-sm uppercase tracking-[0.18em] text-desert-200">Engineering Excellence</p>
+                    <p className="mt-2 text-sm text-charcoal-300">Structural integrity with thoughtful design coordination.</p>
                   </div>
                   <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.04] p-4">
-                    <p className="text-sm uppercase tracking-[0.18em] text-cyan-200">Smart Envelope</p>
-                    <p className="mt-2 text-sm text-slate-300">Frosted glass panels and adaptive thermal skins.</p>
+                    <p className="text-sm uppercase tracking-[0.18em] text-desert-200">Human-Centered</p>
+                    <p className="mt-2 text-sm text-charcoal-300">Spaces that serve their purpose beautifully.</p>
                   </div>
                 </div>
-                <div className="relative h-[22rem] overflow-hidden rounded-[1.6rem] border border-white/10 bg-slate-950/70">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(56,189,248,0.1),_transparent_55%)]" />
-                  <BuildingSceneCanvas accent="#67e8f9" />
+                <div className="relative h-[22rem] overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#0C1012]/70">
+                  {/* SANATA Brand: Desert accent */}
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(201,173,130,0.1),_transparent_55%)]" />
+                  <BuildingSceneCanvas accent="#C9AD82" />
                 </div>
               </div>
             </div>
@@ -333,18 +349,20 @@ export function FuturisticHomePage({
         </div>
       </section>
 
+      {/* SANATA Brand: Services Section */}
       <section className="relative py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">Dual Service Ecosystem</p>
+              {/* SANATA Brand: Desert accent */}
+              <p className="text-xs uppercase tracking-[0.28em] text-desert-400">Dual Service Ecosystem</p>
               <h2 className="mt-3 text-3xl font-semibold uppercase tracking-[0.08em] text-white sm:text-4xl">
                 SANATA &amp; RUMAMESRA Services
               </h2>
             </div>
-            <p className="max-w-2xl text-sm leading-7 text-slate-300">
-              Dua panel layanan kini tersinkron ke CMS terpisah agar tim bisa mengelola positioning brand dan layanan kedua
-              entitas secara mandiri.
+            {/* SANATA Brand: Professional description */}
+            <p className="max-w-2xl text-sm leading-7 text-charcoal-200">
+              Dua panel layanan yang dikelola secara profesional untuk memenuhi kebutuhan konstruksi dan interior Anda dengan standar tertinggi.
             </p>
           </div>
 
@@ -352,33 +370,36 @@ export function FuturisticHomePage({
             <ServicePanel
               id="sanata-services"
               title="SANATA SERVICES"
-              eyebrow="Blue Spectrum"
+              eyebrow="Engineering Excellence"
               items={sanataServices}
-              accent="cyan"
-              description="Platform engineering, konstruksi skala besar, dan lingkungan interior masa depan."
+              accent="desert"
+              description="Platform engineering, konstruksi skala besar, dan lingkungan interior profesional."
             />
             <ServicePanel
               id="rumamesra-services"
               title="RUMAMESRA SERVICES"
-              eyebrow="Copper Spectrum"
+              eyebrow="Human-Centered Design"
               items={rumamesraServices}
-              accent="amber"
-              description="Hunian modern dengan keseimbangan struktur, kenyamanan ruang, dan efisiensi eksekusi."
+              accent="desert"
+              description="Hunian modern dengan keseimbangan struktur, kenyamanan ruang, dan finishing premium."
             />
           </div>
         </div>
       </section>
 
-      <section id="projects" className="border-y border-white/10 bg-slate-950/60 py-24">
+      {/* SANATA Brand: Projects Section */}
+      <section id="projects" className="border-y border-white/10 bg-[#0C1012]/60 py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">FEATURED PROJECTS</p>
+              {/* SANATA Brand: Desert accent */}
+              <p className="text-xs uppercase tracking-[0.28em] text-desert-400">FEATURED PROJECTS</p>
               <h2 className="mt-3 text-3xl font-semibold uppercase tracking-[0.08em] text-white sm:text-4xl">
-                Interactive Portfolio Grid
+                Professional Portfolio
               </h2>
             </div>
-            <Link href="/projects" className="text-sm uppercase tracking-[0.2em] text-cyan-200 transition hover:text-white">
+            {/* SANATA Brand: Desert link */}
+            <Link href="/projects" className="text-sm uppercase tracking-[0.2em] text-desert-300 transition hover:text-desert-200">
               Explore all projects
             </Link>
           </div>
@@ -387,37 +408,42 @@ export function FuturisticHomePage({
             {showcaseProjects.map((project, index) => (
               <article
                 key={project.id}
-                className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 transition duration-500 hover:-translate-y-1 hover:border-cyan-300/35"
+                className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 transition duration-500 hover:-translate-y-1 hover:border-desert-400/35"
               >
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(56,189,248,0.16),_transparent_28%)]" />
+                {/* SANATA Brand: Desert gradient */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(201,173,130,0.12),_transparent_28%)]" />
                 <div className="relative">
-                  <div className="flex items-center justify-between text-xs uppercase tracking-[0.24em] text-slate-400">
+                  <div className="flex items-center justify-between text-xs uppercase tracking-[0.24em] text-charcoal-300">
                     <span>{project.category?.name ?? "Featured"}</span>
                     <span>0{index + 1}</span>
                   </div>
-                  <div className="relative mt-6 h-52 rounded-[1.6rem] border border-white/10 bg-slate-950/70 p-5 shadow-[inset_0_0_30px_rgba(255,255,255,0.02)]">
-                    <div className="absolute inset-x-5 bottom-4 h-2 rounded-full bg-cyan-300/20 blur-md" />
+                  {/* SANATA Brand: Project visualization */}
+                  <div className="relative mt-6 h-52 rounded-[1.6rem] border border-white/10 bg-[#0C1012]/70 p-5 shadow-[inset_0_0_30px_rgba(255,255,255,0.02)]">
+                    {/* SANATA Brand: Desert accent bars */}
+                    <div className="absolute inset-x-5 bottom-4 h-2 rounded-full bg-desert-400/20 blur-md" />
                     <div className="absolute bottom-6 left-8 flex items-end gap-3">
                       {[72, 124, 96, 164].map((height, barIndex) => (
                         <div
                           key={height}
-                          className="rounded-t-[1rem] border border-cyan-300/15 bg-gradient-to-b from-slate-200/10 via-cyan-200/10 to-cyan-300/25"
+                          className="rounded-t-[1rem] border border-desert-400/15 bg-gradient-to-b from-charcoal-200/10 via-desert-200/10 to-desert-400/25"
                           style={{ height: `${height}px`, width: `${40 - barIndex * 3}px` }}
                         />
                       ))}
                     </div>
-                    <div className="absolute right-7 top-7 rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-[11px] uppercase tracking-[0.22em] text-cyan-100">
-                      3D Model
+                    {/* SANATA Brand: Desert badge */}
+                    <div className="absolute right-7 top-7 rounded-full border border-desert-400/20 bg-desert-400/10 px-3 py-1 text-[11px] uppercase tracking-[0.22em] text-desert-200">
+                      Project
                     </div>
-                    <div className="absolute inset-x-5 bottom-5 rounded-[1rem] border border-amber-300/15 bg-amber-300/5 px-4 py-3 text-[11px] uppercase tracking-[0.22em] text-amber-100 opacity-0 transition group-hover:opacity-100">
-                      Exploded floor-view preview
+                    <div className="absolute inset-x-5 bottom-5 rounded-[1rem] border border-desert-400/15 bg-desert-400/5 px-4 py-3 text-[11px] uppercase tracking-[0.22em] text-desert-200 opacity-0 transition group-hover:opacity-100">
+                      View project details
                     </div>
                   </div>
                   <h3 className="mt-6 text-2xl font-semibold uppercase tracking-[0.08em] text-white">{project.name}</h3>
-                  <p className="mt-3 text-sm leading-7 text-slate-300">{project.description}</p>
+                  <p className="mt-3 text-sm leading-7 text-charcoal-200">{project.description}</p>
+                  {/* SANATA Brand: Desert price text */}
                   <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4 text-sm">
-                    <span className="text-slate-400">Start from</span>
-                    <span className="font-semibold uppercase tracking-[0.16em] text-cyan-100">
+                    <span className="text-charcoal-300">Start from</span>
+                    <span className="font-semibold uppercase tracking-[0.16em] text-desert-300">
                       Rp {Number(project.price).toLocaleString("id-ID")}
                     </span>
                   </div>
@@ -428,16 +454,19 @@ export function FuturisticHomePage({
         </div>
       </section>
 
+      {/* SANATA Brand: Insights Section */}
       <section id="insights" className="py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">LATEST NEWS &amp; INSIGHTS</p>
+              {/* SANATA Brand: Desert accent */}
+              <p className="text-xs uppercase tracking-[0.28em] text-desert-400">LATEST NEWS &amp; INSIGHTS</p>
               <h2 className="mt-3 text-3xl font-semibold uppercase tracking-[0.08em] text-white sm:text-4xl">
-                Research, Strategy, and Construction Intelligence
+                Knowledge &amp; Updates
               </h2>
             </div>
-            <Link href="/journal" className="text-sm uppercase tracking-[0.2em] text-cyan-200 transition hover:text-white">
+            {/* SANATA Brand: Desert link */}
+            <Link href="/journal" className="text-sm uppercase tracking-[0.2em] text-desert-300 transition hover:text-desert-200">
               View all insights
             </Link>
           </div>
@@ -447,29 +476,32 @@ export function FuturisticHomePage({
               <Link
                 key={article.id}
                 href={`/journal/${article.slug}`}
-                className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 transition duration-500 hover:-translate-y-1 hover:border-cyan-300/35"
+                className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] p-6 transition duration-500 hover:-translate-y-1 hover:border-desert-400/35"
               >
+                {/* SANATA Brand: Desert gradient */}
                 <div
                   className={`absolute inset-0 bg-gradient-to-br ${
-                    index === 0 ? "from-cyan-400/14 via-transparent to-transparent" : "from-amber-300/10 via-transparent to-transparent"
+                    index === 0 ? "from-desert-400/14 via-transparent to-transparent" : "from-desert-300/10 via-transparent to-transparent"
                   }`}
                 />
                 <div className="relative">
-                  <div className="rounded-[1.6rem] border border-white/10 bg-slate-950/70 p-5">
-                    <div className="flex items-center justify-between text-xs uppercase tracking-[0.24em] text-slate-400">
+                  <div className="rounded-[1.6rem] border border-white/10 bg-[#0C1012]/70 p-5">
+                    <div className="flex items-center justify-between text-xs uppercase tracking-[0.24em] text-charcoal-300">
                       <span>{article.category?.name ?? "Insight"}</span>
-                      <span>Depth Card</span>
+                      <span>Article</span>
                     </div>
                     <div className="mt-5 flex items-end gap-3">
-                      <div className="h-20 w-20 rounded-[1.4rem] border border-cyan-300/20 bg-gradient-to-br from-cyan-300/30 to-transparent" />
+                      {/* SANATA Brand: Desert accents */}
+                      <div className="h-20 w-20 rounded-[1.4rem] border border-desert-400/20 bg-gradient-to-br from-desert-300/30 to-transparent" />
                       <div className="h-28 flex-1 rounded-[1.4rem] border border-white/10 bg-gradient-to-br from-white/8 to-transparent" />
                     </div>
                   </div>
                   <h3 className="mt-6 text-2xl font-semibold uppercase tracking-[0.08em] text-white">{article.title}</h3>
-                  <p className="mt-3 text-sm leading-7 text-slate-300">
-                    {article.excerpt ?? "Insight terbaru dari ekosistem inovasi konstruksi Sanata."}
+                  <p className="mt-3 text-sm leading-7 text-charcoal-200">
+                    {article.excerpt ?? "Insight terbaru dari ekosistem profesional Sanata Construction."}
                   </p>
-                  <span className="mt-5 inline-flex items-center gap-2 text-sm uppercase tracking-[0.18em] text-cyan-100">
+                  {/* SANATA Brand: Desert link */}
+                  <span className="mt-5 inline-flex items-center gap-2 text-sm uppercase tracking-[0.18em] text-desert-300">
                     Read insight <ArrowRight size={16} className="transition group-hover:translate-x-1" />
                   </span>
                 </div>
@@ -494,9 +526,9 @@ export function FuturisticHomePage({
       {/* CTA Section */}
       <CTASection />
 
-      {/* End of page */}
-      <div className="border-t border-white/10 bg-slate-950/60 py-8 text-center">
-        <p className="text-xs uppercase tracking-[0.2em] text-slate-500">
+      {/* End of page - SANATA Brand */}
+      <div className="border-t border-white/10 bg-[#0C1012]/60 py-8 text-center">
+        <p className="text-xs uppercase tracking-[0.2em] text-charcoal-400">
           © {new Date().getFullYear()} {companyName}. All rights reserved.
         </p>
       </div>
@@ -692,52 +724,58 @@ function ServicePanel({
   eyebrow: string;
   description: string;
   items: { title: string; subtitle: string; body: string; icon: LucideIcon; href?: string | null }[];
-  accent: "cyan" | "amber";
+  accent: "desert";
 }) {
-  const accentBorder = accent === "cyan" ? "border-cyan-300/20" : "border-amber-300/20";
-  const accentText = accent === "cyan" ? "text-cyan-200" : "text-amber-100";
-  const accentGlow = accent === "cyan" ? "bg-cyan-300/10" : "bg-amber-300/10";
-  const accentSoft = accent === "cyan" ? "from-cyan-400/12" : "from-amber-300/12";
+  // SANATA Brand: Desert accent colors
+  const accentBorder = "border-desert-400/20";
+  const accentText = "text-desert-200";
+  const accentGlow = "bg-desert-400/10";
+  const accentSoft = "from-desert-400/12";
 
   return (
     <article
       id={id}
       className={`relative overflow-hidden rounded-[2rem] border ${accentBorder} bg-white/[0.04] p-6 shadow-[0_30px_70px_rgba(0,0,0,0.28)] backdrop-blur-xl`}
     >
+      {/* SANATA Brand: Desert gradient */}
       <div className={`absolute inset-0 bg-gradient-to-br ${accentSoft} via-transparent to-transparent`} />
       <div className="relative">
         <div className="flex items-center justify-between gap-4">
           <div>
+            {/* SANATA Brand: Desert eyebrow */}
             <p className={`text-xs uppercase tracking-[0.24em] ${accentText}`}>{eyebrow}</p>
             <h3 className="mt-3 text-2xl font-semibold uppercase tracking-[0.08em] text-white">{title}</h3>
           </div>
           <div className={`rounded-full border ${accentBorder} ${accentGlow} px-4 py-2 text-[11px] uppercase tracking-[0.22em] ${accentText}`}>
-            3D Panel
+            Services
           </div>
         </div>
-        <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">{description}</p>
+        <p className="mt-4 max-w-2xl text-sm leading-7 text-charcoal-200">{description}</p>
         <div className="mt-8 space-y-4">
           {items.map((item, index) => (
             <div
               key={item.title}
-              className="grid gap-4 rounded-[1.6rem] border border-white/10 bg-slate-950/65 p-4 sm:grid-cols-[auto_1fr_auto] sm:items-center"
+              className="grid gap-4 rounded-[1.6rem] border border-white/10 bg-[#0C1012]/65 p-4 sm:grid-cols-[auto_1fr_auto] sm:items-center"
             >
+              {/* SANATA Brand: Desert icon */}
               <div className={`flex h-14 w-14 items-center justify-center rounded-2xl border ${accentBorder} ${accentGlow}`}>
                 <item.icon size={22} className={accentText} />
               </div>
               <div>
+                {/* SANATA Brand: Desert subtitle */}
                 <p className={`text-[11px] uppercase tracking-[0.24em] ${accentText}`}>{item.subtitle}</p>
                 <p className="mt-1 text-sm font-semibold uppercase tracking-[0.14em] text-white">{item.title}</p>
-                <p className="mt-1 text-sm leading-6 text-slate-400">{item.body}</p>
+                <p className="mt-1 text-sm leading-6 text-charcoal-300">{item.body}</p>
                 {item.href ? (
                   <Link href={item.href} className={`mt-3 inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] ${accentText}`}>
                     Explore <ArrowRight size={14} />
                   </Link>
                 ) : null}
               </div>
-              <div className="hidden h-20 w-24 rounded-[1.2rem] border border-white/10 bg-gradient-to-br from-white/10 to-transparent sm:block">
+              {/* SANATA Brand: Desert accent decoration */}
+              <div className="hidden h-20 w-24 rounded-[1.2rem] border border-white/10 bg-gradient-to-br from-desert-400/10 to-transparent sm:block">
                 <div
-                  className="mx-auto mt-4 rounded-t-[0.8rem] border border-white/10 bg-white/10"
+                  className="mx-auto mt-4 rounded-t-[0.8rem] border border-desert-400/20 bg-desert-400/10"
                   style={{ height: `${32 + index * 10}px`, width: `${28 + index * 8}px` }}
                 />
               </div>

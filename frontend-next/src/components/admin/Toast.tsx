@@ -61,10 +61,10 @@ const TOAST_COLORS: Record<ToastType, { border: string; bg: string; icon: string
     progress: "bg-amber-400",
   },
   info: {
-    border: "border-cyan-400/30",
-    bg: "bg-cyan-500/10",
-    icon: "text-cyan-400",
-    progress: "bg-cyan-400",
+    border: "border-desert-400/30",
+    bg: "bg-desert-400/10",
+    icon: "text-desert-400",
+    progress: "bg-desert-400",
   },
 };
 

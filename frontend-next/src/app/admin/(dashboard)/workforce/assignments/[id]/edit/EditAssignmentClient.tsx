@@ -131,7 +131,7 @@ export function EditAssignmentClient({ assignment, workers }: EditAssignmentClie
                   onChange={(e) => setField("workItem", e.target.value)}
                   rows={3}
                   placeholder="Deskripsi pekerjaan yang ditugaskan..."
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none resize-none"
+                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none resize-none"
                 />
                 {errors.workItem && (
                   <p className="mt-1 text-xs text-rose-400">{errors.workItem}</p>
@@ -146,7 +146,7 @@ export function EditAssignmentClient({ assignment, workers }: EditAssignmentClie
                     value={form.wbsCode}
                     onChange={(e) => setField("wbsCode", e.target.value)}
                     placeholder="WBS-01"
-                    className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none"
+                    className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -157,7 +157,7 @@ export function EditAssignmentClient({ assignment, workers }: EditAssignmentClie
                     max="100"
                     value={form.progressPct}
                     onChange={(e) => setField("progressPct", parseInt(e.target.value) || 0)}
-                    className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none"
+                    className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none"
                   />
                   {errors.progressPct && (
                     <p className="mt-1 text-xs text-rose-400">{errors.progressPct}</p>
@@ -172,7 +172,7 @@ export function EditAssignmentClient({ assignment, workers }: EditAssignmentClie
                   onChange={(e) => setField("scopeDescription", e.target.value)}
                   rows={3}
                   placeholder="Detail lingkup pekerjaan..."
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none resize-none"
+                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none resize-none"
                 />
               </div>
             </div>
@@ -186,7 +186,7 @@ export function EditAssignmentClient({ assignment, workers }: EditAssignmentClie
                 <select
                   value={form.responsiblePersonId}
                   onChange={(e) => setField("responsiblePersonId", e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
                 >
                   <option value="">Pilih Worker</option>
                   {workers.map((w) => (
@@ -201,7 +201,7 @@ export function EditAssignmentClient({ assignment, workers }: EditAssignmentClie
                 <select
                   value={form.responsibleMandorId}
                   onChange={(e) => setField("responsibleMandorId", e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
                 >
                   <option value="">Pilih Mandor</option>
                   {workers.map((w) => (
@@ -222,7 +222,7 @@ export function EditAssignmentClient({ assignment, workers }: EditAssignmentClie
                 <select
                   value={form.status}
                   onChange={(e) => setField("status", e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
                 >
                   {STATUS_OPTIONS.map((s) => (
                     <option key={s.value} value={s.value}>
@@ -236,7 +236,7 @@ export function EditAssignmentClient({ assignment, workers }: EditAssignmentClie
                 <select
                   value={form.priority}
                   onChange={(e) => setField("priority", parseInt(e.target.value))}
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
                 >
                   {PRIORITY_OPTIONS.map((p) => (
                     <option key={p.value} value={p.value}>
@@ -257,7 +257,7 @@ export function EditAssignmentClient({ assignment, workers }: EditAssignmentClie
                   type="date"
                   value={form.plannedStart}
                   onChange={(e) => setField("plannedStart", e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
                 />
               </div>
               <div>
@@ -266,7 +266,7 @@ export function EditAssignmentClient({ assignment, workers }: EditAssignmentClie
                   type="date"
                   value={form.plannedEnd}
                   onChange={(e) => setField("plannedEnd", e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
                 />
               </div>
               <div>
@@ -275,7 +275,7 @@ export function EditAssignmentClient({ assignment, workers }: EditAssignmentClie
                   type="date"
                   value={form.actualStart}
                   onChange={(e) => setField("actualStart", e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
                 />
               </div>
               <div>
@@ -284,7 +284,7 @@ export function EditAssignmentClient({ assignment, workers }: EditAssignmentClie
                   type="date"
                   value={form.actualEnd}
                   onChange={(e) => setField("actualEnd", e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
                 />
               </div>
             </div>
@@ -298,7 +298,7 @@ export function EditAssignmentClient({ assignment, workers }: EditAssignmentClie
             <div className="space-y-3">
               <div className="flex justify-between text-sm">
                 <span className="text-slate-500">Kode</span>
-                <span className="font-mono text-cyan-400">{assignment.assignmentCode}</span>
+                <span className="font-mono text-desert-400">{assignment.assignmentCode}</span>
               </div>
               {assignment.rab && (
                 <>
@@ -332,11 +332,11 @@ export function EditAssignmentClient({ assignment, workers }: EditAssignmentClie
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-slate-500">Kemajuan</span>
-                <span className="text-lg font-bold text-cyan-400">{form.progressPct}%</span>
+                <span className="text-lg font-bold text-desert-400">{form.progressPct}%</span>
               </div>
               <div className="h-3 w-full overflow-hidden rounded-full bg-white/10">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-emerald-500 transition-all"
+                  className="h-full rounded-full bg-gradient-to-r from-desert-400 to-emerald-500 transition-all"
                   style={{ width: `${form.progressPct}%` }}
                 />
               </div>

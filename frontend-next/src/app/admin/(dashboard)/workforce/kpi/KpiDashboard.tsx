@@ -260,7 +260,7 @@ export function KpiDashboard({ initialKpis, initialLeaderboard, initialPeriods, 
           <select
             value={selectedPeriod}
             onChange={(e) => handlePeriodChange(e.target.value)}
-            className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+            className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
           >
             <option value="">Semua Periode</option>
             {initialPeriods.map((p) => (
@@ -273,7 +273,7 @@ export function KpiDashboard({ initialKpis, initialLeaderboard, initialPeriods, 
 
         <button
           onClick={handleOpenCreateDialog}
-          className="inline-flex items-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2.5 text-sm font-medium text-cyan-300 transition-all hover:bg-cyan-400/20"
+          className="inline-flex items-center gap-2 rounded-xl border border-desert-400/30 bg-desert-400/10 px-4 py-2.5 text-sm font-medium text-desert-400 transition-all hover:bg-desert-400/20"
         >
           <Plus size={16} />
           Input KPI
@@ -306,7 +306,7 @@ export function KpiDashboard({ initialKpis, initialLeaderboard, initialPeriods, 
                     <p className="text-xs text-slate-500">{kpi.worker.role}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-lg font-bold text-cyan-400">{formatScore(kpi.overallScore)}</p>
+                    <p className="text-lg font-bold text-desert-400">{formatScore(kpi.overallScore)}</p>
                     {kpi.worker.grade && (
                       <Badge tone="info" className="text-xs">Grade {kpi.worker.grade}</Badge>
                     )}
@@ -327,7 +327,7 @@ export function KpiDashboard({ initialKpis, initialLeaderboard, initialPeriods, 
               action={
                 <button
                   onClick={handleOpenCreateDialog}
-                  className="inline-flex items-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-300"
+                  className="inline-flex items-center gap-2 rounded-xl border border-desert-400/30 bg-desert-400/10 px-4 py-2 text-sm font-medium text-desert-400"
                 >
                   <Plus size={16} />
                   Input KPI
@@ -452,7 +452,7 @@ export function KpiDashboard({ initialKpis, initialLeaderboard, initialPeriods, 
             <select
               value={formData.workerId}
               onChange={(e) => setFormData((prev) => ({ ...prev, workerId: e.target.value }))}
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
             >
               <option value="">Pilih Worker</option>
               {workers.map((w) => (
@@ -469,7 +469,7 @@ export function KpiDashboard({ initialKpis, initialLeaderboard, initialPeriods, 
             <select
               value={formData.period}
               onChange={(e) => handlePeriodSelectChange(e.target.value)}
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
             >
               <option value="">Pilih Periode</option>
               {initialPeriods.map((p) => (
@@ -491,7 +491,7 @@ export function KpiDashboard({ initialKpis, initialLeaderboard, initialPeriods, 
                 value={formData.qualityScore ?? ""}
                 onChange={(e) => handleScoreChange("qualityScore", e.target.value)}
                 placeholder="0-100"
-                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none"
+                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none"
               />
             </div>
             <div>
@@ -503,7 +503,7 @@ export function KpiDashboard({ initialKpis, initialLeaderboard, initialPeriods, 
                 value={formData.productivityScore ?? ""}
                 onChange={(e) => handleScoreChange("productivityScore", e.target.value)}
                 placeholder="0-100"
-                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none"
+                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none"
               />
             </div>
             <div>
@@ -515,7 +515,7 @@ export function KpiDashboard({ initialKpis, initialLeaderboard, initialPeriods, 
                 value={formData.attendanceScore ?? ""}
                 onChange={(e) => handleScoreChange("attendanceScore", e.target.value)}
                 placeholder="0-100"
-                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none"
+                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none"
               />
             </div>
             <div>
@@ -527,7 +527,7 @@ export function KpiDashboard({ initialKpis, initialLeaderboard, initialPeriods, 
                 value={formData.safetyScore ?? ""}
                 onChange={(e) => handleScoreChange("safetyScore", e.target.value)}
                 placeholder="0-100"
-                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none"
+                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none"
               />
             </div>
           </div>
@@ -541,7 +541,7 @@ export function KpiDashboard({ initialKpis, initialLeaderboard, initialPeriods, 
                 min="0"
                 value={formData.reworkCount}
                 onChange={(e) => handleCountChange("reworkCount", e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none"
+                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none"
               />
             </div>
             <div>
@@ -551,7 +551,7 @@ export function KpiDashboard({ initialKpis, initialLeaderboard, initialPeriods, 
                 min="0"
                 value={formData.defectCount}
                 onChange={(e) => handleCountChange("defectCount", e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none"
+                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none"
               />
             </div>
             <div>
@@ -561,7 +561,7 @@ export function KpiDashboard({ initialKpis, initialLeaderboard, initialPeriods, 
                 min="0"
                 value={formData.completedTasks}
                 onChange={(e) => handleCountChange("completedTasks", e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none"
+                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none"
               />
             </div>
             <div>
@@ -571,7 +571,7 @@ export function KpiDashboard({ initialKpis, initialLeaderboard, initialPeriods, 
                 min="0"
                 value={formData.lateDays}
                 onChange={(e) => handleCountChange("lateDays", e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none"
+                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none"
               />
             </div>
           </div>
@@ -584,7 +584,7 @@ export function KpiDashboard({ initialKpis, initialLeaderboard, initialPeriods, 
               onChange={(e) => setFormData((prev) => ({ ...prev, notes: e.target.value }))}
               placeholder="Catatan tambahan (opsional)"
               rows={3}
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none resize-none"
+              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none resize-none"
             />
           </div>
         </div>

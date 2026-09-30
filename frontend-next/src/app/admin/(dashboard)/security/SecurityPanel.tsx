@@ -18,7 +18,7 @@ function SubmitButton({ label, danger }: { label: string; danger?: boolean }) {
       className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition disabled:opacity-60 ${
         danger
           ? "border-red-400/30 bg-red-500/10 text-red-200 hover:bg-red-500/18"
-          : "border-cyan-400/30 bg-cyan-400/10 text-cyan-300 hover:bg-cyan-400/20"
+          : "border-desert-400/30 bg-desert-400/10 text-desert-400 hover:bg-desert-400/20"
       }`}
     >
       {pending ? "Memproses..." : label}
@@ -84,7 +84,7 @@ export function SecurityPanel({ twoFactorEnabled }: { twoFactorEnabled: boolean 
                 maxLength={6}
                 required
                 placeholder="000000"
-                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
+                className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none focus:ring-2 focus:ring-desert-400/10"
               />
               {disableState.status === "error" && (
                 <p className="text-sm text-red-400">{disableState.message}</p>
@@ -112,7 +112,7 @@ export function SecurityPanel({ twoFactorEnabled }: { twoFactorEnabled: boolean 
               required
               autoFocus
               placeholder="000000"
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
+              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none focus:ring-2 focus:ring-desert-400/10"
             />
             {enableState.status === "error" && (
               <p className="text-sm text-red-400">{enableState.message}</p>
@@ -128,7 +128,7 @@ export function SecurityPanel({ twoFactorEnabled }: { twoFactorEnabled: boolean 
             <button
               onClick={handleSetup}
               disabled={isPending}
-              className="mt-4 inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-300 transition-all hover:border-cyan-400/60 hover:bg-cyan-400/20 disabled:opacity-60"
+              className="mt-4 inline-flex items-center gap-2 rounded-full border border-desert-400/30 bg-desert-400/10 px-4 py-2 text-sm font-semibold text-desert-400 transition-all hover:border-desert-400/60 hover:bg-desert-400/20 disabled:opacity-60"
             >
               <ShieldCheck size={15} /> {isPending ? "Memuat..." : "Aktifkan 2FA"}
             </button>

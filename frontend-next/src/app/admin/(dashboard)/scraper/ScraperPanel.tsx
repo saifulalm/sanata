@@ -276,7 +276,7 @@ export function ScraperPanel() {
               <button
                 onClick={handleScrape}
                 disabled={!url || singleLoading}
-                className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2.5 text-sm font-semibold text-cyan-300 transition hover:border-cyan-400/60 hover:bg-cyan-400/20 disabled:opacity-50"
+                className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-desert-400/30 bg-desert-400/10 px-4 py-2.5 text-sm font-semibold text-desert-400 transition hover:border-desert-400/60 hover:bg-desert-400/20 disabled:opacity-50"
               >
                 {singleLoading ? <Loader2 size={14} className="animate-spin" /> : <Link2 size={14} />}
                 Scrape & Import
@@ -312,7 +312,7 @@ export function ScraperPanel() {
                 </div>
                 <a
                   href={`/admin/contents?search=${encodeURIComponent(singleResult.title)}`}
-                  className="inline-flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-300"
+                  className="inline-flex items-center gap-1 text-xs text-desert-400 hover:text-desert-400"
                 >
                   Lihat di daftar konten <ExternalLink size={12} />
                 </a>
@@ -356,7 +356,7 @@ export function ScraperPanel() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-slate-400">Slug:</span>
-                  <code className="text-cyan-400">/{previewData.slug}</code>
+                  <code className="text-desert-400">/{previewData.slug}</code>
                 </div>
                 {previewData.author && (
                   <div className="flex items-center justify-between">
@@ -459,7 +459,7 @@ export function ScraperPanel() {
             <button
               onClick={handleRssImport}
               disabled={rssSources.filter((s) => s.url && s.name).length === 0 || rssLoading}
-              className="flex items-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-300 transition hover:border-cyan-400/60 hover:bg-cyan-400/20 disabled:opacity-50"
+              className="flex items-center gap-2 rounded-xl border border-desert-400/30 bg-desert-400/10 px-4 py-2 text-sm font-semibold text-desert-400 transition hover:border-desert-400/60 hover:bg-desert-400/20 disabled:opacity-50"
             >
               {rssLoading ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
               {rssLoading ? "Mengimpor..." : "Import dari RSS"}
@@ -500,7 +500,7 @@ export function ScraperPanel() {
           actions={
             <button
               onClick={() => setShowHistory(!showHistory)}
-              className="flex items-center gap-1 text-xs text-slate-400 hover:text-cyan-300"
+              className="flex items-center gap-1 text-xs text-slate-400 hover:text-desert-400"
             >
               {showHistory ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
               {showHistory ? "Sembunyikan" : "Tampilkan"}
@@ -523,7 +523,7 @@ export function ScraperPanel() {
                   </div>
                   <a
                     href={`/admin/contents?search=${encodeURIComponent(item.title)}`}
-                    className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 text-slate-400 transition hover:border-cyan-400/30 hover:text-cyan-300"
+                    className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 text-slate-400 transition hover:border-desert-400/30 hover:text-desert-400"
                   >
                     <Edit3 size={12} />
                   </a>

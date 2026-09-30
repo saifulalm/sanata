@@ -75,16 +75,16 @@ export default async function JournalDetailPage({ params }: { params: Promise<{ 
         <Container className="max-w-3xl">
           {/* Breadcrumb Navigation */}
           <nav aria-label="Breadcrumb" className="mb-6">
-            <ol className="flex items-center gap-2 text-xs text-slate-400">
+            <ol className="flex items-center gap-2 text-xs text-charcoal-300">
               <li>
-                <Link href="/" className="flex items-center gap-1 hover:text-cyan-300 transition-colors">
+                <Link href="/" className="flex items-center gap-1 hover:text-desert-400 transition-colors">
                   <Home size={12} />
                   Beranda
                 </Link>
               </li>
               <li className="text-slate-600">/</li>
               <li>
-                <Link href="/journal" className="hover:text-cyan-300 transition-colors">
+                <Link href="/journal" className="hover:text-desert-400 transition-colors">
                   Insight
                 </Link>
               </li>
@@ -92,7 +92,7 @@ export default async function JournalDetailPage({ params }: { params: Promise<{ 
                 <>
                   <li className="text-slate-600">/</li>
                   <li>
-                    <Link href={`/journal?category=${article.category.slug}`} className="hover:text-cyan-300 transition-colors">
+                    <Link href={`/journal?category=${article.category.slug}`} className="hover:text-desert-400 transition-colors">
                       {article.category.name}
                     </Link>
                   </li>
@@ -107,18 +107,18 @@ export default async function JournalDetailPage({ params }: { params: Promise<{ 
 
           <Link
             href="/journal"
-            className="mb-6 inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.14em] text-slate-400 hover:text-cyan-300"
+            className="mb-6 inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.14em] text-charcoal-300 hover:text-desert-400"
           >
             <ArrowLeft size={16} /> Kembali ke Insight
           </Link>
 
           <GlassPanel className="p-7">
             {article.category && (
-              <p className="font-accent text-xs font-semibold uppercase tracking-[0.24em] text-cyan-300">{article.category.name}</p>
+              <p className="font-accent text-xs font-semibold uppercase tracking-[0.24em] text-desert-400">{article.category.name}</p>
             )}
             <h1 className="mt-3 font-display text-3xl font-semibold text-white md:text-4xl">{article.title}</h1>
 
-            <div className="mt-4 flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.14em] text-slate-400">
+            <div className="mt-4 flex flex-wrap items-center gap-4 text-xs uppercase tracking-[0.14em] text-charcoal-300">
               <span>
                 {new Date(article.publishedAt ?? article.createdAt).toLocaleDateString("id-ID", {
                   year: "numeric",
@@ -151,12 +151,12 @@ export default async function JournalDetailPage({ params }: { params: Promise<{ 
           <div className="prose-content mt-10" dangerouslySetInnerHTML={{ __html: article.body }} />
 
           <div className="mt-10 flex items-center gap-3 border-t border-white/10 pt-8">
-            <span className="text-sm font-medium text-slate-400">Bagikan:</span>
+            <span className="text-sm font-medium text-charcoal-300">Bagikan:</span>
             <a
               href={`https://wa.me/?text=${shareText}%20${encodeURIComponent(articleUrl)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-slate-400 hover:border-cyan-300/35 hover:text-cyan-300"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-charcoal-300 hover:border-desert-400/35 hover:text-desert-400"
               aria-label="Bagikan ke WhatsApp"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.44 9.9-9.9S17.5 2 12.04 2Z"/></svg>
@@ -165,14 +165,14 @@ export default async function JournalDetailPage({ params }: { params: Promise<{ 
               href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(articleUrl)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-slate-400 hover:border-cyan-300/35 hover:text-cyan-300"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-charcoal-300 hover:border-desert-400/35 hover:text-desert-400"
               aria-label="Bagikan ke Facebook"
             >
               <Facebook size={16} />
             </a>
             <a
               href={`mailto:?subject=${shareText}&body=${encodeURIComponent(articleUrl)}`}
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-slate-400 hover:border-cyan-300/35 hover:text-cyan-300"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-charcoal-300 hover:border-desert-400/35 hover:text-desert-400"
               aria-label="Bagikan lewat Email"
             >
               <Mail size={16} />
@@ -187,10 +187,10 @@ export default async function JournalDetailPage({ params }: { params: Promise<{ 
                   <Link
                     key={r.id}
                     href={`/journal/${r.slug}`}
-                    className="block rounded-[1.4rem] border border-white/10 bg-white/[0.04] p-5 transition hover:border-cyan-300/25"
+                    className="block rounded-[1.4rem] border border-white/10 bg-white/[0.04] p-5 transition hover:border-desert-400/25"
                   >
                     <p className="font-medium text-white">{r.title}</p>
-                    <p className="mt-1 line-clamp-1 text-sm text-slate-400">{r.excerpt}</p>
+                    <p className="mt-1 line-clamp-1 text-sm text-charcoal-300">{r.excerpt}</p>
                   </Link>
                 ))}
               </div>

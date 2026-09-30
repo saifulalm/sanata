@@ -42,16 +42,16 @@ export interface ExplodedFloor {
   durationWeeks: number;
 }
 
-/** Token warna dari CMS dipetakan ke warna hex yang dipakai material. */
+/** Token warna dari CMS dipetakan ke warna hex yang dipakai material - SANATA Brand */
 export const FLOOR_ACCENT_HEX: Record<string, string> = {
-  cyan: "#22d3ee",
-  indigo: "#818cf8",
-  amber: "#fbbf24",
-  emerald: "#34d399",
+  desert: "#C9AD82",
+  sand: "#D4B98C",
+  bronze: "#9A7D54",
+  copper: "#B89A6F",
 };
 
 export function floorAccentHex(token: string | null | undefined): string {
-  return (token && FLOOR_ACCENT_HEX[token]) || FLOOR_ACCENT_HEX.cyan;
+  return (token && FLOOR_ACCENT_HEX[token]) || FLOOR_ACCENT_HEX.desert;
 }
 
 /** Tinggi total dunia 3D; semua ukuran meter dipetakan ke dalam rentang ini. */
@@ -160,11 +160,12 @@ export function ExplodedBuildingView({
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     mount.appendChild(renderer.domElement);
 
-    scene.add(new THREE.AmbientLight("#e2e8f0", 1.1));
+    // SANATA Brand: Lighting with Desert accent
+    scene.add(new THREE.AmbientLight("#9AA9AD", 1.1));
     const keyLight = new THREE.DirectionalLight("#ffffff", 1.6);
     keyLight.position.set(6, 10, 7);
     scene.add(keyLight);
-    const rimLight = new THREE.DirectionalLight("#67e8f9", 0.7);
+    const rimLight = new THREE.DirectionalLight("#C9AD82", 0.7);
     rimLight.position.set(-7, 4, -6);
     scene.add(rimLight);
 
@@ -222,17 +223,19 @@ export function ExplodedBuildingView({
 
       // Garis tepi membuat tiap pelat tetap terbaca sebagai lantai terpisah
       // walau warnanya berdekatan.
+      // SANATA Brand: Charcoal edge color
       const edges = new THREE.LineSegments(
         track(new THREE.EdgesGeometry(new THREE.BoxGeometry(w, h, d))),
-        track(new THREE.LineBasicMaterial({ color: "#0f172a", transparent: true, opacity: 0.55 }))
+        track(new THREE.LineBasicMaterial({ color: "#0C1012", transparent: true, opacity: 0.55 }))
       );
       group.add(edges);
 
       // Pelat tipis di dasar tiap lantai — membaca sebagai pelat beton dan
       // memberi kedalaman saat lantai direnggangkan.
+      // SANATA Brand: Charcoal deck color
       const deck = new THREE.Mesh(
         track(new THREE.BoxGeometry(w * 1.04, h * 0.06, d * 1.04)),
-        track(new THREE.MeshStandardMaterial({ color: "#cbd5e1", metalness: 0.1, roughness: 0.8 }))
+        track(new THREE.MeshStandardMaterial({ color: "#6C848A", metalness: 0.1, roughness: 0.8 }))
       );
       deck.position.y = -h / 2;
       group.add(deck);
@@ -246,9 +249,10 @@ export function ExplodedBuildingView({
     });
 
     // Bidang tanah sebagai acuan visual saat lantai melayang.
+    // SANATA Brand: Charcoal ground
     const ground = new THREE.Mesh(
       track(new THREE.CircleGeometry(5.6, 64)),
-      track(new THREE.MeshStandardMaterial({ color: "#0b1220", metalness: 0.4, roughness: 0.9 }))
+      track(new THREE.MeshStandardMaterial({ color: "#0C1012", metalness: 0.4, roughness: 0.9 }))
     );
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = -WORLD_HEIGHT / 2 - 0.35;
@@ -434,6 +438,7 @@ function FallbackDiagram({
   const maxWidth = Math.max(...floors.map((f) => f.widthM), 1);
 
   return (
+    /* SANATA Brand: Charcoal fallback diagram */
     <div className={`${className ?? "relative h-full w-full"} flex flex-col-reverse items-center justify-center gap-1.5 p-6`}>
       {floors.map((floor) => (
         <div
@@ -445,10 +450,10 @@ function FallbackDiagram({
             background: floorAccentHex(floor.accent),
             opacity: selectedId && selectedId !== floor.id ? 0.4 : 0.9,
           }}
-          className="rounded-sm border border-slate-900/40"
+          className="rounded-sm border border-[#0C1012]/40"
         />
       ))}
-      <p className="mt-3 text-center text-[11px] text-slate-400">
+      <p className="mt-3 text-center text-[11px] text-charcoal-400">
         Peramban ini tidak mendukung WebGL — ditampilkan sebagai diagram tumpukan lantai.
       </p>
     </div>

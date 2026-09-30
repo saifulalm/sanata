@@ -40,6 +40,12 @@ function parseDays(value: string): number[] {
   return [...new Set(days)];
 }
 
+/** Blueprint Chat Widget configuration */
+export interface BlueprintConfig {
+  enabled: boolean;
+  accentColor: string;
+}
+
 export async function WhatsAppFloat() {
   const content = await getSiteContent();
 
@@ -133,4 +139,20 @@ export async function WhatsAppFloat() {
     .map((item) => ({ id: item.id, question: item.title!, answer: item.body! }));
 
   return <WhatsAppWidget agents={agents} config={config} knowledge={knowledge} />;
+}
+
+/**
+ * Blueprint Chat Widget Configuration
+ * Membaca pengaturan AI chatbot dari CMS
+ * 
+ * Default: disabled (WhatsApp is the primary widget)
+ * Enable via CMS setting: blueprint_chat_enabled = "true"
+ */
+export async function getBlueprintConfig(): Promise<BlueprintConfig> {
+  const content = await getSiteContent();
+  
+  return {
+    enabled: boolSetting(setting(content, "blueprint_chat_enabled", "false"), false),
+    accentColor: setting(content, "blueprint_chat_accent_color", "#67e8f9"),
+  };
 }

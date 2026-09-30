@@ -82,7 +82,7 @@ export default function NewQcPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <Link href="/admin/workforce/qc" className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-400 transition-colors hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400">
+        <Link href="/admin/workforce/qc" className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-400 transition-colors hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400">
           <ArrowLeft size={20} />
         </Link>
         <div>
@@ -103,7 +103,7 @@ export default function NewQcPage() {
                     value={form.assignmentId}
                     onFocus={loadData}
                     onChange={(e) => { setForm((p) => ({ ...p, assignmentId: e.target.value })); if (e.target.value) setErrors((e2) => { const { assignmentId, ...rest } = e2; return rest; }); }}
-                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
                   >
                     <option value="">Pilih Assignment</option>
                     {assignments.map((a) => (
@@ -118,7 +118,7 @@ export default function NewQcPage() {
                     value={form.workerId}
                     onFocus={loadData}
                     onChange={(e) => { setForm((p) => ({ ...p, workerId: e.target.value })); if (e.target.value) setErrors((e2) => { const { workerId, ...rest } = e2; return rest; }); }}
-                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
                   >
                     <option value="">Pilih Worker</option>
                     {workers.map((w) => (
@@ -162,7 +162,7 @@ export default function NewQcPage() {
                     value={form.itemDesc}
                     onChange={(e) => setForm((p) => ({ ...p, itemDesc: e.target.value }))}
                     placeholder="Besi Ø10mm - 50pcs"
-                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none"
+                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -171,7 +171,7 @@ export default function NewQcPage() {
                     value={form.criteria}
                     onChange={(e) => setForm((p) => ({ ...p, criteria: e.target.value }))}
                     placeholder="Standar/persyaratan QC"
-                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none"
+                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -180,7 +180,7 @@ export default function NewQcPage() {
                     value={form.measurement}
                     onChange={(e) => setForm((p) => ({ ...p, measurement: e.target.value }))}
                     placeholder="Hasil ukur aktual"
-                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none"
+                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none"
                   />
                 </div>
               </div>
@@ -196,7 +196,7 @@ export default function NewQcPage() {
                     onChange={(e) => { setForm((p) => ({ ...p, defectDesc: e.target.value })); if (e.target.value) setErrors((e2) => { const { defectDesc, ...rest } = e2; return rest; }); }}
                     placeholder="Jelaskan defect yang ditemukan..."
                     rows={3}
-                    className={`w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none resize-none${errors.defectDesc ? " border-rose-400/50" : ""}`}
+                    className={`w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none resize-none${errors.defectDesc ? " border-rose-400/50" : ""}`}
                   />
                   {errors.defectDesc && <p className="mt-1 text-xs text-rose-400">{errors.defectDesc}</p>}
                 </div>

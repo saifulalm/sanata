@@ -20,7 +20,7 @@ import {
 
 // Color constants
 const STATUS_COLORS: Record<string, string> = {
-  PUBLISHED: "#38bdf8",
+  PUBLISHED: "#C9AD82",
   DRAFT: "#f59e0b",
   ARCHIVED: "#f87171",
   NEW: "#fbbf24",
@@ -32,13 +32,12 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 const CHART_COLORS = [
-  "#38bdf8", // cyan
+  "#C9AD82", // desert
   "#fbbf24", // amber
   "#34d399", // emerald
   "#f87171", // red
   "#a78bfa", // purple
   "#f472b6", // pink
-  "#22d3ee", // cyan light
   "#fb923c", // orange
 ];
 
@@ -56,7 +55,7 @@ function CustomTooltip({
 
   return (
     <div className="rounded-xl border border-white/10 bg-[#081421]/95 px-4 py-3 shadow-xl backdrop-blur-xl">
-      {label && <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-cyan-200">{label}</p>}
+      {label && <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-desert-300">{label}</p>}
       {payload.map((entry, index) => (
         <div key={index} className="flex items-center gap-2 text-sm">
           <span
@@ -147,9 +146,9 @@ export function TopContentChart({ data }: { data: { title: string; views: number
         <Tooltip content={<CustomTooltip />} />
         <Bar
           dataKey="views"
-          fill="#38bdf8"
+          fill="#C9AD82"
           radius={[0, 6, 6, 0]}
-          background={{ fill: "rgba(56,189,248,0.05)", radius: [0, 6, 6, 0] } as Record<string, unknown>}
+          background={{ fill: "rgba(201,173,130,0.05)", radius: [0, 6, 6, 0] } as Record<string, unknown>}
         />
       </BarChart>
     </ResponsiveContainer>
@@ -255,8 +254,8 @@ export function ActivityChart({
       <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
         <defs>
           <linearGradient id="activityGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#38bdf8" stopOpacity={0.3} />
-            <stop offset="95%" stopColor="#38bdf8" stopOpacity={0} />
+            <stop offset="5%" stopColor="#C9AD82" stopOpacity={0.3} />
+            <stop offset="95%" stopColor="#C9AD82" stopOpacity={0} />
           </linearGradient>
         </defs>
         <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.08)" />
@@ -275,7 +274,7 @@ export function ActivityChart({
         <Area
           type="monotone"
           dataKey="activities"
-          stroke="#38bdf8"
+          stroke="#C9AD82"
           strokeWidth={2}
           fill="url(#activityGradient)"
         />
@@ -287,7 +286,7 @@ export function ActivityChart({
 // Mini sparkline for inline trends
 export function Sparkline({
   data,
-  color = "#38bdf8",
+  color = "#C9AD82",
   height = 32,
 }: {
   data: number[];
@@ -342,12 +341,12 @@ export function EngagementGauge({
           cy="50"
           r="40"
           fill="none"
-          stroke="#38bdf8"
+          stroke="#C9AD82"
           strokeWidth="8"
           strokeLinecap="round"
           strokeDasharray={`${(percent / 100) * 251.2} 251.2`}
           style={{
-            filter: "drop-shadow(0 0 6px rgba(56,189,248,0.5))",
+            filter: "drop-shadow(0 0 6px rgba(201,173,130,0.5))",
           }}
         />
       </svg>

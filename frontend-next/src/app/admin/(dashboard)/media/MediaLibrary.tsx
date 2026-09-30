@@ -45,7 +45,7 @@ function MediaCard({
   };
 
   return (
-    <div className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] transition hover:border-cyan-300/25">
+    <div className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] transition hover:border-desert-400/25">
       <div className="relative flex aspect-[4/3] items-center justify-center bg-[#060f1c]">
         {isImage ? (
           <Image
@@ -158,7 +158,7 @@ export function MediaLibrary({
             name="file"
             accept="image/jpeg,image/png,image/webp,image/gif"
             required
-            className="max-w-full flex-1 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-slate-300 file:mr-3 file:rounded-lg file:border-0 file:bg-cyan-300/15 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:uppercase file:tracking-[0.14em] file:text-cyan-100"
+            className="max-w-full flex-1 rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-slate-300 file:mr-3 file:rounded-lg file:border-0 file:bg-desert-400/15 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:uppercase file:tracking-[0.14em] file:text-desert-200"
           />
           <button type="submit" className={btn("primary")}>
             <Upload size={15} />

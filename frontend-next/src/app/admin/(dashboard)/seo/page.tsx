@@ -147,66 +147,68 @@ export default async function AdminSeoPage() {
           />
         ) : (
           <TableWrap>
-            <thead>
-              <tr>
-                <Th>Skor</Th>
-                <Th>Judul</Th>
-                <Th>Kata Kunci</Th>
-                <Th>Status</Th>
-                <Th className="text-center">Isu</Th>
-                <Th>Diperbarui</Th>
-              </tr>
-            </thead>
-            <tbody>
-              {sorted.map((row) => {
-                const gradeMeta = GRADE_META[row.grade] ?? { label: row.grade, tone: "neutral" as const };
-                return (
-                  <tr key={row.id} className="transition-colors hover:bg-white/[0.02]">
-                    <Td>
-                      <div className="flex items-center gap-2">
-                        <ScoreRing score={row.score} />
-                        <Badge tone={gradeMeta.tone}>{gradeMeta.label}</Badge>
-                      </div>
-                    </Td>
-                    <Td>
-                      <Link href={`/admin/contents?search=${encodeURIComponent(row.title)}`} className="font-medium text-slate-200 hover:text-cyan-300">
-                        {row.title}
-                      </Link>
-                      <p className="mt-0.5 font-mono text-[11px] text-slate-600">/{row.slug}</p>
-                    </Td>
-                    <Td>
-                      {row.focusKeyword ? (
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-0.5 text-xs text-slate-300">
-                          {row.focusKeyword}
-                        </span>
-                      ) : (
-                        <span className="text-xs text-slate-600">belum diisi</span>
-                      )}
-                    </Td>
-                    <Td>
-                      <div className="flex flex-wrap items-center gap-1.5">
-                        <Badge tone="neutral">{row.status}</Badge>
-                        {row.noIndex && (
-                          <Badge tone="warning">
-                            <EyeOff size={10} /> noindex
-                          </Badge>
+            <table className="w-full">
+              <thead>
+                <tr>
+                  <Th>Skor</Th>
+                  <Th>Judul</Th>
+                  <Th>Kata Kunci</Th>
+                  <Th>Status</Th>
+                  <Th className="text-center">Isu</Th>
+                  <Th>Diperbarui</Th>
+                </tr>
+              </thead>
+              <tbody>
+                {sorted.map((row) => {
+                  const gradeMeta = GRADE_META[row.grade] ?? { label: row.grade, tone: "neutral" as const };
+                  return (
+                    <tr key={row.id} className="transition-colors hover:bg-white/[0.02]">
+                      <Td>
+                        <div className="flex items-center gap-2">
+                          <ScoreRing score={row.score} />
+                          <Badge tone={gradeMeta.tone}>{gradeMeta.label}</Badge>
+                        </div>
+                      </Td>
+                      <Td>
+                        <Link href={`/admin/contents?search=${encodeURIComponent(row.title)}`} className="font-medium text-slate-200 hover:text-desert-400">
+                          {row.title}
+                        </Link>
+                        <p className="mt-0.5 font-mono text-[11px] text-slate-600">/{row.slug}</p>
+                      </Td>
+                      <Td>
+                        {row.focusKeyword ? (
+                          <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-0.5 text-xs text-slate-300">
+                            {row.focusKeyword}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-slate-600">belum diisi</span>
                         )}
-                      </div>
-                    </Td>
-                    <Td className="text-center">
-                      {row.issues > 0 ? (
-                        <span className="font-semibold tabular-nums text-amber-400">{row.issues}</span>
-                      ) : (
-                        <span className="text-slate-600">—</span>
-                      )}
-                    </Td>
-                    <Td>
-                      <span className="whitespace-nowrap text-xs text-slate-500">{formatDate(row.updatedAt)}</span>
-                    </Td>
-                  </tr>
-                );
-              })}
-            </tbody>
+                      </Td>
+                      <Td>
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          <Badge tone="neutral">{row.status}</Badge>
+                          {row.noIndex && (
+                            <Badge tone="warning">
+                              <EyeOff size={10} /> noindex
+                            </Badge>
+                          )}
+                        </div>
+                      </Td>
+                      <Td className="text-center">
+                        {row.issues > 0 ? (
+                          <span className="font-semibold tabular-nums text-amber-400">{row.issues}</span>
+                        ) : (
+                          <span className="text-slate-600">—</span>
+                        )}
+                      </Td>
+                      <Td>
+                        <span className="whitespace-nowrap text-xs text-slate-500">{formatDate(row.updatedAt)}</span>
+                      </Td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </TableWrap>
         )}
       </Panel>

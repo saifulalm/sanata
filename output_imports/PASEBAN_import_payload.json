@@ -1,0 +1,950 @@
+{
+  "rab": {
+    "number": "PASEBAN-2025-001",
+    "title": "RENOVASI RUMAH",
+    "clientName": "Pribadi",
+    "location": "Jl. Kramat Sawah No. E335, Paseban, Jakarta Pusat",
+    "projectDate": "2025-10-10",
+    "scheduleStart": "2025-10-10",
+    "restDays": [
+      0
+    ],
+    "notes": "Imported from TIME LINE (RE-SCHEDULE)-PASEBAN.xlsx | 85 items | Bobot Total: 200.00%"
+  },
+  "sections": [
+    {
+      "name": "Pekerjaan",
+      "order": 0,
+      "items": [
+        {
+          "order": 0,
+          "description": "Pasangan Bouwplank",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 14
+        },
+        {
+          "order": 1,
+          "description": "Air Kerja & Listrik Kerja",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 182
+        },
+        {
+          "order": 2,
+          "description": "Keamanan",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 182
+        },
+        {
+          "order": 3,
+          "description": "Mobilisasi dan Demobilisasi",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 2
+        },
+        {
+          "order": 4,
+          "description": "Pembersihan",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 26
+        }
+      ]
+    },
+    {
+      "name": "II. PEKERJAAN FONDASI",
+      "order": 1,
+      "items": [
+        {
+          "order": 0,
+          "description": "Galian Tanah",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 21
+        },
+        {
+          "order": 1,
+          "description": "Pemadatan Tanah",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 14,
+          "durationDays": 14
+        },
+        {
+          "order": 2,
+          "description": "Sloof/Tie Beam 30cm x 40cm",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 28
+        },
+        {
+          "order": 3,
+          "description": "Kolom Pedestal 35cm x 20cm TINGGI 175CM",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 35
+        },
+        {
+          "order": 4,
+          "description": "Pondasi Tapak 17 Titik",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 28
+        }
+      ]
+    },
+    {
+      "name": "III. PEKERJAAN STRUKTUR",
+      "order": 2,
+      "items": [
+        {
+          "order": 0,
+          "description": "Kolom 20 CM X 35 CM tinggi 350 cm",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 14,
+          "durationDays": 42
+        },
+        {
+          "order": 1,
+          "description": "Plat Lantai 1",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 14,
+          "durationDays": 56
+        },
+        {
+          "order": 2,
+          "description": "3.1",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 28,
+          "durationDays": 14
+        },
+        {
+          "order": 3,
+          "description": "3.2",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 28,
+          "durationDays": 14
+        },
+        {
+          "order": 4,
+          "description": "3.3",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 35,
+          "durationDays": 21
+        },
+        {
+          "order": 5,
+          "description": "Pekerjan Kolom",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 70,
+          "durationDays": 35
+        },
+        {
+          "order": 6,
+          "description": "2.1",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 63,
+          "durationDays": 28
+        },
+        {
+          "order": 7,
+          "description": "2.2",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 63,
+          "durationDays": 28
+        },
+        {
+          "order": 8,
+          "description": "2.3",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 91,
+          "durationDays": 28
+        },
+        {
+          "order": 9,
+          "description": "Plat Lantai 2",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 56,
+          "durationDays": 35
+        },
+        {
+          "order": 10,
+          "description": "Kolom 10cm x 25 cm tinggi 300cm 7 Titik",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 105,
+          "durationDays": 21
+        },
+        {
+          "order": 11,
+          "description": "Pekerjaan balok BL 2 10CM X 25 CM",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 98,
+          "durationDays": 21
+        }
+      ]
+    },
+    {
+      "name": "IV. PEKERJAAN DINDING",
+      "order": 3,
+      "items": [
+        {
+          "order": 0,
+          "description": "Pasangan Bata Ringan",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 35,
+          "durationDays": 21
+        },
+        {
+          "order": 1,
+          "description": "Pekerjaan Glass block",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 147,
+          "durationDays": 7
+        },
+        {
+          "order": 2,
+          "description": "Pasangan Bata Ringan",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 84,
+          "durationDays": 21
+        },
+        {
+          "order": 3,
+          "description": "Pek. Frame hollow 50x50mm fin black metal",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 84,
+          "durationDays": 21
+        },
+        {
+          "order": 4,
+          "description": "Pasangan Bata Ringan",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 105,
+          "durationDays": 21
+        },
+        {
+          "order": 5,
+          "description": "Pekerjaan Pasangan roster",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 280,
+          "durationDays": 14
+        }
+      ]
+    },
+    {
+      "name": "V. PEKERJAAN FINISHING DINDING",
+      "order": 4,
+      "items": [
+        {
+          "order": 0,
+          "description": "Pek. Plesteran 1PC: 5PS + Acian",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 154,
+          "durationDays": 14
+        },
+        {
+          "order": 1,
+          "description": "Pas. Keramik Dinding Lantai 1",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 259,
+          "durationDays": 14
+        },
+        {
+          "order": 2,
+          "description": "Opening Kusen PC",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 161,
+          "durationDays": 7
+        },
+        {
+          "order": 3,
+          "description": "Tali Air",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 273,
+          "durationDays": 14
+        },
+        {
+          "order": 4,
+          "description": "Pek. Plesteran 1PC: 5PS + Acian",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 140,
+          "durationDays": 14
+        },
+        {
+          "order": 5,
+          "description": "Pasangan Keramik Dinding (KM / WC)",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 245,
+          "durationDays": 21
+        },
+        {
+          "order": 6,
+          "description": "Opening Kusen PC",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 147,
+          "durationDays": 7
+        },
+        {
+          "order": 7,
+          "description": "Tali Air",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 273,
+          "durationDays": 14
+        },
+        {
+          "order": 8,
+          "description": "Pek. Plesteran 1PC: 5PS + Acian",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 112,
+          "durationDays": 14
+        },
+        {
+          "order": 9,
+          "description": "Pasangan Keramik Dinding (KM / WC)",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 245,
+          "durationDays": 21
+        },
+        {
+          "order": 10,
+          "description": "Opening Kusen PC",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 126,
+          "durationDays": 7
+        },
+        {
+          "order": 11,
+          "description": "Tali Air",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 126,
+          "durationDays": 7
+        }
+      ]
+    },
+    {
+      "name": "VI. PEKERJAAN ATAP",
+      "order": 5,
+      "items": [
+        {
+          "order": 0,
+          "description": "Rangka Atap Baja Ringan",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 196,
+          "durationDays": 7
+        },
+        {
+          "order": 1,
+          "description": "Waterproofing Dak & Canopy Beton",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 203,
+          "durationDays": 7
+        },
+        {
+          "order": 2,
+          "description": "Screed",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 203,
+          "durationDays": 7
+        },
+        {
+          "order": 3,
+          "description": "Penutup Atap",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 196,
+          "durationDays": 7
+        },
+        {
+          "order": 4,
+          "description": "Flashing Datar & Miring Alderon",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 203,
+          "durationDays": 7
+        },
+        {
+          "order": 5,
+          "description": "raiiling",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 266,
+          "durationDays": 14
+        },
+        {
+          "order": 6,
+          "description": "Zincromate",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 266,
+          "durationDays": 14
+        },
+        {
+          "order": 7,
+          "description": "Cat Besi",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 266,
+          "durationDays": 14
+        }
+      ]
+    },
+    {
+      "name": "VII. PEKERJAAN PLAFOND",
+      "order": 6,
+      "items": [
+        {
+          "order": 0,
+          "description": "Pekerjaan Plafond Lantai 1",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 119,
+          "durationDays": 7
+        },
+        {
+          "order": 1,
+          "description": "Pekerjaan Plafond Lantai 2",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 126,
+          "durationDays": 7
+        },
+        {
+          "order": 2,
+          "description": "Pekerjaan Plafond Lantai 3",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 133,
+          "durationDays": 7
+        },
+        {
+          "order": 3,
+          "description": "Pekerjaan Plafond K. Mandi (Lt.1~Lt.3)",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 119,
+          "durationDays": 21
+        },
+        {
+          "order": 4,
+          "description": "Pekerjaan Shadow Line",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 119,
+          "durationDays": 21
+        }
+      ]
+    },
+    {
+      "name": "VIII. PEKERJAAN FINISHING LANTAI",
+      "order": 7,
+      "items": [
+        {
+          "order": 0,
+          "description": "Pekerjaan Finishing Lantai 1",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 266,
+          "durationDays": 21
+        },
+        {
+          "order": 1,
+          "description": "Pekerjaan Finishing Lantai 2",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 245,
+          "durationDays": 21
+        },
+        {
+          "order": 2,
+          "description": "Pekerjaan Finishing Lantai 3",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 224,
+          "durationDays": 21
+        },
+        {
+          "order": 3,
+          "description": "Peekrjaan Carport",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 273,
+          "durationDays": 14
+        },
+        {
+          "order": 4,
+          "description": "Pekerjaan Waterproofing K. Mandi",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 231,
+          "durationDays": 42
+        },
+        {
+          "order": 5,
+          "description": "Pekerjaan Waterproofing Lt.3",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 224,
+          "durationDays": 21
+        }
+      ]
+    },
+    {
+      "name": "IX. PEKERJAAN KUSEN, JENDELA & PINTU",
+      "order": 8,
+      "items": [
+        {
+          "order": 0,
+          "description": "Pekerjaan Kusen, Pintu dan Jendela Kayu Lt.1",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 280,
+          "durationDays": 14
+        },
+        {
+          "order": 1,
+          "description": "Pekerjaan Kusen, Pintu dan Jendela Kayu Lt.2",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 280,
+          "durationDays": 14
+        },
+        {
+          "order": 2,
+          "description": "Pekerjaan Kusen, Pintu dan Jendela Kayu Lt.3",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 280,
+          "durationDays": 14
+        }
+      ]
+    },
+    {
+      "name": "X. PEKERJAAN PENGECATAN",
+      "order": 9,
+      "items": [
+        {
+          "order": 0,
+          "description": "Pek. Cat Dinding Dalam",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 280,
+          "durationDays": 21
+        },
+        {
+          "order": 1,
+          "description": "Pek. Cat Dinding Luar",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 280,
+          "durationDays": 21
+        },
+        {
+          "order": 2,
+          "description": "Pek. Cat Plafond Gypsum + List",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 280,
+          "durationDays": 21
+        },
+        {
+          "order": 3,
+          "description": "Pek. Cat Plafond Gypsum WR + List",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 280,
+          "durationDays": 21
+        },
+        {
+          "order": 4,
+          "description": "Finishing cat dinding parapet",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 301,
+          "durationDays": 7
+        }
+      ]
+    },
+    {
+      "name": "XI. PEKERJAAN MEP",
+      "order": 10,
+      "items": [
+        {
+          "order": 0,
+          "description": "Pekerjaan Instalasi Air",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 238,
+          "durationDays": 28
+        },
+        {
+          "order": 1,
+          "description": "Pek. Instalasi Kabel Titik Lampu",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 238,
+          "durationDays": 28
+        },
+        {
+          "order": 2,
+          "description": "Pek. Instalasi Kabel Stop Kontak",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 238,
+          "durationDays": 28
+        },
+        {
+          "order": 3,
+          "description": "Pek. Instalasi Kabel Toevoer Tipe 1",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 238,
+          "durationDays": 28
+        },
+        {
+          "order": 4,
+          "description": "Fitting Titik Lampu Standard",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 238,
+          "durationDays": 28
+        },
+        {
+          "order": 5,
+          "description": "Fitting Titik Lampu Downlight Outbow",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 238,
+          "durationDays": 28
+        },
+        {
+          "order": 6,
+          "description": "Pek. Instalasi Saklar Singgel & Double",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 238,
+          "durationDays": 28
+        },
+        {
+          "order": 7,
+          "description": "Pek. Instalasi Stop Kontak",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 238,
+          "durationDays": 28
+        },
+        {
+          "order": 8,
+          "description": "Pek. Instalasi Box MCB",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 238,
+          "durationDays": 28
+        }
+      ]
+    },
+    {
+      "name": "XII. PEKERJAAN SANITAR",
+      "order": 11,
+      "items": [
+        {
+          "order": 0,
+          "description": "Instalasi Closet Monoblock",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 161,
+          "durationDays": 14
+        },
+        {
+          "order": 1,
+          "description": "Instalasi Jet Washer",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 161,
+          "durationDays": 14
+        },
+        {
+          "order": 2,
+          "description": "Instalasi Floor Drain",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 161,
+          "durationDays": 14
+        },
+        {
+          "order": 3,
+          "description": "Instalasi Roof Drain",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 161,
+          "durationDays": 14
+        },
+        {
+          "order": 4,
+          "description": "Instalasi Kran Dinding",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 161,
+          "durationDays": 14
+        },
+        {
+          "order": 5,
+          "description": "Instalasi Kitchen Sink",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 161,
+          "durationDays": 14
+        },
+        {
+          "order": 6,
+          "description": "Instalasi Kran Kitchen Sink",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 161,
+          "durationDays": 14
+        }
+      ]
+    },
+    {
+      "name": "XIII. PEKERJAAN LAIN-LAIN",
+      "order": 12,
+      "items": [
+        {
+          "order": 0,
+          "description": "Pembongkaran dan Bobokan",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 182
+        },
+        {
+          "order": 1,
+          "description": "TOTAL KESELURUHAN",
+          "unit": "LS",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    }
+  ],
+  "_debug": {
+    "source": "PASEBAN Timeline",
+    "total_items": 85,
+    "total_bobot": 200.00000200000005,
+    "sections_found": 13
+  }
+}

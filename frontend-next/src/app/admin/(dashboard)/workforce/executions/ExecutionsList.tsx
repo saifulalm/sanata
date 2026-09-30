@@ -142,7 +142,7 @@ export function ExecutionsList({ initialExecutions, initialMeta }: ExecutionsLis
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Cari log code atau deskripsi..."
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10"
+              className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:border-desert-400/40 focus:outline-none focus:ring-2 focus:ring-desert-400/10"
             />
           </div>
 
@@ -153,14 +153,14 @@ export function ExecutionsList({ initialExecutions, initialMeta }: ExecutionsLis
             }}
             className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition-all ${
               showFilters || hasActiveFilters
-                ? "border-cyan-400/30 bg-cyan-400/10 text-cyan-300"
+                ? "border-desert-400/30 bg-desert-400/10 text-desert-400"
                 : "border-white/10 bg-white/[0.04] text-slate-400 hover:border-white/18"
             }`}
           >
             <Filter size={16} />
             Filter
             {hasActiveFilters && (
-              <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-cyan-400/20 text-xs text-cyan-300">
+              <span className="ml-1 flex h-5 w-5 items-center justify-center rounded-full bg-desert-400/20 text-xs text-desert-400">
                 {(dateFilter ? 1 : 0) + (workerFilter ? 1 : 0) + (assignmentFilter ? 1 : 0)}
               </span>
             )}
@@ -168,7 +168,7 @@ export function ExecutionsList({ initialExecutions, initialMeta }: ExecutionsLis
 
           <Link
             href="/admin/workforce/executions/new"
-            className="inline-flex items-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2.5 text-sm font-medium text-cyan-300 transition-all hover:bg-cyan-400/20"
+            className="inline-flex items-center gap-2 rounded-xl border border-desert-400/30 bg-desert-400/10 px-4 py-2.5 text-sm font-medium text-desert-400 transition-all hover:bg-desert-400/20"
           >
             <Camera size={16} />
             Log Pekerjaan
@@ -184,7 +184,7 @@ export function ExecutionsList({ initialExecutions, initialMeta }: ExecutionsLis
                 type="date"
                 value={dateFilter}
                 onChange={(e) => setDateFilter(e.target.value)}
-                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:border-desert-400/40 focus:outline-none"
               />
             </div>
 
@@ -194,7 +194,7 @@ export function ExecutionsList({ initialExecutions, initialMeta }: ExecutionsLis
                 value={workerFilter}
                 onChange={(e) => setWorkerFilter(e.target.value)}
                 onClick={loadFilters}
-                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:border-desert-400/40 focus:outline-none"
               >
                 <option value="">Semua Worker</option>
                 {workers.map((w) => (
@@ -211,7 +211,7 @@ export function ExecutionsList({ initialExecutions, initialMeta }: ExecutionsLis
                 value={assignmentFilter}
                 onChange={(e) => setAssignmentFilter(e.target.value)}
                 onClick={loadFilters}
-                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+                className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:border-desert-400/40 focus:outline-none"
               >
                 <option value="">Semua Assignment</option>
                 {assignments.map((a) => (
@@ -225,7 +225,7 @@ export function ExecutionsList({ initialExecutions, initialMeta }: ExecutionsLis
             <div className="flex gap-2">
               <button
                 onClick={handleFilter}
-                className="rounded-lg border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm text-cyan-300 hover:bg-cyan-400/20"
+                className="rounded-lg border border-desert-400/30 bg-desert-400/10 px-4 py-2 text-sm text-desert-400 hover:bg-desert-400/20"
               >
                 Terapkan
               </button>
@@ -251,7 +251,7 @@ export function ExecutionsList({ initialExecutions, initialMeta }: ExecutionsLis
           action={
             <Link
               href="/admin/workforce/executions/new"
-              className="inline-flex items-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-300"
+              className="inline-flex items-center gap-2 rounded-xl border border-desert-400/30 bg-desert-400/10 px-4 py-2 text-sm font-medium text-desert-400"
             >
               <Plus size={16} />
               Log Pekerjaan
@@ -265,12 +265,12 @@ export function ExecutionsList({ initialExecutions, initialMeta }: ExecutionsLis
               <Link
                 key={log.id}
                 href={`/admin/workforce/executions/${log.id}`}
-                className="group rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition-all hover:border-cyan-500/30 hover:bg-white/[0.06]"
+                className="group rounded-2xl border border-white/10 bg-white/[0.03] p-5 transition-all hover:border-desert-400/30 hover:bg-white/[0.06]"
               >
                 {/* Header */}
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="font-mono text-sm text-cyan-400">{log.logCode}</p>
+                    <p className="font-mono text-sm text-desert-400">{log.logCode}</p>
                     <p className="text-xs text-slate-500">
                       {formatDate(log.logDate)} • {formatTime(log.logDate)}
                     </p>

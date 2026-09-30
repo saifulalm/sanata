@@ -8,7 +8,7 @@ import { loginAction, type LoginState } from "./actions";
 const initialState: LoginState = { status: "idle" };
 
 const fieldClass =
-  "w-full rounded-2xl border border-cyan-300/15 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300 focus:outline-none focus:ring-2 focus:ring-cyan-300/20";
+  "w-full rounded-2xl border border-desert-400/15 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-desert-400 focus:outline-none focus:ring-2 focus:ring-desert-400/20";
 
 function SubmitButton({ requiresTwoFactor }: { requiresTwoFactor: boolean }) {
   const { pending } = useFormStatus();
@@ -16,7 +16,7 @@ function SubmitButton({ requiresTwoFactor }: { requiresTwoFactor: boolean }) {
     <button
       type="submit"
       disabled={pending}
-            className="w-full rounded-full border border-cyan-300/35 bg-cyan-300/10 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-cyan-100 transition-colors hover:bg-cyan-300/20 disabled:opacity-60"
+            className="w-full rounded-full border border-desert-400/35 bg-desert-400/10 px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-desert-200 transition-colors hover:bg-desert-400/20 disabled:opacity-60"
     >
       {pending ? "Memproses..." : requiresTwoFactor ? "Verifikasi" : "Masuk"}
     </button>

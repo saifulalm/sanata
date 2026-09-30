@@ -15,7 +15,7 @@ function SaveButton() {
     <button
       type="submit"
       disabled={pending}
-      className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-300 transition-all hover:border-cyan-400/60 hover:bg-cyan-400/20 disabled:opacity-60"
+      className="inline-flex items-center gap-2 rounded-full border border-desert-400/30 bg-desert-400/10 px-4 py-2 text-sm font-semibold text-desert-400 transition-all hover:border-desert-400/60 hover:bg-desert-400/20 disabled:opacity-60"
     >
       <Save size={14} /> {pending ? "Menyimpan..." : "Simpan Pengaturan"}
     </button>
@@ -74,13 +74,13 @@ export function SettingsForm({
                       name={`setting:${setting.key}`}
                       defaultValue={setting.value}
                       rows={3}
-                      className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10 transition"
+                      className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-desert-400/40 focus:outline-none focus:ring-2 focus:ring-desert-400/10 transition"
                     />
                   ) : (
                     <input
                       name={`setting:${setting.key}`}
                       defaultValue={setting.value}
-                      className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-300/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10 transition"
+                      className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-desert-400/40 focus:outline-none focus:ring-2 focus:ring-desert-400/10 transition"
                     />
                   )}
                 </div>

@@ -90,7 +90,7 @@ export default function MethodStatementDetailPage({ params }: Props) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-cyan-500 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-desert-400 border-t-transparent" />
       </div>
     );
   }
@@ -104,12 +104,12 @@ export default function MethodStatementDetailPage({ params }: Props) {
         <div className="flex items-center gap-4">
           <Link
             href="/admin/workforce/method-statements"
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-400 transition-colors hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-400 transition-colors hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
           >
             <ArrowLeft size={20} />
           </Link>
           <div>
-            <p className="font-mono text-sm text-cyan-400">{data.methodCode}</p>
+            <p className="font-mono text-sm text-desert-400">{data.methodCode}</p>
             <h1 className="text-xl font-bold text-white">{data.workItem}</h1>
           </div>
         </div>
@@ -291,7 +291,7 @@ export default function MethodStatementDetailPage({ params }: Props) {
               <div className="space-y-2">
                 {data.responsibleRoles.map((role, i) => (
                   <div key={i} className="flex items-center gap-2 text-sm text-slate-300">
-                    <div className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
+                    <div className="h-1.5 w-1.5 rounded-full bg-desert-400" />
                     {role}
                   </div>
                 ))}

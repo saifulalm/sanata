@@ -90,7 +90,7 @@ export default function QcTemplateDetailPage({ params }: Props) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-cyan-500 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-desert-400 border-t-transparent" />
       </div>
     );
   }
@@ -106,7 +106,7 @@ export default function QcTemplateDetailPage({ params }: Props) {
         <div className="flex items-center gap-4">
           <Link
             href="/admin/workforce/qc-templates"
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-400 transition-colors hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-400 transition-colors hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
           >
             <ArrowLeft size={20} />
           </Link>
@@ -217,7 +217,7 @@ export default function QcTemplateDetailPage({ params }: Props) {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-slate-500">Method Code</span>
-                <span className="font-mono text-sm text-cyan-400">
+                <span className="font-mono text-sm text-desert-400">
                   {data.methodCode || "—"}
                 </span>
               </div>
@@ -255,7 +255,7 @@ export default function QcTemplateDetailPage({ params }: Props) {
             <div className="space-y-2">
               <Link
                 href={`/admin/workforce/qc-templates/${data.id}/edit`}
-                className="flex w-full items-center justify-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2.5 text-sm font-medium text-cyan-300 transition-all hover:bg-cyan-400/20"
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-desert-400/30 bg-desert-400/10 px-4 py-2.5 text-sm font-medium text-desert-400 transition-all hover:bg-desert-400/20"
               >
                 <Edit size={16} />
                 Edit Template

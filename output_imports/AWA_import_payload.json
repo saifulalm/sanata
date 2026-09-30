@@ -1,0 +1,1630 @@
+{
+  "rab": {
+    "number": "AWA-2025-001",
+    "title": "Rumah Standar TIPE 53 - Cls. THE AWA 2",
+    "clientName": "PT. SENTOSA ASRI PROPERTINDO",
+    "location": "Jagorawi Golf Estate, Bogor - Jawa Barat",
+    "projectDate": "2022-08-01",
+    "scheduleStart": "2022-09-01",
+    "restDays": [
+      0
+    ],
+    "notes": "Imported from RAB Rumah THE AWA 2-2.xlsx | 151 items | Total: Rp 413.948.008"
+  },
+  "sections": [
+    {
+      "name": "I. PEKERJAAN PERSIAPAN",
+      "order": 0,
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Direksi Keet & Gudang",
+          "unit": "Ls",
+          "volume": 1,
+          "unitPrice": 523584.9056603774,
+          "amount": 523585.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Pas. Bouwplank & Pengukuran",
+          "unit": "M1",
+          "volume": 42,
+          "unitPrice": 16500,
+          "amount": 726000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "3. Pembersihan",
+          "unit": "M2",
+          "volume": 98,
+          "unitPrice": 7500,
+          "amount": 630000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "4. Air Kerja & Listrik Kerja",
+          "unit": "Ls",
+          "volume": 1,
+          "unitPrice": 1500000,
+          "amount": 1500000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "5. Pengadaan & Pelaksanaan K3 (Keselamatan & Kesehatan",
+          "unit": "Ls",
+          "volume": 1,
+          "unitPrice": 1250000,
+          "amount": 1250000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "7. Keamanan",
+          "unit": "Ls",
+          "volume": 1,
+          "unitPrice": 1250000,
+          "amount": 1250000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "name": "II. PEKERJAAN PONDASI",
+      "order": 1,
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Galian Tanah",
+          "unit": "M3",
+          "volume": 64.59165000000002,
+          "unitPrice": 48660,
+          "amount": 2543945.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Urug Pasir Di Bawah Pondasi Pile Cap, Pondasi Rolag Bata,Pondasi tapak, Tie Beam",
+          "unit": "M3",
+          "volume": 1.0390000000000001,
+          "unitPrice": 277700,
+          "amount": 118618.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "3. Lantai Kerja Di bawah Pondasi Pile Cap, Pondasi Tapak dan Tie Beam",
+          "unit": "M3",
+          "volume": 1.0390000000000001,
+          "unitPrice": 638400,
+          "amount": 272689.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "0. - Beton",
+          "unit": "M3",
+          "volume": 2.261,
+          "unitPrice": 930000,
+          "amount": 2365920.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "0. - Besi Tulangan Ø8",
+          "unit": "Kg",
+          "volume": 256.52565000000004,
+          "unitPrice": 16000,
+          "amount": 4884480.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "0. - Bekisting",
+          "unit": "M2",
+          "volume": 8.12,
+          "unitPrice": 105000,
+          "amount": 959316.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 6,
+          "description": "5. Pondasi Batu kali",
+          "unit": "M3",
+          "volume": 21.615000000000002,
+          "unitPrice": 850000,
+          "amount": 10766100.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 7,
+          "description": "0. - Beton",
+          "unit": "M3",
+          "volume": 0.3706499999999999,
+          "unitPrice": 930000,
+          "amount": 141712.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 8,
+          "description": "0. - Besi Tulangan Ø8",
+          "unit": "Kg",
+          "volume": 148.06998360000003,
+          "unitPrice": 16000,
+          "amount": 292566.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 9,
+          "description": "0. - Bekisting",
+          "unit": "M2",
+          "volume": 7.447999999999999,
+          "unitPrice": 105000,
+          "amount": 321505.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 10,
+          "description": "0. - Beton",
+          "unit": "M3",
+          "volume": 1.8937499999999998,
+          "unitPrice": 930000,
+          "amount": 1980900.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 11,
+          "description": "0. - Besi Tulangan Utama D13",
+          "unit": "Kg",
+          "volume": 307.772829,
+          "unitPrice": 16000,
+          "amount": 4089600.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 12,
+          "description": "0. - Besi Sengkang Ø8",
+          "unit": "Kg",
+          "volume": 60.80169600000002,
+          "unitPrice": 16000,
+          "amount": 399940.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 13,
+          "description": "0. - Bekisting",
+          "unit": "M2",
+          "volume": 25.25,
+          "unitPrice": 105000,
+          "amount": 1089958.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 14,
+          "description": "8. Pondasi Rollag batas kavling dan carport dan Teras",
+          "unit": "M1",
+          "volume": 14.959999999999999,
+          "unitPrice": 50296.5113,
+          "amount": 309335.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 15,
+          "description": "10. Urugan Tanah Kembali & Buang Tanah keluar Lokasi",
+          "unit": "M3",
+          "volume": 58.35890000000001,
+          "unitPrice": 35000,
+          "amount": 1386490.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "name": "III. PEKERJAAN STRUKTUR",
+      "order": 2,
+      "items": [
+        {
+          "order": 0,
+          "description": "0. - Beton",
+          "unit": "M3",
+          "volume": 1.769885,
+          "unitPrice": 930000,
+          "amount": 676686.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "0. - Besi Tulangan Utama D13",
+          "unit": "Kg",
+          "volume": 326.4434082000001,
+          "unitPrice": 16000,
+          "amount": 2147272.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "0. - Besi Sengkang Ø8",
+          "unit": "Kg",
+          "volume": 130.29949440000004,
+          "unitPrice": 16000,
+          "amount": 857081.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "0. - Bekisting",
+          "unit": "M2",
+          "volume": 37.8968,
+          "unitPrice": 105000,
+          "amount": 1635879.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "0. - Beton",
+          "unit": "M3",
+          "volume": 1.2892100000000002,
+          "unitPrice": 930000,
+          "amount": 492908.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "0. - Besi Tulangan Utama D13",
+          "unit": "Kg",
+          "volume": 306.89764560000003,
+          "unitPrice": 16000,
+          "amount": 2018705.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 6,
+          "description": "0. - Besi Sengkang Ø8",
+          "unit": "Kg",
+          "volume": 84.01760640000003,
+          "unitPrice": 16000,
+          "amount": 552649.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 7,
+          "description": "0. - Bekisting",
+          "unit": "M2",
+          "volume": 30.806000000000004,
+          "unitPrice": 105000,
+          "amount": 1329792.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 8,
+          "description": "0. - Beton",
+          "unit": "M3",
+          "volume": 0.8004000000000001,
+          "unitPrice": 930000,
+          "amount": 306020.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 9,
+          "description": "0. - Besi Sengkang D10",
+          "unit": "Kg",
+          "volume": 36.989999999999995,
+          "unitPrice": 16000,
+          "amount": 243312.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 10,
+          "description": "0. - Besi Sengkang Ø8",
+          "unit": "Kg",
+          "volume": 214.19873280000007,
+          "unitPrice": 16000,
+          "amount": 1408952.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 11,
+          "description": "0. - Bekisting",
+          "unit": "M2",
+          "volume": 32.016,
+          "unitPrice": 105000,
+          "amount": 1382024.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 12,
+          "description": "0. - Beton",
+          "unit": "M3",
+          "volume": 5.747305000000001,
+          "unitPrice": 930000,
+          "amount": 2197386.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 13,
+          "description": "0. - Besi Tulangan Utama D13",
+          "unit": "Kg",
+          "volume": 584.8621447500001,
+          "unitPrice": 16000,
+          "amount": 3847093.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 14,
+          "description": "0. - Besi Sengkang Ø8",
+          "unit": "Kg",
+          "volume": 566.4155400000002,
+          "unitPrice": 16000,
+          "amount": 3725756.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 15,
+          "description": "0. - Bekisting",
+          "unit": "M2",
+          "volume": 116.10760000000002,
+          "unitPrice": 105000,
+          "amount": 5011978.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 16,
+          "description": "0. - Beton",
+          "unit": "M3",
+          "volume": 6.48,
+          "unitPrice": 690000,
+          "amount": 2773381.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 17,
+          "description": "0. - Besi Sengkang Ø8",
+          "unit": "Kg",
+          "volume": 419.8118400000002,
+          "unitPrice": 16000,
+          "amount": 1929308.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 18,
+          "description": "0. - Beton",
+          "unit": "M3",
+          "volume": 5.944999999999999,
+          "unitPrice": 930000,
+          "amount": 3959568.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 19,
+          "description": "0. - Besi Tulangan Utama Ø8",
+          "unit": "Kg",
+          "volume": 761.7572640000003,
+          "unitPrice": 16000,
+          "amount": 8174592.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 20,
+          "description": "0. - Bekisting",
+          "unit": "M2",
+          "volume": 51.67999999999999,
+          "unitPrice": 105000,
+          "amount": 3725400.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 21,
+          "description": "0. - Beton",
+          "unit": "M3",
+          "volume": 1.8884999999999996,
+          "unitPrice": 930000,
+          "amount": 1788204.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 22,
+          "description": "0. - Besi  Ø8 dan D10",
+          "unit": "Kg",
+          "volume": 154.77849000000003,
+          "unitPrice": 16000,
+          "amount": 3691776.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 23,
+          "description": "0. - Bekisting",
+          "unit": "M2",
+          "volume": 11.819999999999999,
+          "unitPrice": 105000,
+          "amount": 510230.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 24,
+          "description": "0. - Beton",
+          "unit": "M3",
+          "volume": 0.28800000000000003,
+          "unitPrice": 4500000,
+          "amount": 324000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "name": "IV. PEKERJAAN DINDING",
+      "order": 3,
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Pas. Bata Ringan",
+          "unit": "M2",
+          "volume": 300.45999999999987,
+          "unitPrice": 105000,
+          "amount": 25773300.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Pas. Bata Krawangan/Roster",
+          "unit": "M2",
+          "volume": 9,
+          "unitPrice": 275000,
+          "amount": 594000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "name": "V. PEKERJAAN PELAPIS DINDING",
+      "order": 4,
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Plester & Acian Dinding",
+          "unit": "M2",
+          "volume": 427.8512499999997,
+          "unitPrice": 95000,
+          "amount": 16709968.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "0.",
+          "unit": "M2",
+          "volume": 27.52,
+          "unitPrice": 205500,
+          "amount": 2928375.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "0.",
+          "unit": "M2",
+          "volume": 6,
+          "unitPrice": 205500,
+          "amount": 1233000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "0.",
+          "unit": "M2",
+          "volume": 4,
+          "unitPrice": 205500,
+          "amount": 822000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "0.",
+          "unit": "M2",
+          "volume": 27.52,
+          "unitPrice": 205500,
+          "amount": 2928375.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "name": "VI. PEKERJAAN ATAP",
+      "order": 5,
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Rangka Atap Baja Ringan ( Incl. Aluminium Foil, Flashing)",
+          "unit": "M2",
+          "volume": 27.665,
+          "unitPrice": 203000,
+          "amount": 10058650.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Penutup Atap Genteng Beton Flat",
+          "unit": "M2",
+          "volume": 27.665,
+          "unitPrice": 106500,
+          "amount": 5277075.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "3. Nok Genteng Beton",
+          "unit": "M1",
+          "volume": 8.7,
+          "unitPrice": 163000,
+          "amount": 2102700.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "4. Penutup Atap Beton",
+          "unit": "M2",
+          "volume": 15.015000000000002,
+          "unitPrice": 540000,
+          "amount": 3753750.0000000005,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "5. Listplank GRC",
+          "unit": "M1",
+          "volume": 25,
+          "unitPrice": 21250,
+          "amount": 370873.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "6. Ban-Banan 100 x 50 mm",
+          "unit": "M1",
+          "volume": 12,
+          "unitPrice": 65000,
+          "amount": 3220750.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 6,
+          "description": "8. Waterproofing Dak Beton & Canopy + Screed t = 3 cm",
+          "unit": "M2",
+          "volume": 16.05,
+          "unitPrice": 55000,
+          "amount": 1783650.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "name": "VII. PEKERJAAN PLAFOND",
+      "order": 6,
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Plafond Gypsum + Rangka (R. Utama + R. Tidur + R. Duduk + Teras)",
+          "unit": "M2",
+          "volume": 68.814,
+          "unitPrice": 115000,
+          "amount": 5524596.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Plafond Gypsum WR + Rangka (KM/WC)",
+          "unit": "M2",
+          "volume": 8.5565,
+          "unitPrice": 115000,
+          "amount": 686942.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "3. Plafond GRC + Rangka Hollow (Tritisan)",
+          "unit": "M2",
+          "volume": 14.5,
+          "unitPrice": 130000,
+          "amount": 1315943.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "4. Shadow Line 1x1 Cm  (R. Dalam, Teras)",
+          "unit": "M1",
+          "volume": 59.06,
+          "unitPrice": 20000,
+          "amount": 824611.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "5. Shadow Line 1x1 Cm (KM/WC)",
+          "unit": "M1",
+          "volume": 7.699999999999999,
+          "unitPrice": 20000,
+          "amount": 107509.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "6. Shadow Line 1x1 Cm (Tritisan)",
+          "unit": "M1",
+          "volume": 35,
+          "unitPrice": 20000,
+          "amount": 488679.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 6,
+          "description": "7. Man Hole ( Buatan pabrik )",
+          "unit": "Bh",
+          "volume": 2,
+          "unitPrice": 200000,
+          "amount": 400000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "name": "VIII. PEKERJAAN LANTAI",
+      "order": 7,
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Pemadatan Tanah Lantai Dasar (Bangunan + Carport)",
+          "unit": "M2",
+          "volume": 44.418,
+          "unitPrice": 7000,
+          "amount": 392840.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Urugan Pasir t = 5 cm (Bangunan + Carport )",
+          "unit": "M3",
+          "volume": 2.2209,
+          "unitPrice": 350000,
+          "amount": 982100.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "3. Lantai Kerja t = 5 cm ( Bangunan + Carport)",
+          "unit": "M3",
+          "volume": 2.2209,
+          "unitPrice": 700000,
+          "amount": 1964200.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "0. Homogenius  60 x 60 cm R. utama (R. Tidur,Tamu, Makan)",
+          "unit": "M2",
+          "volume": 37.464,
+          "unitPrice": 205500,
+          "amount": 4951340.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "0. Homogenius  60 x 60 cm (Teras)",
+          "unit": "M2",
+          "volume": 2.53,
+          "unitPrice": 205500,
+          "amount": 362960.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "0. Homogenius 60 x 60 cm (KM/WC Lt. Bawah)",
+          "unit": "M2",
+          "volume": 4.4239999999999995,
+          "unitPrice": 205500,
+          "amount": 423330.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 6,
+          "description": "0. Carport",
+          "unit": "M2",
+          "volume": 31.118500000000004,
+          "unitPrice": 205500,
+          "amount": 6463001.265000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 7,
+          "description": "0. Homogenius 60 x 60 cm (R. Tidur, Hall) (K1)",
+          "unit": "M2",
+          "volume": 25.520000000000003,
+          "unitPrice": 205500,
+          "amount": 4469625.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 8,
+          "description": "0. Homogenius  60 x 60 cm (Teras)",
+          "unit": "M2",
+          "volume": 3.3,
+          "unitPrice": 205500,
+          "amount": 244545.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 9,
+          "description": "0. Homogenius  60 x 60 cm (KM/WC Lt. Atas)",
+          "unit": "M2",
+          "volume": 4.1325,
+          "unitPrice": 205500,
+          "amount": 423330.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 10,
+          "description": "0. Plint 10 x 60 cm R Utama",
+          "unit": "M1",
+          "volume": 59.06,
+          "unitPrice": 51375,
+          "amount": 2118220.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 11,
+          "description": "0. Plint 10 x 60  cm (Teras)",
+          "unit": "M1",
+          "volume": 7.699999999999999,
+          "unitPrice": 51375,
+          "amount": 276165.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 12,
+          "description": "0. Grouting Sparing Floor Drain, Roof Drain & Closet",
+          "unit": "Ttk",
+          "volume": 1,
+          "unitPrice": 104594.91500000001,
+          "amount": 104595.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 13,
+          "description": "0. Sealent closet & wastafel",
+          "unit": "Ls",
+          "volume": 1,
+          "unitPrice": 193727.973,
+          "amount": 193728.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 14,
+          "description": "0. KM/WC",
+          "unit": "M2",
+          "volume": 24.3325,
+          "unitPrice": 26376.109,
+          "amount": 448047.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "name": "IX. PEKERJAAN KUSEN, PINTU & JENDELA",
+      "order": 8,
+      "items": [
+        {
+          "order": 0,
+          "description": "0. Kusen dan Jendela",
+          "unit": "ls",
+          "volume": 0.0,
+          "unitPrice": 0.0,
+          "amount": 20408660.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "0. Pintu",
+          "unit": "ls",
+          "volume": 0.0,
+          "unitPrice": 0.0,
+          "amount": 13200000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "name": "XI. PEKERJAAN FINISHING TANGGA BALKON",
+      "order": 10,
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Railling Tangga Utama + Finish",
+          "unit": "M1",
+          "volume": 8,
+          "unitPrice": 700000,
+          "amount": 7929465.199999999,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Pelapis Trap + Bordes Tangga Utama + Step Nosing",
+          "unit": "M2",
+          "volume": 13.75,
+          "unitPrice": 267150,
+          "amount": 2564388.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "3. Railling balkon + Finish",
+          "unit": "M1",
+          "volume": 2,
+          "unitPrice": 700000,
+          "amount": 3395213,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "name": "XII. PEKERJAAN PENGECATAN",
+      "order": 11,
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Cat Dinding Dalam",
+          "unit": "M2",
+          "volume": 329.8512499999997,
+          "unitPrice": 16000,
+          "amount": 3684376.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Cat Dinding Luar",
+          "unit": "M2",
+          "volume": 98,
+          "unitPrice": 28000,
+          "amount": 1915623.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "3. Cat Lisplank",
+          "unit": "M2",
+          "volume": 25,
+          "unitPrice": 28000,
+          "amount": 488679.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "4. Cat Plafond Gypsum + List",
+          "unit": "M2",
+          "volume": 77.37049999999999,
+          "unitPrice": 16000,
+          "amount": 864214.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "name": "XIII. PEKERJAAN INSTALASI AIR",
+      "order": 12,
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Instalasi Air Bersih (jaringan utama )",
+          "unit": "M1",
+          "volume": 87,
+          "unitPrice": 24000,
+          "amount": 1111200.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Instalasi Air Bersih (jaringan karan )",
+          "unit": "M1",
+          "volume": 37,
+          "unitPrice": 24000,
+          "amount": 782880.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "3. Instalasi Air Panas",
+          "unit": "M1",
+          "volume": 30,
+          "unitPrice": 79375,
+          "amount": 873125.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "4. Instalasi Air Bekas dari KM,Wastafel,Dapur",
+          "unit": "M1",
+          "volume": 30.700000000000003,
+          "unitPrice": 103225.42749999999,
+          "amount": 3220633.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "5. Instalasi Air Kotor KE SEPTIKTANK",
+          "unit": "M1",
+          "volume": 14.3,
+          "unitPrice": 103225.42749999999,
+          "amount": 1837413.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "6. Pipa Hawa dari KM",
+          "unit": "M1",
+          "volume": 10,
+          "unitPrice": 40928.445,
+          "amount": 302870.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 6,
+          "description": "7. Instalasi Air Kotor / Air Hujan",
+          "unit": "M1",
+          "volume": 29,
+          "unitPrice": 59755.5297,
+          "amount": 2838388.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 7,
+          "description": "8. Bak Kontrol 40 x 40 cm (uk. Dalam) Terbuka",
+          "unit": "Unit",
+          "volume": 3,
+          "unitPrice": 438091.99999999994,
+          "amount": 876184.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 8,
+          "description": "9. Septictank, Kapasitas Tangki 1000L",
+          "unit": "Unit",
+          "volume": 1,
+          "unitPrice": 2750000,
+          "amount": 2750000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 9,
+          "description": "10. Grease Trap dibawah zink 30 Liter",
+          "unit": "Unit",
+          "volume": 1,
+          "unitPrice": 602376.5,
+          "amount": 602376.5,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 10,
+          "description": "11. Fibre Roof Water Tank 1000 L + Dudukannya + Instalasi",
+          "unit": "Unit",
+          "volume": 1,
+          "unitPrice": 2750000,
+          "amount": 2750000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 11,
+          "description": "12. Pompa air + Rumahnya",
+          "unit": "Unit",
+          "volume": 1,
+          "unitPrice": 13000000,
+          "amount": 13000000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 12,
+          "description": "13. Sumur Resapan dg Buis beton Dia 100",
+          "unit": "Unit",
+          "volume": 1,
+          "unitPrice": 1490000,
+          "amount": 1490000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "name": "XIV. PEKERJAAN INSTALASI LISTRIK",
+      "order": 13,
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Instalasi Titik Lampu Downlight ( JD 11 )",
+          "unit": "Ttk",
+          "volume": 11,
+          "unitPrice": 273588.45399999997,
+          "amount": 3556650.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Instalasi Stop Kontak ( 6 + 7 )",
+          "unit": "Ttk",
+          "volume": 15,
+          "unitPrice": 246426.74999999997,
+          "amount": 2217841.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "3. Saklar Single ( JD 6 )",
+          "unit": "Ttk",
+          "volume": 6,
+          "unitPrice": 26594.37486,
+          "amount": 79783.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "4. Saklar Double ( JD 4 )",
+          "unit": "Bh",
+          "volume": 4,
+          "unitPrice": 42166.354999999996,
+          "amount": 168665.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "5. Saklar Hotel",
+          "unit": "Bh",
+          "volume": 1,
+          "unitPrice": 48204.613000000005,
+          "amount": 96409.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "6. Stop Kontak",
+          "unit": "Bh",
+          "volume": 14,
+          "unitPrice": 36535.77757,
+          "amount": 328822.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 6,
+          "description": "7. Stop Kontak Waterproof",
+          "unit": "Bh",
+          "volume": 1,
+          "unitPrice": 77309.285,
+          "amount": 154619.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 7,
+          "description": "8. Instalasi TV + Outlet TV",
+          "unit": "Ttk",
+          "volume": 4,
+          "unitPrice": 342310.85081,
+          "amount": 1026933.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 8,
+          "description": "9. Spliter TV",
+          "unit": "Bh",
+          "volume": 4,
+          "unitPrice": 101866.352,
+          "amount": 305599.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 9,
+          "description": "10. Instalasi Telephone + Outlet Telephone (dari ONT s/d Outlet Telephone)",
+          "unit": "Bh",
+          "volume": 1,
+          "unitPrice": 273807.5,
+          "amount": 273808.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 10,
+          "description": "11. Kabel Toevoer dari KWH ke Box Skring Lt. Dasar",
+          "unit": "Bh",
+          "volume": 2,
+          "unitPrice": 438091.99999999994,
+          "amount": 876184.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 11,
+          "description": "12. Kabel Toevoer dari Box Skring Lt. Dasar ke Box Skring Lt. Atas",
+          "unit": "Bh",
+          "volume": 3.5,
+          "unitPrice": 876183.9999999999,
+          "amount": 1752368.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 12,
+          "description": "13. Sparing Kabel Telepon & TV Kabel",
+          "unit": "Bh",
+          "volume": 14,
+          "unitPrice": 40928.445,
+          "amount": 368356.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 13,
+          "description": "14. Sparing kabel SR PLN dari Pagar Depan ke Meter PLN",
+          "unit": "Ttk",
+          "volume": 4,
+          "unitPrice": 54571.26,
+          "amount": 109143.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 14,
+          "description": "15. Arde Pentanahan",
+          "unit": "Bh",
+          "volume": 1,
+          "unitPrice": 350000,
+          "amount": 350000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 15,
+          "description": "16. Instalasi Lampu Taman + Lampu Taman",
+          "unit": "Ttk",
+          "volume": 1,
+          "unitPrice": 1100706.15,
+          "amount": 1100706.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 16,
+          "description": "17. Stop Kontak AC & Water Heater ( TOTAL 6 )",
+          "unit": "Ttk",
+          "volume": 6,
+          "unitPrice": 82142.25,
+          "amount": 410711.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 17,
+          "description": "18. Instalasi Power AC + Drain + Pipa Refrigrant",
+          "unit": "Unit",
+          "volume": 4,
+          "unitPrice": 1215000,
+          "amount": 3645000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 18,
+          "description": "19. Instalasi dan unit Exhouse Fan dari KM atas dan bawah ( Komplit )",
+          "unit": "Unit",
+          "volume": 2,
+          "unitPrice": 500000,
+          "amount": 1000000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 19,
+          "description": "21. Instalasi dan unit Lampu Gantung Komplit (Prov.Sum)",
+          "unit": "Unit",
+          "volume": 1,
+          "unitPrice": 1500000,
+          "amount": 1500000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "name": "XV. PEKERJAAN ACCESSORIES SANITAIR",
+      "order": 14,
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Closet Monoblock ( Komplit )",
+          "unit": "Set",
+          "volume": 2,
+          "unitPrice": 5400000,
+          "amount": 10800000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "3. Kran Taman",
+          "unit": "Bh",
+          "volume": 1,
+          "unitPrice": 315000,
+          "amount": 630000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "5. Kran Kitchen Zink",
+          "unit": "Bh",
+          "volume": 1,
+          "unitPrice": 469511.0594,
+          "amount": 469511.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "6. Tempat Sabun KM/WC",
+          "unit": "Bh",
+          "volume": 2,
+          "unitPrice": 217023.0796125,
+          "amount": 434046.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "7. Cermin KM/WC Lt. Bawah & Lt. Atas",
+          "unit": "Bh",
+          "volume": 2,
+          "unitPrice": 318692.4905,
+          "amount": 637385.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "9. Roof Drain",
+          "unit": "Bh",
+          "volume": 5,
+          "unitPrice": 256963.33750000002,
+          "amount": 1284817.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 6,
+          "description": "10. Kitchen Zink",
+          "unit": "Unit",
+          "volume": 1,
+          "unitPrice": 353332.256925881,
+          "amount": 353332.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 7,
+          "description": "11. Clean Out Stainless Steel",
+          "unit": "Bh",
+          "volume": 2,
+          "unitPrice": 286499.115,
+          "amount": 572998.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "name": "XVI. PEKERJAAN LAIN-LAIN",
+      "order": 15,
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Pembersihan Akhir",
+          "unit": "Ls",
+          "volume": 1,
+          "unitPrice": 500000,
+          "amount": 500000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Buang Puing",
+          "unit": "Ls",
+          "volume": 1,
+          "unitPrice": 1200000,
+          "amount": 1200000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "3. Anti rayap Ex. Terminik (pondasi, lantai)",
+          "unit": "lS",
+          "volume": 1,
+          "unitPrice": 1000000,
+          "amount": 1000000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "4. Kanopy Polycarbonate Twinlite 8 mm + Tiang Besi Hollow 150x250x6 mm",
+          "unit": "M2",
+          "volume": 29.15,
+          "unitPrice": 875000,
+          "amount": 25506250,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "5. Tangga Maintanace",
+          "unit": "M2",
+          "volume": 0.0,
+          "unitPrice": 550000,
+          "amount": 1628000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "name": "XVII. PEKERJAAN ADDITIONAL (+/-)",
+      "order": 16,
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Pekerjaan Striping Tanah",
+          "unit": "M3",
+          "volume": 0,
+          "unitPrice": 135000,
+          "amount": 59661.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Pekerjaan Buang Puing",
+          "unit": "M3",
+          "volume": 0,
+          "unitPrice": 142000,
+          "amount": 86202.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "0. Total ( I s/d XVII )",
+          "unit": "ls",
+          "volume": 0.0,
+          "unitPrice": 0.0,
+          "amount": 2634458.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "0. Dibulatkan",
+          "unit": "ls",
+          "volume": 0.0,
+          "unitPrice": 0.0,
+          "amount": 2634458.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "0. Dibulatkan",
+          "unit": "ls",
+          "volume": 0.0,
+          "unitPrice": 0.0,
+          "amount": 2634450.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "0. Material SBO",
+          "unit": "ls",
+          "volume": 0.0,
+          "unitPrice": 0.0,
+          "amount": 322845.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 6,
+          "description": "0. PPN 12 %",
+          "unit": "ls",
+          "volume": 0.0,
+          "unitPrice": 0.0,
+          "amount": 41468000,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 7,
+          "description": "0. Grand Total",
+          "unit": "ls",
+          "volume": 0.0,
+          "unitPrice": 0.0,
+          "amount": 2957296.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 8,
+          "description": "0. Harga Dasar + Fee 10 % Per M² Bangunan",
+          "unit": "ls",
+          "volume": 0.0,
+          "unitPrice": 0.0,
+          "amount": 49707.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 9,
+          "description": "0. Harga Dasar + Fee 10 % + PPN 10 % Per M² Bangunan",
+          "unit": "ls",
+          "volume": 0.0,
+          "unitPrice": 0.0,
+          "amount": 55798.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 10,
+          "description": "0.",
+          "unit": "ls",
+          "volume": 0.0,
+          "unitPrice": 0.25,
+          "amount": 1317225.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 11,
+          "description": "0.",
+          "unit": "ls",
+          "volume": 0.0,
+          "unitPrice": 0.75,
+          "amount": 1975838.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 12,
+          "description": "0.",
+          "unit": "ls",
+          "volume": 0.0,
+          "unitPrice": 0.0,
+          "amount": 3293063.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    }
+  ],
+  "_debug": {
+    "source": "BQ L7 (Sub Total proportional)",
+    "total_items": 151,
+    "total_amount": 413948007.965,
+    "grand_total_rekap": 364526400,
+    "rekap_items": 325479950,
+    "sections_found": 16
+  }
+}

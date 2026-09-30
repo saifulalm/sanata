@@ -78,9 +78,9 @@ export default async function ProjectsPage({
                 <RevealOnScroll key={p.id} delay={(i % 3) * 0.06}>
                   <Link
                     href={`/projects/${p.slug}`}
-                    className="group flex h-full flex-col overflow-hidden rounded-[1.8rem] border border-white/10 bg-white/[0.04] backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-cyan-300/35"
+                    className="group flex h-full flex-col overflow-hidden rounded-[1.8rem] border border-white/10 bg-white/[0.04] backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-desert-400/35"
                   >
-                    <div className="relative flex h-56 items-center justify-center overflow-hidden border-b border-white/10 bg-slate-950/70 text-cyan-300/60">
+                    <div className="relative flex h-56 items-center justify-center overflow-hidden border-b border-white/10 bg-charcoal-800/70 text-desert-400/60">
                       {p.images[0] ? (
                         <Image
                           src={p.images[0].url}
@@ -98,10 +98,10 @@ export default async function ProjectsPage({
                     </div>
                     <div className="p-6">
                       {p.category && (
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-cyan-300">{p.category.name}</p>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-desert-400">{p.category.name}</p>
                       )}
                       <p className="mt-2 font-display text-lg font-semibold text-white">{p.name}</p>
-                      <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-400">{p.description}</p>
+                      <p className="mt-2 line-clamp-2 text-sm leading-6 text-charcoal-300">{p.description}</p>
                     </div>
                   </Link>
                 </RevealOnScroll>

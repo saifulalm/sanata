@@ -83,19 +83,19 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       <PageHero eyebrow={project.category?.name ?? "Proyek"} title={project.name} />
 
       {/* Breadcrumb Navigation */}
-      <div className="border-b border-white/10 bg-slate-950/50">
+      <div className="border-b border-white/10 bg-charcoal-800/50">
         <Container>
           <nav aria-label="Breadcrumb" className="py-3">
-            <ol className="flex items-center gap-2 text-xs text-slate-400">
+            <ol className="flex items-center gap-2 text-xs text-charcoal-300">
               <li>
-                <Link href="/" className="flex items-center gap-1 hover:text-cyan-300 transition-colors">
+                <Link href="/" className="flex items-center gap-1 hover:text-desert-400 transition-colors">
                   <Home size={12} />
                   Beranda
                 </Link>
               </li>
               <li className="text-slate-600">/</li>
               <li>
-                <Link href="/projects" className="hover:text-cyan-300 transition-colors">
+                <Link href="/projects" className="hover:text-desert-400 transition-colors">
                   Proyek
                 </Link>
               </li>
@@ -103,7 +103,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 <>
                   <li className="text-slate-600">/</li>
                   <li>
-                    <Link href={`/projects?category=${project.category.slug}`} className="hover:text-cyan-300 transition-colors">
+                    <Link href={`/projects?category=${project.category.slug}`} className="hover:text-desert-400 transition-colors">
                       {project.category.name}
                     </Link>
                   </li>
@@ -121,7 +121,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       <section className="py-20">
         <Container className="grid gap-12 lg:grid-cols-[1.4fr_1fr]">
           <div>
-            <RevealOnScroll className="relative flex h-72 items-center justify-center overflow-hidden rounded-[1.8rem] border border-white/10 bg-slate-950/70 text-cyan-300/60 md:h-96">
+            <RevealOnScroll className="relative flex h-72 items-center justify-center overflow-hidden rounded-[1.8rem] border border-white/10 bg-charcoal-800/70 text-desert-400/60 md:h-96">
               {project.images[0] ? (
                 <Image
                   src={project.images[0].url}
@@ -137,7 +137,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
             <RevealOnScroll delay={0.1} className="mt-10">
               <h2 className="font-display text-2xl font-semibold uppercase tracking-[0.06em] text-white">Ringkasan Proyek</h2>
-              <p className="mt-4 leading-8 text-slate-300">{project.description}</p>
+              <p className="mt-4 leading-8 text-charcoal-200">{project.description}</p>
             </RevealOnScroll>
           </div>
 
@@ -147,11 +147,11 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 <Badge tone="success">Selesai</Badge>
                 {project.category && <Badge tone="gold">{project.category.name}</Badge>}
               </div>
-              <div className="flex items-center gap-2.5 text-sm text-slate-300">
-                <MapPin size={16} className="text-cyan-300" /> {setting(content, "project.detail.location", "Jabodetabek, Indonesia")}
+              <div className="flex items-center gap-2.5 text-sm text-charcoal-200">
+                <MapPin size={16} className="text-desert-400" /> {setting(content, "project.detail.location", "Jabodetabek, Indonesia")}
               </div>
-              <div className="flex items-center gap-2.5 text-sm text-slate-300">
-                <CalendarDays size={16} className="text-cyan-300" />{" "}
+              <div className="flex items-center gap-2.5 text-sm text-charcoal-200">
+                <CalendarDays size={16} className="text-desert-400" />{" "}
                 {setting(content, "project.detail.completed", "Diselesaikan tahun ini")}
               </div>
               <Button href="/contact" className="w-full justify-center">
@@ -169,9 +169,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 <Link
                   key={r.id}
                   href={`/projects/${r.slug}`}
-                  className="group overflow-hidden rounded-[1.6rem] border border-white/10 bg-white/[0.04] backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-cyan-300/35"
+                  className="group overflow-hidden rounded-[1.6rem] border border-white/10 bg-white/[0.04] backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-desert-400/35"
                 >
-                  <div className="relative flex h-36 items-center justify-center border-b border-white/10 bg-slate-950/70 text-cyan-300/60">
+                  <div className="relative flex h-36 items-center justify-center border-b border-white/10 bg-charcoal-800/70 text-desert-400/60">
                     {r.images[0] ? (
                       <Image src={r.images[0].url} alt={r.name} fill sizes="(min-width: 640px) 30vw, 100vw" className="object-cover opacity-80" />
                     ) : (

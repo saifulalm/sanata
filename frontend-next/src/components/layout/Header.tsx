@@ -61,7 +61,8 @@ export function Header() {
     <header
       className={clsx(
         "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-        solid ? "bg-[#081221]/78 shadow-[0_20px_50px_rgba(3,12,24,0.35)] backdrop-blur-2xl" : "bg-transparent"
+        /* SANATA Brand: Desert Charcoal background */
+        solid ? "bg-[#12181B]/90 shadow-[0_20px_50px_rgba(0,0,0,0.35)] backdrop-blur-2xl" : "bg-transparent"
       )}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between container-px py-4">
@@ -74,8 +75,9 @@ export function Header() {
               href={item.href}
               className={clsx(
                 "rounded-full px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] transition-all duration-300",
-                solid ? "text-slate-300 hover:bg-cyan-300/10 hover:text-cyan-100" : "text-white/80 hover:bg-white/10 hover:text-cyan-100",
-                pathname === item.href && (solid ? "bg-cyan-300/10 text-cyan-100" : "bg-white/10 text-cyan-100")
+                /* SANATA Brand: Desert hover accent */
+                solid ? "text-charcoal-200 hover:bg-desert-400/10 hover:text-desert-200" : "text-white/80 hover:bg-white/10 hover:text-desert-200",
+                pathname === item.href && (solid ? "bg-desert-400/10 text-desert-200" : "bg-white/10 text-desert-200")
               )}
             >
               {item.label}
@@ -84,10 +86,11 @@ export function Header() {
         </nav>
 
         <div className="hidden xl:block">
+          {/* SANATA Brand: Desert CTA */}
           <Button
             href={ADMIN_URL}
             variant="outline"
-            className="!border-cyan-300/35 !bg-cyan-300/10 !py-2.5 !text-xs !uppercase !tracking-[0.22em] !text-cyan-100 hover:!bg-cyan-300/20"
+            className="!border-desert-400/35 !bg-desert-400/10 !py-2.5 !text-xs !uppercase !tracking-[0.22em] !text-desert-200 hover:!bg-desert-400/20"
           >
             <Settings size={14} /> Admin Login
           </Button>
@@ -110,7 +113,8 @@ export function Header() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="overflow-hidden border-t border-white/10 bg-[#091321]/94 shadow-[0_25px_60px_rgba(3,12,24,0.45)] backdrop-blur-2xl xl:hidden"
+            /* SANATA Brand: Desert Charcoal mobile menu */
+            className="overflow-hidden border-t border-white/10 bg-[#12181B]/95 shadow-[0_25px_60px_rgba(0,0,0,0.4)] backdrop-blur-2xl xl:hidden"
           >
             <nav className="flex flex-col gap-2 container-px py-4">
               {navItems.map((item) => (
@@ -118,15 +122,17 @@ export function Header() {
                   key={item.label}
                   href={item.href}
                   onClick={closeMobile}
-                  className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-medium uppercase tracking-[0.16em] text-slate-200 hover:border-cyan-300/30 hover:text-cyan-100"
+                  /* SANATA Brand: Desert hover */
+                  className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm font-medium uppercase tracking-[0.16em] text-charcoal-200 hover:border-desert-400/30 hover:text-desert-200"
                 >
                   {item.label}
                 </Link>
               ))}
+              {/* SANATA Brand: Desert CTA */}
               <Button
                 href={ADMIN_URL}
                 variant="outline"
-                className="mt-2 justify-center !border-cyan-300/35 !bg-cyan-300/10 !text-cyan-100"
+                className="mt-2 justify-center !border-desert-400/35 !bg-desert-400/10 !text-desert-200"
               >
                 Admin Login
               </Button>

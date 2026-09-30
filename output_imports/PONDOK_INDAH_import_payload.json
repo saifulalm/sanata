@@ -1,0 +1,2535 @@
+{
+  "rab": {
+    "number": "PI-2025-001",
+    "title": ": Pembangunan Rumah Tinggal di Pondok Indah Rumah Hunian",
+    "clientName": ": Bapak Sasja & Ibu Febie",
+    "location": ": Jl. Sekolah Duta 1 Blok 1 TC No.19",
+    "projectDate": "2023-10-28",
+    "scheduleStart": "2023-11-01",
+    "restDays": [
+      0
+    ],
+    "notes": "Imported from RAB STR-ARS Renov Pondok Indah_RAP_v1-2.xlsx | 247 items | Rp 454.226.006"
+  },
+  "sections": [
+    {
+      "name": "1. 1. Prelim",
+      "order": 0,
+      "items": [
+        {
+          "order": 0,
+          "description": "1. PROYEK MANAGEMENT DAN BIAYA ADMINISTRASI LAPANGAN",
+          "unit": "ls",
+          "volume": 1.0,
+          "unitPrice": 192000000.0,
+          "amount": 192000000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "PROYEK MANAGEMENT DAN BIAYA ADMINISTRASI LAPANGAN - Project Manager",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "PROYEK MANAGEMENT DAN BIAYA ADMINISTRASI LAPANGAN - HSE",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "PROYEK MANAGEMENT DAN BIAYA ADMINISTRASI LAPANGAN - Administrasi Teknik",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "2. PEKERJAAN MOB-DEMOB",
+          "unit": "ls",
+          "volume": 1.0,
+          "unitPrice": 50000000.0,
+          "amount": 50000000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "4. KEBERSIHAN DAN PERAPIHAN",
+          "unit": "ls",
+          "volume": 1.0,
+          "unitPrice": 80524163.83333334,
+          "amount": 80524163.83333334,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 6,
+          "description": "KEBERSIHAN DAN PERAPIHAN - Pekerjaan Bongkaran dinding Pagar",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 7,
+          "description": "KEBERSIHAN DAN PERAPIHAN - Pekerjaan Perbaikan Pagar Sementara (Seng)",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 8,
+          "description": "KEBERSIHAN DAN PERAPIHAN - Pekerjaan Cleaning & Dewatering Basemant",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 9,
+          "description": "KEBERSIHAN DAN PERAPIHAN - Pekerjaan Cleaning & Dewatering Lantai 1",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 10,
+          "description": "KEBERSIHAN DAN PERAPIHAN - Pembuangan Material Bekas Bongkaran",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 11,
+          "description": "5. KANTOR & GUDANG SEMENTARA utk KONTRAKTOR",
+          "unit": "ls",
+          "volume": 1.0,
+          "unitPrice": 20000000.0,
+          "amount": 20000000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 12,
+          "description": "9. PENGADAAN TENAGA LISTRIK",
+          "unit": "ls",
+          "volume": 1.0,
+          "unitPrice": 8000000.0,
+          "amount": 8000000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 13,
+          "description": "10. PAPAN NAMA PROYEK",
+          "unit": "ls",
+          "volume": 1.0,
+          "unitPrice": 1500000.0,
+          "amount": 1500000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "name": "2. 2. Perbaikan Beton",
+      "order": 1,
+      "items": [
+        {
+          "order": 0,
+          "description": "- Lantai (46,31 M2)",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "- dinding tampak A (40,59 M2)",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "- dinding tampak B (40,59 M2)",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "- dinding tampak C (13 M2)",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "- dinding tampak D (13 M2)",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "- Plat Lantai (Atap) (46,31 M2)",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 6,
+          "description": "- Lantai",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 7,
+          "description": "- dinding tampak A",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 8,
+          "description": "- dinding tampak B",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 9,
+          "description": "- dinding tampak C",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 10,
+          "description": "- dinding tampak D",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 11,
+          "description": "- Plat Lantai (Atap)",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "name": "3. 3. Struktur",
+      "order": 2,
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Pekerjaan Beton K-150 (site mix) pada Kolom Praktis (10/10)",
+          "unit": "ls",
+          "volume": 0.1,
+          "unitPrice": 30706.600000000002,
+          "amount": 0.1,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "Pekerjaan Beton K-150 (site mix) pada Kolom Praktis (10/10) - - pembesian (25 Kg/M')",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "Pekerjaan Beton K-150 (site mix) pada Kolom Praktis (10/10) - - bekisting",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "Pekerjaan Beton K-150 (site mix) pada Kolom Praktis (10/10) - - cor sitemix",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "2. Pekerjaan Beton K-150 (site mix) pada Balok (10/10) ---> Pintu",
+          "unit": "ls",
+          "volume": 0.10000000000000002,
+          "unitPrice": 30706.600000000002,
+          "amount": 0.10000000000000002,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "Pekerjaan Beton K-150 (site mix) pada Balok (10/10) ---> Pintu - - pembesian",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 6,
+          "description": "Pekerjaan Beton K-150 (site mix) pada Balok (10/10) ---> Pintu - - bekisting",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 7,
+          "description": "Pekerjaan Beton K-150 (site mix) pada Balok (10/10) ---> Pintu - - cor sitemix",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 8,
+          "description": "3. Pekerjaan Beton K-150 (site mix) pada Balok (10/10) ---> Jendela",
+          "unit": "ls",
+          "volume": 0.10000000000000002,
+          "unitPrice": 30706.600000000002,
+          "amount": 0.10000000000000002,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 9,
+          "description": "Pekerjaan Beton K-150 (site mix) pada Balok (10/10) ---> Jendela - - pembesian",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 10,
+          "description": "Pekerjaan Beton K-150 (site mix) pada Balok (10/10) ---> Jendela - - bekisting",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 11,
+          "description": "Pekerjaan Beton K-150 (site mix) pada Balok (10/10) ---> Jendela - - cor sitemix",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 12,
+          "description": "4. Pekerjaan Tangga Akses",
+          "unit": "ls",
+          "volume": 0.1,
+          "unitPrice": 2945000.0,
+          "amount": 0.1,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 13,
+          "description": "Pekerjaan Tangga Akses - - pembesian",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 14,
+          "description": "Pekerjaan Tangga Akses - - bekisting",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 15,
+          "description": "Pekerjaan Tangga Akses - - cor sitemix",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "name": "5. 5. Pekerjaan Atap",
+      "order": 3,
+      "items": [
+        {
+          "order": 0,
+          "description": "2. Pekerjaan pemasangan almunium foil",
+          "unit": "- Peredam panas atap menggunakan aluminium foil double side FOAM 3mm",
+          "volume": 3332448.84,
+          "unitPrice": 0.1,
+          "amount": 333244.884,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "3. Pekerjaan pemasangan genteng beton",
+          "unit": "- Genteng penutup atap, type ex beton",
+          "volume": 32912286.54,
+          "unitPrice": 0.1,
+          "amount": 3291228.654,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "4. Pekerjaan pemasangan listplang",
+          "unit": "- listplank GRC ukuran 30 x 600 CM",
+          "volume": 1430991.0,
+          "unitPrice": 0.1,
+          "amount": 143099.1,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "5. Pekerjaan pemasangan bubungan",
+          "unit": "- genteng bubungan type beton",
+          "volume": 2091505.0,
+          "unitPrice": 0.10000000000000002,
+          "amount": 209150.50000000003,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "name": "7. 7. Pekerjaan Kolam Renang",
+      "order": 4,
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Pekerjaan pemasangan pipa pvc aw 1 1/2 Inch",
+          "unit": "Wavin Type AW",
+          "volume": 6610.005000000001,
+          "unitPrice": 85930.06500000002,
+          "amount": 52880.04000000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Pekerjaan pemasangan Elbow pipa pvc aw 1 1/2 Inch",
+          "unit": "Wavin Type AW",
+          "volume": 6610.005000000001,
+          "unitPrice": 99150.07500000001,
+          "amount": 52880.04000000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "3. Pekerjaan pemasangan Tee pipa pvc aw 1 1/2 Inch",
+          "unit": "Wavin Type AW",
+          "volume": 6610.005000000001,
+          "unitPrice": 33050.02500000001,
+          "amount": 52880.03999999999,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "4. Floordrain 1 1/5 Inch",
+          "unit": "ls",
+          "volume": 47000.0,
+          "unitPrice": 235000.0,
+          "amount": 376000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "5. Vacum 1 1/5 Inch",
+          "unit": "ls",
+          "volume": 165000.0,
+          "unitPrice": 660000.0,
+          "amount": 1320000.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "6. Pekerjaan Pipa Overlow",
+          "unit": "Wavin Type AW",
+          "volume": 65297.475000000006,
+          "unitPrice": 457082.32500000007,
+          "amount": 522379.80000000005,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 6,
+          "description": "7. Pekerjaan Drainase Outlet",
+          "unit": "Wavin Type AW",
+          "volume": 102982.725,
+          "unitPrice": 720879.0750000001,
+          "amount": 823861.8,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 7,
+          "description": "8. Pekerjaan main drain",
+          "unit": "Wavin Type AW",
+          "volume": 6610.005000000001,
+          "unitPrice": 46270.035,
+          "amount": 52880.04000000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "name": "8. 8. Pekerjaan Lantai Baseman",
+      "order": 5,
+      "items": [
+        {
+          "order": 0,
+          "description": "- SERVICE AREA",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "- Tempat Parkir",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "- Tempat Genset",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "- VOYER",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "- STORAGE",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "- KITCHEN",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 6,
+          "description": "- PRAYER ROOM",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 7,
+          "description": "- POOL MAINTENANCE",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 8,
+          "description": "- BR. ART 1",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 9,
+          "description": "- BR. ART 2",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 10,
+          "description": "- TOILET",
+          "unit": "ls",
+          "volume": 1,
+          "unitPrice": 0,
+          "amount": 0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    },
+    {
+      "name": "9. 9. Pekerjaan MEP",
+      "order": 6,
+      "items": [
+        {
+          "order": 0,
+          "description": "1. Kabel NYM 3x2,5 mm 100m/roll",
+          "unit": "Suprime",
+          "volume": 6102378.0,
+          "unitPrice": 0.1,
+          "amount": 6102378.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 1,
+          "description": "2. Kabel NYM 2x1,5 mm 100m/roll",
+          "unit": "Suprime",
+          "volume": 2411046.0,
+          "unitPrice": 0.1,
+          "amount": 2411046.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 2,
+          "description": "3. Kabell NYY 3x2.5 mm",
+          "unit": "Suprime",
+          "volume": 504110.25,
+          "unitPrice": 0.1,
+          "amount": 504110.25,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 3,
+          "description": "4. Pipa conduit",
+          "unit": "Lokal",
+          "volume": 495942.75000000006,
+          "unitPrice": 0.1,
+          "amount": 495942.75000000006,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 4,
+          "description": "5. Klem pipa conduit",
+          "unit": "Lokal",
+          "volume": 77463.00000000001,
+          "unitPrice": 0.10000000000000002,
+          "amount": 77463.00000000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 5,
+          "description": "6. Sok pipa conduit",
+          "unit": "Lokal",
+          "volume": 77463.00000000001,
+          "unitPrice": 0.10000000000000002,
+          "amount": 77463.00000000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 6,
+          "description": "7. Terminal listrik/krustin 10 mm",
+          "unit": "RXM-AB (RXZE2S114M)",
+          "volume": 25679.160000000003,
+          "unitPrice": 0.1,
+          "amount": 25679.160000000003,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 7,
+          "description": "8. Tdus cabang 3",
+          "unit": "Lokal",
+          "volume": 281235.375,
+          "unitPrice": 0.1,
+          "amount": 281235.375,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 8,
+          "description": "9. Tdus cabang 4",
+          "unit": "Lokal",
+          "volume": 109161.0,
+          "unitPrice": 0.1,
+          "amount": 109161.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 9,
+          "description": "10. Solasi listrik",
+          "unit": "Lokal",
+          "volume": 29065.5,
+          "unitPrice": 0.1,
+          "amount": 29065.5,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 10,
+          "description": "11. Box panel 60x50x20 cm",
+          "unit": "ls",
+          "volume": 131017.5,
+          "unitPrice": 0.1,
+          "amount": 131017.5,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 11,
+          "description": "12. MCB 6A 1 phase",
+          "unit": "MCB Domae (schneider)",
+          "volume": 116127.67499999999,
+          "unitPrice": 0.09999999999999999,
+          "amount": 116127.67499999999,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 12,
+          "description": "13. MCB 10A 1 phase",
+          "unit": "MCB Domae (schneider)",
+          "volume": 93229.3125,
+          "unitPrice": 0.1,
+          "amount": 93229.3125,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 13,
+          "description": "14. MCB 16A 3 phase",
+          "unit": "MCB Domae (schneider)",
+          "volume": 130755.6,
+          "unitPrice": 0.1,
+          "amount": 130755.6,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 14,
+          "description": "15. MCB 25A 3 phase",
+          "unit": "MCB Domae (schneider)",
+          "volume": 72078.52500000001,
+          "unitPrice": 0.1,
+          "amount": 72078.52500000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 15,
+          "description": "16. MCB 32A 3 phase",
+          "unit": "MCB Domae (schneider)",
+          "volume": 78435.675,
+          "unitPrice": 0.1,
+          "amount": 78435.675,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 16,
+          "description": "17. MCB 40A 3 phase",
+          "unit": "MCB Domae (schneider)",
+          "volume": 91426.05,
+          "unitPrice": 0.1,
+          "amount": 91426.05,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 17,
+          "description": "18. MCCB 125A 3 phase",
+          "unit": "MCB Domae (schneider)",
+          "volume": 324890.15625,
+          "unitPrice": 0.1,
+          "amount": 324890.15625,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 18,
+          "description": "19. Ampere & volt meter digital",
+          "unit": "Autonics Digital Panel Meters Ammeter Series M4M1P-AA-5 1pc",
+          "volume": 1535982.75,
+          "unitPrice": 0.1,
+          "amount": 1535982.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 19,
+          "description": "20. Busbar",
+          "unit": "ls",
+          "volume": 126150.75,
+          "unitPrice": 0.1,
+          "amount": 126150.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 20,
+          "description": "21. Sisir MCB",
+          "unit": "ls",
+          "volume": 42261.75,
+          "unitPrice": 0.1,
+          "amount": 42261.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 21,
+          "description": "22. Bracket MCB",
+          "unit": "ls",
+          "volume": 8143.200000000001,
+          "unitPrice": 0.1,
+          "amount": 8143.200000000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 22,
+          "description": "1. Lampu downlight",
+          "unit": "DOWNLIGHT LED PHILIPS 13WATT 13W TIPE MESON 59464 EYECOMFORT_COOLDAY - Putih",
+          "volume": 1017144.0,
+          "unitPrice": 0.1,
+          "amount": 1017144.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 23,
+          "description": "2. Lampu TL 18W/6500K + housing",
+          "unit": "ls",
+          "volume": 952597.8000000002,
+          "unitPrice": 0.10000000000000002,
+          "amount": 952597.8000000002,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 24,
+          "description": "3. Stop kontak 2 gang",
+          "unit": "16AX 250V Sakelar 2 Gang 2 Arah, Fluoresen, Lavender Silver",
+          "volume": 691882.6950000001,
+          "unitPrice": 0.1,
+          "amount": 691882.6950000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 25,
+          "description": "4. Saklar seri",
+          "unit": "16A 250V 1 Gang Kotak Kontak Tipe Schuko, Lavender Silver",
+          "volume": 331647.75,
+          "unitPrice": 0.1,
+          "amount": 331647.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 26,
+          "description": "5. Stop kontak genset/ surface mounting",
+          "unit": "ls",
+          "volume": 44518.950000000004,
+          "unitPrice": 0.1,
+          "amount": 44518.950000000004,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 27,
+          "description": "6. Gas detector",
+          "unit": "Gas Detector Controller 4Channel Bosean BH-50 Control Panel BH50 Fixed",
+          "volume": 520447.95,
+          "unitPrice": 0.1,
+          "amount": 520447.95,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 28,
+          "description": "7. Heat detector",
+          "unit": "Fire Alarm Sensor Deteksi panas Heat Detector BOSCH FCH-T320",
+          "volume": 140338.575,
+          "unitPrice": 0.1,
+          "amount": 140338.575,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 29,
+          "description": "8. Smoke detector",
+          "unit": "Horing Lih Independent Smoke Detector with Battery QA 31 1pc",
+          "volume": 1690260.75,
+          "unitPrice": 0.1,
+          "amount": 1690260.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 30,
+          "description": "1. Pipa PVC AW dia. 1 inch dari PDAM ke roof tank",
+          "unit": "Wavin type AW",
+          "volume": 176697.45,
+          "unitPrice": 0.1,
+          "amount": 176697.45,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 31,
+          "description": "2. Pipa PVC AW dia. 3/4 inch dari roof tank ke Lt. Basement incl mainline",
+          "unit": "Wavin type AW",
+          "volume": 245184.57,
+          "unitPrice": 0.09999999999999999,
+          "amount": 245184.57,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 32,
+          "description": "3. Pipa PVC AW dia. 1/2 inch",
+          "unit": "Wavin type AW",
+          "volume": 37722.240000000005,
+          "unitPrice": 0.1,
+          "amount": 37722.240000000005,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 33,
+          "description": "4. Pipa PVC D dia. 3 inch",
+          "unit": "Wavin type AW",
+          "volume": 1958924.2500000002,
+          "unitPrice": 0.1,
+          "amount": 1958924.2500000002,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 34,
+          "description": "5. Knee pipa PVC 3 inch",
+          "unit": "Wavin type AW",
+          "volume": 457609.50000000006,
+          "unitPrice": 0.10000000000000002,
+          "amount": 457609.50000000006,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 35,
+          "description": "6. Tee pipa PVC 3 inch",
+          "unit": "Wavin type AW",
+          "volume": 145003.5,
+          "unitPrice": 0.1,
+          "amount": 145003.5,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 36,
+          "description": "7. Knee pipa PVC 1 inch",
+          "unit": "Wavin type AW",
+          "volume": 10997.64,
+          "unitPrice": 0.1,
+          "amount": 10997.64,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 37,
+          "description": "8. Knee pipa PVC 3/4 inch",
+          "unit": "Wavin type AW",
+          "volume": 11622.69,
+          "unitPrice": 0.1,
+          "amount": 11622.69,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 38,
+          "description": "9. Tee pipa PVC 3/4 inch",
+          "unit": "Wavin type AW",
+          "volume": 3874.2300000000005,
+          "unitPrice": 0.1,
+          "amount": 3874.2300000000005,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 39,
+          "description": "10. Reducer pipa 3/4 inch ke 1/2 inch",
+          "unit": "Wavin type AW",
+          "volume": 6457.05,
+          "unitPrice": 0.1,
+          "amount": 6457.05,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 40,
+          "description": "11. Gate valve pipa 1 inch",
+          "unit": "Wavin type AW",
+          "volume": 29285.820000000003,
+          "unitPrice": 0.1,
+          "amount": 29285.820000000003,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 41,
+          "description": "12. Gate valve pipa 3/4 inch",
+          "unit": "Wavin type AW",
+          "volume": 36764.55,
+          "unitPrice": 0.1,
+          "amount": 36764.55,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 42,
+          "description": "13. Pipa PPR PN 10 dia. 3/4 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 201216.15000000002,
+          "unitPrice": 0.1,
+          "amount": 201216.15000000002,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 43,
+          "description": "14. Pipa PPR PN 10 dia. 1/2 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 31049.730000000003,
+          "unitPrice": 0.10000000000000002,
+          "amount": 31049.730000000003,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 44,
+          "description": "15. Knee pipa PPR 3/4 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 8081.639999999999,
+          "unitPrice": 0.1,
+          "amount": 8081.639999999999,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 45,
+          "description": "16. Tee pipa PPR 3/4 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 7154.73,
+          "unitPrice": 0.09999999999999999,
+          "amount": 7154.73,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 46,
+          "description": "17. Reducer pipa 3/4 inch ke 1/2 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 4420.9800000000005,
+          "unitPrice": 0.1,
+          "amount": 4420.9800000000005,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 47,
+          "description": "18. Gate valve pipa ppr 3/4 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 79447.5,
+          "unitPrice": 0.1,
+          "amount": 79447.5,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 48,
+          "description": "1. Kabel NYY 4x10 mm",
+          "unit": "Suprime",
+          "volume": 271107.0,
+          "unitPrice": 0.1,
+          "amount": 271107.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 49,
+          "description": "2. Kabel NYM 3x2,5 mm 100m/roll",
+          "unit": "Suprime",
+          "volume": 6102378.0,
+          "unitPrice": 0.1,
+          "amount": 6102378.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 50,
+          "description": "3. Kabel NYM 2x1,5 mm 100m/roll",
+          "unit": "Suprime",
+          "volume": 2411046.0,
+          "unitPrice": 0.1,
+          "amount": 2411046.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 51,
+          "description": "4. Kabel NYM 3x4 mm 100m/roll",
+          "unit": "Suprime",
+          "volume": 409590.0,
+          "unitPrice": 0.1,
+          "amount": 409590.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 52,
+          "description": "5. Pipa conduit",
+          "unit": "Lokal",
+          "volume": 482891.62500000006,
+          "unitPrice": 0.1,
+          "amount": 482891.62500000006,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 53,
+          "description": "6. Klem pipa conduit",
+          "unit": "Lokal",
+          "volume": 247971.37500000003,
+          "unitPrice": 0.1,
+          "amount": 247971.37500000003,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 54,
+          "description": "7. Sok pipa conduit",
+          "unit": "Lokal",
+          "volume": 77463.00000000001,
+          "unitPrice": 0.10000000000000002,
+          "amount": 77463.00000000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 55,
+          "description": "8. Terminal listrik/krustin 10 mm",
+          "unit": "Lokal",
+          "volume": 25679.160000000003,
+          "unitPrice": 0.1,
+          "amount": 25679.160000000003,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 56,
+          "description": "9. Tdus cabang 3",
+          "unit": "Lokal",
+          "volume": 281235.375,
+          "unitPrice": 0.1,
+          "amount": 281235.375,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 57,
+          "description": "10. Tdus cabang 4",
+          "unit": "Lokal",
+          "volume": 109161.0,
+          "unitPrice": 0.1,
+          "amount": 109161.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 58,
+          "description": "11. Solasi listrik",
+          "unit": "Lokal",
+          "volume": 21799.125,
+          "unitPrice": 0.1,
+          "amount": 21799.125,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 59,
+          "description": "12. Box panel 50x40x20 cm",
+          "unit": "Lokal",
+          "volume": 131017.5,
+          "unitPrice": 0.1,
+          "amount": 131017.5,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 60,
+          "description": "13. MCB 6A 1 phase",
+          "unit": "MCB Domae (schneider)",
+          "volume": 174191.51249999998,
+          "unitPrice": 0.09999999999999999,
+          "amount": 174191.51249999998,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 61,
+          "description": "14. MCB 10A 1 phase",
+          "unit": "MCB Domae (schneider)",
+          "volume": 74583.45,
+          "unitPrice": 0.09999999999999999,
+          "amount": 74583.45,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 62,
+          "description": "15. MCB 16A 3 phase",
+          "unit": "MCB Domae (schneider)",
+          "volume": 196133.40000000002,
+          "unitPrice": 0.1,
+          "amount": 196133.40000000002,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 63,
+          "description": "16. MCB 32A 3 phase",
+          "unit": "MCB Domae (schneider)",
+          "volume": 78435.675,
+          "unitPrice": 0.1,
+          "amount": 78435.675,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 64,
+          "description": "17. Ampere & volt meter digital",
+          "unit": "Autonics Digital Panel Meters Ammeter Series M4M1P-AA-5 1pc",
+          "volume": 1535982.75,
+          "unitPrice": 0.1,
+          "amount": 1535982.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 65,
+          "description": "18. Busbar",
+          "unit": "ls",
+          "volume": 126150.75,
+          "unitPrice": 0.1,
+          "amount": 126150.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 66,
+          "description": "19. Sisir MCB",
+          "unit": "ls",
+          "volume": 42261.75,
+          "unitPrice": 0.1,
+          "amount": 42261.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 67,
+          "description": "20. Bracket MCB",
+          "unit": "ls",
+          "volume": 8143.200000000001,
+          "unitPrice": 0.1,
+          "amount": 8143.200000000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 68,
+          "description": "1. Lampu downlight",
+          "unit": "ls",
+          "volume": 1716430.5,
+          "unitPrice": 0.1,
+          "amount": 1716430.5,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 69,
+          "description": "2. Lampu Spotlight",
+          "unit": "LED Spotlight  6W - BGP 150 Philips - Natural White",
+          "volume": 583098.75,
+          "unitPrice": 0.1,
+          "amount": 583098.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 70,
+          "description": "3. Lampu track lamp",
+          "unit": "Philips LED TRACK LIGHT philips ARTALUX PUTIH ar360 komplit",
+          "volume": 1632519.9,
+          "unitPrice": 0.09999999999999999,
+          "amount": 1632519.9,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 71,
+          "description": "4. Rel lampu track 1m/btg",
+          "unit": "Track 1M 1 Meter Lampu Sorot Rail Tracklight Spotlight Hitam Putih - Hitam",
+          "volume": 450504.45000000007,
+          "unitPrice": 0.10000000000000002,
+          "amount": 450504.45000000007,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 72,
+          "description": "5. Hanging lamp",
+          "unit": "ls",
+          "volume": 3799175.4000000004,
+          "unitPrice": 0.1,
+          "amount": 3799175.4000000004,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 73,
+          "description": "6. LED Strip",
+          "unit": "Led strip philips 50 meter 50m led strip warm white philips led strip - Warm white, Led strip 50m",
+          "volume": 1780517.7000000002,
+          "unitPrice": 0.1,
+          "amount": 1780517.7000000002,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 74,
+          "description": "7. Travo LED strip",
+          "unit": "Lampu LED Tape/ LED Strip Philips Komplit Dengan Ballast 31059 Indoor",
+          "volume": 1243711.8,
+          "unitPrice": 0.1,
+          "amount": 1243711.8,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 75,
+          "description": "8. Stop kontak 2 gang",
+          "unit": "16AX 250V Sakelar 2 Gang 2 Arah, Fluoresen, Lavender Silver",
+          "volume": 553506.1560000001,
+          "unitPrice": 0.1,
+          "amount": 553506.1560000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 76,
+          "description": "9. Saklar seri",
+          "unit": "16A 250V 1 Gang Kotak Kontak Tipe Schuko, Lavender Silver",
+          "volume": 431142.075,
+          "unitPrice": 0.1,
+          "amount": 431142.075,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 77,
+          "description": "10. Gas detector",
+          "unit": "ls",
+          "volume": 1040895.9,
+          "unitPrice": 0.1,
+          "amount": 1040895.9,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 78,
+          "description": "11. Heat detector",
+          "unit": "ls",
+          "volume": 140338.575,
+          "unitPrice": 0.1,
+          "amount": 140338.575,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 79,
+          "description": "12. Smoke detector",
+          "unit": "ls",
+          "volume": 845130.375,
+          "unitPrice": 0.1,
+          "amount": 845130.375,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 80,
+          "description": "1. Pipa PVC AW dia. 3/4 inch",
+          "unit": "Wavin type AW",
+          "volume": 245184.57,
+          "unitPrice": 0.09999999999999999,
+          "amount": 245184.57,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 81,
+          "description": "2. Pipa PVC AW dia. 1/2 inch",
+          "unit": "Wavin type AW",
+          "volume": 37722.240000000005,
+          "unitPrice": 0.1,
+          "amount": 37722.240000000005,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 82,
+          "description": "3. Pipa PVC D dia. 3 inch",
+          "unit": "Wavin type AW",
+          "volume": 1110057.0750000002,
+          "unitPrice": 0.10000000000000002,
+          "amount": 1110057.0750000002,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 83,
+          "description": "4. Knee pipa PVC 3 inch",
+          "unit": "Wavin type AW",
+          "volume": 457609.50000000006,
+          "unitPrice": 0.10000000000000002,
+          "amount": 457609.50000000006,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 84,
+          "description": "5. Tee pipa PVC 3 inch",
+          "unit": "Wavin type AW",
+          "volume": 203004.9,
+          "unitPrice": 0.09999999999999999,
+          "amount": 203004.9,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 85,
+          "description": "6. Knee pipa PVC 3/4 inch",
+          "unit": "Wavin type AW",
+          "volume": 6457.05,
+          "unitPrice": 0.1,
+          "amount": 6457.05,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 86,
+          "description": "7. Tee pipa PVC 3/4 inch",
+          "unit": "Wavin type AW",
+          "volume": 3874.2300000000005,
+          "unitPrice": 0.1,
+          "amount": 3874.2300000000005,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 87,
+          "description": "8. Reducer pipa 3/4 inch ke 1/2 inch",
+          "unit": "Wavin type AW",
+          "volume": 5165.64,
+          "unitPrice": 0.1,
+          "amount": 5165.64,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 88,
+          "description": "9. Gate valve pipa 3/4 inch",
+          "unit": "Wavin type AW",
+          "volume": 22058.730000000003,
+          "unitPrice": 0.10000000000000002,
+          "amount": 22058.730000000003,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 89,
+          "description": "10. Pipa PPR PN 10 dia. 3/4 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 107315.28000000001,
+          "unitPrice": 0.1,
+          "amount": 107315.28000000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 90,
+          "description": "11. Pipa PPR PN 10 dia. 1/2 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 20699.820000000003,
+          "unitPrice": 0.1,
+          "amount": 20699.820000000003,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 91,
+          "description": "12. Knee pipa PPR 3/4 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 10102.05,
+          "unitPrice": 0.09999999999999999,
+          "amount": 10102.05,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 92,
+          "description": "13. Tee pipa PPR 3/4 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 4769.82,
+          "unitPrice": 0.1,
+          "amount": 4769.82,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 93,
+          "description": "14. Reducer pipa 3/4 inch ke 1/2 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 2947.32,
+          "unitPrice": 0.1,
+          "amount": 2947.32,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 94,
+          "description": "15. Gate valve pipa ppr 3/4 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 79447.5,
+          "unitPrice": 0.1,
+          "amount": 79447.5,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 95,
+          "description": "1. Kabel NYY 4x16 mm",
+          "unit": "Suprime",
+          "volume": 406660.5,
+          "unitPrice": 0.1,
+          "amount": 406660.5,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 96,
+          "description": "2. Kabel NYM 3x2,5 mm 100m/roll",
+          "unit": "Suprime",
+          "volume": 7119441.0,
+          "unitPrice": 0.1,
+          "amount": 7119441.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 97,
+          "description": "3. Kabel NYM 2x1,5 mm 100m/roll",
+          "unit": "Suprime",
+          "volume": 2411046.0,
+          "unitPrice": 0.1,
+          "amount": 2411046.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 98,
+          "description": "4. Kabel NYM 3x4 mm 100m/roll",
+          "unit": "Suprime",
+          "volume": 409590.0,
+          "unitPrice": 0.1,
+          "amount": 409590.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 99,
+          "description": "5. Pipa conduit",
+          "unit": "Lokal",
+          "volume": 600351.7500000001,
+          "unitPrice": 0.10000000000000002,
+          "amount": 600351.7500000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 100,
+          "description": "6. Klem pipa conduit",
+          "unit": "Lokal",
+          "volume": 261022.50000000003,
+          "unitPrice": 0.1,
+          "amount": 261022.50000000003,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 101,
+          "description": "7. Sok pipa conduit",
+          "unit": "Lokal",
+          "volume": 81540.00000000001,
+          "unitPrice": 0.10000000000000002,
+          "amount": 81540.00000000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 102,
+          "description": "8. Terminal listrik/krustin 10 mm",
+          "unit": "Lokal",
+          "volume": 38518.740000000005,
+          "unitPrice": 0.1,
+          "amount": 38518.740000000005,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 103,
+          "description": "9. Tdus cabang 3",
+          "unit": "Lokal",
+          "volume": 342373.5,
+          "unitPrice": 0.1,
+          "amount": 342373.5,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 104,
+          "description": "10. Tdus cabang 4",
+          "unit": "Lokal",
+          "volume": 130993.20000000001,
+          "unitPrice": 0.1,
+          "amount": 130993.20000000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 105,
+          "description": "11. Solasi listrik",
+          "unit": "Lokal",
+          "volume": 29065.5,
+          "unitPrice": 0.1,
+          "amount": 29065.5,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 106,
+          "description": "12. Box panel 50x40x20 cm",
+          "unit": "Lokal",
+          "volume": 131017.5,
+          "unitPrice": 0.1,
+          "amount": 131017.5,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 107,
+          "description": "13. MCB 6A 1 phase",
+          "unit": "MCB Domae",
+          "volume": 193546.125,
+          "unitPrice": 0.1,
+          "amount": 193546.125,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 108,
+          "description": "14. MCB 10A 1 phase",
+          "unit": "MCB Domae",
+          "volume": 93229.3125,
+          "unitPrice": 0.1,
+          "amount": 93229.3125,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 109,
+          "description": "15. MCB 16A 3 phase",
+          "unit": "MCB Domae",
+          "volume": 130755.6,
+          "unitPrice": 0.1,
+          "amount": 130755.6,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 110,
+          "description": "16. MCB 40A 3 phase",
+          "unit": "MCB Domae",
+          "volume": 78435.675,
+          "unitPrice": 0.1,
+          "amount": 78435.675,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 111,
+          "description": "17. Ampere & volt meter digital",
+          "unit": "ls",
+          "volume": 1535982.75,
+          "unitPrice": 0.1,
+          "amount": 1535982.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 112,
+          "description": "18. Busbar",
+          "unit": "ls",
+          "volume": 126150.75,
+          "unitPrice": 0.1,
+          "amount": 126150.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 113,
+          "description": "19. Sisir MCB",
+          "unit": "ls",
+          "volume": 42261.75,
+          "unitPrice": 0.1,
+          "amount": 42261.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 114,
+          "description": "20. Bracket MCB",
+          "unit": "ls",
+          "volume": 8143.200000000001,
+          "unitPrice": 0.1,
+          "amount": 8143.200000000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 115,
+          "description": "1. Lampu downlight",
+          "unit": "Philips 13 Watt",
+          "volume": 1303215.75,
+          "unitPrice": 0.1,
+          "amount": 1303215.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 116,
+          "description": "2. Lampu Spotlight",
+          "unit": "Philips 13 Watt",
+          "volume": 2060282.25,
+          "unitPrice": 0.1,
+          "amount": 2060282.25,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 117,
+          "description": "3. LED Strip",
+          "unit": "Philips",
+          "volume": 3264282.45,
+          "unitPrice": 0.1,
+          "amount": 3264282.45,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 118,
+          "description": "4. Travo LED strip",
+          "unit": "Philips",
+          "volume": 1554639.75,
+          "unitPrice": 0.1,
+          "amount": 1554639.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 119,
+          "description": "5. Stop kontak 2 gang",
+          "unit": "16AX 250V Sakelar 2 Gang 2 Arah, Fluoresen, Lavender Silver",
+          "volume": 622694.4255000001,
+          "unitPrice": 0.10000000000000002,
+          "amount": 622694.4255000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 120,
+          "description": "6. Saklar seri",
+          "unit": "16A 250V 1 Gang Kotak Kontak Tipe Schuko, Lavender Silver",
+          "volume": 663295.5,
+          "unitPrice": 0.1,
+          "amount": 663295.5,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 121,
+          "description": "7. Smoke detector",
+          "unit": "ls",
+          "volume": 1521234.675,
+          "unitPrice": 0.1,
+          "amount": 1521234.675,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 122,
+          "description": "1. Pipa PVC AW dia. 3/4 inch",
+          "unit": "Wavin type AW",
+          "volume": 272427.3,
+          "unitPrice": 0.09999999999999999,
+          "amount": 272427.3,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 123,
+          "description": "2. Pipa PVC AW dia. 1/2 inch",
+          "unit": "Wavin type AW",
+          "volume": 141458.40000000002,
+          "unitPrice": 0.10000000000000002,
+          "amount": 141458.40000000002,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 124,
+          "description": "3. Pipa PVC D dia. 3 inch",
+          "unit": "Wavin type AW",
+          "volume": 2285411.625,
+          "unitPrice": 0.1,
+          "amount": 2285411.625,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 125,
+          "description": "4. Knee pipa PVC 3 inch",
+          "unit": "Wavin type AW",
+          "volume": 716921.55,
+          "unitPrice": 0.1,
+          "amount": 716921.55,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 126,
+          "description": "5. Tee pipa PVC 3 inch",
+          "unit": "Wavin type AW",
+          "volume": 304507.35000000003,
+          "unitPrice": 0.1,
+          "amount": 304507.35000000003,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 127,
+          "description": "6. Knee pipa PVC 3/4 inch",
+          "unit": "Wavin type AW",
+          "volume": 19371.15,
+          "unitPrice": 0.1,
+          "amount": 19371.15,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 128,
+          "description": "7. Tee pipa PVC 3/4 inch",
+          "unit": "Wavin type AW",
+          "volume": 16788.33,
+          "unitPrice": 0.10000000000000002,
+          "amount": 16788.33,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 129,
+          "description": "8. Reducer pipa 3/4 inch ke 1/2 inch",
+          "unit": "Wavin type AW",
+          "volume": 25828.2,
+          "unitPrice": 0.1,
+          "amount": 25828.2,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 130,
+          "description": "9. Gate valve pipa 3/4 inch",
+          "unit": "Wavin type AW",
+          "volume": 36764.55,
+          "unitPrice": 0.1,
+          "amount": 36764.55,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 131,
+          "description": "10. Pipa PPR PN 10 dia. 3/4 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 201216.15000000002,
+          "unitPrice": 0.1,
+          "amount": 201216.15000000002,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 132,
+          "description": "11. Pipa PPR PN 10 dia. 1/2 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 113849.01000000002,
+          "unitPrice": 0.10000000000000002,
+          "amount": 113849.01000000002,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 133,
+          "description": "12. Knee pipa PPR 3/4 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 24244.92,
+          "unitPrice": 0.09999999999999999,
+          "amount": 24244.92,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 134,
+          "description": "13. Tee pipa PPR 3/4 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 23849.1,
+          "unitPrice": 0.09999999999999999,
+          "amount": 23849.1,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 135,
+          "description": "14. Reducer pipa 3/4 inch ke 1/2 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 20631.24,
+          "unitPrice": 0.09999999999999999,
+          "amount": 20631.24,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 136,
+          "description": "15. Gate valve pipa ppr 3/4 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 119171.25,
+          "unitPrice": 0.1,
+          "amount": 119171.25,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 137,
+          "description": "1. Kabel NYY 4x10 mm",
+          "unit": "Suprime",
+          "volume": 542214.0,
+          "unitPrice": 0.1,
+          "amount": 542214.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 138,
+          "description": "2. Kabel NYM 3x2,5 mm 100m/roll",
+          "unit": "Suprime",
+          "volume": 3051189.0,
+          "unitPrice": 0.1,
+          "amount": 3051189.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 139,
+          "description": "3. Kabel NYM 2x1,5 mm 100m/roll",
+          "unit": "Suprime",
+          "volume": 803682.0,
+          "unitPrice": 0.1,
+          "amount": 803682.0,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 140,
+          "description": "4. Pipa conduit",
+          "unit": "Suprime",
+          "volume": 208818.00000000003,
+          "unitPrice": 0.10000000000000002,
+          "amount": 208818.00000000003,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 141,
+          "description": "5. Klem pipa conduit",
+          "unit": "Lokal",
+          "volume": 104409.00000000001,
+          "unitPrice": 0.10000000000000002,
+          "amount": 104409.00000000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 142,
+          "description": "6. Sok pipa conduit",
+          "unit": "Lokal",
+          "volume": 32616.000000000004,
+          "unitPrice": 0.1,
+          "amount": 32616.000000000004,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 143,
+          "description": "7. Terminal listrik/krustin 10 mm",
+          "unit": "Lokal",
+          "volume": 12839.580000000002,
+          "unitPrice": 0.1,
+          "amount": 12839.580000000002,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 144,
+          "description": "8. Tdus cabang 3",
+          "unit": "Lokal",
+          "volume": 122276.25,
+          "unitPrice": 0.1,
+          "amount": 122276.25,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 145,
+          "description": "9. Tdus cabang 4",
+          "unit": "Lokal",
+          "volume": 43664.4,
+          "unitPrice": 0.1,
+          "amount": 43664.4,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 146,
+          "description": "10. Solasi listrik",
+          "unit": "Lokal",
+          "volume": 14532.75,
+          "unitPrice": 0.1,
+          "amount": 14532.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 147,
+          "description": "11. Box panel 40x30x20 cm",
+          "unit": "Lokal",
+          "volume": 131017.5,
+          "unitPrice": 0.1,
+          "amount": 131017.5,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 148,
+          "description": "12. MCB 6A 1 phase",
+          "unit": "MCB Domae",
+          "volume": 77418.45,
+          "unitPrice": 0.09999999999999999,
+          "amount": 77418.45,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 149,
+          "description": "13. MCB 10A 1 phase",
+          "unit": "MCB Domae",
+          "volume": 37291.725,
+          "unitPrice": 0.09999999999999999,
+          "amount": 37291.725,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 150,
+          "description": "14. MCB 16A 1 phase",
+          "unit": "MCB Domae",
+          "volume": 130755.6,
+          "unitPrice": 0.1,
+          "amount": 130755.6,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 151,
+          "description": "15. MCB 16A 3 phase",
+          "unit": "MCB Domae",
+          "volume": 65377.8,
+          "unitPrice": 0.1,
+          "amount": 65377.8,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 152,
+          "description": "16. Ampere & volt meter digital",
+          "unit": "ls",
+          "volume": 1535982.75,
+          "unitPrice": 0.1,
+          "amount": 1535982.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 153,
+          "description": "17. Busbar",
+          "unit": "ls",
+          "volume": 126150.75,
+          "unitPrice": 0.1,
+          "amount": 126150.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 154,
+          "description": "18. Sisir MCB",
+          "unit": "ls",
+          "volume": 42261.75,
+          "unitPrice": 0.1,
+          "amount": 42261.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 155,
+          "description": "19. Bracket MCB",
+          "unit": "ls",
+          "volume": 8143.200000000001,
+          "unitPrice": 0.1,
+          "amount": 8143.200000000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 156,
+          "description": "1. Lampu downlight",
+          "unit": "Philips 13 Watt",
+          "volume": 794643.75,
+          "unitPrice": 0.1,
+          "amount": 794643.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 157,
+          "description": "2. Lampu Spotlight",
+          "unit": "Philips 13 Watt",
+          "volume": 272112.75,
+          "unitPrice": 0.1,
+          "amount": 272112.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 158,
+          "description": "3. LED Strip",
+          "unit": "Philips",
+          "volume": 2077270.6500000001,
+          "unitPrice": 0.1,
+          "amount": 2077270.6500000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 159,
+          "description": "4. Travo LED strip",
+          "unit": "Philips",
+          "volume": 932783.8500000001,
+          "unitPrice": 0.1,
+          "amount": 932783.8500000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 160,
+          "description": "5. Stop kontak 2 gang",
+          "unit": "16AX 250V Sakelar 2 Gang 2 Arah, Fluoresen, Lavender Silver",
+          "volume": 276753.07800000004,
+          "unitPrice": 0.1,
+          "amount": 276753.07800000004,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 161,
+          "description": "6. Saklar seri",
+          "unit": "16A 250V 1 Gang Kotak Kontak Tipe Schuko, Lavender Silver",
+          "volume": 198988.65000000002,
+          "unitPrice": 0.1,
+          "amount": 198988.65000000002,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 162,
+          "description": "7. Smoke detector",
+          "unit": "ls",
+          "volume": 676104.3,
+          "unitPrice": 0.1,
+          "amount": 676104.3,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 163,
+          "description": "1. Pipa PVC AW dia. 3/4 inch",
+          "unit": "Wavin type AW",
+          "volume": 54485.46,
+          "unitPrice": 0.1,
+          "amount": 54485.46,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 164,
+          "description": "2. Pipa PVC AW dia. 1/2 inch",
+          "unit": "Wavin type AW",
+          "volume": 18861.120000000003,
+          "unitPrice": 0.1,
+          "amount": 18861.120000000003,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 165,
+          "description": "3. Pipa PVC D dia. 3 inch",
+          "unit": "Wavin type AW",
+          "volume": 587677.275,
+          "unitPrice": 0.1,
+          "amount": 587677.275,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 166,
+          "description": "4. Knee pipa PVC 3 inch",
+          "unit": "Wavin type AW",
+          "volume": 213551.10000000003,
+          "unitPrice": 0.10000000000000002,
+          "amount": 213551.10000000003,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 167,
+          "description": "5. Tee pipa PVC 3 inch",
+          "unit": "Wavin type AW",
+          "volume": 58001.4,
+          "unitPrice": 0.1,
+          "amount": 58001.4,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 168,
+          "description": "6. Knee pipa PVC 3/4 inch",
+          "unit": "Wavin type AW",
+          "volume": 3874.2300000000005,
+          "unitPrice": 0.1,
+          "amount": 3874.2300000000005,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 169,
+          "description": "7. Tee pipa PVC 3/4 inch",
+          "unit": "Wavin type AW",
+          "volume": 2582.82,
+          "unitPrice": 0.1,
+          "amount": 2582.82,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 170,
+          "description": "8. Reducer pipa 3/4 inch ke 1/2 inch",
+          "unit": "Wavin type AW",
+          "volume": 2582.82,
+          "unitPrice": 0.1,
+          "amount": 2582.82,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 171,
+          "description": "9. Gate valve pipa 3/4 inch",
+          "unit": "Wavin type AW",
+          "volume": 14705.820000000002,
+          "unitPrice": 0.1,
+          "amount": 14705.820000000002,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 172,
+          "description": "10. Pipa PPR PN 10 dia. 3/4 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 40243.23,
+          "unitPrice": 0.1,
+          "amount": 40243.23,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 173,
+          "description": "11. Pipa PPR PN 10 dia. 1/2 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 10349.910000000002,
+          "unitPrice": 0.1,
+          "amount": 10349.910000000002,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 174,
+          "description": "12. Knee pipa PPR 3/4 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 6061.23,
+          "unitPrice": 0.09999999999999999,
+          "amount": 6061.23,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 175,
+          "description": "13. Tee pipa PPR 3/4 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 2384.91,
+          "unitPrice": 0.1,
+          "amount": 2384.91,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 176,
+          "description": "14. Reducer pipa 3/4 inch ke 1/2 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 1473.66,
+          "unitPrice": 0.1,
+          "amount": 1473.66,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 177,
+          "description": "15. Gate valve pipa ppr 3/4 inch",
+          "unit": "WAVIN KELEN GREEN",
+          "volume": 39723.75,
+          "unitPrice": 0.1,
+          "amount": 39723.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 178,
+          "description": "1. Knee pipa PVC 3 inch",
+          "unit": "Wavin type AW",
+          "volume": 579638.7000000001,
+          "unitPrice": 0.1,
+          "amount": 579638.7000000001,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 179,
+          "description": "2. Tee pipa PVC 3 inch",
+          "unit": "Wavin type AW",
+          "volume": 188504.55000000002,
+          "unitPrice": 0.1,
+          "amount": 188504.55000000002,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 180,
+          "description": "3. Knee pipa PVC 3/4 inch",
+          "unit": "Wavin type AW",
+          "volume": 14205.51,
+          "unitPrice": 0.09999999999999999,
+          "amount": 14205.51,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        },
+        {
+          "order": 181,
+          "description": "4. Roof drain",
+          "unit": "ls",
+          "volume": 285936.75,
+          "unitPrice": 0.1,
+          "amount": 285936.75,
+          "startOffsetDays": 0,
+          "durationDays": 30
+        }
+      ]
+    }
+  ],
+  "_debug": {
+    "source": "multi-sheet (Prelim..MEP)",
+    "total_items": 247,
+    "total_amount": 454226005.80958337,
+    "grand_total_rekap": 3839434603.5361214,
+    "sections_found": 7
+  }
+}

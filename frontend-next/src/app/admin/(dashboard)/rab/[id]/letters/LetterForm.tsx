@@ -207,7 +207,7 @@ export function LetterForm({
     >
       <div className="space-y-5">
         {loadingDefaults && (
-          <p className="flex items-center gap-2 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.08] px-4 py-2.5 text-sm text-cyan-100">
+          <p className="flex items-center gap-2 rounded-xl border border-desert-400/20 bg-desert-400/[0.08] px-4 py-2.5 text-sm text-desert-200">
             <Sparkles size={14} /> Menarik isi surat dari penawaran, termin, dan opname proyek…
           </p>
         )}

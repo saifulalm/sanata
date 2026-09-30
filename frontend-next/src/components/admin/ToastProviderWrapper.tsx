@@ -81,14 +81,14 @@ const toastStyles = {
   success: "border-emerald-500/30 bg-emerald-500/10 text-emerald-200",
   error: "border-red-500/30 bg-red-500/10 text-red-200",
   warning: "border-amber-500/30 bg-amber-500/10 text-amber-200",
-  info: "border-cyan-500/30 bg-cyan-500/10 text-cyan-200",
+  info: "border-desert-500/30 bg-desert-500/10 text-desert-200",
 };
 
 const toastIconStyles = {
   success: "text-emerald-400",
   error: "text-red-400",
   warning: "text-amber-400",
-  info: "text-cyan-400",
+  info: "text-desert-400",
 };
 
 function ToastItem({ toast, onClose }: { toast: ToastState; onClose: () => void }) {

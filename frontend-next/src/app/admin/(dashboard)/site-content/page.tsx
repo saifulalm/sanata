@@ -41,7 +41,7 @@ export default async function SiteContentPage() {
                 <Link
                   key={item.key}
                   href={`/admin/site-content/${item.key}`}
-                  className="group flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition-all hover:border-cyan-400/30 hover:bg-white/[0.05]"
+                  className="group flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition-all hover:border-desert-400/30 hover:bg-white/[0.05]"
                 >
                   <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.05] text-slate-400">
                     <LayoutList size={16} />
@@ -54,7 +54,7 @@ export default async function SiteContentPage() {
                   </span>
                   <ChevronRight
                     size={16}
-                    className="mt-1 shrink-0 text-slate-600 transition-colors group-hover:text-cyan-400"
+                    className="mt-1 shrink-0 text-slate-600 transition-colors group-hover:text-desert-400"
                   />
                 </Link>
               ))}

@@ -112,14 +112,14 @@ export function LessonLearnedList({ initialData, initialMeta }: LessonLearnedLis
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleFilter()}
             placeholder="Cari title atau description..."
-            className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none"
+            className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:border-desert-400/40 focus:outline-none"
           />
         </div>
 
         <select
           value={wbsFilter}
           onChange={(e) => { setWbsFilter(e.target.value as WbsStage | ""); handleFilter(); }}
-          className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+          className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
         >
           <option value="">Semua WBS</option>
           {Object.entries(WBS_STAGES).map(([key, { label }]) => (
@@ -130,7 +130,7 @@ export function LessonLearnedList({ initialData, initialMeta }: LessonLearnedLis
         <select
           value={severityFilter}
           onChange={(e) => { setSeverityFilter(e.target.value as QcSeverity | ""); handleFilter(); }}
-          className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+          className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
         >
           <option value="">Semua Severity</option>
           <option value="LOW">Rendah</option>
@@ -145,7 +145,7 @@ export function LessonLearnedList({ initialData, initialMeta }: LessonLearnedLis
             setResolvedFilter(e.target.value === "true" ? true : e.target.value === "false" ? false : "");
             handleFilter();
           }}
-          className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-cyan-400/40 focus:outline-none"
+          className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white focus:border-desert-400/40 focus:outline-none"
         >
           <option value="">Semua Status</option>
           <option value="false">Belum Resolved</option>
@@ -210,7 +210,7 @@ export function LessonLearnedList({ initialData, initialMeta }: LessonLearnedLis
                       </td>
                       <td className="px-4 py-3">
                         {item.qcRecord ? (
-                          <span className="font-mono text-xs text-cyan-400">{item.qcRecord.qcCode}</span>
+                          <span className="font-mono text-xs text-desert-400">{item.qcRecord.qcCode}</span>
                         ) : (
                           <span className="text-xs text-slate-500">—</span>
                         )}
@@ -219,7 +219,7 @@ export function LessonLearnedList({ initialData, initialMeta }: LessonLearnedLis
                         <div className="flex items-center justify-end gap-1">
                           <button
                             onClick={() => setViewDialog(item)}
-                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-400 transition-all hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400"
+                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-400 transition-all hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
                             title="View"
                           >
                             <Eye size={14} />

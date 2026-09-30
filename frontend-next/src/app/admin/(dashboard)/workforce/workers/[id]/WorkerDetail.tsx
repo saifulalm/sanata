@@ -140,7 +140,7 @@ export function WorkerDetail({ worker, assessments, kpis, executions }: WorkerDe
                 </div>
                 <div>
                   <label className="text-xs text-slate-500">Kode Worker</label>
-                  <p className="font-mono text-cyan-400">{worker.workerCode}</p>
+                  <p className="font-mono text-desert-400">{worker.workerCode}</p>
                 </div>
                 <div>
                   <label className="text-xs text-slate-500">Role / Jabatan</label>
@@ -221,7 +221,7 @@ export function WorkerDetail({ worker, assessments, kpis, executions }: WorkerDe
           <div className="space-y-6">
             <Card>
               <div className="flex items-center gap-4">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-cyan-500/10 text-cyan-400">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-desert-400/10 text-desert-400">
                   {worker.facePhotoUrl ? (
                     <img
                       src={worker.facePhotoUrl}
@@ -282,7 +282,7 @@ export function WorkerDetail({ worker, assessments, kpis, executions }: WorkerDe
               action={
                 <Link
                   href={`/admin/workforce/assessments/new?workerId=${worker.id}`}
-                  className="inline-flex items-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-300"
+                  className="inline-flex items-center gap-2 rounded-xl border border-desert-400/30 bg-desert-400/10 px-4 py-2 text-sm font-medium text-desert-400"
                 >
                   <Pencil size={16} />
                   Tambah Assessment
@@ -388,7 +388,7 @@ export function WorkerDetail({ worker, assessments, kpis, executions }: WorkerDe
                 <Card key={log.id}>
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="font-mono text-sm text-cyan-400">{log.logCode}</p>
+                      <p className="font-mono text-sm text-desert-400">{log.logCode}</p>
                       <p className="text-xs text-slate-500">{formatDate(log.logDate)}</p>
                     </div>
                     {log.progressPct !== null && (

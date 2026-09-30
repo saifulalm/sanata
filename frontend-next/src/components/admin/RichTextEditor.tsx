@@ -41,7 +41,7 @@ function ToolbarButton({
       aria-label={label}
       aria-pressed={active}
       className={`rounded p-1.5 transition-colors disabled:opacity-30 ${
-              active ? "bg-cyan-300/12 text-cyan-100" : "text-slate-400 hover:bg-white/[0.04] hover:text-white"
+              active ? "bg-desert-400/12 text-desert-200" : "text-slate-400 hover:bg-white/[0.04] hover:text-white"
       }`}
     >
       {children}
@@ -152,7 +152,7 @@ export function RichTextEditor({
     <div>
       {/* Nilai kosong TipTap tetap "<p></p>"; normalkan agar validasi wajib-isi bekerja. */}
       <input type="hidden" name={name} value={html === "<p></p>" ? "" : html} />
-          <div className="overflow-hidden rounded-[1.25rem] border border-white/10 bg-white/[0.03] focus-within:border-cyan-300/30 focus-within:ring-2 focus-within:ring-cyan-300/10">
+          <div className="overflow-hidden rounded-[1.25rem] border border-white/10 bg-white/[0.03] focus-within:border-desert-400/30 focus-within:ring-2 focus-within:ring-desert-400/10">
         {editor && <Toolbar editor={editor} />}
         {editor ? (
           <EditorContent editor={editor} />

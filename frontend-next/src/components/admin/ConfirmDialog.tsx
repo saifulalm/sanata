@@ -58,7 +58,7 @@ export function ConfirmDialog({
       >
         <div
           className={`flex h-11 w-11 items-center justify-center rounded-xl ${
-                  tone === "danger" ? "bg-red-500/15 text-red-300" : "bg-cyan-300/10 text-cyan-200"
+                  tone === "danger" ? "bg-red-500/15 text-red-300" : "bg-desert-400/10 text-desert-200"
           }`}
         >
           <AlertTriangle size={20} />
@@ -86,7 +86,7 @@ export function ConfirmDialog({
                   className={`rounded-2xl px-4 py-2 text-sm font-semibold text-white disabled:opacity-60 ${
                     tone === "danger"
                       ? "bg-red-600 hover:bg-red-700"
-                      : "border border-cyan-300/35 bg-cyan-300/10 text-cyan-100 hover:bg-cyan-300/20"
+                      : "border border-desert-400/35 bg-desert-400/10 text-desert-200 hover:bg-desert-400/20"
             }`}
           >
             {pending ? "Memproses..." : confirmLabel}

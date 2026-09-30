@@ -95,11 +95,11 @@ export function QcDetailClient({ record: initialRecord }: { record: QcRecord }) 
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-4">
-          <Link href="/admin/workforce/qc" className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-400 transition-colors hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400">
+          <Link href="/admin/workforce/qc" className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-400 transition-colors hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400">
             <ArrowLeft size={20} />
           </Link>
           <div>
-            <p className="font-mono text-sm text-cyan-400">{record.qcCode}</p>
+            <p className="font-mono text-sm text-desert-400">{record.qcCode}</p>
             <h1 className="text-xl font-bold text-white">Quality Control</h1>
           </div>
         </div>
@@ -173,7 +173,7 @@ export function QcDetailClient({ record: initialRecord }: { record: QcRecord }) 
             </h3>
             <p className="font-medium text-white">{record.worker.name}</p>
             <p className="text-xs text-slate-500">{record.worker.role}</p>
-            <p className="mt-1 font-mono text-xs text-cyan-400">{record.worker.workerCode}</p>
+            <p className="mt-1 font-mono text-xs text-desert-400">{record.worker.workerCode}</p>
           </Card>
 
           <Card>
@@ -268,7 +268,7 @@ export function QcDetailClient({ record: initialRecord }: { record: QcRecord }) 
               onChange={(e) => setReworkNotes(e.target.value)}
               placeholder="Jelaskan defect yang ditemukan..."
               rows={4}
-              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none resize-none"
+              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none resize-none"
             />
           </div>
         </div>

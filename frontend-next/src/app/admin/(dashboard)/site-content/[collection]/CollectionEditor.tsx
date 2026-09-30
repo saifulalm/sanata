@@ -27,7 +27,7 @@ function SubmitButton({ label }: { label: string }) {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-300 transition-all hover:border-cyan-400/60 hover:bg-cyan-400/20 disabled:opacity-60"
+      className="rounded-full border border-desert-400/30 bg-desert-400/10 px-4 py-2 text-sm font-semibold text-desert-400 transition-all hover:border-desert-400/60 hover:bg-desert-400/20 disabled:opacity-60"
     >
       {pending ? "Menyimpan..." : label}
     </button>
@@ -190,7 +190,7 @@ function ItemModal({
               type="checkbox"
               name="isActive"
               defaultChecked={item?.isActive ?? true}
-              className="rounded border-white/20 bg-white/[0.04] checked:bg-cyan-400"
+              className="rounded border-white/20 bg-white/[0.04] checked:bg-desert-400"
             />
             Tampilkan di situs
           </label>
@@ -242,7 +242,7 @@ export function CollectionEditor({
         <div>
           <Link
             href="/admin/site-content"
-            className="mb-1 flex items-center gap-1.5 text-xs text-slate-400 hover:text-cyan-400"
+            className="mb-1 flex items-center gap-1.5 text-xs text-slate-400 hover:text-desert-400"
           >
             <ArrowLeft size={14} /> Kembali ke Konten Situs
           </Link>
@@ -256,7 +256,7 @@ export function CollectionEditor({
             setEditing(null);
             setModalOpen(true);
           }}
-          className="flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-300 transition-all hover:border-cyan-400/60 hover:bg-cyan-400/20"
+          className="flex items-center gap-2 rounded-full border border-desert-400/30 bg-desert-400/10 px-4 py-2 text-sm font-semibold text-desert-400 transition-all hover:border-desert-400/60 hover:bg-desert-400/20"
         >
           <Plus size={16} /> Tambah
         </button>
@@ -279,7 +279,7 @@ export function CollectionEditor({
                   <button
                     onClick={() => run(() => moveItemAction(item.id, collection, "up"))}
                     disabled={isPending || index === 0}
-                    className="rounded p-0.5 text-slate-500 hover:bg-white/5 hover:text-cyan-400 disabled:opacity-30"
+                    className="rounded p-0.5 text-slate-500 hover:bg-white/5 hover:text-desert-400 disabled:opacity-30"
                     aria-label="Naikkan urutan"
                   >
                     <ChevronUp size={14} />
@@ -287,7 +287,7 @@ export function CollectionEditor({
                   <button
                     onClick={() => run(() => moveItemAction(item.id, collection, "down"))}
                     disabled={isPending || index === items.length - 1}
-                    className="rounded p-0.5 text-slate-500 hover:bg-white/5 hover:text-cyan-400 disabled:opacity-30"
+                    className="rounded p-0.5 text-slate-500 hover:bg-white/5 hover:text-desert-400 disabled:opacity-30"
                     aria-label="Turunkan urutan"
                   >
                     <ChevronDown size={14} />
@@ -299,7 +299,7 @@ export function CollectionEditor({
                     <Image src={mediaSrc(item.imageUrl)} alt="" fill sizes="36px" className="object-cover" />
                   </span>
                 ) : Icon ? (
-                  <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400">
+                  <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-desert-400/10 text-desert-400">
                     <Icon size={16} />
                   </span>
                 ) : null}
@@ -313,7 +313,7 @@ export function CollectionEditor({
                       </span>
                     )}
                   </p>
-                  {item.subtitle && <p className="text-xs text-cyan-400">{item.subtitle}</p>}
+                  {item.subtitle && <p className="text-xs text-desert-400">{item.subtitle}</p>}
                   {item.body && <p className="mt-1 text-sm leading-relaxed text-slate-400">{item.body}</p>}
                 </div>
 
@@ -324,7 +324,7 @@ export function CollectionEditor({
                       setModalOpen(true);
                     }}
                     aria-label={`Sunting "${item.title ?? "item tanpa judul"}"`}
-                    className="rounded-lg p-1.5 text-slate-500 hover:bg-white/5 hover:text-cyan-400"
+                    className="rounded-lg p-1.5 text-slate-500 hover:bg-white/5 hover:text-desert-400"
                   >
                     <Pencil size={15} />
                   </button>

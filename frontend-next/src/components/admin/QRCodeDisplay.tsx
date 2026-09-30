@@ -131,7 +131,7 @@ export function QRCodeDisplay({ toolId, toolCode, toolName, apiUrl, size = 200 }
   if (loading) {
     return (
       <div className="flex h-48 w-48 items-center justify-center rounded-xl border border-white/10 bg-white/5">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-cyan-400 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-desert-400 border-t-transparent" />
       </div>
     );
   }
@@ -142,7 +142,7 @@ export function QRCodeDisplay({ toolId, toolCode, toolName, apiUrl, size = 200 }
         <p className="mb-2 text-sm text-rose-400">Gagal generate QR</p>
         <button
           onClick={generateQrCode}
-          className="flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-300"
+          className="flex items-center gap-1 text-xs text-desert-400 hover:text-desert-400"
         >
           <RefreshCw size={12} /> Coba lagi
         </button>
@@ -176,7 +176,7 @@ export function QRCodeDisplay({ toolId, toolCode, toolName, apiUrl, size = 200 }
 
       {/* Tool Info */}
       <div className="mt-3 text-center">
-        <p className="font-mono text-xs text-cyan-400">{toolCode}</p>
+        <p className="font-mono text-xs text-desert-400">{toolCode}</p>
         <p className="mt-1 text-sm font-medium text-white">{toolName}</p>
       </div>
 
@@ -184,13 +184,13 @@ export function QRCodeDisplay({ toolId, toolCode, toolName, apiUrl, size = 200 }
       <div className="mt-3 flex gap-2">
         <button
           onClick={downloadQrCode}
-          className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-400 transition-colors hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400"
+          className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-400 transition-colors hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
         >
           <Download size={12} /> Download
         </button>
         <button
           onClick={copyToClipboard}
-          className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-400 transition-colors hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400"
+          className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-400 transition-colors hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
         >
           Copy URL
         </button>

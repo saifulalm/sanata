@@ -39,7 +39,7 @@ export default async function GalleryPage() {
                     key={img.id}
                     className="break-inside-avoid overflow-hidden rounded-[1.6rem] border border-white/10"
                   >
-                    <div className="relative aspect-[4/3] w-full bg-slate-950/70">
+                    <div className="relative aspect-[4/3] w-full bg-charcoal-800/70">
                       <Image
                         src={img.url}
                         alt={p.name}
@@ -56,9 +56,9 @@ export default async function GalleryPage() {
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {projects.slice(0, 9).map((p, i) => (
                 <RevealOnScroll key={p.id} delay={(i % 3) * 0.06}>
-                  <div className="flex aspect-[4/3] flex-col items-center justify-center gap-2 rounded-[1.6rem] border border-white/10 bg-slate-950/70 text-cyan-300/60">
+                  <div className="flex aspect-[4/3] flex-col items-center justify-center gap-2 rounded-[1.6rem] border border-white/10 bg-charcoal-800/70 text-desert-400/60">
                     <Building2 size={28} />
-                    <p className="px-4 text-center text-xs font-medium uppercase tracking-[0.16em] text-slate-300">{p.name}</p>
+                    <p className="px-4 text-center text-xs font-medium uppercase tracking-[0.16em] text-charcoal-200">{p.name}</p>
                   </div>
                 </RevealOnScroll>
               ))}

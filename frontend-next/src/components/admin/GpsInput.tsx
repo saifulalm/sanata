@@ -237,7 +237,7 @@ export function GpsInput({
       case "city":
       case "town":
       case "village":
-        return <Building size={14} className="text-cyan-400" />;
+        return <Building size={14} className="text-desert-400" />;
       default:
         return <MapPin size={14} className="text-emerald-400" />;
     }
@@ -271,7 +271,7 @@ export function GpsInput({
             onFocus={() => searchQuery.length >= 3 && setShowResults(true)}
             placeholder="Ketik nama lokasi, alamat, kota..."
             disabled={disabled}
-            className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-10 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none disabled:opacity-50"
+            className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-10 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none disabled:opacity-50"
           />
           {isSearching && (
             <Loader2 size={16} className="absolute right-3 top-1/2 -translate-y-1/2 animate-spin text-slate-500" />
@@ -345,7 +345,7 @@ export function GpsInput({
             type="button"
             onClick={handleGetLocation}
             disabled={disabled || gpsState === "loading"}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-cyan-400/30 bg-cyan-400/10 px-2.5 py-1 text-xs font-medium text-cyan-300 transition-all hover:border-cyan-400/50 hover:bg-cyan-400/20 disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-desert-400/30 bg-desert-400/10 px-2.5 py-1 text-xs font-medium text-desert-400 transition-all hover:border-desert-400/50 hover:bg-desert-400/20 disabled:opacity-50"
           >
             {gpsState === "loading" ? (
               <>
@@ -387,7 +387,7 @@ export function GpsInput({
               placeholder="-6.2088"
               disabled={disabled}
               className={`w-full rounded-xl border bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none disabled:opacity-50 ${
-                error ? "border-rose-400/50" : "border-white/10 focus:border-cyan-400/40"
+                error ? "border-rose-400/50" : "border-white/10 focus:border-desert-400/40"
               }`}
             />
           </div>
@@ -400,7 +400,7 @@ export function GpsInput({
               placeholder="106.8456"
               disabled={disabled}
               className={`w-full rounded-xl border bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none disabled:opacity-50 ${
-                error ? "border-rose-400/50" : "border-white/10 focus:border-cyan-400/40"
+                error ? "border-rose-400/50" : "border-white/10 focus:border-desert-400/40"
               }`}
             />
           </div>
@@ -452,10 +452,10 @@ export function GpsInput({
       </div>
 
       {/* Helper Text */}
-      <div className="flex items-start gap-2 rounded-lg border border-cyan-400/20 bg-cyan-400/5 p-3">
-        <MapPin size={14} className="mt-0.5 shrink-0 text-cyan-400" />
+      <div className="flex items-start gap-2 rounded-lg border border-desert-400/20 bg-desert-400/5 p-3">
+        <MapPin size={14} className="mt-0.5 shrink-0 text-desert-400" />
         <div className="text-xs text-slate-400">
-          <p className="font-medium text-cyan-400">💡 Tips:</p>
+          <p className="font-medium text-desert-400">💡 Tips:</p>
           <ul className="mt-1 space-y-0.5 text-slate-500">
             <li>• Ketik nama lokasi untuk mencari otomatis</li>
             <li>• Atau klik &quot;Deteksi GPS&quot; untuk lokasi saat ini</li>

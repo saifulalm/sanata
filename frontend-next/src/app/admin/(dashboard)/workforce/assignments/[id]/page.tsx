@@ -68,12 +68,12 @@ export default async function AssignmentDetailPage({ params }: Props) {
         <div className="flex items-center gap-4">
           <Link
             href="/admin/workforce/assignments"
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
           >
             <ArrowLeft size={20} />
           </Link>
           <div>
-            <p className="font-mono text-sm text-cyan-400">{assignment.assignmentCode}</p>
+            <p className="font-mono text-sm text-desert-400">{assignment.assignmentCode}</p>
             <h1 className="text-xl font-bold text-white">{assignment.workItem}</h1>
           </div>
         </div>
@@ -108,7 +108,7 @@ export default async function AssignmentDetailPage({ params }: Props) {
               {assignment.wbsCode && (
                 <div>
                   <p className="text-xs text-slate-500">WBS Code</p>
-                  <p className="font-medium text-cyan-400">{assignment.wbsCode}</p>
+                  <p className="font-medium text-desert-400">{assignment.wbsCode}</p>
                 </div>
               )}
               {assignment.methodRef && (
@@ -141,11 +141,11 @@ export default async function AssignmentDetailPage({ params }: Props) {
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-slate-500">Kemajuan</span>
-                  <span className="text-lg font-bold text-cyan-400">{assignment.progressPct}%</span>
+                  <span className="text-lg font-bold text-desert-400">{assignment.progressPct}%</span>
                 </div>
                 <div className="h-3 w-full overflow-hidden rounded-full bg-white/10">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-emerald-500 transition-all"
+                    className="h-full rounded-full bg-gradient-to-r from-desert-400 to-emerald-500 transition-all"
                     style={{ width: `${assignment.progressPct}%` }}
                   />
                 </div>
@@ -215,7 +215,7 @@ export default async function AssignmentDetailPage({ params }: Props) {
               </div>
               {assignment.actualStart && (
                 <div className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-desert-400/10 text-desert-400">
                     <Clock size={14} />
                   </div>
                   <div>
@@ -247,7 +247,7 @@ export default async function AssignmentDetailPage({ params }: Props) {
             <div className="space-y-2">
               <Link
                 href={`/admin/workforce/assignments/${id}/edit`}
-                className="flex w-full items-center justify-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2.5 text-sm font-medium text-cyan-300 transition-all hover:bg-cyan-400/20"
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-desert-400/30 bg-desert-400/10 px-4 py-2.5 text-sm font-medium text-desert-400 transition-all hover:bg-desert-400/20"
               >
                 <Edit size={16} />
                 Edit Assignment

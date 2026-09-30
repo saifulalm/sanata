@@ -99,14 +99,14 @@ export function InquiryBoard({
             value={searchVal}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Cari nama atau pesan..."
-            className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2 pl-9 pr-3.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10 transition-all"
+            className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2 pl-9 pr-3.5 text-sm text-white placeholder:text-slate-500 focus:border-desert-400/40 focus:outline-none focus:ring-2 focus:ring-desert-400/10 transition-all"
           />
         </div>
         <div className="ml-auto flex flex-wrap gap-1">
           {tabs.map((tab) => {
             const active = status === tab.value;
             const toneClass = active
-              ? "border-cyan-400/30 bg-cyan-400/10 text-cyan-300"
+              ? "border-desert-400/30 bg-desert-400/10 text-desert-400"
               : "border-white/10 bg-white/[0.04] text-slate-400 hover:border-white/18 hover:bg-white/[0.07]";
             return (
               <button
@@ -131,6 +131,7 @@ export function InquiryBoard({
       ) : (
         <Panel padded={false}>
           <TableWrap>
+            <table className="w-full min-w-[700px] text-sm">
             <thead>
               <tr>
                 <Th>Nama</Th>
@@ -145,7 +146,7 @@ export function InquiryBoard({
               {inquiries.map((inquiry) => {
                 const meta2 = STATUS_META[inquiry.status] ?? { label: inquiry.status, tone: "neutral" as const };
                 return (
-                  <tr key={inquiry.id} className={`transition-colors hover:bg-white/[0.02] ${inquiry.status === "NEW" ? "bg-cyan-400/[0.02]" : ""}`}>
+                  <tr key={inquiry.id} className={`transition-colors hover:bg-white/[0.02] ${inquiry.status === "NEW" ? "bg-desert-400/[0.02]" : ""}`}>
                     <Td>
                       <p className="text-sm font-medium text-slate-200">{inquiry.name}</p>
                       <p className="text-xs text-slate-500">{inquiry.email ?? inquiry.phone ?? "—"}</p>
@@ -172,7 +173,7 @@ export function InquiryBoard({
                       <div className="flex items-center justify-end gap-1">
                         <Link
                           href={`/admin/inquiries/${inquiry.id}`}
-                          className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-300 transition-all hover:border-cyan-400/30 hover:bg-cyan-400/10 hover:text-cyan-300"
+                          className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-300 transition-all hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
                         >
                           <Eye size={13} /> Lihat
                         </Link>
@@ -182,6 +183,7 @@ export function InquiryBoard({
                 );
               })}
             </tbody>
+            </table>
           </TableWrap>
         </Panel>
       )}

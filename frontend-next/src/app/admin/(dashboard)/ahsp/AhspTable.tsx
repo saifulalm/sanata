@@ -34,7 +34,7 @@ function SubmitButton({ label }: { label: string }) {
     <button
       type="submit"
       disabled={pending}
-      className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-semibold text-cyan-300 transition-all hover:border-cyan-400/60 hover:bg-cyan-400/20 disabled:opacity-60"
+      className="inline-flex items-center gap-2 rounded-full border border-desert-400/30 bg-desert-400/10 px-4 py-2 text-sm font-semibold text-desert-400 transition-all hover:border-desert-400/60 hover:bg-desert-400/20 disabled:opacity-60"
     >
       {pending ? "Menyimpan..." : label}
     </button>
@@ -185,7 +185,7 @@ function AhspModal({
                 type="button"
                 onClick={addComponent}
                 disabled={priceItems.length === 0}
-                className="flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1.5 text-xs font-medium text-cyan-300 hover:border-cyan-400/60 hover:bg-cyan-400/20 disabled:opacity-40 transition"
+                className="flex items-center gap-1.5 rounded-full border border-desert-400/30 bg-desert-400/10 px-3 py-1.5 text-xs font-medium text-desert-400 hover:border-desert-400/60 hover:bg-desert-400/20 disabled:opacity-40 transition"
               >
                 <Plus size={14} /> Tambah Komponen
               </button>
@@ -231,14 +231,14 @@ function AhspModal({
                             step="0.0001"
                             value={line.coefficient}
                             onChange={(e) => updateComponent(line.key, { coefficient: e.target.value })}
-                            className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-2 py-1.5 text-right text-sm tabular-nums text-white placeholder:text-slate-600 focus:border-cyan-300/40 focus:outline-none"
+                            className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-2 py-1.5 text-right text-sm tabular-nums text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none"
                           />
                         </td>
                         <td className="px-3 py-2 text-slate-500">{line.price?.unit ?? "-"}</td>
                         <td className="px-3 py-2 text-right tabular-nums text-slate-500">
                           {line.price ? formatRupiah(line.price.unitPrice) : "-"}
                         </td>
-                        <td className="px-3 py-2 text-right font-medium tabular-nums text-cyan-300">
+                        <td className="px-3 py-2 text-right font-medium tabular-nums text-desert-400">
                           {formatRupiah(line.subtotal)}
                         </td>
                         <td className="px-3 py-2">
@@ -268,7 +268,7 @@ function AhspModal({
               </div>
               <div className="flex justify-between border-t border-white/5 pt-1 font-semibold text-white">
                 <span>Harga Satuan Pekerjaan</span>
-                <span className="tabular-nums text-cyan-300">Rp {formatRupiah(preview.unitPrice, true)}</span>
+                <span className="tabular-nums text-desert-400">Rp {formatRupiah(preview.unitPrice, true)}</span>
               </div>
             </div>
           </div>
@@ -279,7 +279,7 @@ function AhspModal({
           </div>
 
           <label className="flex items-center gap-2 text-sm text-slate-400">
-            <input type="checkbox" name="isActive" defaultChecked={ahsp?.isActive ?? true} className="h-4 w-4 rounded border-white/20 bg-white/[0.04] checked:bg-cyan-400" />
+            <input type="checkbox" name="isActive" defaultChecked={ahsp?.isActive ?? true} className="h-4 w-4 rounded border-white/20 bg-white/[0.04] checked:bg-desert-400" />
             Aktif
           </label>
 
@@ -323,7 +323,7 @@ function AhspRow({
           <code className="text-xs font-mono text-slate-500">{ahsp.code}</code>
         </Td>
         <Td>
-          <button onClick={() => setExpanded((v) => !v)} className="text-left text-sm font-medium text-slate-200 hover:text-cyan-300">
+          <button onClick={() => setExpanded((v) => !v)} className="text-left text-sm font-medium text-slate-200 hover:text-desert-400">
             {ahsp.name}
           </button>
           {ahsp.category && <p className="mt-0.5 text-xs text-slate-600">{ahsp.category}</p>}
@@ -400,7 +400,7 @@ function AhspRow({
                 </tr>
                 <tr className="border-t border-white/[0.1]">
                   <Td colSpan={4} className="py-2 text-right font-semibold text-slate-100">Harga Satuan</Td>
-                  <Td className="py-2 text-right font-semibold tabular-nums text-cyan-300">
+                  <Td className="py-2 text-right font-semibold tabular-nums text-desert-400">
                     {formatRupiah(ahsp.computed.unitPrice)}
                   </Td>
                 </tr>
@@ -468,7 +468,7 @@ export function AhspTable({
         actions={
           <button
             onClick={() => { setEditing(null); setModalOpen(true); }}
-            className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-xs font-semibold text-cyan-300 transition-all hover:border-cyan-400/60 hover:bg-cyan-400/20"
+            className="inline-flex items-center gap-2 rounded-full border border-desert-400/30 bg-desert-400/10 px-4 py-2 text-xs font-semibold text-desert-400 transition-all hover:border-desert-400/60 hover:bg-desert-400/20"
           >
             <Plus size={14} /> AHSP Baru
           </button>
@@ -488,7 +488,7 @@ export function AhspTable({
             name="search"
             defaultValue={search}
             placeholder="Cari kode atau uraian pekerjaan..."
-            className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2 pl-9 pr-3.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan-400/40 focus:outline-none focus:ring-2 focus:ring-cyan-300/10 transition-all"
+            className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2 pl-9 pr-3.5 text-sm text-white placeholder:text-slate-500 focus:border-desert-400/40 focus:outline-none focus:ring-2 focus:ring-desert-400/10 transition-all"
           />
         </form>
       </Toolbar>
@@ -508,6 +508,7 @@ export function AhspTable({
           />
         ) : (
           <TableWrap>
+            <table className="w-full min-w-[700px] text-sm">
             <thead>
               <tr>
                 <Th>Kode</Th>
@@ -530,6 +531,7 @@ export function AhspTable({
                 />
               ))}
             </tbody>
+            </table>
           </TableWrap>
         )}
       </Panel>

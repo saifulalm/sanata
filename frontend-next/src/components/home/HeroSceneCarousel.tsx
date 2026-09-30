@@ -71,7 +71,8 @@ export function HeroSceneCarousel({
         aria-roledescription="carousel"
         aria-label={label}
         aria-live={paused || reduceMotion || intervalMs <= 0 ? "polite" : "off"}
-        className="relative min-h-[25rem] overflow-hidden rounded-[1.8rem] border border-white/10 bg-slate-950/80 shadow-[0_40px_120px_rgba(2,12,27,0.45)]"
+        /* SANATA Brand: Desert Charcoal container */
+        className="relative min-h-[25rem] overflow-hidden rounded-[1.8rem] border border-white/10 bg-[#0C1012]/80 shadow-[0_40px_120px_rgba(0,0,0,0.4)]"
       >
         {current.imageUrl ? (
           <Image
@@ -88,22 +89,25 @@ export function HeroSceneCarousel({
         <div className={`absolute inset-0 bg-gradient-to-br ${current.accentClass}`} />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,7,18,0.15),rgba(3,7,18,0.82))]" />
         <div className="absolute inset-y-0 right-0 hidden w-[48%] lg:block">
-          <BuildingSceneCanvas accent="#67e8f9" />
+          {/* SANATA Brand: Desert accent */}
+          <BuildingSceneCanvas accent="#C9AD82" />
         </div>
 
-        <div className="absolute inset-x-6 top-5 flex items-center justify-between text-[11px] uppercase tracking-[0.24em] text-slate-300">
+        {/* SANATA Brand: Charcoal text */}
+        <div className="absolute inset-x-6 top-5 flex items-center justify-between text-[11px] uppercase tracking-[0.24em] text-charcoal-300">
           <span>{label}</span>
           <span>{String(safeActive + 1).padStart(2, "0")} / {String(scenes.length).padStart(2, "0")}</span>
         </div>
 
         {scenes.length > 1 && (
           <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-3">
+            {/* SANATA Brand: Desert hover accent */}
             <button
               type="button"
               onClick={() => go(-1)}
               aria-label="Scene sebelumnya"
               aria-controls={panelId}
-              className="rounded-full border border-white/15 bg-slate-950/60 p-2 text-slate-200 backdrop-blur transition hover:border-cyan-300/40 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
+              className="rounded-full border border-white/15 bg-[#0C1012]/60 p-2 text-charcoal-200 backdrop-blur transition hover:border-desert-400/40 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-desert-400"
             >
               <ChevronLeft size={18} />
             </button>
@@ -112,7 +116,7 @@ export function HeroSceneCarousel({
               onClick={() => go(1)}
               aria-label="Scene berikutnya"
               aria-controls={panelId}
-              className="rounded-full border border-white/15 bg-slate-950/60 p-2 text-slate-200 backdrop-blur transition hover:border-cyan-300/40 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
+              className="rounded-full border border-white/15 bg-[#0C1012]/60 p-2 text-charcoal-200 backdrop-blur transition hover:border-desert-400/40 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-desert-400"
             >
               <ChevronRight size={18} />
             </button>
@@ -121,17 +125,20 @@ export function HeroSceneCarousel({
 
         <div className="absolute bottom-6 left-6 right-6 max-w-xl">
           <p className="text-2xl font-semibold uppercase tracking-[0.1em] text-white sm:text-3xl">{current.title}</p>
-          <p className="mt-3 text-sm leading-7 text-slate-200 sm:text-base">{current.subtitle}</p>
+          {/* SANATA Brand: Charcoal text */}
+          <p className="mt-3 text-sm leading-7 text-charcoal-200 sm:text-base">{current.subtitle}</p>
           <div className="mt-4 flex flex-wrap items-center gap-3">
-            <div className="flex items-center gap-2 text-cyan-200/90">
+            {/* SANATA Brand: Desert icons */}
+            <div className="flex items-center gap-2 text-desert-300/90">
               <Bot size={16} />
               <TowerControl size={16} />
               <Radar size={16} />
             </div>
             {current.href ? (
+              /* SANATA Brand: Desert CTA */
               <Link
                 href={current.href}
-                className="inline-flex items-center gap-2 rounded-full border border-cyan-300/35 bg-cyan-300/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-100 transition hover:bg-cyan-300/20"
+                className="inline-flex items-center gap-2 rounded-full border border-desert-400/35 bg-desert-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-desert-200 transition hover:bg-desert-400/20"
               >
                 Explore Scene <ArrowRight size={14} />
               </Link>
@@ -151,9 +158,10 @@ export function HeroSceneCarousel({
             aria-current={safeActive === index}
             aria-controls={panelId}
             aria-label={`Tampilkan scene ${index + 1} dari ${scenes.length}: ${scene.title}`}
+            /* SANATA Brand: Desert active state */
             className={clsx(
-              "relative overflow-hidden rounded-[1.4rem] border bg-slate-950/80 p-3 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300",
-              safeActive === index ? "border-cyan-300/45 shadow-[0_0_35px_rgba(56,189,248,0.12)]" : "border-white/10 hover:border-cyan-300/25"
+              "relative overflow-hidden rounded-[1.4rem] border bg-[#0C1012]/80 p-3 text-left transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-desert-400",
+              safeActive === index ? "border-desert-400/45 shadow-[0_0_35px_rgba(201,173,130,0.1)]" : "border-white/10 hover:border-desert-400/25"
             )}
           >
             <div className="relative h-28 overflow-hidden rounded-[1rem]">
@@ -171,7 +179,8 @@ export function HeroSceneCarousel({
               <div className={`absolute inset-0 bg-gradient-to-br ${scene.accentClass}`} />
             </div>
             <p className="mt-3 text-sm font-semibold uppercase tracking-[0.14em] text-white">{scene.title}</p>
-            <p className="mt-1 line-clamp-2 text-xs leading-5 text-slate-400">{scene.subtitle}</p>
+            {/* SANATA Brand: Charcoal text */}
+            <p className="mt-1 line-clamp-2 text-xs leading-5 text-charcoal-400">{scene.subtitle}</p>
           </button>
         ))}
       </div>

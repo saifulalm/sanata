@@ -1,6 +1,17 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000/api";
 import { fetchWithTimeout, isHttpRequestError, readJsonSafely } from "@/lib/http";
 
+const ACCESS_COOKIE = "admin_access";
+
+/**
+ * Get access token from cookie (client-side)
+ */
+function getAccessToken(): string | null {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(new RegExp(ACCESS_COOKIE + "=([^;]+)"));
+  return match ? match[1] : null;
+}
+
 export class MarketingApiError extends Error {
   constructor(
     message: string,
@@ -19,7 +30,7 @@ export interface PaginatedMeta {
 
 // Campaign Types
 export type CampaignType = "WHATSAPP" | "EMAIL" | "INSTAGRAM" | "MULTI";
-export type CampaignStatus = "DRAFT" | "SCHEDULED" | "SENDING" | "COMPLETED" | "CANCELLED" | "FAILED";
+export type CampaignStatus = "DRAFT" | "SCHEDULED" | "SENDING" | "COMPLETED" | "PAUSED" | "CANCELLED" | "FAILED";
 
 export interface Campaign {
   id: string;
@@ -156,7 +167,7 @@ export interface ChannelAnalytics {
 
 // API Helper
 async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const token = getAccessToken();
 
   let res: Response;
   try {
@@ -186,7 +197,7 @@ async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
 }
 
 async function apiFetchPaginated<T>(path: string): Promise<{ data: T[]; meta: PaginatedMeta }> {
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const token = getAccessToken();
 
   const res = await fetchWithTimeout(`${API_URL}${path}`, {
     headers: {
@@ -216,7 +227,7 @@ export async function getCampaigns(params?: {
     ...(params?.type ? { type: params.type } : {}),
     ...(params?.search ? { search: params.search } : {}),
   });
-  return apiFetchPaginated<Campaign>(`/admin/admin/marketing/campaigns?${qs.toString()}`);
+  return apiFetchPaginated<Campaign>(`/admin/marketing/campaigns?${qs.toString()}`);
 }
 
 export async function getCampaign(id: string): Promise<Campaign> {
@@ -293,7 +304,7 @@ export async function importContacts(file: File): Promise<{ imported: number; fa
   const formData = new FormData();
   formData.append("file", file);
 
-  const token = localStorage.getItem("token");
+  const token = getAccessToken();
   const res = await fetch(`${API_URL}/admin/marketing/contacts/import`, {
     method: "POST",
     headers: { Authorization: `Bearer ${token}` },
@@ -310,7 +321,7 @@ export async function exportContacts(params?: { tags?: string[]; listId?: string
     ...(params?.listId ? { listId: params.listId } : {}),
   });
 
-  const token = localStorage.getItem("token");
+  const token = getAccessToken();
   const res = await fetch(`${API_URL}/admin/marketing/contacts/export?${qs.toString()}`, {
     headers: { Authorization: `Bearer ${token}` },
   });

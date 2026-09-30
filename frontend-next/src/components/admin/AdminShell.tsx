@@ -177,7 +177,7 @@ function NavLinks({
                   className={clsx(
                         "flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium uppercase tracking-[0.12em] transition-all",
                         isActive
-                          ? "border border-cyan-300/20 bg-cyan-300/10 text-cyan-100 shadow-[0_0_30px_rgba(56,189,248,0.08)]"
+                          ? "border border-desert-400/20 bg-desert-400/10 text-desert-200 shadow-[0_0_30px_rgba(201,173,130,0.08)]"
                           : "border border-transparent text-slate-400 hover:border-white/10 hover:bg-white/[0.03] hover:text-white"
                   )}
                 >
@@ -234,15 +234,15 @@ export function AdminShell({
 
   return (
         <div className="admin-theme flex min-h-screen">
-          <aside className="hidden w-72 flex-col border-r border-white/10 bg-[#06111f]/90 backdrop-blur-2xl md:flex">
+          <aside className="hidden w-72 flex-col border-r border-white/10 bg-[#12181B]/90 backdrop-blur-2xl md:flex">
             <div className="flex items-center gap-3 border-b border-white/10 px-6 py-5">
-              <div className="relative h-11 w-11 overflow-hidden rounded-2xl border border-cyan-300/30 bg-white/10">
+              <div className="relative h-11 w-11 overflow-hidden rounded-2xl border border-desert-400/30 bg-white/10">
                 <div className="absolute inset-0 flex items-center justify-center">
                   <svg width="28" height="28" viewBox="0 0 40 40" className="opacity-80">
-                    <rect x="6" y="8" width="14" height="24" rx="1" fill="#38bdf8" opacity="0.3" />
-                    <rect x="5" y="8" width="14" height="24" rx="1" fill="none" stroke="#38bdf8" strokeWidth="2" />
-                    <rect x="20" y="14" width="14" height="18" rx="1" fill="#38bdf8" opacity="0.3" />
-                    <rect x="19" y="14" width="14" height="18" rx="1" fill="none" stroke="#38bdf8" strokeWidth="2" />
+                    <rect x="6" y="8" width="14" height="24" rx="1" fill="#C9AD82" opacity="0.3" />
+                    <rect x="5" y="8" width="14" height="24" rx="1" fill="none" stroke="#C9AD82" strokeWidth="2" />
+                    <rect x="20" y="14" width="14" height="18" rx="1" fill="#C9AD82" opacity="0.3" />
+                    <rect x="19" y="14" width="14" height="18" rx="1" fill="none" stroke="#C9AD82" strokeWidth="2" />
                     <circle cx="15" cy="11" r="2" fill="#f59e0b" />
                   </svg>
                 </div>
@@ -271,7 +271,7 @@ export function AdminShell({
             <Menu size={22} />
           </button>
               <div className="flex items-center gap-3">
-                <div className="hidden rounded-full border border-cyan-300/20 bg-cyan-300/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-cyan-100 md:block">
+                <div className="hidden rounded-full border border-desert-400/20 bg-desert-400/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-desert-200 md:block">
                   <Sparkles size={12} className="mr-1 inline-block" />
                   Sanata Ops
             </div>
@@ -282,7 +282,7 @@ export function AdminShell({
                   <p className="text-sm font-medium text-white">{session.name}</p>
                   <p className="text-xs uppercase tracking-[0.18em] text-slate-500">{session.role}</p>
                 </div>
-                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-cyan-300/30 bg-cyan-300/10 text-sm font-semibold text-cyan-100">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-desert-400/30 bg-desert-400/10 text-sm font-semibold text-desert-200">
               {session.name.charAt(0).toUpperCase()}
             </div>
           </div>

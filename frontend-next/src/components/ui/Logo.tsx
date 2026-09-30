@@ -37,5 +37,5 @@ export function Logo({ variant = "full", className = "" }: LogoProps) {
 }
 
 // Tagline constant for easy access
-export const TAGLINE = "Building the Future";
-export const BRAND_NAME = "Sanata Construction";
+export const TAGLINE = "Your Building Partner";
+export const BRAND_NAME = "SANATA";

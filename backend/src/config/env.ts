@@ -48,4 +48,10 @@ export const env = {
     from: process.env.SMTP_FROM ?? "Sanata Construction <no-reply@sanata.id>",
     notifyTo: process.env.INQUIRY_NOTIFY_TO ?? "",
   },
+  // BluePack AI API untuk chatbot widget (OpenAI-compatible)
+  bluepack: {
+    apiUrl: (process.env.BLUEPACK_API_URL ?? "https://ai.bluepack.my.id/v1").replace(/\/+$/, ""),
+    apiKey: process.env.BLUEPACK_API_KEY ?? "",
+    model: process.env.BLUEPACK_MODEL ?? "bluepack-coding",
+  },
 };

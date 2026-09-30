@@ -61,7 +61,7 @@ const activityChartData = [
 ];
 
 const quickActions = [
-  { id: "1", label: "RAB Baru", iconName: "Calculator", href: "/admin/rab/new", color: "text-cyan-300 bg-cyan-300/10 border-cyan-300/20" },
+  { id: "1", label: "RAB Baru", iconName: "Calculator", href: "/admin/rab/new", color: "text-desert-400 bg-desert-400/10 border-desert-400/20" },
   { id: "2", label: "Tulis Konten", iconName: "FileText", href: "/admin/contents", color: "text-emerald-300 bg-emerald-300/10 border-emerald-300/20" },
   { id: "3", label: "Balas Pesan", iconName: "MessageSquare", href: "/admin/inquiries?status=NEW", color: "text-amber-300 bg-amber-300/10 border-amber-300/20" },
   { id: "4", label: "Tambah Layanan", iconName: "ShoppingBag", href: "/admin/products", color: "text-purple-300 bg-purple-300/10 border-purple-300/20" },
@@ -176,7 +176,7 @@ export default async function AdminDashboardPage() {
         <Panel
           title="Perlu Ditindaklanjuti"
           actions={
-            <Link href="/admin/inquiries?status=NEW" className="flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-200">
+            <Link href="/admin/inquiries?status=NEW" className="flex items-center gap-1 text-xs text-desert-400 hover:text-desert-200">
               Semua <ArrowRight size={12} />
             </Link>
           }
@@ -206,7 +206,7 @@ export default async function AdminDashboardPage() {
         <Panel
           title="Pipeline RAB"
           actions={
-            <Link href="/admin/rab" className="flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-200">
+            <Link href="/admin/rab" className="flex items-center gap-1 text-xs text-desert-400 hover:text-desert-200">
               Semua <ArrowRight size={12} />
             </Link>
           }
@@ -297,7 +297,7 @@ export default async function AdminDashboardPage() {
                 key={p.id}
                 primary={p.name}
                 trailing={
-                  <span className="font-medium text-cyan-200">
+                  <span className="font-medium text-desert-200">
                     Rp {formatRupiah(p.price)}
                   </span>
                 }

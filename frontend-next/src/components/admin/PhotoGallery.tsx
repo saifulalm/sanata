@@ -58,7 +58,7 @@ export function PhotoGallery({ photos, toolName, onDelete, onSetPrimary, editabl
             key={photo.id}
             className={`group relative aspect-square overflow-hidden rounded-xl border transition-all ${
               photo.isPrimary
-                ? "border-cyan-400/40"
+                ? "border-desert-400/40"
                 : "border-white/10 hover:border-white/20"
             }`}
           >
@@ -74,7 +74,7 @@ export function PhotoGallery({ photos, toolName, onDelete, onSetPrimary, editabl
 
             {/* Primary Badge */}
             {photo.isPrimary && (
-              <div className="absolute left-2 top-2 rounded-full bg-cyan-500 px-2 py-0.5 text-[10px] font-medium text-white">
+              <div className="absolute left-2 top-2 rounded-full bg-desert-400 px-2 py-0.5 text-[10px] font-medium text-white">
                 Utama
               </div>
             )}
@@ -95,7 +95,7 @@ export function PhotoGallery({ photos, toolName, onDelete, onSetPrimary, editabl
                       e.stopPropagation();
                       onSetPrimary(photo.id);
                     }}
-                    className="rounded bg-cyan-500/80 px-2 py-1 text-[10px] font-medium text-white hover:bg-cyan-500"
+                    className="rounded bg-desert-400/80 px-2 py-1 text-[10px] font-medium text-white hover:bg-desert-400"
                   >
                     Jadikan Utama
                   </button>
@@ -168,7 +168,7 @@ export function PhotoGallery({ photos, toolName, onDelete, onSetPrimary, editabl
                   key={photo.id}
                   onClick={() => setCurrentIndex(index)}
                   className={`h-16 w-16 overflow-hidden rounded-lg border-2 transition-all ${
-                    index === currentIndex ? "border-cyan-400" : "border-transparent opacity-60 hover:opacity-100"
+                    index === currentIndex ? "border-desert-400" : "border-transparent opacity-60 hover:opacity-100"
                   }`}
                 >
                   <img src={photo.url} alt="" className="h-full w-full object-cover" />

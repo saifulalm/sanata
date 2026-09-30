@@ -136,19 +136,19 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
       />
 
       {/* Breadcrumb Navigation */}
-      <div className="border-b border-white/10 bg-slate-950/50">
+      <div className="border-b border-white/10 bg-charcoal-800/50">
         <Container>
           <nav aria-label="Breadcrumb" className="py-3">
-            <ol className="flex items-center gap-2 text-xs text-slate-400">
+            <ol className="flex items-center gap-2 text-xs text-charcoal-300">
               <li>
-                <Link href="/" className="flex items-center gap-1 hover:text-cyan-300 transition-colors">
+                <Link href="/" className="flex items-center gap-1 hover:text-desert-400 transition-colors">
                   <Home size={12} />
                   Beranda
                 </Link>
               </li>
               <li className="text-slate-600">/</li>
               <li>
-                <Link href="/services" className="hover:text-cyan-300 transition-colors">
+                <Link href="/services" className="hover:text-desert-400 transition-colors">
                   Layanan
                 </Link>
               </li>
@@ -156,7 +156,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
                 <>
                   <li className="text-slate-600">/</li>
                   <li>
-                    <Link href={`/services?category=${service.category.slug}`} className="hover:text-cyan-300 transition-colors">
+                    <Link href={`/services?category=${service.category.slug}`} className="hover:text-desert-400 transition-colors">
                       {service.category.name}
                     </Link>
                   </li>
@@ -174,7 +174,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
       <section className="py-20">
         <Container className="grid gap-12 lg:grid-cols-[1.4fr_1fr]">
           <div>
-            <RevealOnScroll className="relative flex h-72 items-center justify-center overflow-hidden rounded-[1.8rem] border border-white/10 bg-slate-950/70 text-cyan-300/60 md:h-96">
+            <RevealOnScroll className="relative flex h-72 items-center justify-center overflow-hidden rounded-[1.8rem] border border-white/10 bg-charcoal-800/70 text-desert-400/60 md:h-96">
               {service.images[0] ? (
                 <Image
                   src={service.images[0].url}
@@ -190,7 +190,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
 
             <RevealOnScroll delay={0.1} className="mt-10">
               <h2 className="font-display text-2xl font-semibold uppercase tracking-[0.06em] text-white">Deskripsi Layanan</h2>
-              <p className="mt-4 leading-8 text-slate-300">{service.description}</p>
+              <p className="mt-4 leading-8 text-charcoal-200">{service.description}</p>
             </RevealOnScroll>
 
             <RevealOnScroll delay={0.15} className="mt-10">
@@ -198,10 +198,10 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
               <ul className="mt-4 grid gap-3 sm:grid-cols-2">
                 {advantages.map((a) => (
                   <li key={a.title} className="flex items-start gap-2.5 rounded-[1.2rem] border border-white/10 bg-white/[0.03] p-4 text-sm">
-                    <a.icon size={18} className="mt-0.5 shrink-0 text-cyan-300" />
+                    <a.icon size={18} className="mt-0.5 shrink-0 text-desert-400" />
                     <span>
                       <span className="font-medium text-white">{a.title}</span>
-                      {a.body ? <span className="mt-0.5 block leading-6 text-slate-400">{a.body}</span> : null}
+                      {a.body ? <span className="mt-0.5 block leading-6 text-charcoal-300">{a.body}</span> : null}
                     </span>
                   </li>
                 ))}
@@ -217,15 +217,15 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
                     className="flex flex-wrap items-center justify-between gap-3 rounded-[1.2rem] border border-white/10 bg-white/[0.03] px-5 py-3.5"
                   >
                     <div className="flex items-center gap-3">
-                      <span className="flex h-7 w-7 items-center justify-center rounded-full border border-cyan-300/30 bg-cyan-300/10 text-xs font-bold text-cyan-200">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-full border border-desert-400/30 bg-desert-400/10 text-xs font-bold text-desert-300">
                         {i + 1}
                       </span>
                       <div>
                         <span className="text-sm font-medium text-white">{t.label}</span>
-                        {t.body ? <p className="mt-0.5 text-xs leading-5 text-slate-400">{t.body}</p> : null}
+                        {t.body ? <p className="mt-0.5 text-xs leading-5 text-charcoal-300">{t.body}</p> : null}
                       </div>
                     </div>
-                    <span className="flex items-center gap-1.5 text-xs uppercase tracking-[0.14em] text-slate-400">
+                    <span className="flex items-center gap-1.5 text-xs uppercase tracking-[0.14em] text-charcoal-300">
                       <Clock size={13} /> {t.duration}
                     </span>
                   </div>
@@ -239,7 +239,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
                 {faqs.map((f) => (
                   <div key={f.q} className="rounded-[1.2rem] border border-white/10 bg-white/[0.03] p-5">
                     <p className="font-semibold text-white">{f.q}</p>
-                    <p className="mt-1.5 text-sm leading-7 text-slate-400">{f.a}</p>
+                    <p className="mt-1.5 text-sm leading-7 text-charcoal-300">{f.a}</p>
                   </div>
                 ))}
               </div>
@@ -252,7 +252,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
               <p className="mt-2 font-display text-3xl font-bold tracking-[0.04em] text-white">
                 Rp {Number(service.price).toLocaleString("id-ID")}
               </p>
-              <p className="mt-1 text-sm leading-6 text-slate-400">
+              <p className="mt-1 text-sm leading-6 text-charcoal-300">
                 {setting(content, "service.detail.price_note", "Harga dapat berubah sesuai hasil survei lokasi")}
               </p>
               <Button href="/contact" className="mt-6 w-full justify-center">

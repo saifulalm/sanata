@@ -1,6 +1,6 @@
 /**
- * Client Portal Test Seeder
- * Seeds test client accounts and project access for development
+ * Seed Client Portal Demo Data
+ * Run: cd backend && npx tsx prisma/seed-client-portal.ts
  */
 
 import { PrismaClient } from "@prisma/client";
@@ -9,165 +9,95 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("======================================================================");
-  console.log("CLIENT PORTAL TEST SEEDER");
-  console.log("======================================================================");
-  console.log("");
+  console.log("🌱 Seeding Client Portal Demo Data...");
 
-  // Get RABs for access
-  const rabs = await prisma.rab.findMany({ take: 5 });
-  if (rabs.length === 0) {
-    console.log("ERROR: No RABs found. Run seed.ts first.");
-    return;
-  }
-
-  // Test clients data
-  const testClients = [
+  // Demo clients with passwords
+  const clients = [
     {
-      email: "hendra@nusantara-realty.co.id",
-      password: "Client123!",
-      name: "Ir. Hendra Wijaya",
-      phone: "081212345678",
-      companyName: "PT Nusantara Realty Indonesia",
-      rabNumbers: ["RAB-2026-001"],
+      email: "demo@sanata.id",
+      password: "Demo123!",
+      name: "Budi Santoso",
+      phone: "081234567890",
+      companyName: "PT Maju Jaya Construction",
     },
     {
-      email: "budi.santoso@email.com",
-      password: "Client123!",
-      name: "Budi Santoso",
-      phone: "081298765432",
-      companyName: null,
-      rabNumbers: ["RAB-2026-002"],
+      email: "hendra@nusantara-realty.co.id",
+      password: "Hendra123!",
+      name: "Ir. Hendra Wijaya",
+      phone: "081234567891",
+      companyName: "PT Nusantara Realty",
     },
     {
       email: "marketing@maju-jaya.co.id",
-      password: "Client123!",
+      password: "Marketing123!",
       name: "Tim Marketing CV Maju Jaya",
-      phone: "081345678901",
+      phone: "081234567892",
       companyName: "CV Maju Jaya",
-      rabNumbers: ["RAB-2026-003"],
     },
   ];
 
-  console.log("STEP 1: Creating test client accounts...");
-  for (const clientData of testClients) {
-    const existingClient = await prisma.client.findUnique({
-      where: { email: clientData.email },
-    });
+  for (const c of clients) {
+    const hash = await bcrypt.hash(c.password, 12);
+    const existing = await prisma.client.findUnique({ where: { email: c.email } });
 
-    if (existingClient) {
-      console.log(`  Skipping ${clientData.email} - already exists`);
-      continue;
-    }
-
-    const passwordHash = await bcrypt.hash(clientData.password, 12);
-
-    const client = await prisma.client.create({
-      data: {
-        email: clientData.email,
-        passwordHash,
-        name: clientData.name,
-        phone: clientData.phone,
-        companyName: clientData.companyName,
-        emailVerified: true,
-        isActive: true,
-      },
-    });
-
-    console.log(`  Created client: ${client.email}`);
-
-    // Grant access to RABs
-    for (const rabNumber of clientData.rabNumbers) {
-      const rab = rabs.find((r) => r.number === rabNumber);
-      if (!rab) {
-        console.log(`    WARNING: RAB ${rabNumber} not found`);
-        continue;
-      }
-
-      const existingAccess = await prisma.clientProjectAccess.findUnique({
-        where: {
-          clientId_rabId: { clientId: client.id, rabId: rab.id },
-        },
+    if (existing) {
+      await prisma.client.update({
+        where: { id: existing.id },
+        data: { passwordHash: hash, isActive: true },
       });
-
-      if (existingAccess) {
-        console.log(`    Access to ${rabNumber} already exists`);
-        continue;
-      }
-
-      await prisma.clientProjectAccess.create({
+      console.log(`✓ Updated client: ${c.email}`);
+    } else {
+      await prisma.client.create({
         data: {
-          clientId: client.id,
-          rabId: rab.id,
-          status: "ACTIVE",
-          accessLevel: "VIEW",
-          canViewProgress: true,
-          canViewDailyReports: true,
-          canViewPhotos: true,
-          canViewQC: true,
-          canViewDocuments: true,
-          canViewFinancials: true,
+          email: c.email,
+          passwordHash: hash,
+          name: c.name,
+          phone: c.phone,
+          companyName: c.companyName,
+          isActive: true,
         },
       });
-
-      console.log(`    Granted access to ${rabNumber}`);
+      console.log(`✓ Created client: ${c.email}`);
     }
   }
 
-  console.log("");
-  console.log("STEP 2: Creating test notifications...");
-  const firstClient = await prisma.client.findFirst();
-  if (firstClient) {
-    const notifications = [
-      {
-        clientId: firstClient.id,
-        type: "PROGRESS_UPDATE",
-        title: "Progress Proyek Update",
-        message: "Pekerjaan plat lantai 3 telah mencapai 85% progress.",
-        link: `/client/project/${rabs[0]?.id}`,
-      },
-      {
-        clientId: firstClient.id,
-        type: "NEW_REPORT",
-        title: "Laporan Harian Baru",
-        message: "Laporan harian tanggal 8 September 2026 sudah tersedia.",
-        link: `/client/project/${rabs[0]?.id}/reports`,
-      },
-      {
-        clientId: firstClient.id,
-        type: "QC_ALERT",
-        title: "QC Record Baru",
-        message: "Ada 3 QC record baru yang perlu diperhatikan.",
-        link: `/client/project/${rabs[0]?.id}/qc`,
-      },
-    ];
+  // Get first RAB project to give access
+  const firstRab = await prisma.rab.findFirst();
+  if (firstRab) {
+    const demoClient = await prisma.client.findUnique({ where: { email: "demo@sanata.id" } });
+    if (demoClient) {
+      const existingAccess = await prisma.clientProjectAccess.findFirst({
+        where: { clientId: demoClient.id, rabId: firstRab.id },
+      });
 
-    for (const notif of notifications) {
-      await prisma.clientNotification.create({ data: notif });
+      if (!existingAccess) {
+        await prisma.clientProjectAccess.create({
+          data: {
+            clientId: demoClient.id,
+            rabId: firstRab.id,
+            status: "ACTIVE",
+            accessLevel: "FULL",
+          },
+        });
+        console.log(`✓ Granted project access to demo@sanata.id for RAB: ${firstRab.number}`);
+      } else {
+        console.log(`ℹ demo@sanata.id already has access to project`);
+      }
     }
-    console.log(`  Created ${notifications.length} test notifications`);
   }
 
-  // Summary
-  console.log("");
-  console.log("======================================================================");
-  console.log("CLIENT PORTAL SEEDING COMPLETE");
-  console.log("======================================================================");
-  console.log("");
-  console.log("TEST ACCOUNTS:");
-  console.log("");
-  for (const client of testClients) {
-    console.log(`  Email:    ${client.email}`);
-    console.log(`  Password: ${client.password}`);
-    console.log(`  Name:     ${client.name}`);
-    console.log(`  Projects: ${client.rabNumbers.join(", ")}`);
-    console.log("");
-  }
-  console.log("======================================================================");
+  console.log("\n✅ Client Portal Demo Data seeded successfully!");
+  console.log("\n📋 Demo Credentials:");
+  console.log("   • demo@sanata.id / Demo123!");
+  console.log("   • hendra@nusantara-realty.co.id / Hendra123!");
+  console.log("   • marketing@maju-jaya.co.id / Marketing123!");
 }
 
 main()
-  .catch(console.error)
+  .catch((e) => {
+    console.error("❌ Seeding failed:", e);
+    process.exit(1);
+  })
   .finally(async () => {
     await prisma.$disconnect();
   });

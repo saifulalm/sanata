@@ -1,212 +1,169 @@
 @import "tailwindcss";
 
 @theme {
-  /* Primary - futuristic deep navy */
-  --color-primary-50: #ecf8ff;
-  --color-primary-100: #d8efff;
-  --color-primary-200: #b7e3ff;
-  --color-primary-300: #80d0ff;
-  --color-primary-400: #44b7f1;
-  --color-primary-500: #1f97d4;
-  --color-primary-600: #1779b5;
-  --color-primary-700: #125f90;
-  --color-primary-800: #0b2437;
-  --color-primary-900: #081b2a;
-  --color-primary-950: #040f1a;
+  /*
+   * ── Brand Color Foundation ──────────────────────────────────────
+   * Primary:  Charcoal  #20282C  (R:32 G:40 B:44)
+   * Accent:   Desert    #C9AD82  (R:201 G:173 B:130)
+   */
 
-  /* Secondary - futuristic copper */
-  --color-gold-50: #fff5eb;
-  --color-gold-100: #fde6cf;
-  --color-gold-200: #fac69b;
-  --color-gold-300: #f6a66b;
-  --color-gold-400: #ef8745;
-  --color-gold-500: #db6f2f;
-  --color-gold-600: #b95623;
-  --color-gold-700: #8f411c;
-  --color-gold-800: #663016;
-  --color-gold-900: #431f10;
+  /* Charcoal – dark base palette */
+  --color-charcoal-50:  #E8ECED;
+  --color-charcoal-100: #C8CED0;
+  --color-charcoal-200: #9AA9AD;
+  --color-charcoal-300: #6C848A;
+  --color-charcoal-400: #3E5F67;
+  --color-charcoal-500: #2C3A40;
+  --color-charcoal-600: #20282C;  /* base */
+  --color-charcoal-700: #192023;
+  --color-charcoal-800: #12181B;
+  --color-charcoal-900: #0C1012;
+  --color-charcoal-950: #060809;
 
-  /* Neutrals */
-  --color-ink: #e2e8f0;
-  --color-surface: #07111d;
+  /* Desert – warm accent palette */
+  --color-desert-50:  #FAF6F0;
+  --color-desert-100: #F2E6D6;
+  --color-desert-200: #E6CEAF;
+  --color-desert-300: #D4B98C;   /* lighter */
+  --color-desert-400: #C9AD82;  /* base */
+  --color-desert-500: #B89A6F;  /* darker */
+  --color-desert-600: #9A7D54;
+  --color-desert-700: #7C6343;
+  --color-desert-800: #5E4932;
+  --color-desert-900: #402F21;
+  --color-desert-950: #221810;
 
-  --font-display: var(--font-display), ui-sans-serif, system-ui, sans-serif;
-  --font-body: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-  --font-accent: var(--font-accent), ui-sans-serif, system-ui, sans-serif;
+  /* Semantic aliases */
+  --color-brand-dark:  #20282C;
+  --color-brand-light: #F2E6D6;
+  --color-brand-accent: #C9AD82;
+
+  /* Brand typography */
+  --font-display: "Avenir", ui-sans-serif, system-ui, sans-serif;
+  --font-body:    "Avenir", ui-sans-serif, system-ui, sans-serif;
+  --font-accent:  "Avenir", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ── Base Reset ──────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
+/* ── Body – Charcoal Foundation ──────────────────────────────────── */
 body {
-  @apply bg-primary-950 text-ink antialiased;
-  font-family: var(--font-body);
+  background-color: #20282C;
+  color: #C8CED0;
+  font-family: "Avenir", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* ── Selection – Desert accent ──────────────────────────────────── */
 ::selection {
-  @apply bg-gold-300 text-primary-900;
+  background: rgba(201, 173, 130, 0.3);
+  color: #F2E6D6;
 }
 
-.container-px {
-  @apply px-6 md:px-10 lg:px-16;
+/* ── Scrollbar – Charcoal theme ──────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #192023;
+}
+::-webkit-scrollbar-thumb {
+  background: #3E5F67;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C9AD82;
 }
 
-/* Latar situs publik. Halaman publik memakai kelas tema gelap secara eksplisit
-   (lihat `components/ui/Surface.tsx`), jadi tidak ada aturan paksaan di sini. */
+/* ── Focus Visible – Desert outline ─────────────────────────────── */
+:focus-visible {
+  outline: 2px solid #C9AD82;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Brand Container ─────────────────────────────────────────────── */
+.container-brand {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .container-brand {
+    padding-inline: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-brand {
+    padding-inline: 4rem;
+  }
+}
+
+/* ── Public Theme ────────────────────────────────────────────────── */
 .public-theme {
   background:
-    radial-gradient(circle at top, rgba(56, 189, 248, 0.12), transparent 24%),
-    radial-gradient(circle at 80% 18%, rgba(239, 135, 69, 0.1), transparent 20%),
-    linear-gradient(180deg, #06111f 0%, #071423 52%, #06101b 100%);
-  color: #e2e8f0;
+    radial-gradient(ellipse at top, rgba(201, 173, 130, 0.08), transparent 50%),
+    radial-gradient(ellipse at 80% 15%, rgba(201, 173, 130, 0.05), transparent 40%),
+    linear-gradient(180deg, #1A1F22 0%, #1E2428 50%, #1A1F22 100%);
+  color: #C8CED0;
 }
 
-/**
- * Jembatan tema panel admin.
- *
- * Layar admin masih ditulis dengan kelas tema terang (`bg-white`,
- * `text-neutral-500`, dst.). Sampai layar-layar itu ditulis ulang, aturan di
- * bawah memetakannya ke padanan gelap. Sengaja dibatasi pada `.admin-theme`
- * supaya tidak menyentuh situs publik maupun halaman cetak — halaman cetak
- * harus tetap putih.
- */
+/* ── Admin Theme Bridge ──────────────────────────────────────────── */
 .admin-theme {
   background:
-    radial-gradient(circle at top left, rgba(56, 189, 248, 0.14), transparent 24%),
-    radial-gradient(circle at 80% 22%, rgba(239, 135, 69, 0.12), transparent 22%),
-    linear-gradient(180deg, #06111f 0%, #081421 100%);
-  color: #e2e8f0;
+    radial-gradient(ellipse at top left, rgba(201, 173, 130, 0.06), transparent 40%),
+    radial-gradient(ellipse at 80% 20%, rgba(201, 173, 130, 0.04), transparent 35%),
+    linear-gradient(180deg, #1A1F22 0%, #1E2428 100%);
+  color: #C8CED0;
 }
 
-.admin-theme [class*="bg-white"] {
-  background: rgba(255, 255, 255, 0.04) !important;
-  backdrop-filter: blur(18px);
-}
-
-.admin-theme [class*="bg-surface"] {
-  background: rgba(8, 18, 33, 0.82) !important;
-}
-
-.admin-theme [class*="border-neutral-"] {
-  border-color: rgba(148, 163, 184, 0.18) !important;
-}
-
-.admin-theme [class*="text-primary-"] {
-  color: #f8fafc !important;
-}
-
-.admin-theme [class*="text-neutral-"] {
-  color: #94a3b8 !important;
-}
-
-.admin-theme [class*="text-gold-"] {
-  color: #f59e0b !important;
-}
-
-.admin-theme [class*="bg-primary-"] {
-  background: linear-gradient(135deg, rgba(11, 36, 55, 0.95), rgba(8, 27, 42, 0.95)) !important;
-}
-
-.admin-theme [class*="bg-gold-"] {
-  background: rgba(239, 135, 69, 0.16) !important;
-}
-
-.admin-theme [class*="hover:bg-neutral-50"]:hover {
-  background: rgba(255, 255, 255, 0.05) !important;
-}
-
-.admin-theme [class*="hover:text-primary-"] {
-  transition: color 0.2s ease;
-}
-
-.admin-theme input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]),
+.admin-theme input,
 .admin-theme select,
 .admin-theme textarea {
   background: rgba(255, 255, 255, 0.04) !important;
-  color: #f8fafc !important;
-  border-color: rgba(125, 211, 252, 0.18) !important;
+  color: #C8CED0 !important;
+  border-color: rgba(201, 173, 130, 0.2) !important;
 }
 
 .admin-theme input::placeholder,
 .admin-theme textarea::placeholder {
-  color: #64748b;
+  color: #6C848A;
 }
 
 .admin-theme option,
 .public-theme option {
-  background: #081b2a;
-  color: #f8fafc;
+  background: #1A1F22;
+  color: #F2E6D6;
 }
 
-.admin-theme table {
-  color: #e2e8f0;
-}
-
-.admin-theme thead {
-  background: rgba(255, 255, 255, 0.03);
-}
-
-/**
- * Chip status & kotak peringatan pada panel admin memakai warna tint terang
- * (`bg-red-50` + `text-red-700`). Di atas latar gelap kombinasi itu menyilaukan,
- * jadi dipetakan ke versi transparan dengan teks terang.
- *
- * Selektor memakai `~=` (token utuh) — bukan `*=` — supaya `bg-red-50` tidak
- * ikut mencocokkan `bg-red-500`.
- */
-.admin-theme [class~="bg-red-50"],
-.admin-theme [class~="bg-red-100"] {
-  background: rgba(248, 113, 113, 0.14) !important;
-}
-.admin-theme [class~="bg-amber-50"],
-.admin-theme [class~="bg-amber-100"] {
-  background: rgba(251, 191, 36, 0.14) !important;
-}
-.admin-theme [class~="bg-emerald-50"],
-.admin-theme [class~="bg-emerald-100"] {
-  background: rgba(52, 211, 153, 0.14) !important;
-}
-.admin-theme [class~="bg-blue-50"],
-.admin-theme [class~="bg-blue-100"] {
-  background: rgba(96, 165, 250, 0.14) !important;
-}
-
-.admin-theme [class~="text-red-600"],
-.admin-theme [class~="text-red-700"] {
-  color: #fca5a5 !important;
-}
-.admin-theme [class~="text-amber-600"],
-.admin-theme [class~="text-amber-700"],
-.admin-theme [class~="text-amber-800"],
-.admin-theme [class~="text-amber-900"] {
-  color: #fcd34d !important;
-}
-.admin-theme [class~="text-emerald-600"],
-.admin-theme [class~="text-emerald-700"] {
-  color: #6ee7b7 !important;
-}
-.admin-theme [class~="text-blue-700"] {
-  color: #93c5fd !important;
-}
-
-.admin-theme [class~="border-amber-100"],
-.admin-theme [class~="border-amber-200"] {
-  border-color: rgba(251, 191, 36, 0.28) !important;
-}
-.admin-theme [class~="border-red-400"] {
-  border-color: rgba(248, 113, 113, 0.45) !important;
-}
-
-/* Isi artikel publik yang datang sebagai HTML dari editor. */
+/* ── Prose Content (HTML from CMS) ──────────────────────────────── */
 .prose-content {
-  @apply space-y-4 leading-8 text-slate-300;
+  @apply space-y-4 leading-8;
+  color: #9AA9AD;
 }
 .prose-content h2 {
-  @apply mt-8 font-display text-xl font-semibold text-white;
+  @apply mt-8 text-xl font-semibold;
+  font-family: "Avenir", sans-serif;
+  font-weight: 700;
+  color: #C8CED0;
 }
 .prose-content h3 {
-  @apply mt-6 font-display text-lg font-semibold text-cyan-100;
+  @apply mt-6 text-lg font-semibold;
+  color: #C9AD82;
 }
 .prose-content ul {
   @apply list-disc space-y-1 pl-5;
@@ -215,22 +172,31 @@ body {
   @apply list-decimal space-y-1 pl-5;
 }
 .prose-content blockquote {
-  @apply border-l-2 border-gold-400 pl-4 italic text-slate-400;
+  @apply border-l-2 pl-4 italic;
+  border-color: rgba(201, 173, 130, 0.5);
+  color: #6C848A;
 }
 .prose-content a {
-  @apply text-cyan-300 underline underline-offset-2;
+  color: #C9AD82;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.prose-content a:hover {
+  color: #D4B98C;
 }
 .prose-content strong {
-  @apply font-semibold text-white;
+  @apply font-semibold;
+  color: #C8CED0;
 }
 .prose-content img {
-  @apply rounded-[1.4rem] border border-white/10;
+  @apply rounded-3xl;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Isi editor teks kaya — proyek ini tidak memakai plugin typography,
-   jadi gayanya ditulis eksplisit agar cocok dengan tampilan artikel publik. */
+/* ── RTE Content ─────────────────────────────────────────────────── */
 .rte-content {
-  @apply min-h-[220px] px-3 py-2.5 text-sm leading-relaxed text-slate-200;
+  @apply min-h-[220px] px-3 py-2.5 text-sm leading-relaxed;
+  color: #9AA9AD;
 }
 .rte-content:focus {
   @apply outline-none;
@@ -239,10 +205,12 @@ body {
   @apply mt-3;
 }
 .rte-content h2 {
-  @apply mt-6 font-display text-xl font-semibold text-white;
+  @apply mt-6 text-xl font-semibold;
+  color: #C8CED0;
 }
 .rte-content h3 {
-  @apply mt-5 font-display text-base font-semibold text-cyan-100;
+  @apply mt-5 text-base font-semibold;
+  color: #C9AD82;
 }
 .rte-content ul {
   @apply list-disc space-y-1 pl-5;
@@ -251,15 +219,31 @@ body {
   @apply list-decimal space-y-1 pl-5;
 }
 .rte-content blockquote {
-  @apply border-l-2 border-gold-400 pl-4 italic text-slate-400;
+  @apply border-l-2 pl-4 italic;
+  border-color: rgba(201, 173, 130, 0.5);
+  color: #6C848A;
 }
 .rte-content a {
-  @apply text-cyan-300 underline;
+  color: #C9AD82;
+  text-decoration: underline;
 }
 .rte-content strong {
-  @apply font-semibold text-white;
+  @apply font-semibold;
+  color: #C8CED0;
 }
 .rte-content p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
-  @apply pointer-events-none float-left h-0 text-slate-500;
+  @apply pointer-events-none float-left h-0;
+  color: #3E5F67;
+}
+
+/* ── Under Construction Animations ───────────────────────────────── */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33%       { transform: translateY(-12px) rotate(0.5deg); }
+  66%       { transform: translateY(-6px) rotate(-0.5deg); }
+}
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
 }

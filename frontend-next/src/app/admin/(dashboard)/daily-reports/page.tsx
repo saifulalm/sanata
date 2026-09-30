@@ -123,7 +123,7 @@ export default async function DailyReportsPage() {
                 {/* Project identity */}
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="rounded-md border border-cyan-400/20 bg-cyan-500/10 px-2 py-0.5 font-mono text-[11px] font-semibold text-cyan-300">
+                    <span className="rounded-md border border-desert-400/20 bg-desert-400/10 px-2 py-0.5 font-mono text-[11px] font-semibold text-desert-400">
                       {project.number}
                     </span>
                     <span className="font-medium text-white">{project.title}</span>
@@ -140,7 +140,7 @@ export default async function DailyReportsPage() {
                 <div className="flex items-center gap-2">
                   {project.reportCount > 0 ? (
                     <div className="flex items-center gap-2">
-                      <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-cyan-400/20 bg-cyan-500/10 text-xs font-bold text-cyan-300">
+                      <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-desert-400/20 bg-desert-400/10 text-xs font-bold text-desert-400">
                         {project.reportCount}
                       </div>
                       <span className="text-xs text-slate-500">laporan</span>
@@ -192,14 +192,14 @@ export default async function DailyReportsPage() {
       )}
 
       {/* ── Info Strip ──────────────────────────────────── */}
-      <div className="rounded-xl border border-cyan-400/10 bg-cyan-500/5 px-4 py-3">
+      <div className="rounded-xl border border-desert-400/10 bg-desert-400/5 px-4 py-3">
         <p className="text-xs text-slate-400">
           Laporan harian dibuat per proyek di tab{" "}
-          <Link href="/admin/rab" className="font-medium text-cyan-300 hover:text-cyan-200">
+          <Link href="/admin/rab" className="font-medium text-desert-400 hover:text-desert-200">
             Proyek &amp; RAB
           </Link>
           . Kelola peran tenaga kerja di{" "}
-          <Link href="/admin/roles" className="font-medium text-cyan-300 hover:text-cyan-200">
+          <Link href="/admin/roles" className="font-medium text-desert-400 hover:text-desert-200">
             Jabatan &amp; Peran
           </Link>
           .

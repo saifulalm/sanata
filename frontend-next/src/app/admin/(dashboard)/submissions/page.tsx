@@ -105,6 +105,7 @@ export default async function AllSubmissionsPage({
       ) : (
         <Panel padded={false}>
           <TableWrap>
+            <table className="w-full min-w-[700px] text-sm">
             <thead>
               <tr>
                 <Th>Nomor</Th>
@@ -123,7 +124,7 @@ export default async function AllSubmissionsPage({
                   <Td>
                     <Link
                       href={`/admin/rab/${item.rabId}/submissions`}
-                      className="text-sm text-cyan-200 hover:text-cyan-100"
+                      className="text-sm text-desert-200 hover:text-desert-200"
                     >
                       {item.rab.number}
                     </Link>
@@ -151,6 +152,7 @@ export default async function AllSubmissionsPage({
                 </Tr>
               ))}
             </tbody>
+            </table>
           </TableWrap>
         </Panel>
       )}

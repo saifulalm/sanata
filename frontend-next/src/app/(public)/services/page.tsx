@@ -80,7 +80,7 @@ export default async function ServicesPage({
               />
             </div>
             {params.category && <input type="hidden" name="category" value={params.category} />}
-            <button className="rounded-xl border border-cyan-300/35 bg-cyan-300/10 px-6 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-100 transition hover:bg-cyan-300/20">
+            <button className="rounded-xl border border-desert-400/35 bg-desert-400/10 px-6 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-desert-200 transition hover:bg-desert-400/20">
               Cari
             </button>
           </form>
@@ -102,9 +102,9 @@ export default async function ServicesPage({
                 <RevealOnScroll key={s.id} delay={(i % 3) * 0.06}>
                   <Link
                     href={`/services/${s.slug}`}
-                    className="group flex h-full flex-col overflow-hidden rounded-[1.8rem] border border-white/10 bg-white/[0.04] backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-cyan-300/35"
+                    className="group flex h-full flex-col overflow-hidden rounded-[1.8rem] border border-white/10 bg-white/[0.04] backdrop-blur-xl transition duration-500 hover:-translate-y-1 hover:border-desert-400/35"
                   >
-                    <div className="relative flex h-44 items-center justify-center overflow-hidden border-b border-white/10 bg-slate-950/70 text-cyan-300/60">
+                    <div className="relative flex h-44 items-center justify-center overflow-hidden border-b border-white/10 bg-charcoal-800/70 text-desert-400/60">
                       {s.images[0] ? (
                         <Image
                           src={s.images[0].url}
@@ -119,11 +119,11 @@ export default async function ServicesPage({
                     </div>
                     <div className="flex flex-1 flex-col p-6">
                       {s.category && (
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-cyan-300">{s.category.name}</p>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-desert-400">{s.category.name}</p>
                       )}
                       <p className="mt-2 font-display text-lg font-semibold text-white">{s.name}</p>
-                      <p className="mt-2 line-clamp-2 flex-1 text-sm leading-6 text-slate-400">{s.description}</p>
-                      <p className="mt-4 text-sm font-semibold uppercase tracking-[0.14em] text-cyan-100">
+                      <p className="mt-2 line-clamp-2 flex-1 text-sm leading-6 text-charcoal-300">{s.description}</p>
+                      <p className="mt-4 text-sm font-semibold uppercase tracking-[0.14em] text-desert-200">
                         Estimasi mulai Rp {Number(s.price).toLocaleString("id-ID")}
                       </p>
                     </div>
@@ -136,7 +136,7 @@ export default async function ServicesPage({
           )}
 
           {meta.totalPages > 1 && (
-            <p className="mt-10 text-center text-sm text-slate-400">
+            <p className="mt-10 text-center text-sm text-charcoal-300">
               Menampilkan {services.length} dari {meta.total} layanan
             </p>
           )}

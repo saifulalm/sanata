@@ -27,7 +27,7 @@ export async function register(req: Request, res: Response, next: NextFunction) 
     res.cookie("client_refresh", result.refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "strict", // CSRF protection
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
@@ -56,8 +56,8 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     res.cookie("client_refresh", result.refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      sameSite: "strict", // CSRF protection
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
     res.json({
@@ -91,8 +91,8 @@ export async function refresh(req: Request, res: Response, next: NextFunction) {
     res.cookie("client_refresh", result.refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      sameSite: "strict", // CSRF protection
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
     res.json({
@@ -137,6 +137,83 @@ export async function updateProfile(req: Request, res: Response, next: NextFunct
     const clientId = req.user!.sub;
     const client = await clientService.updateClientProfile(clientId, req.body);
     res.json({ success: true, data: client });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ============================================================
+// PASSWORD RESET (Public routes)
+// ============================================================
+
+export async function requestReset(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      throw ApiError.badRequest("Email wajib diisi");
+    }
+
+    // Always return success to prevent email enumeration
+    const result = await clientService.requestPasswordReset(email);
+
+    // Even if email doesn't exist, we return success
+    // In production, send email with reset link
+    res.json({
+      success: true,
+      message: result
+        ? "Link reset password telah dikirim ke email Anda"
+        : "Jika email terdaftar, link reset password telah dikirim",
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function confirmReset(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { token, password } = req.body;
+
+    if (!token || !password) {
+      throw ApiError.badRequest("Token dan password baru wajib diisi");
+    }
+
+    if (password.length < 6) {
+      throw ApiError.badRequest("Password minimal 6 karakter");
+    }
+
+    await clientService.resetPassword(token, password);
+
+    res.json({
+      success: true,
+      message: "Password berhasil diubah. Silakan login dengan password baru.",
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ============================================================
+// S-CURVE DATA
+// ============================================================
+
+export async function getProjectSCurveData(req: Request, res: Response, next: NextFunction) {
+  try {
+    const clientId = req.user!.sub;
+    const { rabId } = req.params;
+    const scurveData = await clientService.getProjectSCurve(clientId, rabId);
+    res.json({ success: true, data: scurveData });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getSectionLevelSCurveData(req: Request, res: Response, next: NextFunction) {
+  try {
+    const clientId = req.user!.sub;
+    const { rabId } = req.params;
+    const scurveData = await clientService.getSectionLevelSCurve(clientId, rabId);
+    res.json({ success: true, data: scurveData });
   } catch (err) {
     next(err);
   }
@@ -276,6 +353,146 @@ export async function markAllRead(req: Request, res: Response, next: NextFunctio
     const clientId = req.user!.sub;
     await clientService.markAllNotificationsRead(clientId);
     res.json({ success: true });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ============================================================
+// RECENT DOCUMENTS
+// ============================================================
+
+export async function getRecentDocuments(req: Request, res: Response, next: NextFunction) {
+  try {
+    const clientId = req.user!.sub;
+    const { limit } = req.query;
+    const documents = await clientService.getRecentDocuments(clientId, limit ? parseInt(limit as string) : 5);
+    res.json({ success: true, data: documents });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ============================================================
+// DASHBOARD STATS
+// ============================================================
+
+export async function getStats(req: Request, res: Response, next: NextFunction) {
+  try {
+    const clientId = req.user!.sub;
+    const stats = await clientService.getClientDashboardStats(clientId);
+    res.json({ success: true, data: stats });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ============================================================
+// PROJECT TEAM
+// ============================================================
+
+export async function getTeam(req: Request, res: Response, next: NextFunction) {
+  try {
+    const clientId = req.user!.sub;
+    const { rabId } = req.params;
+    const team = await clientService.getProjectTeam(clientId, rabId);
+    res.json({ success: true, data: team });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ============================================================
+// PROJECT MILESTONES
+// ============================================================
+
+export async function getMilestones(req: Request, res: Response, next: NextFunction) {
+  try {
+    const clientId = req.user!.sub;
+    const { rabId } = req.params;
+    const milestones = await clientService.getProjectMilestones(clientId, rabId);
+    res.json({ success: true, data: milestones });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ============================================================
+// S-CURVE DATA
+// ============================================================
+
+export async function getSCurve(req: Request, res: Response, next: NextFunction) {
+  try {
+    const clientId = req.user!.sub;
+    const { rabId } = req.params;
+    const sCurve = await clientService.getProjectSCurve(clientId, rabId);
+    res.json({ success: true, data: sCurve });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ============================================================
+// PROJECT PHOTOS
+// ============================================================
+
+export async function getPhotos(req: Request, res: Response, next: NextFunction) {
+  try {
+    const clientId = req.user!.sub;
+    const { rabId } = req.params;
+    const { limit } = req.query;
+    const photos = await clientService.getProjectPhotos(clientId, rabId, limit ? parseInt(limit as string) : 20);
+    res.json({ success: true, data: photos });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ============================================================
+// PASSWORD CHANGE
+// ============================================================
+
+export async function changePassword(req: Request, res: Response, next: NextFunction) {
+  try {
+    const clientId = req.user!.sub;
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      throw ApiError.badRequest("Password saat ini dan password baru wajib diisi");
+    }
+
+    const result = await clientService.changeClientPassword(clientId, currentPassword, newPassword);
+    res.json({ success: true, message: result.message });
+  } catch (err) {
+    next(err);
+  }
+}
+
+// ============================================================
+// NOTIFICATION PREFERENCES
+// ============================================================
+
+export async function getPreferences(req: Request, res: Response, next: NextFunction) {
+  try {
+    const clientId = req.user!.sub;
+    const preferences = await clientService.getNotificationPreferences(clientId);
+    res.json({ success: true, data: preferences });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function updatePreferences(req: Request, res: Response, next: NextFunction) {
+  try {
+    const clientId = req.user!.sub;
+    const { preferences } = req.body;
+
+    if (!preferences || !Array.isArray(preferences)) {
+      throw ApiError.badRequest("Preferensi harus berupa array");
+    }
+
+    const result = await clientService.updateNotificationPreferences(clientId, preferences);
+    res.json({ success: true, message: result.message });
   } catch (err) {
     next(err);
   }

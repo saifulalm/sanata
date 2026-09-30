@@ -1070,13 +1070,13 @@ export function ImageAnnotator({
                       <option key={s} value={s}>{s}px</option>
                     ))}
                   </select>
-                  <button onClick={() => setIsBold(!isBold)} className={`p-1.5 rounded ${isBold ? "bg-cyan-500/30 text-cyan-400" : "text-slate-400 hover:bg-slate-600"}`}>
+                  <button onClick={() => setIsBold(!isBold)} className={`p-1.5 rounded ${isBold ? "bg-desert-400/30 text-desert-400" : "text-slate-400 hover:bg-slate-600"}`}>
                     <Bold size={14} />
                   </button>
-                  <button onClick={() => setIsItalic(!isItalic)} className={`p-1.5 rounded ${isItalic ? "bg-cyan-500/30 text-cyan-400" : "text-slate-400 hover:bg-slate-600"}`}>
+                  <button onClick={() => setIsItalic(!isItalic)} className={`p-1.5 rounded ${isItalic ? "bg-desert-400/30 text-desert-400" : "text-slate-400 hover:bg-slate-600"}`}>
                     <Italic size={14} />
                   </button>
-                  <button onClick={() => setTextAlign("left")} className={`p-1.5 rounded ${textAlign === "left" ? "bg-cyan-500/30 text-cyan-400" : "text-slate-400 hover:bg-slate-600"}`}>
+                  <button onClick={() => setTextAlign("left")} className={`p-1.5 rounded ${textAlign === "left" ? "bg-desert-400/30 text-desert-400" : "text-slate-400 hover:bg-slate-600"}`}>
                     <AlignLeft size={14} />
                   </button>
                 </div>
@@ -1087,7 +1087,7 @@ export function ImageAnnotator({
             {needsShapeOptions && (
               <button
                 onClick={() => setIsFilled(!isFilled)}
-                className={`flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs ${isFilled ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/30" : "border border-slate-600 text-slate-400 hover:border-slate-500"}`}
+                className={`flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs ${isFilled ? "bg-desert-400/20 text-desert-400 border border-desert-400/30" : "border border-slate-600 text-slate-400 hover:border-slate-500"}`}
               >
                 <Layers size={14} />
                 Isi
@@ -1097,7 +1097,7 @@ export function ImageAnnotator({
             {/* Dashed Toggle */}
             <button
               onClick={() => setIsDashed(!isDashed)}
-              className={`flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs ${isDashed ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/30" : "border border-slate-600 text-slate-400 hover:border-slate-500"}`}
+              className={`flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs ${isDashed ? "bg-desert-400/20 text-desert-400 border border-desert-400/30" : "border border-slate-600 text-slate-400 hover:border-slate-500"}`}
             >
               <MinusIcon size={14} />
               Putus
@@ -1108,7 +1108,7 @@ export function ImageAnnotator({
             {/* Keyboard Shortcuts Help */}
             <button
               onClick={() => setShowShortcuts(!showShortcuts)}
-              className={`flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs ${showShortcuts ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/30" : "border border-slate-600 text-slate-400 hover:border-slate-500"}`}
+              className={`flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs ${showShortcuts ? "bg-desert-400/20 text-desert-400 border border-desert-400/30" : "border border-slate-600 text-slate-400 hover:border-slate-500"}`}
               title="Keyboard Shortcuts"
             >
               <span className="font-mono text-[10px]">?</span>
@@ -1189,7 +1189,7 @@ export function ImageAnnotator({
               onChange={(e) => setTextInput(e.target.value)}
               placeholder="Masukkan teks..."
               autoFocus
-              className="rounded-lg border border-slate-600 bg-slate-900 px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-cyan-500 focus:outline-none"
+              className="rounded-lg border border-slate-600 bg-slate-900 px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-desert-400 focus:outline-none"
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleAddText();
                 if (e.key === "Escape") setTextPosition(null);
@@ -1204,7 +1204,7 @@ export function ImageAnnotator({
               </button>
               <button
                 onClick={handleAddText}
-                className="rounded-lg bg-cyan-500 px-3 py-1.5 text-xs font-medium text-slate-900 hover:bg-cyan-400"
+                className="rounded-lg bg-desert-400 px-3 py-1.5 text-xs font-medium text-slate-900 hover:bg-desert-400"
               >
                 Tambah
               </button>
@@ -1269,7 +1269,7 @@ export function ImageAnnotator({
               </div>
               <hr className="border-slate-700" />
               <div className="flex justify-between">
-                <span className="text-cyan-400">+ Shift</span>
+                <span className="text-desert-400">+ Shift</span>
                 <span className="text-slate-500">Kunci 45°</span>
               </div>
             </div>
@@ -1286,7 +1286,7 @@ export function ImageAnnotator({
           </button>
           <button
             onClick={handleSave}
-            className="flex items-center gap-2 rounded-xl bg-cyan-500 px-4 py-2 text-sm font-medium text-slate-900 hover:bg-cyan-400"
+            className="flex items-center gap-2 rounded-xl bg-desert-400 px-4 py-2 text-sm font-medium text-slate-900 hover:bg-desert-400"
           >
             <Download size={16} />
             Simpan
@@ -1441,15 +1441,15 @@ function ShapeGuides({ canvasRef, tool, color, zoom }: { canvasRef: RefObject<HT
       {/* Crosshair guides */}
       {showGuides && !isLineTool && (
         <>
-          <div className="absolute left-0 right-0 h-px bg-cyan-500/30 pointer-events-none" style={{ top: mousePos.y }} />
-          <div className="absolute top-0 bottom-0 w-px bg-cyan-500/30 pointer-events-none" style={{ left: mousePos.x }} />
+          <div className="absolute left-0 right-0 h-px bg-desert-400/30 pointer-events-none" style={{ top: mousePos.y }} />
+          <div className="absolute top-0 bottom-0 w-px bg-desert-400/30 pointer-events-none" style={{ left: mousePos.x }} />
         </>
       )}
 
       {/* Distance from start point */}
       {startPos && dimensions && !isLineTool && (
         <div
-          className="absolute bg-slate-900/90 px-1.5 py-0.5 rounded text-[10px] text-cyan-400 border border-cyan-500/50 pointer-events-none whitespace-nowrap"
+          className="absolute bg-slate-900/90 px-1.5 py-0.5 rounded text-[10px] text-desert-400 border border-desert-400/50 pointer-events-none whitespace-nowrap"
           style={{
             left: Math.min(startPos.x / zoom, mousePos.x) + 8,
             top: Math.min(startPos.y / zoom, mousePos.y) - 20,
@@ -1462,7 +1462,7 @@ function ShapeGuides({ canvasRef, tool, color, zoom }: { canvasRef: RefObject<HT
       {/* Length display for line tool */}
       {isLineTool && currentLine && (
         <div
-          className="absolute bg-slate-900/90 px-1.5 py-0.5 rounded text-[10px] text-cyan-400 border border-cyan-500/50 pointer-events-none whitespace-nowrap"
+          className="absolute bg-slate-900/90 px-1.5 py-0.5 rounded text-[10px] text-desert-400 border border-desert-400/50 pointer-events-none whitespace-nowrap"
           style={{
             left: (currentLine.x1 + currentLine.x2) / 2 + 8,
             top: (currentLine.y1 + currentLine.y2) / 2 - 10,
@@ -1497,10 +1497,10 @@ function DrawingIndicator({ isDrawing, tool }: { isDrawing: boolean; tool: Annot
   return (
     <div
       className={`absolute top-2 left-2 flex items-center gap-2 px-2 py-1 rounded-lg text-xs font-medium transition-all duration-200 ${
-        isDrawing ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/30" : "bg-slate-800/80 text-slate-500 border border-slate-700"
+        isDrawing ? "bg-desert-400/20 text-desert-400 border border-desert-400/30" : "bg-slate-800/80 text-slate-500 border border-slate-700"
       }`}
     >
-      <span className={`w-2 h-2 rounded-full ${isDrawing ? "bg-cyan-400 animate-pulse" : "bg-slate-500"}`} />
+      <span className={`w-2 h-2 rounded-full ${isDrawing ? "bg-desert-400 animate-pulse" : "bg-slate-500"}`} />
       {isDrawing ? (
         isLineTool ? "Mengambar garis..." : `Mengambar ${tool}...`
       ) : (
@@ -1512,7 +1512,7 @@ function DrawingIndicator({ isDrawing, tool }: { isDrawing: boolean; tool: Annot
 
 export function AnnotationBadge({ count }: { count: number }) {
   return count > 0 ? (
-    <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-cyan-500 text-[10px] font-bold text-slate-900">
+    <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-desert-400 text-[10px] font-bold text-slate-900">
       {count > 9 ? "9+" : count}
     </span>
   ) : null;
@@ -1526,7 +1526,7 @@ function ToolButton({ icon, label, active, onClick }: { icon: React.ReactNode; l
       title={label}
       className={`p-1.5 rounded transition-colors ${
         active
-          ? "bg-cyan-500/30 text-cyan-400"
+          ? "bg-desert-400/30 text-desert-400"
           : "text-slate-400 hover:bg-slate-600 hover:text-slate-200"
       }`}
     >

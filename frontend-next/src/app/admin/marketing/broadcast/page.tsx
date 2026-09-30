@@ -101,7 +101,7 @@ export default function BroadcastListsPage() {
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-cyan-400">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-desert-400">
               <List size={18} />
             </div>
             <div>
@@ -191,7 +191,7 @@ export default function BroadcastListsPage() {
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => openListContacts(list)}
-                          className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-cyan-300"
+                          className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-desert-400"
                           title="Lihat Kontak"
                         >
                           <Users size={16} />

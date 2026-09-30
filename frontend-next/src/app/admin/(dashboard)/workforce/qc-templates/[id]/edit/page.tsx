@@ -126,12 +126,12 @@ export default function EditQcTemplatePage({ params }: Props) {
   };
 
   const inputClass = (field: string) =>
-    `w-full rounded-xl border ${errors[field] ? "border-rose-500" : "border-white/10"} bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none`;
+    `w-full rounded-xl border ${errors[field] ? "border-rose-500" : "border-white/10"} bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:border-desert-400/40 focus:outline-none`;
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-cyan-500 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-desert-400 border-t-transparent" />
       </div>
     );
   }
@@ -142,7 +142,7 @@ export default function EditQcTemplatePage({ params }: Props) {
       <div className="flex items-center gap-4">
         <Link
           href="/admin/workforce/qc-templates"
-          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-400 transition-colors hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400"
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-400 transition-colors hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
         >
           <ArrowLeft size={20} />
         </Link>
@@ -266,7 +266,7 @@ export default function EditQcTemplatePage({ params }: Props) {
                       type="checkbox"
                       checked={item.isMandatory}
                       onChange={(e) => updateItem(index, "isMandatory", e.target.checked)}
-                      className="h-4 w-4 rounded border-white/20 bg-white/5 text-cyan-500"
+                      className="h-4 w-4 rounded border-white/20 bg-white/5 text-desert-400"
                     />
                     Mandatory
                   </label>
@@ -286,7 +286,7 @@ export default function EditQcTemplatePage({ params }: Props) {
             <button
               type="button"
               onClick={addItem}
-              className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-white/10 py-8 text-sm text-slate-400 transition-colors hover:border-cyan-400/30 hover:text-cyan-400"
+              className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-white/10 py-8 text-sm text-slate-400 transition-colors hover:border-desert-400/30 hover:text-desert-400"
             >
               <Plus size={16} />
               Tambah checklist item pertama

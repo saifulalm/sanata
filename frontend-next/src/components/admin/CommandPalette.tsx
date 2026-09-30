@@ -208,7 +208,7 @@ export function CommandPalette({ items }: { items: CommandItem[] }) {
       <button
         type="button"
         onClick={openPalette}
-        className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-2 text-xs text-slate-400 transition hover:border-cyan-300/25 hover:text-white"
+        className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-2 text-xs text-slate-400 transition hover:border-desert-400/25 hover:text-white"
       >
         <Search size={14} />
         <span className="hidden sm:inline">Cari menu</span>
@@ -311,7 +311,7 @@ export function CommandPalette({ items }: { items: CommandItem[] }) {
                           onClick={() => go(item)}
                           className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm transition ${
                             globalIndex === safeIndex
-                              ? "bg-cyan-300/12 text-cyan-100"
+                              ? "bg-desert-400/12 text-desert-200"
                               : "text-slate-300 hover:bg-white/[0.04]"
                           }`}
                         >
@@ -324,7 +324,7 @@ export function CommandPalette({ items }: { items: CommandItem[] }) {
                           )}
                           <span className="flex-1 truncate">{item.label}</span>
                           {globalIndex === safeIndex && (
-                            <CornerDownLeft size={12} className="text-cyan-400" />
+                            <CornerDownLeft size={12} className="text-desert-400" />
                           )}
                         </button>
                       );

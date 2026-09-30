@@ -142,13 +142,13 @@ export default function TemplatesPage() {
         <div className="flex items-center gap-1 rounded-xl border border-white/10 bg-white/5 p-1">
           <button
             onClick={() => setViewMode("grid")}
-            className={`rounded-lg p-2 transition ${viewMode === "grid" ? "bg-cyan-400/20 text-cyan-400" : "text-slate-400 hover:text-white"}`}
+            className={`rounded-lg p-2 transition ${viewMode === "grid" ? "bg-desert-400/20 text-desert-400" : "text-slate-400 hover:text-white"}`}
           >
             <Grid size={16} />
           </button>
           <button
             onClick={() => setViewMode("list")}
-            className={`rounded-lg p-2 transition ${viewMode === "list" ? "bg-cyan-400/20 text-cyan-400" : "text-slate-400 hover:text-white"}`}
+            className={`rounded-lg p-2 transition ${viewMode === "list" ? "bg-desert-400/20 text-desert-400" : "text-slate-400 hover:text-white"}`}
           >
             <List size={16} />
           </button>
@@ -162,7 +162,7 @@ export default function TemplatesPage() {
             {filteredTemplates.map((template) => (
               <div
                 key={template.id}
-                className="group rounded-2xl border border-white/10 bg-white/[0.035] p-4 transition hover:border-cyan-300/30"
+                className="group rounded-2xl border border-white/10 bg-white/[0.035] p-4 transition hover:border-desert-400/30"
               >
                 <div className="mb-3 flex items-start justify-between">
                   <div className="flex items-center gap-2">
@@ -182,7 +182,7 @@ export default function TemplatesPage() {
                   <div className="flex items-center gap-1 opacity-0 transition group-hover:opacity-100">
                     <button
                       onClick={() => openPreview(template)}
-                      className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-cyan-300"
+                      className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-desert-400"
                     >
                       <Eye size={14} />
                     </button>
@@ -222,7 +222,7 @@ export default function TemplatesPage() {
                       <p className="mt-1 text-xs text-slate-500">{template.usageCount} digunakan</p>
                     </div>
                     <div className="flex items-center gap-1">
-                      <button onClick={() => openPreview(template)} className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-cyan-300">
+                      <button onClick={() => openPreview(template)} className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-desert-400">
                         <Eye size={16} />
                       </button>
                       <button className="rounded-lg p-1.5 text-slate-400 hover:bg-white/5 hover:text-white">

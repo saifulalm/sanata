@@ -2,6 +2,7 @@
 import * as bcrypt from "bcryptjs";
 import slugify from "slugify";
 import { SITE_SETTING_DEFAULTS } from "../src/config/siteContent";
+import { seedRabFull } from "./seed-rab-full";
 
 const prisma = new PrismaClient();
 
@@ -88,6 +89,7 @@ async function main() {
   await seedBroadcast(admin.id);
   await seedSignatories();
   await seedProjectDocs(admin.id);
+  await seedRabFull(admin.id);
   await seedWorkforce(admin.id);
   await seedLessonLearned();
   await seedMarketing();
@@ -2445,4 +2447,37 @@ async function seedMarketing() {
   console.log(`Seeded ${offersData.length} offers.`);
 
   console.log("Marketing seed complete!");
+
+  // ==========================================================================
+  // KPI Performance Seed
+  // ==========================================================================
+  try {
+    const { seedKpiData } = await import("./seed-kpi");
+    await seedKpiData(prisma);
+    console.log("KPI Performance seed complete!");
+  } catch (error) {
+    console.log("KPI Performance seed skipped (may already exist):", error instanceof Error ? error.message : "Unknown error");
+  }
+
+  // ==========================================================================
+  // QC Templates Seed
+  // ==========================================================================
+  try {
+    const { seedQcTemplates } = await import("./seed-qc-templates");
+    await seedQcTemplates(prisma);
+    console.log("QC Templates seed complete!");
+  } catch (error) {
+    console.log("QC Templates seed skipped (may already exist):", error instanceof Error ? error.message : "Unknown error");
+  }
+
+  // ==========================================================================
+  // Assessments Seed
+  // ==========================================================================
+  try {
+    const { seedAssessments } = await import("./seed-assessment");
+    await seedAssessments(prisma);
+    console.log("Assessments seed complete!");
+  } catch (error) {
+    console.log("Assessments seed skipped (may already exist):", error instanceof Error ? error.message : "Unknown error");
+  }
 }

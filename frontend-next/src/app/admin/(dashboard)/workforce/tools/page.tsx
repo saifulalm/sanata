@@ -25,7 +25,7 @@ async function ToolStats() {
         {/* Total Tools */}
         <Card className="p-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-desert-400/10 text-desert-400">
               <Package size={24} />
             </div>
             <div>
@@ -190,13 +190,13 @@ export default async function ToolsPage() {
             <div className="mt-4 pt-4 border-t border-white/10">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs text-slate-500">Tingkat Ketersediaan</span>
-                <span className="text-xs font-medium text-cyan-400">
+                <span className="text-xs font-medium text-desert-400">
                   {stats.total > 0 ? Math.round((stats.available / stats.total) * 100) : 0}%
                 </span>
               </div>
               <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
                 <div
-                  className="h-full rounded-full bg-cyan-500 transition-all"
+                  className="h-full rounded-full bg-desert-400 transition-all"
                   style={{ width: `${stats.total > 0 ? (stats.available / stats.total) * 100 : 0}%` }}
                 />
               </div>

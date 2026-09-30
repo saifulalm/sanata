@@ -120,7 +120,7 @@ function SummaryCard({
     <div className="rounded-[1.6rem] border border-white/10 bg-white/[0.04] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.2)]">
       <div className="flex items-center justify-between">
         <span className="text-xs uppercase tracking-[0.2em] text-slate-500">{label}</span>
-        <span className="rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-2 text-cyan-200">
+        <span className="rounded-2xl border border-desert-400/20 bg-desert-400/10 p-2 text-desert-200">
           <Icon size={16} />
         </span>
       </div>
@@ -161,7 +161,7 @@ function ConnectionCard({
 
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <span className="rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-3 text-cyan-200">
+          <span className="rounded-2xl border border-desert-400/20 bg-desert-400/10 p-3 text-desert-200">
             <Icon size={18} />
           </span>
           <div>
@@ -174,7 +174,7 @@ function ConnectionCard({
 
         <div className="flex flex-wrap gap-2">
           {connection.isPrimary && (
-            <span className="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-cyan-100">
+            <span className="rounded-full border border-desert-400/20 bg-desert-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-desert-200">
               Primary
             </span>
           )}
@@ -194,7 +194,7 @@ function ConnectionCard({
               <input
                 name="label"
                 defaultValue={connection.label}
-                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
               />
             </label>
             <label className="block">
@@ -203,7 +203,7 @@ function ConnectionCard({
                 name="senderIdentity"
                 defaultValue={connection.senderIdentity ?? ""}
                 placeholder="nomor, username, atau phoneNumberId"
-                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
               />
             </label>
           </div>
@@ -214,7 +214,7 @@ function ConnectionCard({
               <select
                 name="provider"
                 defaultValue={connection.provider}
-                className="w-full rounded-2xl border border-white/10 bg-[#07111e] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+                className="w-full rounded-2xl border border-white/10 bg-[#07111e] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
               >
                 {providerOptions[connection.channel].map((option) => (
                   <option key={option.value} value={option.value}>
@@ -228,7 +228,7 @@ function ConnectionCard({
               <select
                 name="mode"
                 defaultValue={connection.mode}
-                className="w-full rounded-2xl border border-white/10 bg-[#07111e] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+                className="w-full rounded-2xl border border-white/10 bg-[#07111e] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
               >
                 {Object.entries(modeLabels).map(([value, label]) => (
                   <option key={value} value={value}>
@@ -248,7 +248,7 @@ function ConnectionCard({
                 min={1}
                 max={999}
                 defaultValue={connection.priority}
-                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
               />
             </label>
             <label className="block">
@@ -259,7 +259,7 @@ function ConnectionCard({
                 min={1}
                 max={20}
                 defaultValue={connection.weight}
-                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
               />
             </label>
             <label className="block">
@@ -269,7 +269,7 @@ function ConnectionCard({
                 type="number"
                 min={1}
                 defaultValue={connection.hourlyLimit ?? ""}
-                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
               />
             </label>
             <label className="block">
@@ -279,7 +279,7 @@ function ConnectionCard({
                 type="number"
                 min={1}
                 defaultValue={connection.dailyLimit ?? ""}
-                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
               />
             </label>
           </div>
@@ -290,7 +290,7 @@ function ConnectionCard({
               name="cooldownUntil"
               type="datetime-local"
               defaultValue={connection.cooldownUntil ? connection.cooldownUntil.slice(0, 16) : ""}
-              className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+              className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
             />
           </label>
 
@@ -303,7 +303,7 @@ function ConnectionCard({
               name="config"
               rows={10}
               defaultValue={prettyJson(connection.config)}
-              className="mt-3 w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 font-mono text-xs text-slate-200 focus:border-cyan-300/40 focus:outline-none"
+              className="mt-3 w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 font-mono text-xs text-slate-200 focus:border-desert-400/40 focus:outline-none"
             />
           </details>
         </div>
@@ -448,7 +448,7 @@ function ConnectionCard({
             <button
               type="submit"
               disabled={isPending}
-              className="rounded-full border border-cyan-300/30 bg-cyan-300/10 px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.16em] text-cyan-100 disabled:opacity-60"
+              className="rounded-full border border-desert-400/30 bg-desert-400/10 px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.16em] text-desert-200 disabled:opacity-60"
             >
               {isPending ? "Menyimpan..." : "Simpan"}
             </button>
@@ -510,9 +510,9 @@ function CreateConnectionCard() {
   const [state, action] = useActionState(createBroadcastConnectionAction, initialState);
 
   return (
-    <div className="rounded-[1.8rem] border border-dashed border-cyan-300/25 bg-cyan-400/[0.04] p-5">
+    <div className="rounded-[1.8rem] border border-dashed border-desert-400/25 bg-desert-400/[0.04] p-5">
       <div className="flex items-center gap-3">
-        <span className="rounded-2xl border border-cyan-300/20 bg-cyan-300/10 p-3 text-cyan-200">
+        <span className="rounded-2xl border border-desert-400/20 bg-desert-400/10 p-3 text-desert-200">
           <Plus size={18} />
         </span>
         <div>
@@ -533,7 +533,7 @@ function CreateConnectionCard() {
                 setChannel(nextChannel);
                 setProvider(providerOptions[nextChannel][0].value);
               }}
-              className="w-full rounded-2xl border border-white/10 bg-[#07111e] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+              className="w-full rounded-2xl border border-white/10 bg-[#07111e] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
             >
               {Object.keys(channelIcons).map((item) => (
                 <option key={item} value={item}>
@@ -549,7 +549,7 @@ function CreateConnectionCard() {
               name="provider"
               value={provider}
               onChange={(event) => setProvider(event.target.value as BroadcastProvider)}
-              className="w-full rounded-2xl border border-white/10 bg-[#07111e] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+              className="w-full rounded-2xl border border-white/10 bg-[#07111e] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
             >
               {providerOptions[channel].map((option) => (
                 <option key={option.value} value={option.value}>
@@ -564,7 +564,7 @@ function CreateConnectionCard() {
             <select
               name="mode"
               defaultValue={channel === "WHATSAPP" && provider === "WHATSAPP_BAILEYS" ? "EXPERIMENTAL" : "PRODUCTION"}
-              className="w-full rounded-2xl border border-white/10 bg-[#07111e] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+              className="w-full rounded-2xl border border-white/10 bg-[#07111e] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
             >
               {Object.entries(modeLabels).map(([value, label]) => (
                 <option key={value} value={value}>
@@ -580,7 +580,7 @@ function CreateConnectionCard() {
               name="accountKey"
               required
               placeholder="contoh: wa-baileys-c"
-              className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+              className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
             />
           </label>
         </div>
@@ -592,7 +592,7 @@ function CreateConnectionCard() {
               name="label"
               required
               placeholder="Nama akun pengirim"
-              className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+              className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
             />
           </label>
           <label className="block">
@@ -600,7 +600,7 @@ function CreateConnectionCard() {
             <input
               name="senderIdentity"
               placeholder="nomor / username"
-              className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+              className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
             />
           </label>
           <label className="block">
@@ -609,7 +609,7 @@ function CreateConnectionCard() {
               name="config"
               rows={1}
               defaultValue={"{}"}
-              className="min-h-[52px] w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 font-mono text-xs text-slate-200 focus:border-cyan-300/40 focus:outline-none"
+              className="min-h-[52px] w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 font-mono text-xs text-slate-200 focus:border-desert-400/40 focus:outline-none"
             />
           </label>
         </div>
@@ -623,7 +623,7 @@ function CreateConnectionCard() {
               defaultValue={100}
               min={1}
               max={999}
-              className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+              className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
             />
           </label>
           <label className="block">
@@ -634,7 +634,7 @@ function CreateConnectionCard() {
               defaultValue={1}
               min={1}
               max={20}
-              className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+              className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
             />
           </label>
           <label className="block">
@@ -643,7 +643,7 @@ function CreateConnectionCard() {
               name="hourlyLimit"
               type="number"
               min={1}
-              className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+              className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
             />
           </label>
           <label className="block">
@@ -652,7 +652,7 @@ function CreateConnectionCard() {
               name="dailyLimit"
               type="number"
               min={1}
-              className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+              className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
             />
           </label>
           <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-slate-200">
@@ -681,7 +681,7 @@ function CreateConnectionCard() {
 
         <button
           type="submit"
-          className="rounded-full border border-cyan-300/30 bg-cyan-300/10 px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.16em] text-cyan-100"
+          className="rounded-full border border-desert-400/30 bg-desert-400/10 px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.16em] text-desert-200"
         >
           Tambah Account
         </button>
@@ -1084,7 +1084,7 @@ export function BroadcastCenter({ overview }: { overview: BroadcastOverview }) {
                 <input
                   name="title"
                   required
-                  className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+                  className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
                 />
               </label>
               <label className="block">
@@ -1093,7 +1093,7 @@ export function BroadcastCenter({ overview }: { overview: BroadcastOverview }) {
                   name="channel"
                   value={selectedChannel}
                   onChange={(event) => setSelectedChannel(event.target.value as BroadcastChannel)}
-                  className="w-full rounded-2xl border border-white/10 bg-[#07111e] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+                  className="w-full rounded-2xl border border-white/10 bg-[#07111e] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
                 >
                   {(Object.keys(channelIcons) as BroadcastChannel[]).map((channel) => (
                     <option key={channel} value={channel}>
@@ -1110,7 +1110,7 @@ export function BroadcastCenter({ overview }: { overview: BroadcastOverview }) {
                 <select
                   name="connectionId"
                   defaultValue=""
-                  className="w-full rounded-2xl border border-white/10 bg-[#07111e] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+                  className="w-full rounded-2xl border border-white/10 bg-[#07111e] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
                 >
                   <option value="">Auto Route sesuai priority/weight</option>
                   {channelConnections.map((connection) => (
@@ -1125,7 +1125,7 @@ export function BroadcastCenter({ overview }: { overview: BroadcastOverview }) {
                 <select
                   name="audienceType"
                   defaultValue="CONSENTED_ONLY"
-                  className="w-full rounded-2xl border border-white/10 bg-[#07111e] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+                  className="w-full rounded-2xl border border-white/10 bg-[#07111e] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
                 >
                   <option value="CONSENTED_ONLY">Consented Only</option>
                   <option value="ALL_CONTACTS">All Contacts</option>
@@ -1139,7 +1139,7 @@ export function BroadcastCenter({ overview }: { overview: BroadcastOverview }) {
               <input
                 name="tags"
                 placeholder="contoh: inquiry, vip, lead"
-                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
               />
             </label>
 
@@ -1148,7 +1148,7 @@ export function BroadcastCenter({ overview }: { overview: BroadcastOverview }) {
               <input
                 name="subject"
                 placeholder="Khusus email, opsional untuk channel lain"
-                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
               />
             </label>
 
@@ -1158,7 +1158,7 @@ export function BroadcastCenter({ overview }: { overview: BroadcastOverview }) {
                 name="message"
                 rows={8}
                 required
-                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-cyan-300/40 focus:outline-none"
+                className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white focus:border-desert-400/40 focus:outline-none"
               />
             </label>
 
@@ -1176,7 +1176,7 @@ export function BroadcastCenter({ overview }: { overview: BroadcastOverview }) {
 
             <button
               type="submit"
-              className="rounded-full border border-cyan-300/30 bg-cyan-300/10 px-6 py-3 text-sm font-semibold uppercase tracking-[0.16em] text-cyan-100"
+              className="rounded-full border border-desert-400/30 bg-desert-400/10 px-6 py-3 text-sm font-semibold uppercase tracking-[0.16em] text-desert-200"
             >
               Simpan Draft
             </button>
@@ -1320,7 +1320,7 @@ export function BroadcastCenter({ overview }: { overview: BroadcastOverview }) {
                     {contact.consent ? "Consent" : "No Consent"}
                   </span>
                   {contact.tags.map(tag => (
-                    <span key={tag} className="rounded-full border border-cyan-400/20 bg-cyan-500/8 px-2 py-0.5 text-[11px] text-cyan-200">{tag}</span>
+                    <span key={tag} className="rounded-full border border-desert-400/20 bg-desert-400/8 px-2 py-0.5 text-[11px] text-desert-200">{tag}</span>
                   ))}
                 </div>
               </div>

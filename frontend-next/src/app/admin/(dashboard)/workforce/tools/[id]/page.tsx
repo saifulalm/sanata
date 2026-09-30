@@ -133,7 +133,7 @@ export default async function ToolDetailPage({ params }: Props) {
         <div className="flex items-center gap-4">
           <Link
             href="/admin/workforce/tools"
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-cyan-400/30 hover:bg-cyan-500/10 hover:text-cyan-400"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-desert-400/30 hover:bg-desert-400/10 hover:text-desert-400"
           >
             <ArrowLeft size={20} />
           </Link>
@@ -153,7 +153,7 @@ export default async function ToolDetailPage({ params }: Props) {
           </Link>
           <Link
             href={`/admin/workforce/tools/${id}/edit`}
-            className="inline-flex items-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-300 transition-all hover:bg-cyan-400/20"
+            className="inline-flex items-center gap-2 rounded-xl border border-desert-400/30 bg-desert-400/10 px-4 py-2 text-sm font-medium text-desert-400 transition-all hover:bg-desert-400/20"
           >
             <Edit size={16} />
             Edit
@@ -207,7 +207,7 @@ export default async function ToolDetailPage({ params }: Props) {
             <h3 className="text-sm font-medium text-slate-400 mb-4">Spesifikasi</h3>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-desert-400/10 text-desert-400">
                   <Package size={18} />
                 </div>
                 <div>
@@ -325,7 +325,7 @@ export default async function ToolDetailPage({ params }: Props) {
               <h3 className="text-sm font-medium text-slate-400">Riwayat Peminjaman</h3>
               <Link
                 href={`/admin/workforce/tools/${id}/loan`}
-                className="text-xs text-cyan-400 hover:underline"
+                className="text-xs text-desert-400 hover:underline"
               >
                 Lihat semua →
               </Link>
@@ -437,7 +437,7 @@ export default async function ToolDetailPage({ params }: Props) {
               <div className="mt-4">
                 <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
                   <div
-                    className="h-full rounded-full bg-cyan-500 transition-all"
+                    className="h-full rounded-full bg-desert-400 transition-all"
                     style={{ width: `${utilization.utilizationRate}%` }}
                   />
                 </div>
@@ -461,7 +461,7 @@ export default async function ToolDetailPage({ params }: Props) {
               </Link>
               <Link
                 href={`/admin/workforce/tools/${id}/edit`}
-                className="flex items-center justify-center gap-2 rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-3 text-sm font-medium text-cyan-300 transition-all hover:bg-cyan-400/20"
+                className="flex items-center justify-center gap-2 rounded-xl border border-desert-400/30 bg-desert-400/10 px-4 py-3 text-sm font-medium text-desert-400 transition-all hover:bg-desert-400/20"
               >
                 <Edit size={16} />
                 Edit Alat
