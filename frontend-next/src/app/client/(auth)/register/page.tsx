@@ -32,7 +32,7 @@ import clsx from "clsx";
 // ============================================================================
 
 function FeatureBadge({ icon: Icon, label, color }: { icon: typeof Shield; label: string; color: "emerald" | "amber" | "blue" }) {
-  const colors = { emerald: "text-emerald-600 bg-emerald-50", amber: "text-amber-600 bg-amber-50", blue: "text-blue-600 bg-blue-50" };
+  const colors = { emerald: "text-desert-400 bg-charcoal-$1", amber: "text-desert-400 bg-charcoal-700", blue: "text-desert-400 bg-charcoal-800" };
   return (
     <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${colors[color]}`}>
       <Icon className="w-3.5 h-3.5" />
@@ -61,17 +61,17 @@ function getPasswordStrength(password: string): { score: number; label: string; 
   const metCount = requirements.filter(r => r.met).length;
   let score = metCount;
   let label = "";
-  let color = "bg-slate-200";
+  let color = "bg-charcoal-700";
 
   if (password.length === 0) {
-    return { score: 0, label: "", color: "bg-slate-200", requirements };
+    return { score: 0, label: "", color: "bg-charcoal-700", requirements };
   }
 
-  if (metCount <= 1) { label = "Sangat Lemah"; color = "bg-red-500"; }
+  if (metCount <= 1) { label = "Sangat Lemah"; color = "bg-red-500/100"; }
   else if (metCount <= 2) { label = "Lemah"; color = "bg-red-400"; }
-  else if (metCount <= 3) { label = "Sedang"; color = "bg-amber-500"; }
-  else if (metCount <= 4) { label = "Kuat"; color = "bg-blue-500"; }
-  else { label = "Sangat Kuat"; color = "bg-emerald-500"; }
+  else if (metCount <= 3) { label = "Sedang"; color = "bg-charcoal-7000"; }
+  else if (metCount <= 4) { label = "Kuat"; color = "bg-charcoal-8000"; }
+  else { label = "Sangat Kuat"; color = "bg-charcoal-$1"; }
 
   return { score, label, color, requirements };
 }
@@ -83,18 +83,18 @@ function PasswordStrengthIndicator({ password }: PasswordStrengthProps) {
   return (
     <div className="mt-2 space-y-2">
       <div className="flex items-center justify-between">
-        <span className="text-xs text-slate-500">Kekuatan password:</span>
+        <span className="text-xs text-charcoal-400">Kekuatan password:</span>
         <span className={clsx(
           "text-xs font-medium",
           strength.score <= 1 ? "text-red-500" :
           strength.score <= 2 ? "text-red-400" :
-          strength.score <= 3 ? "text-amber-500" :
-          strength.score <= 4 ? "text-blue-500" : "text-emerald-500"
+          strength.score <= 3 ? "text-desert-400" :
+          strength.score <= 4 ? "text-desert-400" : "text-desert-400"
         )}>
           {strength.label}
         </span>
       </div>
-      <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+      <div className="h-1.5 bg-charcoal-800 rounded-full overflow-hidden">
         <div
           className={clsx("h-full rounded-full transition-all duration-300", strength.color)}
           style={{ width: `${(strength.score / 5) * 100}%` }}
@@ -104,11 +104,11 @@ function PasswordStrengthIndicator({ password }: PasswordStrengthProps) {
         {strength.requirements.map((req, index) => (
           <div key={index} className="flex items-center gap-2">
             {req.met ? (
-              <Check className="w-3 h-3 text-emerald-500" />
+              <Check className="w-3 h-3 text-desert-400" />
             ) : (
-              <X className="w-3 h-3 text-slate-300" />
+              <X className="w-3 h-3 text-charcoal-$1" />
             )}
-            <span className={clsx("text-xs", req.met ? "text-slate-600" : "text-slate-400")}>
+            <span className={clsx("text-xs", req.met ? "text-charcoal-400" : "text-charcoal-400")}>
               {req.text}
             </span>
           </div>
@@ -132,15 +132,15 @@ function RequirementsList({ requirements }: RequirementsListProps) {
       {requirements.map((req, index) => (
         <div key={index} className="flex items-center gap-2">
           {req.met ? (
-            <div className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center">
-              <Check className="w-2.5 h-2.5 text-emerald-600" />
+            <div className="w-4 h-4 rounded-full bg-charcoal-700 flex items-center justify-center">
+              <Check className="w-2.5 h-2.5 text-desert-400" />
             </div>
           ) : (
-            <div className="w-4 h-4 rounded-full bg-slate-100 flex items-center justify-center">
-              <div className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+            <div className="w-4 h-4 rounded-full bg-charcoal-800 flex items-center justify-center">
+              <div className="w-1.5 h-1.5 rounded-full bg-charcoal-$1" />
             </div>
           )}
-          <span className={clsx("text-xs", req.met ? "text-emerald-600" : "text-slate-400")}>
+          <span className={clsx("text-xs", req.met ? "text-desert-400" : "text-charcoal-400")}>
             {req.text}
           </span>
         </div>
@@ -166,23 +166,23 @@ function Modal({ isOpen, onClose, title, children }: ModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative w-full max-w-2xl max-h-[80vh] bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-        <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white">{title}</h2>
+      <div className="relative w-full max-w-2xl max-h-[80vh] bg-white bg-charcoal-900 rounded-3xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        <div className="flex items-center justify-between p-6 border-b border-white/10 border-desert-400/20">
+          <h2 className="text-xl font-bold text-white text-white">{title}</h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
+            className="p-2 hover:bg-charcoal-800 dark:hover:bg-charcoal-700 rounded-xl transition-colors"
           >
-            <X className="w-5 h-5 text-slate-500" />
+            <X className="w-5 h-5 text-charcoal-400" />
           </button>
         </div>
         <div className="p-6 overflow-y-auto max-h-[60vh]">
           {children}
         </div>
-        <div className="p-6 border-t border-slate-200 dark:border-slate-700">
+        <div className="p-6 border-t border-white/10 border-desert-400/20">
           <button
             onClick={onClose}
-            className="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-2xl"
+            className="w-full py-3 bg-gradient-to-r from-blue-600 to-charcoal-700 text-white font-semibold rounded-2xl"
           >
             Tutup
           </button>
@@ -221,25 +221,25 @@ function SuccessModal({ isOpen, onClose, email }: SuccessModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Registrasi Berhasil">
       <div className="text-center py-8">
-        <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-emerald-100 flex items-center justify-center">
-          <CheckCircle2 className="w-10 h-10 text-emerald-600" />
+        <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-charcoal-700 flex items-center justify-center">
+          <CheckCircle2 className="w-10 h-10 text-desert-400" />
         </div>
-        <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+        <h3 className="text-2xl font-bold text-white text-white mb-2">
           Akun Berhasil Dibuat!
         </h3>
-        <p className="text-slate-500 dark:text-slate-400 mb-6">
+        <p className="text-charcoal-400 text-charcoal-400 mb-6">
           Selamat datang di Portal Klien Sanata Construction. Kami telah mengirimkan link verifikasi ke:
         </p>
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800/30">
-          <Mail className="w-4 h-4 text-blue-600" />
-          <span className="font-medium text-blue-700 dark:text-blue-300">{email}</span>
+        <div className="inline-flex items-center gap-2 px-4 py-2 bg-charcoal-800 bg-charcoal-900/20 rounded-xl border border-blue-100 dark:border-desert-400/30">
+          <Mail className="w-4 h-4 text-desert-400" />
+          <span className="font-medium text-desert-400 text-charcoal-300">{email}</span>
         </div>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-6">
+        <p className="text-sm text-charcoal-400 text-charcoal-400 mt-6">
           Halaman akan dialihkan dalam {countdown} detik...
         </p>
         <button
           onClick={() => window.location.href = "/client/login"}
-          className="mt-4 text-blue-600 dark:text-blue-400 hover:underline"
+          className="mt-4 text-desert-400 text-desert-400 hover:underline"
         >
           Klik di sini jika tidak dialihkan otomatis
         </button>
@@ -401,11 +401,11 @@ function FormInput({ label, type, value, onChange, placeholder, required, error,
 
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+      <label className="block text-sm font-medium text-charcoal-300 dark:text-charcoal-$1">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
       <div className="relative">
-        <Icon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+        <Icon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-400" />
         <input
           type={inputType}
           value={value}
@@ -416,10 +416,10 @@ function FormInput({ label, type, value, onChange, placeholder, required, error,
           className={clsx(
             "w-full pl-12 pr-",
             isPassword ? "pr-12" : "pr-4",
-            "py-3.5 bg-slate-50/50 dark:bg-slate-800/50 border rounded-2xl placeholder:text-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all",
+            "py-3.5 bg-charcoal-800/50 bg-charcoal-800/50 border rounded-2xl placeholder:text-charcoal-400 focus:ring-2 focus:ring-desert-400 focus:border-desert-400 outline-none transition-all",
             error 
-              ? "border-red-300 dark:border-red-700 bg-red-50/50 dark:bg-red-900/10" 
-              : "border-slate-200 dark:border-slate-700",
+              ? "border-red-400/20 dark:border-red-700 bg-red-500/10/50 dark:bg-red-900/10" 
+              : "border-white/10 border-desert-400/20",
             disabled && "opacity-60 cursor-not-allowed"
           )}
         />
@@ -427,7 +427,7 @@ function FormInput({ label, type, value, onChange, placeholder, required, error,
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-0 pr-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+            className="absolute right-0 pr-4 top-1/2 -translate-y-1/2 text-charcoal-400 hover:text-charcoal-400 dark:hover:text-charcoal-$1"
           >
             {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
           </button>
@@ -525,11 +525,11 @@ export default function ClientRegister() {
   const strength = getPasswordStrength(form.password);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-900 dark:to-indigo-950">
+    <div className="relative min-h-screen flex flex-col items-center justify-center px-4 py-12">
       {/* Animated Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-desert-400/5 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-desert-400/5 rounded-full blur-3xl" style={{ animationDelay: "1s" }} />
       </div>
 
       {/* Header */}
@@ -537,8 +537,8 @@ export default function ClientRegister() {
         <div className="max-w-md mx-auto text-center">
           <div className="inline-flex items-center justify-center gap-3 mb-2">
             <div className="relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl blur opacity-30" />
-              <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-xl shadow-blue-500/30">
+              <div className="absolute -inset-1 bg-gradient-to-r from-charcoal-700 to-charcoal-700 rounded-2xl blur opacity-30" />
+              <div className="relative w-14 h-14 rounded-2xl bg-charcoal-700 from-charcoal-700 to-charcoal-700 flex items-center justify-center shadow-xl shadow-charcoal-600/30">
                 <svg viewBox="0 0 48 48" className="w-9 h-9" xmlns="http://www.w3.org/2000/svg">
                   <defs><linearGradient id="regGradV2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#ffffff" /><stop offset="100%" stopColor="#e0e7ff" /></linearGradient></defs>
                   <path d="M12 10 L28 10 L28 28 L40 28 L40 40 L12 40 Z" fill="url(#regGradV2)" opacity="0.3" />
@@ -549,11 +549,11 @@ export default function ClientRegister() {
               </div>
             </div>
             <div className="text-left">
-              <span className="font-bold text-2xl text-slate-900 dark:text-white tracking-tight">SANTRA</span>
+              <span className="font-bold text-2xl text-white text-white tracking-tight">SANTRA</span>
               <span className="ml-2 px-2 py-0.5 text-[10px] font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-full uppercase tracking-wider">Portal</span>
             </div>
           </div>
-          <p className="text-sm text-slate-500 dark:text-slate-400">Portal Klien Konstruksi</p>
+          <p className="text-sm text-charcoal-400 text-charcoal-400">Portal Klien Konstruksi</p>
         </div>
       </header>
 
@@ -561,13 +561,13 @@ export default function ClientRegister() {
       <main className="relative flex-1 flex items-center justify-center px-4 py-4">
         <div className="w-full max-w-md">
           <div className="relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 via-indigo-500/20 to-cyan-500/20 rounded-3xl blur-xl opacity-70" />
-            <div className="relative bg-white/90 backdrop-blur-xl border border-white/50 dark:border-slate-700/50 rounded-3xl shadow-2xl overflow-hidden">
-              <div className="h-1.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-cyan-500" />
+            <div className="absolute -inset-1 bg-gradient-to-r from-charcoal-700/20 /20 to-desert-400/20 rounded-3xl blur-xl opacity-70" />
+            <div className="relative bg-white/90 backdrop-blur-xl border border-white/50 border-desert-400/20/50 rounded-3xl shadow-2xl overflow-hidden">
+              <div className="h-1.5 bg-gradient-to-r from-charcoal-700  to-desert-400" />
               <div className="p-8">
                 <div className="text-center mb-5">
-                  <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Buat Akun Baru</h1>
-                  <p className="text-slate-500 dark:text-slate-400 text-sm">Daftar untuk memantau proyek konstruksi Anda</p>
+                  <h1 className="text-2xl font-bold text-white text-white mb-2">Buat Akun Baru</h1>
+                  <p className="text-charcoal-400 text-charcoal-400 text-sm">Daftar untuk memantau proyek konstruksi Anda</p>
                   <div className="flex items-center justify-center gap-3 mt-4 flex-wrap">
                     <FeatureBadge icon={ShieldCheck} label="Aman" color="emerald" />
                     <FeatureBadge icon={Globe} label="Gratis" color="blue" />
@@ -576,9 +576,9 @@ export default function ClientRegister() {
                 </div>
 
                 {error && (
-                  <div className="mb-5 p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800/30 rounded-2xl flex items-start gap-3 animate-in fade-in slide-in-from-top-1">
+                  <div className="mb-5 p-4 bg-red-500/10 dark:bg-red-900/20 border border-red-100 dark:border-red-400/20 rounded-2xl flex items-start gap-3 animate-in fade-in slide-in-from-top-1">
                     <AlertCircle className="w-5 h-5 text-red-500 dark:text-red-400 flex-shrink-0 mt-0.5" />
-                    <p className="text-sm font-medium text-red-700 dark:text-red-300">{error}</p>
+                    <p className="text-sm font-medium text-red-400 dark:text-red-300">{error}</p>
                   </div>
                 )}
 
@@ -639,7 +639,7 @@ export default function ClientRegister() {
                         disabled={loading}
                       />
                       {form.confirmPassword && form.password === form.confirmPassword && (
-                        <div className="flex items-center gap-1 text-xs text-emerald-600 mt-1">
+                        <div className="flex items-center gap-1 text-xs text-desert-400 mt-1">
                           <Check className="w-3 h-3" />
                           <span>Password cocok</span>
                         </div>
@@ -675,14 +675,14 @@ export default function ClientRegister() {
                         type="checkbox"
                         checked={form.agreeTerms}
                         onChange={(e) => setField("agreeTerms", e.target.checked)}
-                        className="w-5 h-5 mt-0.5 text-blue-600 border-slate-300 dark:border-slate-600 rounded focus:ring-blue-500 cursor-pointer bg-white dark:bg-slate-800"
+                        className="w-5 h-5 mt-0.5 text-desert-400 border-white/10 dark:border-charcoal-$1 rounded focus:ring-desert-400 cursor-pointer bg-white bg-charcoal-800"
                       />
-                      <div className="text-sm text-slate-600 dark:text-slate-400">
+                      <div className="text-sm text-charcoal-400 text-charcoal-400">
                         Saya setuju dengan{" "}
                         <button
                           type="button"
                           onClick={() => setShowTermsModal(true)}
-                          className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                          className="text-desert-400 text-desert-400 hover:underline font-medium"
                         >
                           Syarat & Ketentuan
                         </button>
@@ -690,7 +690,7 @@ export default function ClientRegister() {
                         <button
                           type="button"
                           onClick={() => setShowPrivacyModal(true)}
-                          className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                          className="text-desert-400 text-desert-400 hover:underline font-medium"
                         >
                           Kebijakan Privasi
                         </button>
@@ -702,9 +702,9 @@ export default function ClientRegister() {
                   </div>
 
                   {/* Info Box */}
-                  <div className="flex items-start gap-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800/30">
-                    <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-                    <div className="text-sm text-blue-700 dark:text-blue-300">
+                  <div className="flex items-start gap-3 p-4 bg-charcoal-800 bg-charcoal-900/20 rounded-xl border border-blue-100 dark:border-desert-400/30">
+                    <Info className="w-5 h-5 text-desert-400 text-desert-400 flex-shrink-0 mt-0.5" />
+                    <div className="text-sm text-desert-400 text-charcoal-300">
                       <p className="font-medium mb-1">Penting:</p>
                       <p>Setelah mendaftar, admin akan memberikan akses ke proyek Anda. Hubungi tim kami jika membutuhkan bantuan.</p>
                     </div>
@@ -713,7 +713,7 @@ export default function ClientRegister() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-60 text-white font-semibold rounded-2xl shadow-lg shadow-blue-500/30 flex items-center justify-center gap-2 transition-all focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    className="w-full py-4 bg-gradient-to-r from-blue-600 to-charcoal-700 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-60 text-white font-semibold rounded-2xl shadow-lg shadow-charcoal-600/30 flex items-center justify-center gap-2 transition-all focus:ring-2 focus:ring-desert-400 focus:ring-offset-2"
                   >
                     {loading ? (
                       <>
@@ -730,13 +730,13 @@ export default function ClientRegister() {
                 </form>
 
                 <div className="relative my-5">
-                  <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-200 dark:border-slate-700" /></div>
-                  <div className="relative flex justify-center text-xs"><span className="px-3 bg-white dark:bg-slate-800 text-slate-400">atau</span></div>
+                  <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/10 border-desert-400/20" /></div>
+                  <div className="relative flex justify-center text-xs"><span className="px-3 bg-white bg-charcoal-800 text-charcoal-400">atau</span></div>
                 </div>
 
-                <p className="text-center text-sm text-slate-500 dark:text-slate-400">
+                <p className="text-center text-sm text-charcoal-400 text-charcoal-400">
                   Sudah punya akun?{" "}
-                  <Link href="/client/login" className="font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors inline-flex items-center gap-1 group">
+                  <Link href="/client/login" className="font-semibold text-desert-400 text-desert-400 hover:text-desert-400 dark:hover:text-charcoal-300 transition-colors inline-flex items-center gap-1 group">
                     Masuk di sini
                     <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
                   </Link>
@@ -746,16 +746,16 @@ export default function ClientRegister() {
           </div>
 
           {/* Quick Links */}
-          <div className="mt-6 flex items-center justify-center gap-4 text-xs text-slate-400">
-            <Link href="/privacy" className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors">Kebijakan Privasi</Link>
+          <div className="mt-6 flex items-center justify-center gap-4 text-xs text-charcoal-400">
+            <Link href="/privacy" className="hover:text-charcoal-400 dark:hover:text-charcoal-$1 transition-colors">Kebijakan Privasi</Link>
             <span>•</span>
-            <Link href="/terms" className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors">Syarat & Ketentuan</Link>
+            <Link href="/terms" className="hover:text-charcoal-400 dark:hover:text-charcoal-$1 transition-colors">Syarat & Ketentuan</Link>
             <span>•</span>
-            <Link href="/contact" className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors">Bantuan</Link>
+            <Link href="/contact" className="hover:text-charcoal-400 dark:hover:text-charcoal-$1 transition-colors">Bantuan</Link>
           </div>
 
           <div className="text-center mt-6">
-            <Link href="/" className="inline-flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 transition-colors">
+            <Link href="/" className="inline-flex items-center gap-2 text-sm text-charcoal-400 text-charcoal-400 hover:text-charcoal-300 dark:hover:text-charcoal-$1 transition-colors">
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
               Kembali ke Beranda
             </Link>
@@ -764,19 +764,19 @@ export default function ClientRegister() {
       </main>
 
       <footer className="relative p-6 text-center">
-        <p className="text-xs text-slate-400">© {new Date().getFullYear()} PT Sanata Bhakti Utama. Hak cipta dilindungi.</p>
+        <p className="text-xs text-charcoal-400">© {new Date().getFullYear()} PT Sanata Bhakti Utama. Hak cipta dilindungi.</p>
       </footer>
 
       {/* Modals */}
       <Modal isOpen={showTermsModal} onClose={() => setShowTermsModal(false)} title="Syarat & Ketentuan">
         <div className="prose prose-sm dark:prose-invert max-w-none">
-          <div className="whitespace-pre-wrap text-sm text-slate-600 dark:text-slate-300">{termsContent}</div>
+          <div className="whitespace-pre-wrap text-sm text-charcoal-400 dark:text-charcoal-$1">{termsContent}</div>
         </div>
       </Modal>
 
       <Modal isOpen={showPrivacyModal} onClose={() => setShowPrivacyModal(false)} title="Kebijakan Privasi">
         <div className="prose prose-sm dark:prose-invert max-w-none">
-          <div className="whitespace-pre-wrap text-sm text-slate-600 dark:text-slate-300">{privacyContent}</div>
+          <div className="whitespace-pre-wrap text-sm text-charcoal-400 dark:text-charcoal-$1">{privacyContent}</div>
         </div>
       </Modal>
 

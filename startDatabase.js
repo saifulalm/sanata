@@ -10,11 +10,14 @@
  *   node startDatabase.js stop        # hentikan PostgreSQL
  *   node startDatabase.js restart     # restart PostgreSQL
  *   node startDatabase.js status      # cek status
+ *   node startDatabase.js create      # buat database sanata
  *   node startDatabase.js migrate     # jalankan migrasi
+ *   node startDatabase.js baseline    # tandai semua migration sudah diterapkan
  *   node startDatabase.js seed         # jalankan seeder
  *   node startDatabase.js setup        # setup lengkap (mulai + migrate + seed)
  *   node startDatabase.js reset        # reset database (hapus + buat + migrate + seed)
  *   node startDatabase.js verify       # verifikasi koneksi database
+ *   node startDatabase.js help        # tampilkan bantuan
  * 
  * Catatan:
  *   - Script ini dirancang untuk Windows dengan Laragon
@@ -496,6 +499,104 @@ function runMigrations() {
 }
 
 /**
+ * Baseline migrations - tandai semua migration sebagai sudah diterapkan
+ * Digunakan ketika database sudah ada tabel-tabelnya tapi _prisma_migrations kosong
+ */
+function runBaseline() {
+  logHeader('BASELINE MIGRATIONS');
+  
+  const status = checkPostgresRunning();
+  if (!status.running) {
+    logError('PostgreSQL tidak berjalan. Mulai dulu.');
+    return false;
+  }
+  
+  const dbStatus = checkDatabase();
+  if (!dbStatus.exists) {
+    logError(`Database '${DB_NAME}' belum ada. Buat dulu dengan 'create'.`);
+    return false;
+  }
+  
+  logWarning('Ini akan menandai SEMUA migration sebagai sudah diterapkan.');
+  log('  Pastikan database sudah memiliki struktur yang sesuai!', 'yellow');
+  log('  Tekan Ctrl+C untuk membatalkan...', 'yellow');
+  
+  execSync('sleep 3', { encoding: 'utf-8' });
+  
+  // Buat tabel _prisma_migrations jika belum ada
+  log('\n  Membuat tabel _prisma_migrations...', 'dim');
+  const createTableResult = runCommand(
+    `"${PSQL}" -h localhost -U ${DB_USER} -d ${DB_NAME} -c "CREATE TABLE IF NOT EXISTS \"_prisma_migrations\" (\"id\" VARCHAR(36) PRIMARY KEY, \"checksum\" VARCHAR(64) NOT NULL, \"finished_at\" TIMESTAMPTZ NOT NULL DEFAULT now(), \"migration_name\" VARCHAR(255) NOT NULL UNIQUE, \"logs\" TEXT, \"rolled_back_at\" TIMESTAMPTZ, \"started_at\" TIMESTAMPTZ NOT NULL DEFAULT now(), \"applied_steps_count\" INTEGER NOT NULL DEFAULT 0);"`
+  );
+  
+  if (!createTableResult.success) {
+    logWarning('Tabel mungkin sudah ada atau ada masalah');
+  } else {
+    logSuccess('Tabel _prisma_migrations siap');
+  }
+  
+  // Dapatkan semua migration files
+  const migrationsDir = path.join(__dirname, 'backend', 'prisma', 'migrations');
+  if (!fileExists(migrationsDir)) {
+    logError('Direktori migrations tidak ditemukan');
+    return false;
+  }
+  
+  const fs = require('fs');
+  const migrationFolders = fs.readdirSync(migrationsDir)
+    .filter(name => /^\d{14}/.test(name))
+    .sort();
+  
+  if (migrationFolders.length === 0) {
+    logWarning('Tidak ada migration ditemukan');
+    return false;
+  }
+  
+  log(`\n  Menandai ${migrationFolders.length} migrations sebagai diterapkan...`, 'dim');
+  
+  let success = true;
+  for (const folder of migrationFolders) {
+    const migrationName = folder;
+    
+    // Cek apakah sudah ada di tabel
+    const checkResult = runCommand(
+      `"${PSQL}" -h localhost -U ${DB_USER} -d ${DB_NAME} -c "SELECT 1 FROM _prisma_migrations WHERE migration_name = '${migrationName}';"`
+    );
+    
+    if (checkResult.output && checkResult.output.includes('1 row')) {
+      log(`  ✓ ${migrationName} (sudah ada)`, 'dim');
+      continue;
+    }
+    
+    // Generate UUID menggunakan Node.js crypto
+    const { randomUUID } = require('crypto');
+    const uuid = randomUUID();
+    
+    // Insert record - gunakan UPDATE jika sudah ada (INSERT...ON CONFLICT)
+    const sql = `INSERT INTO _prisma_migrations (id, checksum, finished_at, migration_name, applied_steps_count) VALUES ('${uuid}', 'baseline', now(), '${migrationName}', 1) ON CONFLICT (migration_name) DO UPDATE SET finished_at = now(), applied_steps_count = 1;`;
+    const insertResult = runCommand(
+      `"${PSQL}" -h localhost -U ${DB_USER} -d ${DB_NAME} -c "${sql}"`
+    );
+    
+    if (insertResult.success) {
+      log(`  ✓ ${migrationName}`, 'green');
+    } else {
+      logError(`  ${migrationName}: ${insertResult.output || insertResult.error}`);
+      success = false;
+    }
+  }
+  
+  if (success) {
+    logSuccess('Baseline selesai');
+    log('\n  Jalankan \"node startDatabase.js status\" untuk verifikasi', 'dim');
+  } else {
+    logError('Baseline selesai dengan kesalahan');
+  }
+  
+  return success;
+}
+
+/**
  * Jalankan Prisma seed
  */
 function runSeed() {
@@ -675,15 +776,16 @@ function showStatus() {
     
     // Prisma migrations
     log('\nPrisma Migrations:', 'bright');
-    const migrateStatus = runCommand('npx prisma migrate status --schema backend/prisma/schema.prisma', {
-      cwd: path.join(__dirname),
+    // Jalankan dari backend directory agar .env dimuat
+    const migrateStatus = runCommand('npx prisma migrate status', {
+      cwd: path.join(__dirname, 'backend'),
       stdio: ['pipe', 'pipe', 'pipe']
     });
     
     if (migrateStatus.success) {
-      if (migrateStatus.output.includes('No pending migrations')) {
+      if (migrateStatus.output.includes('Database schema is up to date')) {
         logSuccess('Semua migration sudah diterapkan');
-      } else if (migrateStatus.output.includes('The last migration')) {
+      } else if (migrateStatus.output.includes('Following migrations have not yet been applied')) {
         logWarning('Ada migration yang belum diterapkan');
         log('  Jalankan "node startDatabase.js migrate"', 'dim');
       } else {
@@ -743,6 +845,7 @@ function showHelp() {
     status    - Tampilkan status database
     create    - Buat database ${DB_NAME}
     migrate   - Jalankan Prisma migrations
+    baseline  - Tandai semua migrations sebagai diterapkan
     seed      - Jalankan Prisma seeder
     setup     - Setup lengkap (start + create + migrate + seed)
     reset     - Reset database (hapus + buat + migrate + seed)
@@ -806,7 +909,11 @@ async function main() {
     case 'seed':
       runSeed();
       break;
-      
+
+    case 'baseline':
+      runBaseline();
+      break;
+
     case 'setup':
       await fullSetup();
       break;
