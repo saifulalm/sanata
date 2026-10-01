@@ -15,6 +15,254 @@ sanata/
 └── package.json         npm workspaces root
 ```
 
+### Folder Structure
+
+```
+sanata/
+├── backend/
+│   ├── prisma/
+│   │   ├── schema.prisma          # Database schema (55 tables, enums, relations)
+│   │   ├── seed.ts                # Main seeder (admin, categories, products, CMS, broadcasts)
+│   │   ├── seed-client.ts         # Client portal demo seeder
+│   │   └── migrations/            # Migration files (chronological)
+│   │       ├── 20260806000000_init_postgres/
+│   │       ├── 20260809202106_add_rab_schedule_progress/
+│   │       ├── 20260809211902_add_field_reports_billing_baselines/
+│   │       ├── 20260815110928_add_project_document_modules/
+│   │       ├── 20260816023613_add_signatory/
+│   │       ├── 20260816185518_unify_project_roles/
+│   │       └── 20260908164539_recreate_migrations/
+│   │   └── mocks/
+│   │       └── mock-baileys-gateway.js  # Simulasi WhatsApp Baileys gateway untuk testing
+│   └── src/
+│       ├── index.ts               # Entry point — bootstrap, ensureWorkforceRoles, listen
+│       ├── app.ts                 # Express app factory (middleware, routes, error handler)
+│       ├── config/
+│       │   ├── env.ts             # Environment variable validation (Zod schema)
+│       │   └── siteContent.ts     # CMS default values registry
+│       ├── controllers/           # Request handlers (parse → call service → respond)
+│       │   ├── auth.controller.ts       # Login, register, 2FA, refresh token
+│       │   ├── clientPortal.controller.ts  # Client portal endpoints
+│       │   ├── cms.controller.ts        # Content, categories, products CRUD
+│       │   ├── inquiry.controller.ts    # Contact form submissions
+│       │   ├── media.controller.ts      # File upload/list/delete
+│       │   ├── users.controller.ts      # User management
+│       │   ├── workforce.controller.ts   # Workforce roles
+│       │   ├── audit.controller.ts      # Audit log viewer
+│       │   ├── price-item.controller.ts # Harga Satuan Dasar
+│       │   ├── ahsp.controller.ts       # Analisa Harga Satuan
+│       │   ├── rab.controller.ts        # RAB (Rencana Anggaran Biaya)
+│       │   ├── quotation.controller.ts   # Surat Penawaran
+│       │   ├── daily-report.controller.ts # Laporan harian
+│       │   ├── project-letter.controller.ts # Dokumen proyek (SPK/Invoice/Kwitansi/BAPP/BAST)
+│       │   ├── progress-billing.controller.ts # Termin tagihan
+│       │   ├── broadcast.controller.ts   # Broadcast multi-channel
+│       │   ├── santra.controller.ts     # SANTRA (QC, Worker, Tool, KPI)
+│       │   ├── site-content.controller.ts # CMS collections & settings
+│       │   └── seo.controller.ts        # SEO configuration
+│       ├── services/              # Business logic (query, transform, validate)
+│       │   ├── auth.service.ts
+│       │   ├── clientPortal.service.ts  # Client portal (projects, S-curve, reports, QC)
+│       │   ├── cms.service.ts
+│       │   ├── inquiry.service.ts
+│       │   ├── media.service.ts
+│       │   ├── users.service.ts
+│       │   ├── workforceRole.service.ts  # Seed & manage project roles
+│       │   ├── audit.service.ts
+│       │   ├── priceItem.service.ts
+│       │   ├── ahsp.service.ts
+│       │   ├── rab.service.ts
+│       │   ├── quotation.service.ts
+│       │   ├── dailyReport.service.ts
+│       │   ├── projectLetter.service.ts
+│       │   ├── progressBilling.service.ts
+│       │   ├── broadcast.service.ts
+│       │   ├── santra.service.ts
+│       │   ├── siteContent.service.ts
+│       │   └── seo.service.ts
+│       ├── routes/                # Route definitions (mount controllers)
+│       │   ├── index.ts               # Mounts all route groups
+│       │   ├── auth.routes.ts
+│       │   ├── client.routes.ts       # /api/client/*
+│       │   ├── cms.routes.ts
+│       │   ├── inquiry.routes.ts
+│       │   ├── media.routes.ts
+│       │   ├── users.routes.ts
+│       │   ├── workforce.routes.ts
+│       │   ├── audit.routes.ts
+│       │   ├── price-item.routes.ts
+│       │   ├── ahsp.routes.ts
+│       │   ├── rab.routes.ts
+│       │   ├── quotation.routes.ts
+│       │   ├── daily-report.routes.ts
+│       │   ├── project-letter.routes.ts
+│       │   ├── progress-billing.routes.ts
+│       │   ├── broadcast.routes.ts
+│       │   ├── santra.routes.ts
+│       │   ├── site-content.routes.ts
+│       │   └── seo.routes.ts
+│       ├── middleware/            # Express middleware
+│       │   ├── auth.ts               # JWT verification, role checks
+│       │   ├── rbac.ts               # Role-based access control
+│       │   ├── rateLimiters.ts      # Global + per-endpoint rate limits
+│       │   ├── errorHandler.ts      # Centralized error handler (Zod/Prisma/ApiError aware)
+│       │   ├── upload.ts            # Multer file upload config
+│       │   ├── audit.ts             # Audit log middleware
+│       │   └── validate.ts          # Zod request validation
+│       ├── lib/
+│       │   ├── prisma.ts           # Prisma client singleton
+│       │   ├── jwt.ts              # JWT sign/verify helpers
+│       │   ├── logger.ts           # Winston logger
+│       │   ├── storage.ts          # Pluggable storage driver (local / S3 / R2)
+│       │   ├── mailer.ts          # Nodemailer (inquiry notifications)
+│       │   ├── cache.ts           # Redis caching with version-tag invalidation
+│       │   ├── broadcast/         # Broadcast channel adapters
+│       │   │   ├── index.ts           # Router (dispatches to channel adapter)
+│       │   │   ├── email.ts           # SMTP adapter
+│       │   │   ├── telegram.ts        # Bot API adapter
+│       │   │   ├── whatsapp-brileys.ts # Baileys QR-pairing adapter
+│       │   │   ├── whatsapp-official.ts # Meta Cloud API adapter
+│       │   │   ├── instagram.ts        # Meta Messaging API adapter
+│       │   │   └── facebook.ts        # Messenger API adapter
+│       │   └── whatsapp.ts        # WhatsApp agents & FAQ matcher
+│       ├── utils/
+│       │   ├── ApiError.ts        # Custom error class (400/401/403/404/409/500)
+│       │   ├── ApiResponse.ts     # Consistent JSON response helpers
+│       │   ├── helpers.ts        # Decimal math, tanggal formatting, dll.
+│       │   └── validators/        # Zod input schemas
+│       │       ├── auth.validator.ts
+│       │       ├── cms.validator.ts
+│       │       ├── rab.validator.ts
+│       │       └── ...
+│       └── types/                 # TypeScript type augmentations
+│
+├── frontend-next/
+│   ├── src/
+│   │   ├── app/                  # Next.js App Router pages
+│   │   │   ├── (public)/         # Public marketing site routes
+│   │   │   │   ├── page.tsx           # Homepage (Under Construction / FuturisticHomePage)
+│   │   │   │   ├── layout.tsx         # Public layout (EnhancedHeader + EnhancedFooter)
+│   │   │   │   ├── under-construction/
+│   │   │   │   ├── about/
+│   │   │   │   ├── services/
+│   │   │   │   ├── projects/
+│   │   │   │   ├── journal/
+│   │   │   │   ├── contact/
+│   │   │   │   ├── gallery/
+│   │   │   │   ├── testimonials/
+│   │   │   │   ├── clients/
+│   │   │   │   ├── career/
+│   │   │   │   ├── faq/
+│   │   │   │   ├── privacy/
+│   │   │   │   ├── terms/
+│   │   │   │   └── process/
+│   │   │   ├── admin/             # Admin panel (protected by middleware + BFF cookie)
+│   │   │   │   ├── layout.tsx
+│   │   │   │   ├── login/
+│   │   │   │   ├── (dashboard)/
+│   │   │   │   │   ├── page.tsx       # Dashboard
+│   │   │   │   │   ├── products/
+│   │   │   │   │   ├── contents/
+│   │   │   │   │   ├── categories/
+│   │   │   │   │   ├── users/
+│   │   │   │   │   ├── inquiries/
+│   │   │   │   │   ├── broadcasts/
+│   │   │   │   │   ├── media/
+│   │   │   │   │   ├── site-content/
+│   │   │   │   │   ├── seo/
+│   │   │   │   │   ├── price-items/
+│   │   │   │   │   ├── ahsp/
+│   │   │   │   │   ├── rab/
+│   │   │   │   │   │   ├── [id]/
+│   │   │   │   │   │   │   ├── page.tsx
+│   │   │   │   │   │   │   ├── schedule/
+│   │   │   │   │   │   │   ├── daily-reports/
+│   │   │   │   │   │   │   ├── billings/
+│   │   │   │   │   │   │   └── print/
+│   │   │   │   │   ├── quotations/
+│   │   │   │   │   ├── signatories/
+│   │   │   │   │   ├── workforce/
+│   │   │   │   │   ├── audit-log/
+│   │   │   │   │   ├── security/
+│   │   │   │   │   ├── settings/
+│   │   │   │   │   ├── scraper/
+│   │   │   │   │   └── submissions/
+│   │   │   │   └── print/
+│   │   │   │       ├── rab/[id]/page.tsx
+│   │   │   │       ├── quotation/[id]/page.tsx
+│   │   │   │       └── daily-report/[id]/page.tsx
+│   │   │   ├── client/            # Client Portal (localStorage auth)
+│   │   │   │   ├── login/
+│   │   │   │   ├── register/
+│   │   │   │   ├── page.tsx           # Client dashboard
+│   │   │   │   ├── projects/
+│   │   │   │   ├── project/[id]/
+│   │   │   │   ├── notifications/
+│   │   │   │   └── settings/
+│   │   │   ├── proxy.ts          # BFF auth proxy (refreshes cookies server-side)
+│   │   │   └── globals.css
+│   │   ├── components/
+│   │   │   ├── home/
+│   │   │   │   ├── FuturisticHomePage.tsx  # Public homepage (SSR)
+│   │   │   │   ├── HeroScene.tsx           # 3D exploded floor view (three.js)
+│   │   │   │   ├── GarisWaktu4D.tsx        # 4D timeline (schedule + model)
+│   │   │   │   └── ...
+│   │   │   ├── public/
+│   │   │   │   ├── Header.tsx
+│   │   │   │   ├── Footer.tsx
+│   │   │   │   ├── WhatsAppFloat.tsx       # WhatsApp widget (FAQ + agents)
+│   │   │   │   └── ...
+│   │   │   ├── admin/
+│   │   │   │   ├── layout.tsx        # Admin layout (sidebar, header, breadcrumbs)
+│   │   │   │   ├── ui.tsx           # Design system primitives (Panel, Badge, TableWrap, btn())
+│   │   │   │   ├── CommandPalette.tsx # Ctrl+K menu navigator
+│   │   │   │   ├── Sidebar.tsx
+│   │   │   │   └── forms/
+│   │   │   │       ├── ContentForm.tsx
+│   │   │   │       ├── ProductForm.tsx
+│   │   │   │       ├── RabForm.tsx
+│   │   │   │       └── ...
+│   │   │   ├── client/
+│   │   │   │   ├── ClientLayout.tsx
+│   │   │   │   ├── ProjectCard.tsx
+│   │   │   │   ├── SCurveChart.tsx
+│   │   │   │   ├── DailyReportList.tsx
+│   │   │   │   └── ...
+│   │   │   └── ui/                  # Shared UI primitives (shared across admin + client)
+│   │   │       ├── Button.tsx
+│   │   │       ├── Dialog.tsx
+│   │   │       ├── Skeleton.tsx
+│   │   │       └── ...
+│   │   ├── lib/
+│   │   │   ├── api.ts            # Server-side API fetch (SSR/ISR)
+│   │   │   ├── auth.ts           # Client-side auth helpers (localStorage)
+│   │   │   ├── clientPortal.ts   # Client portal API client (getProjects, getSCurve, dll.)
+│   │   │   ├── siteContent.ts    # CMS helpers (setting(), collection())
+│   │   │   ├── seo.ts            # SEO config helpers
+│   │   │   └── utils.ts
+│   │   └── types/
+│   │       ├── api.ts            # API response types (generated from OpenAPI)
+│   │       └── cms.ts
+│   ├── public/
+│   │   ├── uploads/             # Uploaded files (generated at runtime)
+│   │   └── ...
+│   ├── next.config.ts
+│   └── tailwind.config.ts
+│
+├── prisma/                       # Seed scripts (legacy, mostly unused)
+│   └── ...
+│
+├── startDatabase.js             # PostgreSQL manager (cross-platform: Windows + Linux)
+├── ecosystem.config.js           # PM2 config (NOT in repo — server-specific)
+├── package.json                  # npm workspaces root
+└── tsconfig.json
+```
+
+> **Catatan**: Berkas-berkas di `ecosystem.config.js` dan `backend/.env` tidak ikut di-repo karena berisi
+> detail spesifik server. Setiap deployment membuat salinan lokalnya sendiri.
+
+
+
 `frontend-next/src/app/(public)/*` is the public marketing site (Header/Footer chrome).
 Homepage (`/`) currently redirects to the Under Construction page. All other public routes
 (`/about`, `/services`, `/projects`, `/contact`, etc.) remain fully accessible with normal
