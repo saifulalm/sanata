@@ -1269,6 +1269,162 @@ export async function getProjectSCurve(clientId: string, rabId: string) {
   };
 }
 
+/**
+ * S-Curve per-section breakdown for Client Portal.
+ * Returns per-section S-curves plus an overall combined curve.
+ *
+ * Frontend shape needed:
+ * {
+ *   project?: { id, number, title },
+ *   sections?: [{
+ *     sectionId, sectionName, color,
+ *     totalWeight, currentProgress,
+ *     plannedCurve: [{ date, cumulativePlanned }],
+ *     actualCurve: [{ date, cumulativeActual }],
+ *   }],
+ *   combined?: [{ date, planned, actual }]
+ * }
+ */
+export async function getSectionLevelSCurve(clientId: string, rabId: string) {
+  // Verify access
+  const access = await prisma.clientProjectAccess.findUnique({
+    where: { clientId_rabId: { clientId, rabId } }
+  });
+
+  if (!access || !access.canViewProgress || access.status !== "ACTIVE") {
+    throw ApiError.forbidden("Anda tidak memiliki akses ke progress proyek ini");
+  }
+
+  const rab = await prisma.rab.findUnique({
+    where: { id: rabId },
+    include: {
+      baselines: { orderBy: { capturedAt: "asc" }, take: 1 },
+      sections: {
+        orderBy: { order: "asc" },
+        include: {
+          items: { orderBy: { startOffsetDays: "asc" } }
+        }
+      }
+    }
+  });
+
+  if (!rab) throw ApiError.notFound("Proyek tidak ditemukan");
+
+  const scheduleStart = rab.scheduleStart ? new Date(rab.scheduleStart) : new Date();
+
+  // Warna per section
+  const SECTION_COLORS = [
+    "#3B82F6", "#10B981", "#F59E0B", "#EF4444",
+    "#8B5CF6", "#EC4899", "#06B6D4", "#84CC16",
+  ];
+
+  // Total amount (denominator for percentages)
+  const totalAmount = rab.sections.reduce(
+    (sum, s) => sum + s.items.reduce((s2, i) => s2 + Number(i.amount), 0),
+    0
+  );
+
+  // Per-section S-curve
+  const sectionResults = await Promise.all(
+    rab.sections.map(async (section, idx) => {
+      const sectionAmount = section.items.reduce((sum, i) => sum + Number(i.amount), 0);
+      const sectionWeight = totalAmount > 0 ? (sectionAmount / totalAmount) * 100 : 0;
+
+      // Get baseline snapshot or use items directly
+      let items = section.items.map(i => ({
+        id: i.id,
+        description: i.description,
+        startOffsetDays: i.startOffsetDays || 0,
+        durationDays: i.durationDays || 0,
+        amount: Number(i.amount),
+      }));
+
+      if (rab.baselines[0]?.snapshot) {
+        const snap = rab.baselines[0].snapshot as any;
+        const sectionSnap = snap.sections?.find((s: any) => s.sectionId === section.id);
+        if (sectionSnap?.items) items = sectionSnap.items;
+      }
+
+      // Planned curve for this section
+      const plannedCurve: Array<{ date: string; cumulativePlanned: number }> = [];
+      if (items.length > 0) {
+        const maxDay = Math.max(...items.map(i => i.startOffsetDays + i.durationDays));
+        for (let d = 0; d <= maxDay; d += 7) {
+          const date = new Date(scheduleStart);
+          date.setDate(date.getDate() + d);
+          const completed = items
+            .filter(i => i.startOffsetDays + i.durationDays <= d)
+            .reduce((sum, i) => sum + i.amount, 0);
+          const pct = sectionAmount > 0 ? (completed / sectionAmount) * 100 : 0;
+          plannedCurve.push({
+            date: date.toISOString().split("T")[0],
+            cumulativePlanned: Math.round(Math.min(100, pct) * 10) / 10,
+          });
+        }
+      }
+
+      // Actual curve for this section
+      const progressRecords = await prisma.rabProgress.findMany({
+        where: {
+          itemId: { in: section.items.map(i => i.id) },
+          status: "APPROVED",
+        },
+        orderBy: { date: "asc" },
+      });
+
+      const weeklyProgress: Record<string, number> = {};
+      for (const p of progressRecords) {
+        const weekStart = new Date(p.date);
+        weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+        const weekKey = weekStart.toISOString().split("T")[0];
+        const itemAmount = Number(p.item?.amount || 0);
+        weeklyProgress[weekKey] = (weeklyProgress[weekKey] || 0) + (itemAmount / (sectionAmount || 1)) * 100;
+      }
+
+      const actualCurve: Array<{ date: string; cumulativeActual: number }> = [];
+      let cumulative = 0;
+      for (const week of Object.keys(weeklyProgress).sort()) {
+        cumulative = Math.min(100, cumulative + weeklyProgress[week]);
+        actualCurve.push({
+          date: week,
+          cumulativeActual: Math.round(cumulative * 10) / 10,
+        });
+      }
+
+      return {
+        sectionId: section.id,
+        sectionName: section.name,
+        color: SECTION_COLORS[idx % SECTION_COLORS.length],
+        totalWeight: Math.round(sectionWeight * 10) / 10,
+        currentProgress: actualCurve.length > 0
+          ? actualCurve[actualCurve.length - 1].cumulativeActual
+          : 0,
+        plannedCurve,
+        actualCurve,
+      };
+    })
+  );
+
+  // Combined overall S-curve — merge planned + actual into one array
+  const projectCurve = await getProjectSCurve(clientId, rabId);
+  const allDates = [
+    ...projectCurve.plannedCurve.map(p => p.date),
+    ...projectCurve.actualCurve.map(a => a.date),
+  ];
+  const uniqueDates = Array.from(new Set(allDates)).sort();
+  const combined = uniqueDates.map(date => ({
+    date,
+    planned: projectCurve.plannedCurve.find(p => p.date === date)?.cumulativePlanned ?? 0,
+    actual: projectCurve.actualCurve.find(a => a.date === date)?.cumulativeActual ?? 0,
+  }));
+
+  return {
+    project: { id: rab.id, number: rab.number || rab.id.slice(0, 8), title: rab.title || "" },
+    sections: sectionResults,
+    combined,
+  };
+}
+
 // ============================================================
 // PROJECT PHOTOS
 // ============================================================
