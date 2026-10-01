@@ -1,7 +1,7 @@
 #!/bin/bash
 # ============================================================
-# SANATA GROUP - Deploy Content Update
-# Run on server: cd /var/www/sanata
+# SANATA GROUP - Deploy Script (PM2 Ecosystem)
+# Run on server: cd /var/www/sanata && ./deploy_sanata.sh
 # ============================================================
 
 set -e
@@ -11,8 +11,7 @@ echo "=== 1. Pull latest changes ==="
 git pull origin master
 
 echo ""
-echo "=== 2. Run Prisma migrate (applies schema change from backend workspace) ==="
-# Schema ada di backend/prisma/schema.prisma — jalankan dari workspace backend
+echo "=== 2. Run Prisma migrate ==="
 npm run prisma:migrate --workspace backend -- --name add_collection_title_unique
 
 echo ""
@@ -25,17 +24,32 @@ npm run prisma:seed --workspace backend
 
 echo ""
 echo "=== 5. Build backend ==="
-cd backend && npm run build && cd ..
+npm run build:backend
 
 echo ""
 echo "=== 6. Build frontend ==="
-cd frontend-next && npm run build && cd ..
+npm run build:web
 
 echo ""
-echo "=== 7. Restart backend ==="
-pm2 restart sanata-backend 2>/dev/null || pm2 start backend/dist/index.js --name sanata-backend
+echo "=== 7. Setup logs directory ==="
+sudo mkdir -p /var/log/sanata
+sudo chown -R $USER:$USER /var/log/sanata
+
+echo ""
+echo "=== 8. Restart PM2 apps ==="
+# Gunakan ecosystem config
+pm2 delete all 2>/dev/null || true
+pm2 start ecosystem.config.js
+
+echo ""
+echo "=== 9. Save PM2 process list ==="
+pm2 save
+
+echo ""
+echo "=== 10. Setup PM2 startup script (for server reboot) ==="
+pm2 startup 2>/dev/null || true
 
 echo ""
 echo "=== DONE ==="
-echo "Expected seed output: 'Seeded X site content items (N updated) and 80 settings.'"
-echo "If 'N updated' > 0, existing content items were updated with new data."
+echo "Services:"
+pm2 list
