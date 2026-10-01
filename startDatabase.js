@@ -1,9 +1,9 @@
 /**
  * startDatabase.js — Sanata Construction
- * 
+ *
  * Script untuk memulai PostgreSQL dan mempersiapkan database.
- * Menyesuaikan dengan konfigurasi Laragon di Windows.
- * 
+ * Mendukung Windows (Laragon) dan Linux (CentOS/Ubuntu).
+ *
  * Penggunaan:
  *   node startDatabase.js              # cek status saja
  *   node startDatabase.js start        # mulai PostgreSQL
@@ -18,35 +18,68 @@
  *   node startDatabase.js reset        # reset database (hapus + buat + migrate + seed)
  *   node startDatabase.js verify       # verifikasi koneksi database
  *   node startDatabase.js help        # tampilkan bantuan
- * 
+ *
  * Catatan:
- *   - Script ini dirancang untuk Windows dengan Laragon
- *   - PostgreSQL harus sudah terinstall di laragon/bin/postgresql/
- *   - Pastikan backend/.env sudah dikonfigurasi dengan benar
+ *   - Mendukung Windows (Laragon) dan Linux (CentOS/Ubuntu)
+ *   - Secara otomatis mendeteksi OS dan menggunakan command yang sesuai
+ *   - Di Linux, mungkin memerlukan 'sudo' untuk operasi PostgreSQL
+ *   - Konfigurasi dapat di-override dengan environment variable:
+ *     PG_BIN, PG_DATA, PG_LOG, PG_DB_DATA_DIR, DB_NAME, PGUSER, PGHOST, PGPORT
  */
 
 const { execSync, exec } = require('child_process');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
+
+// ============================================================================
+// DETEKSI LINGKUNGAN — Windows (Laragon) atau Linux (CentOS/Ubuntu)
+// ============================================================================
+
+const isWindows = os.platform() === 'win32';
 
 // ============================================================================
 // KONFIGURASI — sesuaikan dengan lingkungan Anda
 // ============================================================================
 
+// Konfigurasi Windows (Laragon)
 const LARAGON_PG_BIN = 'D:/laragon/bin/postgresql/postgresql-16.1-1-windows-x64-binaries/bin';
 const LARAGON_DATA = 'D:/laragon/data/postgresql-16';
 const LARAGON_LOG = 'D:/laragon/data/postgresql-16/server.log';
 const DB_DATA_DIR = 'D:/laragon/data';
 
-// Nama database yang digunakan
-const DB_NAME = 'sanata';
-const DB_USER = 'postgres';
+// Konfigurasi Linux (CentOS/Ubuntu) — path standar instalasi PostgreSQL
+const LINUX_PG_BIN = '/usr/psql/bin';
+const LINUX_DATA = '/var/lib/pgsql/data';
+const LINUX_LOG = '/var/lib/pgsql/data/log';
+const LINUX_DB_DATA_DIR = '/var/lib/pgsql/data';
 
-// Command untuk psql
-const PSQL = path.join(LARAGON_PG_BIN, 'psql.exe');
-const PG_CTL = path.join(LARAGON_PG_BIN, 'pg_ctl.exe');
-const INIT_DB = path.join(LARAGON_PG_BIN, 'initdb.exe');
-const PG_ISREADY = path.join(LARAGON_PG_BIN, 'pg_isready.exe');
+// Tentukan path berdasarkan OS
+const PG_BIN = isWindows ? LARAGON_PG_BIN : (process.env.PG_BIN || '/usr/bin');
+const PG_DATA = isWindows ? LARAGON_DATA : (process.env.PG_DATA || '/var/lib/pgsql/data');
+const PG_LOG = isWindows ? LARAGON_LOG : (process.env.PG_LOG || '/var/log/postgresql');
+const PG_DB_DATA_DIR = isWindows ? DB_DATA_DIR : (process.env.PG_DB_DATA_DIR || '/var/lib/pgsql/data');
+
+// Nama database yang digunakan
+const DB_NAME = process.env.DB_NAME || 'sanata';
+const DB_USER = process.env.PGUSER || 'postgres';
+const DB_HOST = process.env.PGHOST || 'localhost';
+const DB_PORT = process.env.PGPORT || '5432';
+
+// Command untuk psql — coba gunakan yang ada di PATH terlebih dahulu
+function findPsqlCommand() {
+  if (isWindows) {
+    return path.join(PG_BIN, 'psql.exe');
+  } else {
+    // Di Linux, coba gunakan command langsung dari PATH
+    return 'psql';
+  }
+}
+
+const PSQL = findPsqlCommand();
+const PG_CTL = isWindows ? path.join(PG_BIN, 'pg_ctl.exe') : 'pg_ctl';
+const INIT_DB = isWindows ? path.join(PG_BIN, 'initdb.exe') : 'initdb';
+const PG_ISREADY = isWindows ? path.join(PG_BIN, 'pg_isready.exe') : 'pg_isready';
 
 // ============================================================================
 // UTILITAS
@@ -175,17 +208,31 @@ function logInfo(message) {
  */
 function checkPostgresInstall() {
   log('\n  Mengecek instalasi PostgreSQL...', 'dim');
-  
-  const pgCtlExists = fileExists(PG_CTL);
-  const psqlExists = fileExists(PSQL);
-  
-  if (!pgCtlExists || !psqlExists) {
-    logError('PostgreSQL tidak ditemukan di path standar Laragon');
-    log(`  Pastikan PostgreSQL terinstall di: ${LARAGON_PG_BIN}`, 'dim');
-    return false;
+
+  if (isWindows) {
+    // Di Windows, cek apakah file executable ada
+    const pgCtlExists = fileExists(PG_CTL);
+    const psqlExists = fileExists(PSQL);
+
+    if (!pgCtlExists || !psqlExists) {
+      logError('PostgreSQL tidak ditemukan di path standar Laragon');
+      log(`  Pastikan PostgreSQL terinstall di: ${PG_BIN}`, 'dim');
+      return false;
+    }
+  } else {
+    // Di Linux, cek apakah command tersedia di PATH
+    const whichResult = runCommand('which psql');
+    if (!whichResult.success) {
+      logError('PostgreSQL tidak ditemukan di PATH');
+      log('  Pastikan PostgreSQL terinstall dengan: sudo yum install postgresql postgresql-contrib', 'dim');
+      log('  Atau: sudo apt-get install postgresql postgresql-contrib', 'dim');
+      return false;
+    }
+    logSuccess(`PostgreSQL ditemukan di: ${whichResult.output}`);
+    return true;
   }
-  
-  logSuccess(`PostgreSQL binaries ditemukan di ${LARAGON_PG_BIN}`);
+
+  logSuccess(`PostgreSQL binaries ditemukan di ${PG_BIN}`);
   return true;
 }
 
@@ -194,13 +241,27 @@ function checkPostgresInstall() {
  */
 function checkDataDir() {
   log('\n  Mengecek data directory...', 'dim');
-  
-  if (!fileExists(LARAGON_DATA)) {
-    logWarning(`Data directory tidak ditemukan: ${LARAGON_DATA}`);
+
+  // Di Linux, cek juga beberapa lokasi umum
+  const dataDirs = isWindows
+    ? [PG_DATA]
+    : [PG_DATA, '/var/lib/pgsql/data', '/var/lib/postgresql/data', '/usr/local/pgsql/data'];
+
+  let found = false;
+  for (const dir of dataDirs) {
+    if (fileExists(dir)) {
+      logSuccess(`Data directory ditemukan: ${dir}`);
+      found = true;
+      break;
+    }
+  }
+
+  if (!found) {
+    logWarning(`Data directory tidak ditemukan. Lokasi yang dicoba:`);
+    dataDirs.forEach(dir => log(`  - ${dir}`, 'dim'));
     return false;
   }
-  
-  logSuccess(`Data directory ditemukan: ${LARAGON_DATA}`);
+
   return true;
 }
 
@@ -208,21 +269,35 @@ function checkDataDir() {
  * Cek apakah PostgreSQL sudah running
  */
 function checkPostgresRunning() {
-  const result = runCommand(`"${PG_ISREADY}" -h localhost -p 5432`);
-  
+  // Build command based on OS
+  const isReadyCmd = isWindows
+    ? `"${PG_ISREADY}" -h localhost -p 5432`
+    : `${PG_ISREADY} -h ${DB_HOST} -p ${DB_PORT}`;
+
+  const result = runCommand(isReadyCmd);
+
   if (result.success && result.output.includes('accepting connections')) {
     return { running: true, message: 'PostgreSQL sedang berjalan' };
   }
-  
-  // Cek apakah ada PID file
-  const pidFile = path.join(LARAGON_DATA, 'postmaster.pid');
-  if (fileExists(pidFile)) {
-    const pid = readFile(pidFile);
-    logWarning(`PID file ada (PID: ${pid?.split('\n')[0]}) tapi PostgreSQL tidak merespons`);
-    log('  Ini biasanya berarti PostgreSQL crash. Coba restart.', 'dim');
-    return { running: false, crashed: true, message: 'PostgreSQL crash (PID file ada tapi tidak responsif)' };
+
+  // Cek apakah ada PID file (berbeda lokasi di Windows vs Linux)
+  const pidFileLocations = isWindows
+    ? [path.join(PG_DATA, 'postmaster.pid')]
+    : [
+        path.join(PG_DATA, 'postmaster.pid'),
+        '/var/run/postgresql/postmaster.pid',
+        '/tmp/postmaster.pid'
+      ];
+
+  for (const pidFile of pidFileLocations) {
+    if (fileExists(pidFile)) {
+      const pid = readFile(pidFile);
+      logWarning(`PID file ada (PID: ${pid?.split('\n')[0]}) tapi PostgreSQL tidak merespons`);
+      log('  Ini biasanya berarti PostgreSQL crash. Coba restart.', 'dim');
+      return { running: false, crashed: true, message: 'PostgreSQL crash (PID file ada tapi tidak responsif)' };
+    }
   }
-  
+
   return { running: false, message: 'PostgreSQL tidak berjalan' };
 }
 
@@ -321,34 +396,40 @@ function startPostgres() {
   if (!checkDataDir()) {
     logError('Data directory tidak ada. Jalankan init dulu.');
     log('  Catatan: Jika ini pertama kali, data directory mungkin perlu diinisialisasi', 'dim');
-    log('  dengan command: initdb -D ' + LARAGON_DATA, 'dim');
+    log('  dengan command: initdb -D ' + PG_DATA, 'dim');
     return false;
   }
-  
+
   // Cek apakah sudah diinisialisasi
-  const pgVersionFile = path.join(LARAGON_DATA, 'PG_VERSION');
+  const pgVersionFile = path.join(PG_DATA, 'PG_VERSION');
   if (!fileExists(pgVersionFile)) {
     logWarning('Database belum diinisialisasi. Menginisialisasi...');
-    log(`  Jalankan: initdb -D "${LARAGON_DATA}" -U postgres --encoding=UTF8 --locale=C`, 'dim');
+    log(`  Jalankan: initdb -D "${PG_DATA}" -U postgres --encoding=UTF8 --locale=C`, 'dim');
     return false;
   }
-  
+
   log('  Memulai PostgreSQL...', 'dim');
-  
+
   // Pastikan log directory ada
-  const logDir = path.dirname(LARAGON_LOG);
+  const logDir = path.dirname(PG_LOG);
   if (!fileExists(logDir)) {
     fs.mkdirSync(logDir, { recursive: true });
   }
-  
-  const result = runCommand(
-    `"${PG_CTL}" -D "${LARAGON_DATA}" -l "${LARAGON_LOG}" start`,
-    { stdio: ['pipe', 'pipe', 'pipe'] }
-  );
-  
+
+  // Build command based on OS
+  let startCmd;
+  if (isWindows) {
+    startCmd = `"${PG_CTL}" -D "${PG_DATA}" -l "${PG_LOG}" start`;
+  } else {
+    // Di Linux, coba gunakan pg_ctl dengan data directory
+    startCmd = `${PG_CTL} -D "${PG_DATA}" -l "${PG_LOG}" start`;
+  }
+
+  const result = runCommand(startCmd, { stdio: ['pipe', 'pipe', 'pipe'] });
+
   if (result.success) {
     logSuccess('PostgreSQL berhasil dimulai');
-    
+
     // Tunggu sebentar untuk startup
     log('  Menunggu PostgreSQL ready...', 'dim');
     let retries = 10;
@@ -361,22 +442,22 @@ function startPostgres() {
       retries--;
       execSync('sleep 1', { encoding: 'utf-8' });
     }
-    
+
     logWarning('PostgreSQL started tapi belum ready setelah 10 detik');
     return true;
   }
-  
+
   logError('Gagal memulai PostgreSQL');
   log(result.error || result.output, 'red');
-  
+
   // Tampilkan log jika ada
-  if (fileExists(LARAGON_LOG)) {
+  if (fileExists(PG_LOG)) {
     log('\n  Isi server.log:', 'dim');
-    const logContent = readFile(LARAGON_LOG);
+    const logContent = readFile(PG_LOG);
     const lastLines = logContent?.split('\n').slice(-20).join('\n') || '';
     console.log('  ' + lastLines.replace(/\n/g, '\n  '));
   }
-  
+
   return false;
 }
 
@@ -394,11 +475,16 @@ function stopPostgres() {
   }
   
   log('  Menghentikan PostgreSQL...', 'dim');
-  
-  const result = runCommand(
-    `"${PG_CTL}" -D "${LARAGON_DATA}" stop`,
-    { stdio: ['pipe', 'pipe', 'pipe'] }
-  );
+
+  // Build command based on OS
+  let stopCmd;
+  if (isWindows) {
+    stopCmd = `"${PG_CTL}" -D "${PG_DATA}" stop`;
+  } else {
+    stopCmd = `sudo ${PG_CTL} -D "${PG_DATA}" stop`;
+  }
+
+  const result = runCommand(stopCmd, { stdio: ['pipe', 'pipe', 'pipe'] });
   
   if (result.success) {
     logSuccess('PostgreSQL berhasil dihentikan');
@@ -798,10 +884,13 @@ function showStatus() {
   
   // Configuration
   log('\nKonfigurasi:', 'bright');
-  log(`  PostgreSQL bin:  ${LARAGON_PG_BIN}`, 'dim');
-  log(`  Data directory:  ${LARAGON_DATA}`, 'dim');
-  log(`  Log file:        ${LARAGON_LOG}`, 'dim');
+  log(`  OS:               ${isWindows ? 'Windows (Laragon)' : 'Linux'}`, 'dim');
+  log(`  PostgreSQL bin:   ${PG_BIN}`, 'dim');
+  log(`  Data directory:  ${PG_DATA}`, 'dim');
+  log(`  Log file:        ${PG_LOG}`, 'dim');
   log(`  Database name:    ${DB_NAME}`, 'dim');
+  log(`  Database user:    ${DB_USER}`, 'dim');
+  log(`  Database host:    ${DB_HOST}:${DB_PORT}`, 'dim');
   
   // Env check
   log('\nFile .env:', 'bright');
@@ -862,8 +951,9 @@ function showHelp() {
     node startDatabase.js reset    # reset database
   
   Catatan:
-    - Pastikan Laragon PostgreSQL sudah terinstall
-    - Konfigurasi path ada di bagian atas script
+    - Mendukung Windows (Laragon) dan Linux (CentOS/Ubuntu)
+    - Konfigurasi auto-detect OS, dapat di-override dengan env variable
+    - Di Linux, mungkin perlu 'sudo' untuk operasi PostgreSQL
     - File backend/.env harus sudah ada sebelum migrate/seed
   `);
 }
