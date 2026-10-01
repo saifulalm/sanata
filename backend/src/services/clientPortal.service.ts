@@ -1370,6 +1370,7 @@ export async function getSectionLevelSCurve(clientId: string, rabId: string) {
           status: "APPROVED",
         },
         orderBy: { date: "asc" },
+        include: { item: { select: { amount: true } } },
       });
 
       const weeklyProgress: Record<string, number> = {};
