@@ -511,8 +511,43 @@ Setelah deploy pertama, segera ganti password akun seed (`admin@sanata.id` /
 
 ### 3. Menjalankan dengan PM2
 
+#### 3.1 Instalasi PM2
+
+Ada dua cara instalasi PM2:
+
+**Cara 1 — Global (direkomendasikan untuk server):**
+```bash
+sudo npm install -g pm2
+```
+
+**Cara 2 — Local project (alternatif):**
+```bash
+npm install --save-dev pm2
+```
+
+Untuk production, global install lebih umum karena:
+- PM2 tersedia di seluruh sistem tanpa perlu `npx`
+- Script startup systemd lebih bersih
+- Bisa mengelola banyak aplikasi dari satu install
+
+**Upgrade PM2:**
+```bash
+sudo npm install -g pm2@latest
+pm2 update        # perbarui binary in-memory setelah upgrade
+```
+
+**Verifikasi versi:**
+```bash
+pm2 --version     # cek versi PM2
+pm2 list          # cek proses yang berjalan
+```
+
+#### 3.2 Ecosystem File
+
 Buat `ecosystem.config.js` di root proyek (file ini tidak ikut di repo karena berisi
-detail spesifik server):
+detail spesifik server). Lokasi yang direkomendasikan: `/var/www/sanata/ecosystem.config.js`
+
+##### Konfigurasi Lengkap — Mode Fork (default, untuk API dan Next.js single instance)
 
 ```js
 module.exports = {
@@ -527,14 +562,18 @@ module.exports = {
       max_memory_restart: "512M",
       error_file: "/var/log/sanata/api.error.log",
       out_file: "/var/log/sanata/api.out.log",
+      log_date_format: "YYYY-MM-DD HH:mm:ss Z",
       time: true,
+      // Opsi tambahan untuk stabilitas
+      autorestart: true,
+      watch: false,
+      max_restarts: 10,
+      min_uptime: "10s",
+      restart_delay: 4000,
     },
     {
       name: "sanata-web",
       cwd: "/var/www/sanata/frontend-next",
-      // Path absolut: npm workspaces meng-hoist `next` ke node_modules root,
-      // bukan ke frontend-next/node_modules. Cek nilainya di server dengan:
-      //   cd frontend-next && node -p "require.resolve('next/dist/bin/next')"
       script: "/var/www/sanata/node_modules/next/dist/bin/next",
       args: "start -p 5001",
       instances: 1,
@@ -543,54 +582,389 @@ module.exports = {
       max_memory_restart: "1G",
       error_file: "/var/log/sanata/web.error.log",
       out_file: "/var/log/sanata/web.out.log",
+      log_date_format: "YYYY-MM-DD HH:mm:ss Z",
+      time: true,
+      autorestart: true,
+      watch: false,
+      max_restarts: 10,
+      min_uptime: "10s",
+      restart_delay: 4000,
+    },
+  ],
+};
+```
+
+##### Konfigurasi — Mode Cluster (hanya untuk API, setelah Redis rate limiter aktif)
+
+> ⚠️ **Peringatan**: Mode cluster belum aktif secara default karena `express-rate-limit`
+> menyimpan penghitung di memori proses. Dengan cluster, setiap worker punya kuota
+> terpisah — sebuah klien bisa mendapat 300 request × N workers request. Aktifkan
+> cluster hanya SETELAH rate limiter dikonfigurasi dengan Redis store.
+
+```js
+module.exports = {
+  apps: [
+    {
+      name: "sanata-api",
+      cwd: "/var/www/sanata/backend",
+      script: "dist/index.js",
+      instances: "max",            // atau angka spesifik: 2, 4, dll.
+      exec_mode: "cluster",
+      env_production: {
+        NODE_ENV: "production",
+      },
+      max_memory_restart: "512M",
+      error_file: "/var/log/sanata/api.error.log",
+      out_file: "/var/log/sanata/api.out.log",
+      log_date_format: "YYYY-MM-DD HH:mm:ss Z",
+      time: true,
+    },
+    // Next.js TIDAK bisa di-cluster via PM2 — gunakan `next start` (satu proses).
+    // Untuk scaling Next.js gunakan container/orchestrator lain.
+    {
+      name: "sanata-web",
+      cwd: "/var/www/sanata/frontend-next",
+      script: "/var/www/sanata/node_modules/next/dist/bin/next",
+      args: "start -p 5001",
+      instances: 1,
+      exec_mode: "fork",
+      env: { NODE_ENV: "production" },
+      max_memory_restart: "1G",
+      error_file: "/var/log/sanata/web.error.log",
+      out_file: "/var/log/sanata/web.out.log",
+      log_date_format: "YYYY-MM-DD HH:mm:ss Z",
       time: true,
     },
   ],
 };
 ```
 
-Catatan penting soal konfigurasi di atas:
+##### Konfigurasi — Environment Berbeda (staging vs production)
 
-- `exec_mode: "fork"` dengan satu instance dipakai sengaja. Mode `cluster` belum aman untuk
-  API ini karena rate limiter (`express-rate-limit`) menyimpan hitungan di memori proses —
-  beberapa worker berarti setiap worker punya kuota sendiri. Naikkan instance hanya setelah
-  limiter dipindah ke store Redis.
-- `script: "dist/index.js"` menjalankan hasil `npm run build:backend`; jangan menunjuk ke
-  `src/index.ts` (butuh `tsx`, tidak untuk produksi).
-- Next.js dipanggil lewat binary-nya langsung, bukan `npm run start`, supaya PM2 mengawasi
-  proses Node sungguhan dan bukan shell npm perantara.
-- Karena `exec_mode` fork, `pm2 reload` berperilaku sama dengan `pm2 restart` (ada jeda
-  singkat saat proses berganti). Reload nol-downtime baru berlaku di mode cluster.
-- `cwd` pada `sanata-api` bersifat wajib, bukan kosmetik. Backend memakai `import
-  "dotenv/config"` yang membaca `.env` dari direktori kerja proses, dan direktori unggahan
-  dihitung `path.resolve(process.cwd(), UPLOAD_DIR)` ([storage.ts:28](backend/src/lib/storage.ts:28)).
-  Salah `cwd` berarti env tidak terbaca dan berkas unggahan mendarat di folder lain.
+```js
+module.exports = {
+  apps: [
+    {
+      name: "sanata-api",
+      cwd: "/var/www/sanata/backend",
+      script: "dist/index.js",
+      instances: 1,
+      exec_mode: "fork",
+      env: { NODE_ENV: "development" },
+      env_staging: { NODE_ENV: "staging" },
+      env_production: { NODE_ENV: "production" },
+      max_memory_restart: "512M",
+      error_file: "/var/log/sanata/api.error.log",
+      out_file: "/var/log/sanata/api.out.log",
+      time: true,
+    },
+  ],
+};
 
-Jalankan dan pasang autostart:
-
-```bash
-sudo mkdir -p /var/log/sanata && sudo chown deploy:deploy /var/log/sanata
-pm2 start ecosystem.config.js
-pm2 save
-pm2 startup systemd -u deploy --hp /home/deploy    # jalankan perintah yang dicetak, sebagai root
+// Jalankan dengan env tertentu:
+pm2 start ecosystem.config.js --env production
+pm2 restart sanata-api --env staging
 ```
 
-Pasang rotasi log — tanpa ini `/var/log/sanata/*.log` tumbuh tanpa batas sampai disk penuh:
+##### Konfigurasi — Dengan Variable Environment Ekstra
+
+```js
+module.exports = {
+  apps: [
+    {
+      name: "sanata-api",
+      cwd: "/var/www/sanata/backend",
+      script: "dist/index.js",
+      env: {
+        NODE_ENV: "production",
+        // Variable tambahan yang tidak ada di .env
+        // (berguna untuk override sementara tanpa ubah .env)
+        PORT: "5000",
+      },
+      // Atau gunakan env_file untuk load dari berkas
+      env_production: {
+        NODE_ENV: "production",
+      },
+    },
+  ],
+};
+```
+
+> ⚠️ **Catatan**: `.env` di-load otomatis oleh `import "dotenv/config"` di backend.
+> Konfigurasi `env` di PM2 **ditambahkan** ke environment yang sudah ada, bukan
+> menimpanya. Variable di PM2 lebih diutamakan. Pastikan `cwd` menunjuk ke direktori
+> tempat `.env` berada, karena dotenv membaca dari `process.cwd()`.
+
+#### 3.3 Perintah PM2 Lengkap
+
+##### Manajemen Proses
 
 ```bash
+# Menjalankan
+pm2 start ecosystem.config.js              # start semua app
+pm2 start ecosystem.config.js --only sanata-api   # start satu app saja
+pm2 start ecosystem.config.js --env production   # dengan env production
+pm2 start dist/index.js --name api         # start satu file langsung
+
+# Me-restart
+pm2 restart sanata-api                     # restart (downtime singkat)
+pm2 restart sanata-web --update-env        # restart + reload env vars
+pm2 reload sanata-api                      # reload (sama dengan restart di mode fork)
+pm2 gracefulReload sanata-api              # kirim SIGINT dulu, tunggu graceful shutdown
+
+# Menghentikan
+pm2 stop sanata-api                        # berhenti (bisa di-start ulang)
+pm2 stop all                              # berhenti semua
+pm2 delete sanata-api                      # hapus dari PM2 process list
+pm2 delete all                            # hapus semua dari list
+
+# Reload tanpa downtime (zero-downtime, perlu cluster mode)
+pm2 reload sanata-api
+pm2 gracefulReload sanata-api             # tunggu proses lama selesai dulu
+
+# Periksa status
+pm2 status                                 # daftar semua proses
+pm2 jlist                                  # JSON
+pm2 prettylist                             # tabel rata
+pm2 describe sanata-api                    # detail satu proses
+pm2 info sanata-api                        # info lebih lengkap
+```
+
+##### Monitoring & Observability
+
+```bash
+# Log real-time
+pm2 logs                           # log semua app
+pm2 logs sanata-api                # log satu app
+pm2 logs sanata-api --err          # stderr saja
+pm2 logs sanata-api --out          # stdout saja
+pm2 logs sanata-api --lines 200    # jumlah baris
+pm2 logs sanata-api --nostream     # tampilkan lalu exit (untuk scripting)
+pm2 logs sanata-api --timestamp    # dengan timestamp
+
+# Monitoring real-time (dashboard terminal interaktif)
+pm2 monit                          # monitor CPU/RAM semua proses
+pm2 monit sanata-api               # monitor satu proses
+
+# Metrik (PM2 Plus / observability)
+pm2 plus                           # buka PM2 Plus dashboard (butuh login)
+pm2 link <secret-key>              # hubungkan ke PM2 Plus untuk monitoring cloud
+
+# Metrics real-time via terminal
+pm2 describe sanata-api | grep -E "(status|restart|memory|cpu|uptime)")
+```
+
+##### Log Management
+
+```bash
+# Rotasi log otomatis (sudah di-setup di langkah sebelumnya)
 pm2 install pm2-logrotate
-pm2 set pm2-logrotate:max_size 10M
-pm2 set pm2-logrotate:retain 14
-pm2 set pm2-logrotate:compress true
+
+# Konfigurasi rotasi
+pm2 set pm2-logrotate:max_size 10M         # ukuran maksimal per file
+pm2 set pm2-logrotate:retain 14            # simpan 14 file terakhir
+pm2 set pm2-logrotate:compress true        # compress file lama
+pm2 set pm2-logrotate:rotate_interval "0 2 * * *"  # rotate jam 2 pagi
+pm2 set pm2-logrotate:date_format "YYYY-MM-DD"
+pm2 set pm2-logrotate:worker_interval 10000    # cek setiap 10 detik
+pm2 set pm2-logrotate:max_logs 30              # total file log maksimal
+
+# Verifikasi konfigurasi rotasi
+pm2 conf                                 # tampilkan semua konfigurasi PM2
+
+# Flush/bersihkan log manual
+pm2 flush sanata-api                     # kosongkan log satu app
+pm2 flush all                            # kosongkan semua log
+
+# Rename file log
+pm2 restart sanata-api --log /var/log/sanata/api-new.log --log-date-format "YYYY-MM-DD"
 ```
 
-Perintah harian:
+##### Process Metadata
 
 ```bash
+# Kelola metadata proses
+pm2 rename sanata-api sanata-api-v2     # rename proses
+pm2 restart sanata-api --update-env     # reload env tanpa restart
+pm2 reset sanata-api                    # reset uptime & restart count
+
+# Dump/restore process list
+pm2 save                                # simpan process list ke ~/.pm2/dump.pm2
+pm2 resurrect                            # restore proses dari dump (setelah reboot)
+pm2 startOrReload ecosystem.config.js   # start kalau belum jalan, reload kalau sudah
+pm2 startOrStop ecosystem.config.js    # start kalau belum jalan, stop kalau sudah
+```
+
+##### Startup & Autostart
+
+```bash
+# Generate script startup untuk init system tertentu
+pm2 startup                              # deteksi init system otomatis
+pm2 startup systemd                      # secara eksplisit
+pm2 startup ubuntu                       # untuk Ubuntu/Debian
+pm2 startup centos                       # untuk CentOS/RHEL
+pm2 startup docker                       # untuk Docker container
+
+# Perintah output dari `pm2 startup` perlu dijalankan sebagai root:
+pm2 startup systemd -u deploy --hp /home/deploy
+
+# Disable startup
+pm2 unstartup systemd                    # hapus service autostart
+
+# Contoh output `pm2 startup systemd -u deploy --hp /home/deploy`:
+# [PM2] Generating system init script in /etc/systemd/system/pm2-deploy.service
+# [PM2] Installing system startup script...
+# >>> YOU MUST EXECUTE THE FOLLOWING COMMAND AS ROOT <<<
+# systemctl daemon-reload
+# systemctl enable pm2-deploy
+# systemctl start pm2-deploy
+#
+# Jalankan perintah systemctl di atas sebagai root.
+```
+
+##### Advanced
+
+```bash
+# Inspect environment variable saat proses jalan
+pm2 env 12345                            # Tampilkan semua env var proses dengan PID 12345
+pm2 show sanata-api                      # Tampilkan semua info proses
+
+# Fork mode - start script shell/kustom
+pm2 start --name "sanata-scheduler" bash --cwd /var/www/sanata "while true; do node scheduler.js; sleep 60; done"
+pm2 start --name "sanata-cron" bash -- "node cron.js 2>&1 | tee /var/log/sanata/cron.log"
+
+# Scaling (hanya cluster mode)
+pm2 scale sanata-api +3                 # tambah 3 instance
+pm2 scale sanata-api 2                   # set ke 2 instance
+pm2 scale sanata-api max                 # scale ke max CPU
+
+# Interact (interactive mode)
+pm2 interact <secret-key>                # hubungkan ke PM2 Plus interaktif
+```
+
+#### 3.4 Startup Script Lengkap
+
+```bash
+# 1. Buat direktori log
+sudo mkdir -p /var/log/sanata
+sudo chown deploy:deploy /var/log/sanata
+
+# 2. Jalankan aplikasi
+pm2 start ecosystem.config.js
+
+# 3. Verifikasi semua proses berjalan
 pm2 status
-pm2 logs sanata-api --lines 100
-pm2 reload sanata-api            # muat ulang setelah deploy
-pm2 restart sanata-web --update-env   # --update-env bila .env berubah
+# ┌──────┬──────────────┬──────────┬──────┬───────────┬──────────────┬──────────┐
+# │ Name │ Mode        │ status   │ ↺    │ cpu      │ memory       │ uptime  │
+# ├──────┼──────────────┼──────────┼──────┼───────────┼──────────────┼──────────┤
+# │ api  │ fork         │ online   │ 0    │ 0%       │ 120 MB       │ 3m      │
+# │ web  │ fork         │ online   │ 0    │ 0.2%     │ 350 MB       │ 3m      │
+# └──────┴──────────────┴──────────┴──────┴───────────┴──────────────┴──────────┘
+
+# 4. Cek log tidak ada error
+pm2 logs sanata-api --lines 50
+pm2 logs sanata-web --lines 50
+
+# 5. Simpan process list
+pm2 save
+
+# 6. Setup autostart systemd
+pm2 startup systemd -u deploy --hp /home/deploy
+# Salin dan jalankan perintah yang dicetak sebagai root:
+# sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd
+# -u deploy --hp /home/deploy --post-discard -l /var/log/sanata/.pm2-nice-lock
+
+# 7. Verifikasi autostart (opsional: reboot server)
+sudo systemctl status pm2-deploy
+```
+
+#### 3.5 Healthcheck & Watchdog
+
+PM2 bisa secara otomatis me-restart proses yang crash. Konfigurasi watchdog:
+
+```js
+// di ecosystem.config.js
+{
+  name: "sanata-api",
+  script: "dist/index.js",
+  cwd: "/var/www/sanata/backend",
+  // Restart jika memory melebihi batas
+  max_memory_restart: "512M",
+  // Minimum waktu proses harus hidup sebelum dianggap stabil
+  min_uptime: "10s",
+  // Maksimum restart dalam rentang waktu sebelum PM2 berhenti mencoba
+  max_restarts: 10,
+  // Jeda antar restart
+  restart_delay: 4000,
+  // Arahkan proses ke crash dump
+  dump_delay: 1000,
+  // Ignore sinyal tertentu
+  ignore_signals: false,
+  // Graceful shutdown timeout (ms)
+  kill_timeout: 5000,
+  // Sinyal yang dikirim untuk graceful shutdown
+  signal: "SIGTERM",
+  // Autorestart on crash
+  autorestart: true,
+  // Watch file changes (DEV ONLY - jangan di production)
+  watch: false,
+}
+```
+
+#### 3.6 Troubleshooting PM2
+
+| Gejala | Perintah Diagnosis | Perbaikan |
+|--------|-------------------|----------|
+| Proses `errored` | `pm2 logs sanata-api --lines 100` | Periksa error log |
+| `online` tapi port tidak listen | `pm2 describe sanata-api` cek `env` dan `cwd` | Pastikan `PORT=5000` di `.env` |
+| Memory naik terus | `pm2 monit` atau `pm2 report` | Memory leak — proses `restart` atau upgrade memory |
+| Restart loop | `pm2 logs` cek restart delay | Cek konfigurasi `min_uptime` dan `max_restarts` |
+| CPU 100% terus | `pm2 top` atau `htop` | Proses stuck — `pm2 restart` |
+| `ECONNREFUSED` | `pm2 describe` cek port | Port bentrok — ubah PORT di `.env` |
+| PM2 mati setelah reboot | `pm2 status` setelah reboot | `pm2 startup` belum dijalankan |
+| Env var tidak terbaca | `pm2 env <pid>` | Pastikan `cwd` benar, cek `.env` ada |
+| Log terlalu besar | `pm2 conf` | Pasang `pm2-logrotate` + `pm2 flush` |
+
+**Dump diagnostik lengkap:**
+```bash
+pm2 report           # Generate laporan full system (bisa di-share ke developer)
+pm2 jlist            # JSON semua proses
+pm2 prettylist       # Tabel detail semua proses
+```
+
+#### 3.7 Perintah Harian — Ringkasan
+
+```bash
+# Cek status
+pm2 status
+
+# Lihat log error terbaru
+pm2 logs sanata-api --err --lines 50
+
+# Monitoring real-time
+pm2 monit
+
+# Restart satu proses (setelah deploy)
+pm2 restart sanata-api
+
+# Reload (setelah ubah .env)
+pm2 reload sanata-api --update-env
+
+# Restart semua
+pm2 restart all
+
+# Cek kesehatan
+curl http://127.0.0.1:5000/health
+curl http://127.0.0.1:5001
+
+# Update deployment
+cd /var/www/sanata && git pull && npm install
+(cd backend && npx prisma migrate deploy)
+npm run build:backend && npm run build:web
+pm2 reload sanata-api && pm2 reload sanata-web
+
+# Full restart (kalau reload gagal)
+pm2 restart all
 ```
 
 ### 4. Konfigurasi Nginx

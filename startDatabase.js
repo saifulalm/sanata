@@ -548,17 +548,24 @@ function createDatabase() {
 }
 
 /**
- * Jalankan Prisma migrations
+ * Jalankan Prisma migrations — NON-INTERACTIVE.
+ * Selalu pakai `prisma migrate deploy` karena:
+ *   - Tidak pernah membuat file migration baru
+ *   - Tidak pernah me-reset database
+ *   - Aman untuk CI/CD dan automation script
+ *
+ * Untuk development yang perlu buat migration baru, gunakan:
+ *   cd backend && npx prisma migrate dev --name <nama_migration>
  */
 function runMigrations() {
   logHeader('MENJALANKAN PRISMA MIGRATIONS');
-  
+
   const status = checkPostgresRunning();
   if (!status.running) {
     logError('PostgreSQL tidak berjalan. Mulai dulu.');
     return false;
   }
-  
+
   const dbStatus = checkDatabase();
   if (!dbStatus.exists) {
     logWarning(`Database '${DB_NAME}' belum ada. Membuat dulu...`);
@@ -566,21 +573,40 @@ function runMigrations() {
       return false;
     }
   }
-  
-  log('  Menjalankan prisma migrate...', 'dim');
-  
-  const result = runCommand('npm run prisma:migrate', {
-    cwd: path.join(__dirname),
+
+  // Generate Prisma Client dulu (diperlukan sebelum migrate deploy)
+  log('  Generate Prisma Client...', 'dim');
+  const genResult = runCommand('npm run prisma:generate', {
+    cwd: path.join(__dirname, 'backend'),
     stdio: ['pipe', 'pipe', 'pipe']
   });
-  
+  if (!genResult.success) {
+    logWarning('Prisma generate ada masalah (mungkin tidak fatal)');
+    log(genResult.output, 'dim');
+  }
+
+  // Jalankan migrate deploy — NON-INTERACTIVE
+  // Panggil langsung dari backend/ agar .env ditemukan, tanpa --workspace flag
+  // karena Prisma CLI tidak menerima flag tersebut
+  log('  Menjalankan prisma migrate deploy (non-interactive)...', 'dim');
+  const result = runCommand('npm run prisma:migrate', {
+    cwd: path.join(__dirname, 'backend'),
+    stdio: ['pipe', 'pipe', 'pipe']
+  });
+
   if (result.success) {
-    logSuccess('Migration berhasil');
+    logSuccess('Migration berhasil diterapkan');
+    // Tampilkan ringkasan
+    const lines = result.output.split('\n');
+    const appliedLines = lines.filter(l => l.includes('applied') || l.includes('already'));
+    if (appliedLines.length > 0) {
+      appliedLines.forEach(l => log(`  ${l.trim()}`, 'dim'));
+    }
     return true;
   }
-  
+
   logError('Migration gagal');
-  log(result.output, 'red');
+  log(result.output || result.error, 'red');
   return false;
 }
 
