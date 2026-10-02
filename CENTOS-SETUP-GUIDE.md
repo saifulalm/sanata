@@ -34,7 +34,7 @@ sudo yum install -y git
 sudo mkdir -p /var/www/sanata
 sudo mkdir -p /var/www/letsencrypt
 sudo mkdir -p /var/log/sanata
-sudo mkdir -p /etc/letsencrypt/live/sanata.id
+sudo mkdir -p /etc/letsencrypt/live/sanatagroup.id
 sudo chown -R $USER:$USER /var/www/sanata
 sudo chown -R $USER:$USER /var/www/letsencrypt
 
@@ -92,16 +92,16 @@ sudo systemctl stop nginx
 sudo certbot certonly --standalone \
   --prehook "systemctl stop nginx" \
   --posthook "systemctl start nginx" \
-  -d sanata.id \
-  -d www.sanata.id \
-  -d api.sanata.id \
-  --email admin@sanata.id \
+  -d sanatagroup.id \
+  -d www.sanatagroup.id \
+  -d api.sanatagroup.id \
+  --email admin@sanatagroup.id \
   --agree-tos \
   --non-interactive \
   --keep-until-expiring
 
 # C. Verify SSL certificates created
-sudo ls -la /etc/letsencrypt/live/sanata.id/
+sudo ls -la /etc/letsencrypt/live/sanatagroup.id/
 
 # Anda akan melihat:
 # - fullchain.pem
@@ -128,7 +128,7 @@ sudo vim /etc/nginx/conf.d/sanata.conf
 # Pastikan semua path sudah benar:
 # - /var/www/sanata (app directory)
 # - /var/log/nginx (logs)
-# - /etc/letsencrypt/live/sanata.id (SSL)
+# - /etc/letsencrypt/live/sanatagroup.id (SSL)
 
 # D. Create logs directory
 sudo mkdir -p /var/log/nginx
@@ -172,15 +172,15 @@ pm2 list
 sudo systemctl status nginx
 
 # B. Test API endpoint
-curl -I https://api.sanata.id/health
+curl -I https://api.sanatagroup.id/health
 # Expected: HTTP/2 200
 
 # C. Test main website
-curl -I https://sanata.id
+curl -I https://sanatagroup.id
 # Expected: HTTP/2 200
 
 # D. Test SSL certificate
-curl -v https://sanata.id 2>&1 | grep -E "(SSL|TLS|certificate)"
+curl -v https://sanatagroup.id 2>&1 | grep -E "(SSL|TLS|certificate)"
 
 # ================================================================
 # TROUBLESHOOTING
