@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'sanata-backend',
-      script: 'backend/dist/index.js',
+      script: './start-backend.sh',
       cwd: '/var/www/sanata',
       instances: 1,
       exec_mode: 'fork',
@@ -11,8 +11,6 @@ module.exports = {
         NODE_ENV: 'production',
         PORT: 5000
       },
-      // Load .env file untuk production
-      env_file: '/var/www/sanata/.env',
       error_file: '/var/log/sanata/backend-error.log',
       out_file: '/var/log/sanata/backend-out.log',
       log_date_format: 'YYYY-MM-DD HH:mm:ss',
@@ -32,8 +30,6 @@ module.exports = {
         NODE_ENV: 'production',
         PORT: 5001
       },
-      // Load .env file untuk production
-      env_file: '/var/www/sanata/.env',
       error_file: '/var/log/sanata/web-error.log',
       out_file: '/var/log/sanata/web-out.log',
       log_date_format: 'YYYY-MM-DD HH:mm:ss',
