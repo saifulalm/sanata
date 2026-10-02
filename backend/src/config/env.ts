@@ -1,5 +1,10 @@
 import "dotenv/config";
 
+// Explicit path untuk production deployment
+import path from "path";
+const envPath = path.resolve(__dirname, "../../.env");
+require("dotenv").config({ path: envPath });
+
 function required(name: string, fallback?: string): string {
   const value = process.env[name] ?? fallback;
   if (value === undefined) {
