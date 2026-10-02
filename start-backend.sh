@@ -1,13 +1,11 @@
 #!/bin/bash
-# =============================================================================
-# SANATA CONSTRUCTION - Smart Backend Startup Script v2
-# =============================================================================
+# SANATA BACKEND STARTUP SCRIPT
 
 APP_DIR="/var/www/sanata"
+BACKEND_DIR="$APP_DIR/backend"
 LOG_DIR="/var/log/sanata"
 LOG_FILE="$LOG_DIR/startup.log"
 
-# Simple logging
 log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"
 }
@@ -22,7 +20,6 @@ cd "$APP_DIR"
 if [[ ! -f .env ]]; then
     log "ERROR: .env not found"
     cp .env.example .env 2>/dev/null || true
-    log "ERROR: Please edit .env with your credentials"
     exit 1
 fi
 
@@ -34,9 +31,9 @@ if [[ -z "${DATABASE_URL:-}" ]]; then
     exit 1
 fi
 
-log "DATABASE_URL: ${DATABASE_URL:0:30}..."
+log "DB: ${DATABASE_URL:0:40}..."
 
-# Parse DB connection
+# Parse DB
 DB_NAME=$(echo "$DATABASE_URL" | sed -n 's|.*/\([^?]*\)|\1|p')
 DB_HOST=$(echo "$DATABASE_URL" | sed -n 's|.*@\([^:]*\):.*|\1|p')
 DB_USER=$(echo "$DATABASE_URL" | sed -n 's|.*://\([^:]*\):.*|\1|p')
@@ -46,8 +43,6 @@ DB_PORT=$(echo "$DATABASE_URL" | sed -n 's|.*:\([0-9]*\)/.*|\1|p')
 DB_HOST=${DB_HOST:-localhost}
 DB_PORT=${DB_PORT:-5432}
 DB_USER=${DB_USER:-postgres}
-
-log "DB: $DB_NAME @ $DB_HOST:$DB_PORT"
 
 # Check PostgreSQL
 log "Checking PostgreSQL..."
@@ -68,19 +63,22 @@ log "Checking database..."
 DB_EXISTS=$(PGPASSWORD="$DB_PASS" psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d postgres -tAc "SELECT 1 FROM pg_database WHERE datname='$DB_NAME'" 2>/dev/null || echo "0")
 
 if [[ "$DB_EXISTS" != "1" ]]; then
-    log "Creating database..."
-    sudo -u postgres psql -c "CREATE DATABASE $DB_NAME;" 2>/dev/null || true
+    log "Creating database '$DB_NAME'..."
+    sudo -u postgres psql -c "CREATE DATABASE $DB_NAME;" 2>/dev/null || \
+    PGPASSWORD="$DB_PASS" psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d postgres -c "CREATE DATABASE $DB_NAME;" 2>/dev/null || true
 fi
 log "Database OK"
 
-# Prisma sync
+# Prisma sync - dari backend directory
 log "Running Prisma db push..."
-npx prisma db push --skip-generate 2>&1 | tee -a "$LOG_FILE"
-log "Prisma db push done"
+cd "$BACKEND_DIR"
+npx prisma db push --schema ./prisma/schema.prisma 2>&1 | tee -a "$LOG_FILE"
 
 log "Generating Prisma client..."
-npm run prisma:generate 2>&1 | tee -a "$LOG_FILE"
-log "Prisma generate done"
+npx prisma generate --schema ./prisma/schema.prisma 2>&1 | tee -a "$LOG_FILE"
+
+# Back to app dir
+cd "$APP_DIR"
 
 # Verify build
 if [[ ! -d "backend/dist" ]]; then
