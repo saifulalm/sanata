@@ -114,27 +114,35 @@ sudo crontab -e
 # 0 0 * * * certbot renew --post-hook "systemctl reload nginx"
 
 # ================================================================
-# STEP 4: Configure Nginx
+# STEP 4: Configure Nginx - CLEANUP & REPLACE
 # ================================================================
 
-# A. Backup existing nginx config
+# A. STOP nginx service
+sudo systemctl stop nginx
+
+# B. Hapus semua config lama (masalah dari Windows/Laragon import)
+sudo rm -f /etc/nginx/conf.d/*.conf
+sudo rm -f /etc/nginx/sites-enabled/*
+sudo rm -f /etc/nginx/sites-available/*
+
+# C. Backup original nginx.conf
 sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup
 
-# B. Create nginx config
+# D. Clean nginx.conf - hapus SSL lines dari Laragon/Windows
+sudo sed -i '/ssl_/d' /etc/nginx/nginx.conf
+sudo sed -i '/D:\\\\/d' /etc/nginx/nginx.conf
+
+# E. Copy config baru
 sudo cp /var/www/sanata/nginx-centos.conf /etc/nginx/conf.d/sanata.conf
 
-# C. Edit config untuk verify paths (optional)
-sudo vim /etc/nginx/conf.d/sanata.conf
-# Pastikan semua path sudah benar:
-# - /var/www/sanata (app directory)
-# - /var/log/nginx (logs)
-# - /etc/letsencrypt/live/sanatagroup.id (SSL)
+# F. Verify no Windows paths remain
+sudo grep -r "D:/" /etc/nginx/ || echo "No Windows paths found - OK"
 
-# D. Create logs directory
+# G. Create logs directory
 sudo mkdir -p /var/log/nginx
 sudo chown -R nginx:nginx /var/log/nginx
 
-# E. Test nginx configuration
+# H. Test nginx configuration
 sudo nginx -t
 
 # Output yang benar:
