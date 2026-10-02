@@ -120,29 +120,34 @@ sudo crontab -e
 # A. STOP nginx service
 sudo systemctl stop nginx
 
-# B. Hapus semua config lama (masalah dari Windows/Laragon import)
+# B. Hapus SEMUA config lama
 sudo rm -f /etc/nginx/conf.d/*.conf
+sudo rm -f /etc/nginx/default.d/*.conf
 sudo rm -f /etc/nginx/sites-enabled/*
 sudo rm -f /etc/nginx/sites-available/*
 
-# C. Backup original nginx.conf
+# C. Backup dan edit nginx.conf utama - hapus includes yang bermasalah
 sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup
 
-# D. Clean nginx.conf - hapus SSL lines dari Laragon/Windows
+# D. Edit nginx.conf - hapus baris include default.d dan ssl_
+sudo sed -i '/include.*default.d/d' /etc/nginx/nginx.conf
 sudo sed -i '/ssl_/d' /etc/nginx/nginx.conf
 sudo sed -i '/D:\\\\/d' /etc/nginx/nginx.conf
 
-# E. Copy config baru
+# E. Verify nginx.conf tidak ada include problematic
+sudo grep -E "(include.*default|php-fpm)" /etc/nginx/nginx.conf || echo "nginx.conf is clean"
+
+# F. Copy config baru
 sudo cp /var/www/sanata/nginx-centos.conf /etc/nginx/conf.d/sanata.conf
 
-# F. Verify no Windows paths remain
+# G. Verify tidak ada Windows paths
 sudo grep -r "D:/" /etc/nginx/ || echo "No Windows paths found - OK"
 
-# G. Create logs directory
+# H. Create logs directory
 sudo mkdir -p /var/log/nginx
 sudo chown -R nginx:nginx /var/log/nginx
 
-# H. Test nginx configuration
+# I. Test nginx configuration
 sudo nginx -t
 
 # Output yang benar:
